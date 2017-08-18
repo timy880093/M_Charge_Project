@@ -1,0 +1,497 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--檔案順序，請參考http://maven.apache.org/pom.html -->
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.gateweb</groupId>
+    <artifactId>chargeproject</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+	<repositories>
+		    <repository>
+					<id>nexus21</id>
+					<name>local private nexus</name>
+					<url>http://search.gwis.com.tw/nexus/content/groups/public/</url>
+ 					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>nexus11</id>
+					<name>local private nexus snapshot</name>
+					<url>http://search.gwis.com.tw/nexus/content/repositories/snapshots/</url>
+ 					<releases>
+						<enabled>false</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+
+				<repository>
+					<id>nexus_third</id>
+					<name>local third party</name>
+					<url>http://search.gwis.com.tw/nexus/content/repositories/thirdparty/</url>
+				</repository>
+	  </repositories>
+    <!--設定環境變數 -->
+    <properties>
+        <!--設定project name-->
+        <project.name>Gateweb_Project</project.name>
+        <!--設定所有library版本-->
+        <log4j.version>1.2.17</log4j.version>
+        <jaxen.version>1.1.6</jaxen.version>
+        <hibernate.version>5.0.12.Final</hibernate.version>
+        <spring.version>4.2.9.RELEASE</spring.version>
+        <commons.lang3.version>3.6</commons.lang3.version>
+        <commons.io.version>2.5</commons.io.version>
+        <commons.beanutils.version>1.9.3</commons.beanutils.version>
+        <commons.codec.version>1.10</commons.codec.version>
+        <commons.lang.version>2.6</commons.lang.version>
+        <commons.email.version>1.4</commons.email.version>
+        <commons.httpcomponents.version>4.5.3</commons.httpcomponents.version>
+        <javax.validation.version>1.1.0.Final</javax.validation.version>
+        <quartz.version>2.3.0</quartz.version>
+        <jsr311.api.version>1.1.1</jsr311.api.version>
+        <ws.rs.api.version>2.0.1</ws.rs.api.version>
+        <jersey.guava.version>2.22.4</jersey.guava.version>
+        <opencvs.version>2.3</opencvs.version>
+        <poi.relation.version>3.14</poi.relation.version>
+        <openxml4j.version>1.0-beta</openxml4j.version>
+        <xmlbeans.version>2.6.0</xmlbeans.version>
+        <itext.pdf.version>5.5.11</itext.pdf.version>
+        <mail.version>1.5.0-b01</mail.version>
+        <jdom.version>1.1.3</jdom.version><!--can't upgrade v2 , because dependency.-->
+        <postgresql.jdbc.version>42.1.1</postgresql.jdbc.version>
+        <aspectj.relation.version>1.8.10</aspectj.relation.version>
+        <j2ee.version>7.0</j2ee.version>
+        <gson.version>2.8.1</gson.version>
+        <commons.net.version>3.6</commons.net.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <jta.version>1.1</jta.version>
+        <jersey-common.version>2.25.1</jersey-common.version>
+        <slf4.relation.version>1.7.25</slf4.relation.version>
+        <google-collections.version>1.0</google-collections.version>
+        <!--setup test environment library.-->
+        <junit.version>4.12</junit.version>
+        <!--customized library, must need to import it by yourself.-->
+        <gateweb.relation.version>1.0</gateweb.relation.version>
+    </properties>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jaxen/jaxen -->
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>${jaxen.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0 -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${commons.beanutils.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons.codec.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commons.lang.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>${commons.email.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${commons.httpcomponents.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax.validation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.ws.rs/jsr311-api -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version>${jsr311.api.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${ws.rs.api.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.bundles.repackaged/jersey-guava -->
+        <dependency>
+            <groupId>org.glassfish.jersey.bundles.repackaged</groupId>
+            <artifactId>jersey-guava</artifactId>
+            <version>${jersey.guava.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.opencsv/opencsv -->
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencvs.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/openxml4j -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>openxml4j</artifactId>
+            <version>${openxml4j.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>${poi.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml-schemas -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>${poi.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans -->
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>${xmlbeans.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>${itext.pdf.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jdom/jdom -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>${jdom.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.jdbc.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjtools -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>${aspectj.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${j2ee.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.transaction/jta -->
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>${jta.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>${jersey-common.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4.relation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.lang3.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
+        <dependency>
+            <groupId>com.google.collections</groupId>
+            <artifactId>google-collections</artifactId>
+            <version>${google-collections.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+
+        <!--test environment library.-->
+        <!-- https://mvnrepository.com/artifact/junit/junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--third party library , not in maven repository -->
+        <!--run command first ,add customize lib to your local repository -->
+        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\MigPacket.jar -DgroupId=com.gateweb   -DartifactId=mig -Dversion=1.0 -Dpackaging=jar  -->
+        <dependency>
+            <groupId>com.gateweb</groupId>
+            <artifactId>mig</artifactId>
+            <version>${gateweb.relation.version}</version>
+        </dependency>
+        <!--third party library , not in maven repository -->
+        <!--run command first ,add customize lib to your local repository -->
+        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\DB_Core.jar -DgroupId=com.gateweb   -DartifactId=db-core -Dversion=1.0 -Dpackaging=jar  -->
+        <dependency>
+            <groupId>com.gateweb</groupId>
+            <artifactId>db-core</artifactId>
+            <version>${gateweb.relation.version}</version>
+        </dependency>
+        <!--third party library , not in maven repository -->
+        <!--run command first ,add customize lib to your local repository -->
+        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\GatewebRealm.jar -DgroupId=com.gateweb   -DartifactId=realm -Dversion=1.0 -Dpackaging=jar  -->
+        <dependency>
+            <groupId>com.gateweb</groupId>
+            <artifactId>realm</artifactId>
+            <version>${gateweb.relation.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--third party library , not in maven repository -->
+        <!--run command first ,add customize lib to your local repository -->
+        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\chilkat.jar -DgroupId=com.chilkatsoft   -DartifactId=chilkat -Dversion=1.0 -Dpackaging=jar  -->
+        <dependency>
+            <groupId>com.chilkatsoft</groupId>
+            <artifactId>chilkat</artifactId>
+            <version>${gateweb.relation.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!--執行build的工作 -->
+    <build>
+        <finalName>${project.name}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+
+
+        <plugins>
+            <!--verify plugins dependency-->
+            <!--
+            you can check dependency status by " mvn versions:display-dependency-updates "
+            or use " mvn org.codehaus.mojo:versions-maven-plugin:display-dependency-updates "
+            or use " mvn org.codehaus.mojo:versions-maven-plugin:2.3:display-dependency-updates ".
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>display-dependency-updates</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>display-dependency-updates</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <rulesUri>file:///${basedir}/maven-version-rules.xml</rulesUri>
+                </configuration>
+            </plugin>
+            <!--先清空舊資料檔案 -->
+            <!-- <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>target</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                        <fileset>
+                            <directory>lib</directory>
+                            <includes>
+                                <include>*.jar</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin> -->
+            <!--升級 resources plugin採用utf-8 build code -->
+           <!--  <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin> -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <fork>true</fork>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <meminitial>128m</meminitial>
+                    <maxmem>512m</maxmem>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <!--if eclipse have problem , using 2.6 -->
+                <!--<version>3.0.0</version> -->
+                <configuration>
+                    <warSourceDirectory>web</warSourceDirectory>
+                    <outputDirectory>target</outputDirectory>
+                    <webappDirectory>target/${project.name}</webappDirectory>
+                    <failOnMissingWebXml>true</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <!--新增aspectJ縫合-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.10</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>       <!-- use this goal to weave all your main classes -->
+                            <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
+                        </goals>
+                        <configuration>
+                            <aspectDirectory>src/main/aspects</aspectDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <Xlint>error</Xlint>
+                    <warn>none</warn>
+                    <complianceLevel>1.8</complianceLevel>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>${aspectj.relation.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
