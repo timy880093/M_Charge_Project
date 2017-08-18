@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu-define>
+    <role id="600" name="帳務管理者">
+
+        <menu name="收費方案列表" url="/backendAdmin/chargeSearchServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu name="經銷商方案列表" url="/backendAdmin/dealerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu name="設定用戶收費列表" url="/backendAdmin/companySearchPackageServlet?sessionClean=Y" enable="true" pop="true"/>
+        <!--<menu name="贈送張數列表" url="/backendAdmin/giftSearchServlet?sessionClean=Y" enable="true" pop="true"/>-->
+        <menu name="月租超額計算" url="/backendAdmin/calCycleSearchServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu name="出/入帳管理" url="/backendAdmin/cashSearchServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu name="佣金計算管理" url="/backendAdmin/commissionLogSearchServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu name="介紹裝機公司匯出" url="/backendAdmin/brokerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
+    </role>
+
+</menu-define>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource>
+    <taiwan>
+        <country zip="100" name="新北市"/>
+        <country zip="101" name="臺北市"/>
+        <country zip="102" name="臺中市"/>
+        <country zip="103" name="基隆市"/>
+        <country zip="104" name="臺南市"/>
+        <country zip="105" name="高雄市"/>
+        <country zip="106" name="宜蘭縣"/>
+        <country zip="107" name="桃園縣"/>
+        <country zip="108" name="嘉義市"/>
+        <country zip="109" name="新竹縣"/>
+        <country zip="110" name="苗栗縣"/>
+        <country zip="111" name="南投縣"/>
+        <country zip="112" name="彰化縣"/>
+        <country zip="113" name="新竹市"/>
+        <country zip="114" name="雲林縣"/>
+        <country zip="115" name="嘉義縣"/>
+        <country zip="116" name="嘉義市"/>
+        <country zip="117" name="臺南縣"/>
+        <country zip="119" name="屏東縣"/>
+        <country zip="120" name="花蓮縣"/>
+        <country zip="121" name="臺東縣"/>
+        <country zip="122" name="金門縣"/>
+        <country zip="123" name="澎湖縣"/>
+    </taiwan>
+
+    <authority>
+        <role id="0" name="一般使用者"/>
+        <role id="100" name="管理者"/>
+        <role id="200" name="一般公司管理者"/>
+        <role id="201" name="一般公司會計者"/>
+        <role id="202" name="一般公司使用者"/>
+        <role id="300" name="會計公司使用者"/>
+        <role id="400" name="POS公司使用者"/>
+    </authority>
+
+    <errors>
+        <!--common errors-->
+        <error errorCode="E0001" errorDescription="緊急通知：無註冊資料，請確認統一編號、發票機號、金鑰等資料欄位是否正確"/>
+        <error errorCode="E0002" errorDescription="緊急通知：該張發票號碼系統已為開立狀態。此次上傳資料的隨機碼、總計金額與系統紀錄不符，請立即處理 "/>
+        <error errorCode="E0003" errorDescription="緊急通知：此發票號碼與加值中心可用字軌不符，請立即處裡"/>
+        <error errorCode="E0004" errorDescription="緊急通知：此張發票已超過上傳期限"/>
+
+        <!--column errors-->
+        <error errorCode="E0101" errorDescription="缺少必要欄位=>(XML欄位)"/>
+        <error errorCode="E0102" errorDescription="(XML欄位)=>格式不正確 "/>
+        <error errorCode="E0103" errorDescription="此張發票為捐贈 ，列印註記欄位不得為Y"/>
+        <error errorCode="E0104" errorDescription="此張發票為捐贈 ，愛心碼必為 3-7碼的數字"/>
+        <error errorCode="E0105" errorDescription="此張發票載具為手機條碼，格式錯誤，第一碼必為 / ，且總長度必為 8碼"/>
+        <error errorCode="E0106" errorDescription="此張發票載具為手機條碼，格式錯誤，顯碼欄位必須等於隱碼欄位"/>
+        <error errorCode="E0107" errorDescription="此張發票載具為自然人憑證，格式錯誤，第一、二碼必為英文，且總長度必為 16 碼"/>
+        <error errorCode="E0108" errorDescription="此張發票載具為自然人憑證，格式錯誤，顯碼欄位必須等於隱碼欄位"/>
+        <error errorCode="E0109" errorDescription="此張發票防偽隨機碼，格式錯誤，限填四位隨機數字"/>
+        <error errorCode="E0110" errorDescription="此張發票課稅別為應稅或混和稅率，且有買方統一編號，請算出此張發票營業稅額"/>
+        <error errorCode="E0111" errorDescription="此張發票沒有買方統一編號或為特種稅率發票，不需算出營業稅額"/>
+        <error errorCode="E0112" errorDescription="此張發票課稅別為應稅，稅率應為 0.05"/>
+        <error errorCode="E0113" errorDescription="此張發票課稅別為混和型 ，應稅銷售額合計必須大於 0，且必須有稅率0.05"/>
+        <error errorCode="E0114" errorDescription="此張發票課稅別為特種稅率，稅率須為 0.02、0.05、0.15、0.25"/>
+        <error errorCode="E0115" errorDescription="此張發票課稅別為應稅 ，免稅銷售額合計、零稅銷售額合計等欄位內容應為0"/>
+        <error errorCode="E0116" errorDescription="此張發票課稅別為免稅 ，應稅銷售額合計、零稅銷售額合計等欄位內容應為0"/>
+        <error errorCode="E0117" errorDescription="此張發票課稅別為零稅，應稅銷售額合計、免稅售額額合計等欄位內容應為0"/>
+        <error errorCode="E0118" errorDescription="此張發票課稅別為應稅(特種稅率)，免稅銷售額合計、零稅銷售額合計、營業稅額等欄位內容應為0"/>
+        <error errorCode="E0119" errorDescription="此張發票總計金額必須等於應稅銷售合計+免稅銷售額合計+零稅率銷售額合計+營業稅額"/>
+        <error errorCode="E0120" errorDescription="特種稅率不得用07類別發票"/>
+        <error errorCode="E0121" errorDescription="特種稅率不得用08類別發票"/>
+        <error errorCode="E0122" errorDescription="零稅發票必填海關"/>
+        <error errorCode="E0123" errorDescription="作廢原因未填"/>
+        <error errorCode="E0124" errorDescription="註銷原因未填"/>
+        <error errorCode="E0125" errorDescription="愛心碼不為空時，列印註記需為N"/>
+        <error errorCode="E0126" errorDescription="折讓金額有誤，數量乘單價與折讓金額不相等"/>
+        <error errorCode="E0127" errorDescription="折讓金額有誤，可折金額小於折讓金額"/>
+
+        <!-- status errors-->
+        <error errorCode="E0201" errorDescription="此張發票為未使用狀態，請勿傳送作廢或註銷及折讓發票資料"/>
+        <error errorCode="E0202" errorDescription="此張折讓證明單不存在，請勿傳送作廢折讓證明單資料 "/>
+        <error errorCode="E0203" errorDescription="此張發票已為開立狀態，系統判定為重複上傳，請確認"/>
+        <error errorCode="E0204" errorDescription="此張發票已為作廢狀態，系統判定為重複上傳，請確認"/>
+        <error errorCode="E0205" errorDescription="此張發票已為註銷狀態，系統判定為重複上傳，請確認"/>
+        <error errorCode="E0206" errorDescription="此張折讓證明單已為開立狀態，系統判定為重複上傳，請確認"/>
+        <error errorCode="E0207" errorDescription="此張折讓證明單已為作廢狀態，系統判定為重複上傳，請確認"/>
+        <error errorCode="E0208" errorDescription="此張發票已作廢或註銷，請勿傳送折讓發票資料"/>
+        <error errorCode="e0209" errorDescription="該張發票號碼系統非開立狀態。"/>
+        <error errorCode="E0210" errorDescription="未上傳成功"/>
+        <error errorCode="E0211" errorDescription="未上傳成功，無法作廢發票"/>
+        <error errorCode="E0212" errorDescription="status 不能為NULL"/>
+
+        <!-- invoice type errors-->
+        <error errorCode="E0316" errorDescription="應為D0401"/>
+        <error errorCode="E0317" errorDescription="應為B0401"/>
+        <error errorCode="E0318" errorDescription="應為C0501"/>
+        <error errorCode="E0319" errorDescription="應為A0501"/>
+
+        <!--E0501 type errors 取號錯誤-->
+        <error errorCode="E0402" errorDescription="此發票號碼與加值中心可用字軌不符"/>
+        <error errorCode="E0404" errorDescription="已無可用發票"/>
+        <error errorCode="E0405" errorDescription="取用發票組數大於剩餘組數，請立即處理"/>
+        <error errorCode="E0406" errorDescription="雙月25號以後才可取次期發票號碼"/>
+
+        <!-- 系統類錯誤-->
+        <error errorCode="E0904" errorDescription="資料庫寫入失敗"/>
+
+    </errors>
+
+    <prizes>
+        <prize type="A" prizeamt="10000000" remark="特別獎1000萬"></prize>
+        <prize type="B" prizeamt="2000" remark="無實體2000元獎"></prize>
+        <prize type="C" prizeamt="1000000" remark="無實體100萬"></prize>
+        <prize type="0" prizeamt="2000000" remark="特獎200萬"></prize>
+        <prize type="1" prizeamt="200000" remark="頭獎20萬"></prize>
+        <prize type="2" prizeamt="40000" remark="二獎4萬"></prize>
+        <prize type="3" prizeamt="10000" remark="三獎1萬"></prize>
+        <prize type="4" prizeamt="4000" remark="四獎4000"></prize>
+        <prize type="5" prizeamt="1000" remark="五獎1000"></prize>
+        <prize type="6" prizeamt="200" remark="六獎200"></prize>
+    </prizes>
+
+</resource>

@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="dao.PackageModeEntity" table="package_mode" schema="public" catalog="charge_db">
+        <id name="packageId">
+            <column name="package_id" sql-type="serial" not-null="true"/>
+            <generator class="identity"/>
+        </id>
+        <property name="packageType">
+            <column name="package_type" sql-type="int4"/>
+        </property>
+        <property name="chargeId">
+            <column name="charge_id" sql-type="int4"/>
+        </property>
+        <property name="additionId">
+            <column name="addition_id" sql-type="int4"/>
+        </property>
+        <property name="companyId">
+            <column name="company_id" sql-type="int4"/>
+        </property>
+        <property name="dealerId">
+            <column name="dealer_id" sql-type="int4"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="bpchar" length="1"/>
+        </property>
+        <property name="creatorId">
+            <column name="creator_id" sql-type="int4"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="timestamp"/>
+        </property>
+        <property name="modifierId">
+            <column name="modifier_id" sql-type="int4"/>
+        </property>
+        <property name="modifyDate">
+            <column name="modify_date" sql-type="timestamp"/>
+        </property>
+        <property name="dealerCompanyId">
+            <column name="dealer_company_id" sql-type="int4"/>
+        </property>
+        <property name="brokerCp2">
+            <column name="broker_cp2" sql-type="varchar" length="50"/>
+        </property>
+        <property name="broker2">
+            <column name="broker2" sql-type="varchar" length="50"/>
+        </property>
+        <property name="brokerCp3">
+            <column name="broker_cp3" sql-type="varchar" length="100"/>
+        </property>
+        <property name="broker3">
+            <column name="broker3" sql-type="varchar" length="50"/>
+        </property>
+    </class>
+</hibernate-mapping>

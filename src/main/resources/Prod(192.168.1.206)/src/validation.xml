@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validation>
+    <class name="com.gate.web.servlets.backend.common.IndexServlet" form="com.gate.core.bean.DemoBean"></class>
+    <class name="com.gate.web.servlets.backend.invoice.InvoiceOpenServlet" form="com.gate.web.formbeans.InvoiceOpenBean"></class>
+</validation>

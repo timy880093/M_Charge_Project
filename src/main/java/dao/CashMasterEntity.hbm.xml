@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="dao.CashMasterEntity" table="cash_master" schema="public" catalog="charge_db">
+        <id name="cashMasterId">
+            <column name="cash_master_id" sql-type="serial" not-null="true"/>
+            <generator class="identity"/>
+        </id>
+        <property name="outYm">
+            <column name="out_ym" sql-type="varchar" length="6"/>
+        </property>
+        <property name="bankYm">
+            <column name="bank_ym" sql-type="varchar" length="6"/>
+        </property>
+        <property name="companyId">
+            <column name="company_id" sql-type="int4"/>
+        </property>
+        <property name="noTaxInclusiveAmount">
+            <column name="no_tax_inclusive_amount" sql-type="numeric" precision="53" scale="4"/>
+        </property>
+        <property name="taxType">
+            <column name="tax_type" sql-type="bpchar" length="1"/>
+        </property>
+        <property name="taxRate">
+            <column name="tax_rate" sql-type="float4" precision="8" scale="8"/>
+        </property>
+        <property name="taxAmount">
+            <column name="tax_amount" sql-type="numeric" precision="53" scale="4"/>
+        </property>
+        <property name="taxInclusiveAmount">
+            <column name="tax_inclusive_amount" sql-type="numeric" precision="53" scale="4"/>
+        </property>
+        <property name="emailSentDate">
+            <column name="email_sent_date" sql-type="timestamp"/>
+        </property>
+        <property name="outDate">
+            <column name="out_date" sql-type="timestamp"/>
+        </property>
+        <property name="excelOutDate">
+            <column name="excel_out_date" sql-type="timestamp"/>
+        </property>
+        <property name="inAmount">
+            <column name="in_amount" sql-type="numeric" precision="53" scale="4"/>
+        </property>
+        <property name="inNote">
+            <column name="in_note" sql-type="varchar" length="200"/>
+        </property>
+        <property name="inDate">
+            <column name="in_date" sql-type="timestamp"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="int4"/>
+        </property>
+        <property name="isFirst">
+            <column name="is_first"  sql-type="varchar" length="1"/>
+        </property>
+        <property name="creatorId">
+            <column name="creator_id" sql-type="int4"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="timestamp"/>
+        </property>
+        <property name="modifierId">
+            <column name="modifier_id" sql-type="int4"/>
+        </property>
+        <property name="modifyDate">
+            <column name="modify_date" sql-type="timestamp"/>
+        </property>
+        <property name="isInoutMoneyUnmatch">
+            <column name="is_inout_money_unmatch" sql-type="varchar" length="1"/>
+        </property>
+    </class>
+</hibernate-mapping>

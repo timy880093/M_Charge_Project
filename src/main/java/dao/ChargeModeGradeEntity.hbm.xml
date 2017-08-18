@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="dao.ChargeModeGradeEntity" table="charge_mode_grade" schema="public" catalog="charge_db">
+        <id name="chargeId">
+            <column name="charge_id" sql-type="integer"/>
+            <generator class="identity"/>
+        </id>
+        <property name="packageName">
+            <column name="package_name" sql-type="varchar(50)" length="50" not-null="true"/>
+        </property>
+        <property name="chargeCycle">
+            <column name="charge_cycle" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="freeMonth">
+            <column name="free_month" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="contractLimit">
+            <column name="contract_limit" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="feePeriod">
+            <column name="fee_period" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="baseQuantity">
+            <column name="base_quantity" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="salesPrice">
+            <column name="sales_price" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="hasGrade">
+            <column name="has_grade" sql-type="varchar" not-null="true"/>
+        </property>
+        <property name="gradePrice">
+            <column name="grade_price" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="gradeCnt">
+            <column name="grade_cnt" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="creatorId">
+            <column name="creator_id" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="timestamp(6)" not-null="true"/>
+        </property>
+        <property name="modifierId">
+            <column name="modifier_id" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="modifyDate">
+            <column name="modify_date" sql-type="timestamp(6)" not-null="true"/>
+        </property>
+        <property name="prePayment">
+            <column name="pre_payment" sql-type="integer" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

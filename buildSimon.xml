@@ -1,0 +1,14 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" 
+         name="SimonUsed" default="init-ivy" basedir=".">
+    <!-- User defined -->
+	<property name="ANT_HOME" location="D:\Ant\apache-ant-1.9.6"></property>
+	<property name="IVY_HOME" location="D:\IVY\apache-ivy-2.4.0"></property>
+	<property name="JAVA_HOME" location="D:\Java\jdk1.8.0_45"></property>
+	<property name="ANT_TOOL_JAVA_HOME" location="D:\Java\jdk1.7.0_71"></property>
+	<property name="FINDBUGS_HOME" location="D:\Findbugs\findbugs-3.0.1"></property>
+	<property name="TOMCAT_HOME" location="D:\Tomcat-8.0.9"></property>
+	<property name="JVM_HEAPSIZE" value="1024m"></property>
+	<property name="ASPJECT_JAR" value="lib/aspectjtools-1.8.7.jar"></property>
+    <!-- import default build script -->
+    <import file="build.xml"></import>
+</project>

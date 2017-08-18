@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="dao.ChargeModeCycleAddEntity" table="charge_mode_cycle_add" schema="public" catalog="charge_db">
+        <id name="additionId">
+            <column name="addition_id" sql-type="serial" not-null="true"/>
+            <generator class="identity"/>
+        </id>
+        <property name="startDate">
+            <column name="start_date" sql-type="date"/>
+        </property>
+        <property name="endDate">
+            <column name="end_date" sql-type="date"/>
+        </property>
+        <property name="realStartDate">
+            <column name="real_start_date" sql-type="date"/>
+        </property>
+        <property name="realEndDate">
+            <column name="real_end_date" sql-type="date"/>
+        </property>
+        <property name="additionQuantity">
+            <column name="addition_quantity" sql-type="int4"/>
+        </property>
+        <property name="freeMonth">
+            <column name="free_month" sql-type="int4"/>
+        </property>
+        <property name="creatorId">
+            <column name="creator_id" sql-type="int4"/>
+        </property>
+        <property name="modifierId">
+            <column name="modifier_id" sql-type="int4"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="timestamp"/>
+        </property>
+        <property name="modifyDate">
+            <column name="modify_date" sql-type="timestamp"/>
+        </property>
+        <property name="giftPrice">
+            <column name="gift_price" sql-type="numeric" precision="32" scale="9"/>
+        </property>
+    </class>
+</hibernate-mapping>

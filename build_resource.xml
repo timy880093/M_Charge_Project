@@ -1,0 +1,80 @@
+<project name="build_resource" basedir="." default="copyResource">
+	<!--  output folder -->
+	<target name="copyResource" description="複製設定檔案至編譯出來的資料夾">
+		<echo message="copy ${RESOURCE}/src to ${src} folder" />
+		<copy todir="${src}" includeemptydirs="false" overwrite="true"
+			  description="copy resource to build folder">
+			<fileset dir="${RESOURCE}/src" >
+				<include name="**/*.gif"></include>
+				<include name="**/*.xml"></include>
+				<include name="**/*.properties"></include>
+			</fileset>
+		</copy>
+
+		<!--把/build/ajc/com裡面和/build/ajc/dao裡面的資料copy到/web/WEB-INF/classes/com和/web/WEB-INF/classes/dao-->
+		<!--echo message="copy ${PUBLISH_TO}/build/ajc/com to ${WEB-INF}/classes/com folder" />
+		<delete dir="${WEB-INF}/classes/com"></delete>
+		<mkdir dir="${WEB-INF}/classes/com"></mkdir>
+		<copy todir="${WEB-INF}/classes/com">
+			<fileset dir="${PUBLISH_TO}/build/ajc/com">
+			</fileset>
+		</copy>
+		<delete dir="${WEB-INF}/classes/dao"></delete>
+		<mkdir dir="${WEB-INF}/classes/dao"></mkdir>
+		<copy todir="${WEB-INF}/classes/dao">
+			<fileset dir="${PUBLISH_TO}/build/ajc/dao">
+			</fileset>
+		</copy-->
+	</target>
+
+	<target name="copyToWebInf"  description="複製檔案到WEB-INF當中">
+		<!-- delete web.xml -->
+		<delete file="${WEB-INF}/web.xml"/>
+		<!-- copy web.xml -->
+		<copy todir="${WEB-INF}" includeemptydirs="false" overwrite="true"
+			  description="copy resource to build folder">
+			<fileset dir="${RESOURCE}" >
+				<include name="web.xml"></include>
+			</fileset>
+		</copy>
+
+		<!-- clean classes folder-->
+		<delete dir="${WEB-INF}/classes"></delete>
+		<!-- recreate folder -->
+		<mkdir dir="${WEB-INF}/classes"></mkdir>
+		<!-- copy classes -->
+		<copy todir="${WEB-INF}/classes" includeemptydirs="false" overwrite="true"
+			  description="copy resource to build folder">
+			<fileset dir="${build_ajc}" >
+				<include name="**/*.gif"></include>
+				<include name="**/*.xml"></include>
+				<include name="**/*.properties"></include>
+				<include name="**/*.class"></include>
+			</fileset>
+		</copy>
+
+		<!-- clean lib folder-->
+		<delete dir="${WEB-INF}/lib"></delete>
+		<!-- recreate folder -->
+		<mkdir dir="${WEB-INF}/lib"></mkdir>
+		<!-- copy libraries -->
+		<copy todir="${WEB-INF}/lib" includeemptydirs="false" overwrite="true"
+			  description="copy resource to build folder">
+			<fileset dir="${lib}" >
+				<include name="**/*.jar"></include>
+			</fileset>
+			<fileset dir="${static_lib}" >
+				<include name="**/*.jar"></include>
+			</fileset>
+		</copy>
+	</target>
+	<target name="publish" description="發佈至指定目錄">
+		<delete dir="${PUBLISH_TO}"></delete>
+		<mkdir dir="${PUBLISH_TO}"></mkdir>
+		<copy todir="${PUBLISH_TO}">
+			<fileset dir="web">
+				<exclude name="**/*.java"></exclude>
+			</fileset>
+		</copy>
+	</target>
+</project>

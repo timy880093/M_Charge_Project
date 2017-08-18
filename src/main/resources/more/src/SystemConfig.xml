@@ -1,0 +1,41 @@
+<SystemConfig>
+    <mailConfig>
+        <encoding>utf-8</encoding>
+        <host>vmail.fetnet.net</host>
+        <port>587</port>
+        <userName>se01@gateweb.com.tw</userName>
+        <password>689vMsXr</password>
+        <from>se01@gateweb.com.tw</from>
+        <errMailTo>se01@gateweb.com.tw</errMailTo>
+        <testMailTo>se01@gateweb.com.tw</testMailTo>
+        <sendMail>true</sendMail>
+    </mailConfig>
+
+    <parameter>
+        <name>uploadTempPath</name>
+        <value>D:\Temp\UploadTemp</value>
+    </parameter>
+
+    <parameter>
+        <name>compatibleVersion</name>
+        <value>1.021,1.022</value>
+    </parameter>
+
+    <parameter>
+        <name>wsUri</name>
+        <value>ws://localhost:8080/dataPush</value>
+    </parameter>
+
+    <parameter>
+        <name>adminCompany</name>
+        <value>2</value>
+    </parameter>
+    <parameter>
+        <name>MIG_ExchangeRootFolder</name>
+        <value>D:\Temp\Exchange</value>
+    </parameter>
+    <parameter>
+        <name>showPath</name>
+        <value>http://localhost:8080/</value>
+    </parameter>
+</SystemConfig>

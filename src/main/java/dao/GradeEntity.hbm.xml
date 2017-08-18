@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="dao.GradeEntity" table="grade" schema="public" catalog="charge_db">
+        <id name="gradeId">
+            <column name="grade_id" sql-type="integer"/>
+            <generator class="identity"/>
+        </id>
+        <property name="chargeId">
+            <column name="charge_id" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="cntStart">
+            <column name="cnt_start" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="cntEnd">
+            <column name="cnt_end" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="price">
+            <column name="price" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="creatorId">
+            <column name="creator_id" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="timestamp(6)" not-null="true"/>
+        </property>
+        <property name="modifierId">
+            <column name="modifier_id" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="modifyDate">
+            <column name="modify_date" sql-type="timestamp(6)" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

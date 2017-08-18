@@ -1,0 +1,113 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant"
+         name="DefaultProject" default="init-ivy" basedir=".">
+    <!-- User defined -->
+
+    <!--<property name="ANT_HOME" location="D:\Ant\apache-ant-1.9.6"></property>-->
+    <!--<property name="IVY_HOME" location="D:\IVY\apache-ivy-2.4.0"></property>-->
+    <!--<property name="JAVA_HOME" location="D:\Java\jdk1.8.0_45"></property>-->
+    <!--<property name="ANT_TOOL_JAVA_HOME" location="D:\Java\jdk1.7.0_71"></property>-->
+    <!--<property name="FINDBUGS_HOME" location="D:\Findbugs\findbugs-3.0.1"></property>-->
+    <!--<property name="TOMCAT_HOME" location="D:\Tomcat-8.0.9"></property>-->
+    <!--<property name="JVM_HEAPSIZE" value="1024m"></property>-->
+    <!--<property name="ASPJECT_JAR" value="lib/aspectjtools-1.8.7.jar"></property>-->
+
+    <!--system defined-->
+    <property name="encoding" value="UTF-8"></property>
+    <property name="ivv_version" value="2.4.0"></property>
+    <property name="lib" location="lib"></property>
+    <property name="static_lib" location="static_lib"></property>
+    <property name="ivy_lib" location="ivy"></property>
+    <property name="src" location="src"></property>
+    <property name="build_web" location="build/web"></property>
+    <property name="build_ajc" location="build/ajc"></property>
+    <property name="resource_dev" location="resources/dev" ></property>
+    <property name="resource_production" location="resources/production" ></property>
+    <property name="resource_test" location="resources/test" ></property>
+
+    <!-- customize task list-->
+    <target name="ivy" depends="init-ivy" description="install ivy"></target>
+    <target name="getLib" depends="retrieve" description="download library"></target>
+    <target name="buildWeb" depends="build_web"></target>
+    <!-- ivy -->
+    <target name="download-ivy" unless="offline">
+        <mkdir dir="${ivy_lib}"/>
+        <get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivv_version}/ivy-${ivv_version}.jar"
+             dest="${ivy_lib}/ivy-${ivv_version}.jar" usetimestamp="true"/>
+        <copy file="${ivy_lib}/ivy-${ivv_version}.jar" tofile="${ANT_HOME}/lib/ivy-${ivv_version}.jar"/>
+    </target>
+    <target name="init-ivy" depends="download-ivy">
+        <path id="ivy.lib.path">
+            <fileset dir="${ivy_lib}" includes="*.jar"/>
+        </path>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+                 uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+    </target>
+    <!-- ivy to get dependencies and copy to project lib folder automatically -->
+    <target name="retrieve" description="retrieve dependencies with ivy">
+        <mkdir dir="${lib}"></mkdir>
+        <delete dir="${lib}"></delete>
+        <mkdir dir="${lib}"></mkdir>
+        <mkdir dir="${IVY_HOME}"></mkdir>
+        <property name="ivy.default.ivy.user.dir" value="${IVY_HOME}"/>
+        <ivy:retrieve/>
+    </target>
+
+    <target name="build_web"
+            description="compile the source " depends="copyResource">
+        <!--動態導入外部ant task-->
+        <taskdef resource="net/sf/antcontrib/antlib.xml">
+            <classpath>
+                <fileset dir="${lib}"/>
+            </classpath>
+        </taskdef>
+
+        <!--aspectj -->
+        <taskdef classpath="${ASPJECT_JAR}" description="use aspectJ"
+                 resource="org/aspectj/antlib.xml">
+        </taskdef>
+        <!-- recreate folder -->
+        <delete dir="build"></delete>
+        <mkdir dir="${build_web}"></mkdir>
+        <mkdir dir="${build_ajc}"></mkdir>
+        <echo message="classpath...." />
+        <!-- classpath -->
+        <path id="web.class.path" description="compile web library">
+            <fileset dir="${lib}">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${static_lib}">
+                <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="${TOMCAT_HOME}/lib">
+                <include name="**/*.jar"></include>
+            </fileset>
+        </path>
+
+        <echo message="Compile the java code from ${src} into ${build_web}  ${build_ajc} ...." />
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}" destdir="${build_web}" memoryMaximumSize="${JVM_HEAPSIZE}"
+               includeantruntime="false" debug="true" debuglevel="lines,vars,source"
+               executable="${JAVA_HOME}/bin/javac" fork="yes"
+               classpathref="web.class.path" encoding="UTF-8"
+               compiler="javac1.8"
+               description="java compiler">
+        </javac>
+        <iajc source="1.7" target="1.7" showweaveinfo="true" verbose="false" destdir="${build_ajc}"
+              maxmem="256M" srcdir="${src}" description="aspectJ compiler" fork="true"
+              classpathref="web.class.path">
+            <include name="**/*.aj"/>
+            <inpath>
+                <pathelement location="${build_web}"/>
+            </inpath>
+        </iajc>
+        <echo message="copy default properties...." />
+        <!--copy default properties-->
+        <copy todir="${build_ajc}" description="combine all classes to client agent">
+            <fileset dir="${src}">
+                <include name="**/*.gif"></include>
+                <include name="**/*.xml"></include>
+                <include name="**/*.properties"></include>
+            </fileset>
+        </copy>
+    </target>
+</project>

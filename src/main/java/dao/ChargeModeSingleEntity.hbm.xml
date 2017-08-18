@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="dao.ChargeModeSingleEntity" table="charge_mode_single" schema="public" catalog="charge_db">
+        <id name="chargeId">
+            <column name="charge_id" sql-type="serial" not-null="true"/>
+            <generator class="identity"/>
+        </id>
+        <property name="packageName">
+            <column name="package_name" sql-type="varchar" length="50"/>
+        </property>
+        <property name="baseQuantity">
+            <column name="base_quantity" sql-type="int4"/>
+        </property>
+        <property name="salesPrice">
+            <column name="sales_price" sql-type="int4"/>
+        </property>
+        <property name="maxPrice">
+            <column name="max_price" sql-type="int4"/>
+        </property>
+        <property name="availableStart">
+            <column name="available_start" sql-type="date"/>
+        </property>
+        <property name="availableEnd">
+            <column name="available_end" sql-type="date"/>
+        </property>
+        <property name="status">
+            <column name="status" sql-type="int4"/>
+        </property>
+        <property name="creatorId">
+            <column name="creator_id" sql-type="int4"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="timestamp"/>
+        </property>
+        <property name="modifierId">
+            <column name="modifier_id" sql-type="int4"/>
+        </property>
+        <property name="modifyDate">
+            <column name="modify_date" sql-type="timestamp"/>
+        </property>
+        <property name="pointPrice">
+            <column name="point_price" sql-type="float8" precision="17" scale="17"/>
+        </property>
+        <property name="contractLimit">
+            <column name="contract_limit" sql-type="int4"/>
+        </property>
+    </class>
+</hibernate-mapping>
