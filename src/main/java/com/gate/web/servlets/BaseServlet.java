@@ -1,22 +1,17 @@
 package com.gate.web.servlets;
 
-import com.gate.core.bean.BaseFormBean;
-import com.gate.core.db.Dom4jUtils;
-import com.gate.realms.LoginUser;
-import com.gate.utils.RequestToMapUtils;
-import com.gate.web.authority.UserInfo;
-import com.gate.web.authority.UserInfoContext;
-import com.gate.web.exceptions.FormValidationException;
-import com.gate.web.exceptions.ReturnPathException;
-import com.gate.web.messages.ErrorMessages;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +21,27 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.io.IOException;
-import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.*;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import com.gate.core.bean.BaseFormBean;
+import com.gate.core.db.Dom4jUtils;
+import com.gate.utils.RequestToMapUtils;
+import com.gate.web.authority.UserInfo;
+import com.gate.web.authority.UserInfoContext;
+import com.gate.web.exceptions.FormValidationException;
+import com.gate.web.exceptions.ReturnPathException;
+import com.gate.web.messages.ErrorMessages;
+import com.gateweb.einv.model.Company;
+import com.gateweb.einv.model.User;
+import com.gateweb.einv.service.EinvFacade;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Created by simon on 2014/7/4.
@@ -63,6 +75,15 @@ public abstract class BaseServlet extends HttpServlet {
     protected static final String POP_TEMPLATE_PAGE = "/backendAdmin/template/pop_template.jsp";
     protected static final String IMPORT_TEMPLATE_PAGE = "/backendAdmin/template/import_template.jsp";
 
+	@Autowired
+	EinvFacade einvFacade;
+	
+	public void init(ServletConfig config) throws ServletException {
+	    super.init(config);
+	    SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+	      config.getServletContext());
+	  }
+	
     /**
      * 前面是action,後面是path
      *
@@ -131,64 +152,84 @@ public abstract class BaseServlet extends HttpServlet {
     protected void commonService(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {
-//            if(request.isUserInRole("停用")){
-//                throw new LoginException("此帳號已停用,或是公司已停權,請洽關網客服!");
-////                forwardLoginErrorPage(request,response,"此帳號已停用,或是公司已停權,請洽關網客服!");
-//            }
-//            if(request.isUserInRole("密碼錯誤")){
-//                throw new LoginException("密碼輸入錯誤!");
-////                forwardLoginErrorPage(request,response,"密碼輸入錯誤!");
-//            }
-            //parse User Principal.
-            Principal principal = request.getUserPrincipal();
+        	User user = (User)request.getSession().getAttribute("loginUser");
+        	//List<AccountReference> referenceList = (List<AccountReference>)request.getSession().getAttribute("accountReferenceList");
+        	Company company = (Company)request.getSession().getAttribute("company");
+        	UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userContext");
 
-            String userId = "";
-            String roleId = "";
-            String roleName ="";
-            String companyId = "";
-            String loginName = "";
-            String email = "";
-            String companyName = "";
-            String referenceIds ="";
-            if (principal != null) {//表示有經過授權登入
-
-                String principalName = principal.getName();
-                LoginUser loginUser = new Gson().fromJson(principalName,LoginUser.class);
-                //Map<String,Object> dataMap = (Map<String, Object>)new Gson().fromJson(principalName,new TypeToken<Map<String, Object>>(){}.getType());
-                userId = String.valueOf(loginUser.getUserId());
-                roleId = String.valueOf(loginUser.getRoleId());
-                roleName = loginUser.getCurrentRoleName();
-                companyId =String.valueOf(loginUser.getCompanyId());
-                loginName = loginUser.getName();
-                email = loginUser.getEmail();
-                companyName = loginUser.getCompanyName();
-
-//                String[] dataList = StringUtils.split(principalName, "_");
-//                userId = dataList[0];
-//                roleId = dataList[1];
-//                roleName = dataList[2];
-//                companyId = dataList[3];
-//                loginName = dataList[4];
-//                email = dataList[5];
-//                companyName = dataList[6];
-
-
-
-                UserInfo userInfo = new UserInfo();
-                userInfo.setUserId(userId);
-                userInfo.setRoleId(roleId);
-                userInfo.setRoleName(roleName);
-                userInfo.setCompanyId(companyId);
-                userInfo.setLoginName(loginName);
-                userInfo.setEmail(email);
-                userInfo.setCompanyName(companyName);
-                if(StringUtils.isNotEmpty(loginUser.getReferenceCompanyId())){
-                    referenceIds = loginUser.getReferenceCompanyId();
-                    userInfo.setReferenceCompanyId(referenceIds);
+        	if(user == null){
+	            String userName = null;
+	        	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	        	if (principal instanceof User) {
+	        		System.out.println("Admin 1:"+((User)principal).getUsername());
+	        		user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	        		System.out.println("Admin 2:"+user);
+	        		request.getSession().setAttribute("loginUser", user);
+	        		userName = user.getUsername();
+	        		/*AccountReference tmpRef = new AccountReference();
+	    			tmpRef.setUserId(user.getUserId());
+	    			referenceList = einvFacade.searchBy(tmpRef);
+	    			if(referenceList != null && referenceList.size()>0){
+	    				request.getSession().setAttribute("accountReferenceList", referenceList);
+	    			} else {
+	    				request.getSession().setAttribute("accountReferenceList", new ArrayList<AccountReference>());
+	    			}*/
+	    		} else if (principal instanceof UserDetails) {
+	    	    		System.out.println("Admin 2:"+((UserDetails)principal).getUsername());
+	    	    		User user1 = new User();
+			    		user1.setEmail(((UserDetails)principal).getUsername());
+			    		List<User> usersList = einvFacade.searchBy(user1);
+			    		if (usersList != null && usersList.size()>0){
+			    			//System.out.println("usersList.get(0):"+usersList.get(0));
+			    			user = usersList.get(0);
+			    			request.getSession().setAttribute("loginUser", user);
+			    			/*AccountReference tmpRef = new AccountReference();
+			    			tmpRef.setUserId(user.getUserId());
+			    			referenceList = einvFacade.searchBy(tmpRef);
+			    			if(referenceList != null && referenceList.size()>0){
+			    				request.getSession().setAttribute("accountReferenceList", referenceList);
+			    			} else {
+			    				request.getSession().setAttribute("accountReferenceList", new ArrayList<AccountReference>());
+			    			}*/
+			    			company = einvFacade.findCompanyById(user.getCompanyId());
+			    			request.getSession().setAttribute("company", company);
+			    			
+			    		}else{
+			    			System.out.println("No user");
+			    			System.out.println("Admin No Login");
+					    	//be  hacked ?
+			    		}
+	    		} else {
+	    			System.out.println("Admin 3:"+principal.toString());
+	
+	    		}
+        	}
+        	System.out.println("user:"+user+",  userInfo:"+UserInfoContext.getUserInfo()+", userContext:"+userInfo);
+            if (user != null && (UserInfoContext.getUserInfo() == null || userInfo == null)) {//表示有經過授權登入
+                userInfo = new UserInfo();
+                userInfo.setUserId(user.getUserId().toString());
+                userInfo.setRoleId(user.getRoleId().toString());
+                userInfo.setRoleName(User.convRoleName(user.getRoleId()));
+                userInfo.setCompanyId(user.getCompanyId().toString());
+                userInfo.setLoginName(user.getName());
+                userInfo.setEmail(user.getEmail());
+                if(company!=null){
+                	userInfo.setCompanyName(company.getName());
                 }
-                userInfo.setLogout_time(loginUser.getLogout_time());
-
-                UserInfoContext.setUserInfo(userInfo);
+                /*StringBuffer sb = new StringBuffer();
+                if(referenceList!=null){
+                	int i = 0;
+                	for(AccountReference ref: referenceList){
+                		if(i++>0){
+                			sb.append(",");
+                		}
+                		sb.append(ref.getCompanyId().toString());
+                	}
+                }
+                userInfo.setReferenceCompanyId(sb.toString());*/
+                userInfo.setLogout_time(user.getLogoutTime().intValue());
+    			request.getSession().setAttribute("userContext", userInfo);
+                UserInfoContext.setUserInfo(userInfo); 
             }
             BaseFormBean formBeanObject = null;
             //透過validation xml來定義每個servlet進入的form Class...
@@ -241,13 +282,17 @@ public abstract class BaseServlet extends HttpServlet {
             otherMap.put(REQUEST, request);
             otherMap.put(RESPONSE, response);
             otherMap.put(FORM_BEAN, formBeanObject);
-            otherMap.put(USER_ID, userId);
-            otherMap.put(ROLE_ID, roleId);
-            otherMap.put(ROLE_NAME,roleName);
-            otherMap.put(COMPANY_ID, companyId);
-            otherMap.put(LOGIN_NAME, loginName);
-            otherMap.put(EMAIL, email);
-            otherMap.put(COMPANY_NAME, companyName);
+            if(user != null){
+	            otherMap.put(USER_ID, user.getUserId().toString());
+	            otherMap.put(ROLE_ID, user.getRoleId().toString());
+	            otherMap.put(ROLE_NAME,User.convRoleName(user.getRoleId()));
+	            otherMap.put(COMPANY_ID, user.getCompanyId());
+	            otherMap.put(LOGIN_NAME, user.getName());
+	            otherMap.put(EMAIL, user.getEmail());
+            }
+            if(company!=null){
+            	otherMap.put(COMPANY_NAME, company.getName());
+            }
             String[] returnPath = serviceBU(requestParameterMap, requestAttMap, sessionAttMap, otherMap);
             //set object to session or request.
             sendObjToViewer(request, otherMap);

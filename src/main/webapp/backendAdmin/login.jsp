@@ -5,7 +5,6 @@
   Time: 下午 02:10
   To change this template use File | Settings | File Templates.
 --%>
-
 <html>
 
 <head>
@@ -38,7 +37,7 @@
 	<%--<%--%>
 	<%--session.invalidate();--%>
 	<%--%>--%>
-	<form action='j_security_check' method="POST" id="loginForm">
+	<form action='../j_spring_security_check' method="POST" id="loginForm">
 		<div align="center">
 			<br />
             <table width="975" border="0" cellpadding="0" cellspacing="0" background="<%=request.getContextPath()%>/images/bg2.jpg">
@@ -62,13 +61,13 @@
 									src="<%=request.getContextPath()%>/images/006.gif" width="32"
 									height="18" /></td>
 								<td width="173" align="left"><INPUT type='text'
-									name='j_username' value=''></td>
+									name='username' value=''></td>
 							</tr>
 							<tr>
 								<td align="left"><img
 									src="<%=request.getContextPath()%>/images/007.gif" width="32"
 									height="18" /></td>
-								<td align="left"><INPUT type='password' name='j_password' autocomplete="off"
+								<td align="left"><INPUT type='password' name='password' autocomplete="off"
 									value='' onKeyPress="return submitenter(this,event)"></td>
 							</tr>
 							<%--<tr>--%>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+	<persistence-unit name="turnkeyFacade" transaction-type="RESOURCE_LOCAL">
+				<class>com.gateweb.turnkey.model.ToConfig</class>
+				<class>com.gateweb.turnkey.model.ScheduleConfig</class>
+				<class>com.gateweb.turnkey.model.TurnkeySequence</class>
+				<class>com.gateweb.turnkey.model.Incominginvoice</class>
+				<class>com.gateweb.turnkey.model.FromConfig</class>
+				<class>com.gateweb.turnkey.model.Outgoinginvoice</class>
+				<class>com.gateweb.turnkey.model.TurnkeyMessageLogDetail</class>
+				<class>com.gateweb.turnkey.model.TurnkeySyseventLog</class>
+				<class>com.gateweb.turnkey.model.Archivedfile</class>
+				<class>com.gateweb.turnkey.model.TurnkeyTransportConfig</class>
+				<class>com.gateweb.turnkey.model.SignConfig</class>
+				<class>com.gateweb.turnkey.model.TaskConfig</class>
+				<class>com.gateweb.turnkey.model.TurnkeyUserProfile</class>
+				<class>com.gateweb.turnkey.model.TurnkeyMessageLog</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>	
+	</persistence-unit>
+	<persistence-unit name="einvFacade" transaction-type="RESOURCE_LOCAL">
+				<class>com.gateweb.einv.model.InvoiceMain</class>
+				<class>com.gateweb.einv.model.Company</class>
+				<class>com.gateweb.einv.model.User</class>
+				<class>com.gateweb.einv.model.AccountReference</class>
+				<class>com.gateweb.einv.model.InvoiceDetails</class>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>	
+	</persistence-unit>
+
+</persistence>

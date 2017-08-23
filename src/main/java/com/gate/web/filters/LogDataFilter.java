@@ -1,18 +1,33 @@
 package com.gate.web.filters;
 
-import com.gate.realms.LoginUser;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.gate.utils.TimeUtils;
+import com.gateweb.einv.model.User;
 import com.google.gson.Gson;
+
 import dao.LogDataDAO;
 import dao.LogDataEntity;
 import dao.LogParameterDAO;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.security.Principal;
-import java.util.*;
 
 /**
  * Created by Good688 on 2014/8/26.
@@ -26,10 +41,25 @@ public class LogDataFilter implements Filter {
         HttpServletRequest request = ((HttpServletRequest)req);
         StringBuffer requestURL = request.getRequestURL();
         LogParameterDAO logParameterDAO = new LogParameterDAO();
-        Principal userPrincipal = request.getUserPrincipal();
-        LoginUser loginUser = new Gson().fromJson(userPrincipal.getName(),LoginUser.class);
-        //Map<String,Object> dataMap = (Map<String, Object>)new Gson().fromJson(userPrincipal.getName(),new TypeToken<Map<String, Object>>(){}.getType());
-        String userName = loginUser.getName(); //抓Principal 的 name 切割後取user name
+        User user = null;
+        String userName = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	if (principal instanceof User) {
+    		System.out.println("Admin 1:"+((User)principal).getUsername());
+    		user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    		System.out.println("Admin 2:"+user);
+    		userName = user.getUsername();
+		} else if (principal instanceof UserDetails) {
+	    		System.out.println("Admin 2:"+((UserDetails)principal).getUsername());
+	    		UserDetails detail = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    		System.out.println("Admin 2:"+detail);
+	    		userName = detail.getUsername();
+		} else {
+			System.out.println("Admin 3:"+principal.toString());
+
+		}
+        
+         //抓Principal 的 name 切割後取user name
         //String reqSession = request.getSession().getAttributeNames();
         Map reqObj = request.getParameterMap();
         HttpSession session = request.getSession();

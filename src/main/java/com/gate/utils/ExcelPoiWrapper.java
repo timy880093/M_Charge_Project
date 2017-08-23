@@ -1,12 +1,6 @@
 package com.gate.utils;
 
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.Region;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.util.CellRangeAddress;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -14,6 +8,16 @@ import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 public class ExcelPoiWrapper {
 	private HSSFWorkbook wb;
@@ -468,7 +472,7 @@ public class ExcelPoiWrapper {
 	 */
 	public void mergeCell(int rowFrom, int colFrom, int rowTo, int colTo)
 			throws Exception {
-		this.sheet.addMergedRegion(new Region(rowFrom - 1,
+		this.sheet.addMergedRegion(new CellRangeAddress(rowFrom - 1,
 				(short) (colFrom - 1), rowTo - 1, (short) (colTo - 1)));
 	}
 

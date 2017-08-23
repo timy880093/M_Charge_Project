@@ -44,7 +44,7 @@
         <log4j.version>1.2.17</log4j.version>
         <jaxen.version>1.1.6</jaxen.version>
         <hibernate.version>5.0.12.Final</hibernate.version>
-        <spring.version>4.2.9.RELEASE</spring.version>
+        <spring.version>4.3.9.RELEASE</spring.version>
         <commons.lang3.version>3.6</commons.lang3.version>
         <commons.io.version>2.5</commons.io.version>
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
@@ -71,15 +71,125 @@
         <commons.net.version>3.6</commons.net.version>
         <dom4j.version>1.6.1</dom4j.version>
         <jta.version>1.1</jta.version>
-        <jersey-common.version>2.25.1</jersey-common.version>
+        <jersey-common.version>2.22.4</jersey-common.version>
+        <!--  <jersey-common.version>2.25.1</jersey-common.version> -->
         <slf4.relation.version>1.7.25</slf4.relation.version>
         <google-collections.version>1.0</google-collections.version>
         <!--setup test environment library.-->
         <junit.version>4.12</junit.version>
         <!--customized library, must need to import it by yourself.-->
         <gateweb.relation.version>1.0</gateweb.relation.version>
+        <spring.security.version>4.2.3.RELEASE</spring.security.version>
+        <joda.version>2.9.9</joda.version>
+		<spring-data-jpa.version>1.11.4.RELEASE</spring-data-jpa.version>
+        <spring-amqp.version>1.7.3.RELEASE</spring-amqp.version>
+		<querydsl.version>4.1.4</querydsl.version>
+		<jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+        <tiles.version>3.0.5</tiles.version>
+        
     </properties>
     <dependencies>
+    	<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
+    	<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda.version}</version>
+		</dependency>
+    	<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring-data-jpa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<version>${querydsl.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<!-- <dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>23.0</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<version>${querydsl.version}</version>
+		</dependency>
+    	<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+			<version>${spring-amqp.version}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-extras</artifactId>
+			<version>${tiles.version}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson-mapper-asl.version}</version>
+		</dependency>
+    	<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-acl</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency> -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/log4j/log4j -->
         <dependency>
             <groupId>log4j</groupId>
@@ -98,6 +208,17 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
+	    <dependency>
+			 <groupId>org.hibernate</groupId>
+			 <artifactId>hibernate-entitymanager</artifactId>
+			 <version>${hibernate.version}</version>
+		</dependency>
+	    <!-- Apache Commons DBCP -->
+	    <dependency>
+	      <groupId>org.apache.commons</groupId>
+	      <artifactId>commons-dbcp2</artifactId>
+	      <version>2.1.1</version>
+	    </dependency>        
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0 -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -171,11 +292,11 @@
             <version>${ws.rs.api.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.bundles.repackaged/jersey-guava -->
-        <dependency>
+       <!--  <dependency>
             <groupId>org.glassfish.jersey.bundles.repackaged</groupId>
             <artifactId>jersey-guava</artifactId>
             <version>${jersey.guava.version}</version>
-        </dependency>
+        </dependency> -->
         <!-- https://mvnrepository.com/artifact/net.sf.opencsv/opencsv -->
         <dependency>
             <groupId>net.sf.opencsv</groupId>
@@ -242,6 +363,16 @@
             <artifactId>postgresql</artifactId>
             <version>${postgresql.jdbc.version}</version>
         </dependency>
+        <dependency>
+			<groupId>com.thetransactioncompany</groupId>
+			<artifactId>cors-filter</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.thetransactioncompany</groupId>
+		  <artifactId>java-property-utils</artifactId>
+		  <version>1.10</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjtools -->
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -274,11 +405,11 @@
             <version>${jta.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common -->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
             <version>${jersey-common.version}</version>
-        </dependency>
+        </dependency> -->
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -292,11 +423,11 @@
             <version>${commons.lang3.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
-        <dependency>
+       <!--  <dependency>
             <groupId>com.google.collections</groupId>
             <artifactId>google-collections</artifactId>
             <version>${google-collections.version}</version>
-        </dependency>
+        </dependency> -->
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -372,6 +503,22 @@
 
 
         <plugins>
+        	<plugin>
+			    <groupId>com.mysema.maven</groupId>
+			    <artifactId>apt-maven-plugin</artifactId>
+			    <version>1.1.3</version>
+			    <executions>
+			        <execution>
+			            <goals>
+			                <goal>process</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+			                <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
             <!--verify plugins dependency-->
             <!--
             you can check dependency status by " mvn versions:display-dependency-updates "
@@ -456,9 +603,6 @@
                 <!--if eclipse have problem , using 2.6 -->
                 <!--<version>3.0.0</version> -->
                 <configuration>
-                    <warSourceDirectory>web</warSourceDirectory>
-                    <outputDirectory>target</outputDirectory>
-                    <webappDirectory>target/${project.name}</webappDirectory>
                     <failOnMissingWebXml>true</failOnMissingWebXml>
                 </configuration>
             </plugin>
