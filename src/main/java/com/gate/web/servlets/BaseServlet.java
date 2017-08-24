@@ -37,9 +37,9 @@ import com.gate.web.authority.UserInfoContext;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.messages.ErrorMessages;
-import com.gateweb.einv.model.Company;
-import com.gateweb.einv.model.User;
-import com.gateweb.einv.service.EinvFacade;
+import com.gateweb.charge.model.Company;
+import com.gateweb.charge.model.User;
+import com.gateweb.charge.service.ChargeFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -76,7 +76,7 @@ public abstract class BaseServlet extends HttpServlet {
     protected static final String IMPORT_TEMPLATE_PAGE = "/backendAdmin/template/import_template.jsp";
 
 	@Autowired
-	EinvFacade einvFacade;
+	ChargeFacade chargeFacade;
 	
 	public void init(ServletConfig config) throws ServletException {
 	    super.init(config);
@@ -168,7 +168,7 @@ public abstract class BaseServlet extends HttpServlet {
 	        		userName = user.getUsername();
 	        		/*AccountReference tmpRef = new AccountReference();
 	    			tmpRef.setUserId(user.getUserId());
-	    			referenceList = einvFacade.searchBy(tmpRef);
+	    			referenceList = chargeFacade.searchBy(tmpRef);
 	    			if(referenceList != null && referenceList.size()>0){
 	    				request.getSession().setAttribute("accountReferenceList", referenceList);
 	    			} else {
@@ -178,20 +178,20 @@ public abstract class BaseServlet extends HttpServlet {
 	    	    		System.out.println("Admin 2:"+((UserDetails)principal).getUsername());
 	    	    		User user1 = new User();
 			    		user1.setEmail(((UserDetails)principal).getUsername());
-			    		List<User> usersList = einvFacade.searchBy(user1);
+			    		List<User> usersList = chargeFacade.searchBy(user1);
 			    		if (usersList != null && usersList.size()>0){
 			    			//System.out.println("usersList.get(0):"+usersList.get(0));
 			    			user = usersList.get(0);
 			    			request.getSession().setAttribute("loginUser", user);
 			    			/*AccountReference tmpRef = new AccountReference();
 			    			tmpRef.setUserId(user.getUserId());
-			    			referenceList = einvFacade.searchBy(tmpRef);
+			    			referenceList = chargeFacade.searchBy(tmpRef);
 			    			if(referenceList != null && referenceList.size()>0){
 			    				request.getSession().setAttribute("accountReferenceList", referenceList);
 			    			} else {
 			    				request.getSession().setAttribute("accountReferenceList", new ArrayList<AccountReference>());
 			    			}*/
-			    			company = einvFacade.findCompanyById(user.getCompanyId());
+			    			company = chargeFacade.findCompanyById(user.getCompanyId());
 			    			request.getSession().setAttribute("company", company);
 			    			
 			    		}else{

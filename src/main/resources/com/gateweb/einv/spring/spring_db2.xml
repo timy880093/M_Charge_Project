@@ -12,26 +12,25 @@
 	http://www.springframework.org/schema/aop/spring-aop.xsd
 	http://www.springframework.org/schema/data/jpa
     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-    ">
-<!-- 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
- -->	
+    " default-autowire="byName">
+ 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 		
 	<aop:config>
-		<aop:pointcut id="TurnkeyFacadePoint"
-			expression="execution(* com.gateweb.turnkey.service.impl.TurnkeyFacadeImpl.*(..))" />
-		<aop:advisor advice-ref="txAdviceTurnkey" pointcut-ref="TurnkeyFacadePoint" />
+		<aop:pointcut id="ChargeFacadePoint"
+			expression="execution(* com.gateweb.charge.service.impl.ChargeFacadeImpl.*(..))" />
+		<aop:advisor advice-ref="txAdviceCharge" pointcut-ref="ChargeFacadePoint" />
 	</aop:config>
 		
-	<jpa:repositories base-package="com.gateweb.turnkey.repository" 
-		entity-manager-factory-ref="entityManagerFactoryTurnkey"
-		transaction-manager-ref="transactionManagerTurnkey" />
+	<jpa:repositories base-package="com.gateweb.charge.repository" 
+		entity-manager-factory-ref="entityManagerFactoryCharge"
+		transaction-manager-ref="transactionManagerCharge" />
 
-	<bean id="jpaDataSourceTurnkey" class="org.apache.commons.dbcp2.BasicDataSource"
+	<bean id="jpaDataSourceCharge" class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close">
-		<property name="driverClassName" value="${turnkey.jdbc.driverClassName}" />
-		<property name="url" value="${turnkey.jdbc.url}" />
-		<property name="username" value="${turnkey.jdbc.username}" />
-		<property name="password" value="${turnkey.jdbc.password}" />
+		<property name="driverClassName" value="${charge.jdbc.driverClassName}" />
+		<property name="url" value="${charge.jdbc.url}" />
+		<property name="username" value="${charge.jdbc.username}" />
+		<property name="password" value="${charge.jdbc.password}" />
 		<property name="maxTotal" value="${jdbc.maxTotal}" />
 		<property name="initialSize" value="${jdbc.initialSize}" />
 		<property name="maxIdle" value="${jdbc.maxIdle}" />
@@ -42,16 +41,16 @@
 		<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}" />
 	</bean>
 
-	<bean id="entityManagerFactoryTurnkey"
+	<bean id="entityManagerFactoryCharge"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="dataSource" ref="jpaDataSourceTurnkey" />
-		<property name="jtaDataSource" ref="jpaDataSourceTurnkey" />
-		<property name="persistenceUnitName" value="turnkeyFacade" />
+		<property name="dataSource" ref="jpaDataSourceCharge" />
+		<property name="jtaDataSource" ref="jpaDataSourceCharge" />
+		<property name="persistenceUnitName" value="chargeFacade" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 				<property name="showSql" value="${jdbc.showSql}" />
 				<property name="generateDdl" value="${jdbc.generateDdl}" />
-				<property name="databasePlatform" value="${turnkey.jdbc.dialect}" />
+				<property name="databasePlatform" value="${charge.jdbc.dialect}" />
 			</bean>
 		</property>
 		<property name="jpaProperties">
@@ -62,12 +61,12 @@
 		</property>	
 	</bean>
 
-	<bean id="transactionManagerTurnkey" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactoryTurnkey" />
-		<property name="dataSource" ref="jpaDataSourceTurnkey" />
+	<bean id="transactionManagerCharge" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactoryCharge" />
+		<property name="dataSource" ref="jpaDataSourceCharge" />
 	</bean>
 
-	<tx:advice id="txAdviceTurnkey" transaction-manager="transactionManagerTurnkey">
+	<tx:advice id="txAdviceCharge" transaction-manager="transactionManagerCharge">
 		<tx:attributes>
 			<tx:method name="create*" propagation="REQUIRED" />
 			<tx:method name="delete*" propagation="REQUIRED" />

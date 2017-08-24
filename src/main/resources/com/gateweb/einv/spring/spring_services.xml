@@ -15,11 +15,14 @@
 	http://www.springframework.org/schema/task/spring-task.xsd
 	http://www.springframework.org/schema/util 
 	http://www.springframework.org/schema/util/spring-util.xsd
-    ">
+    " >
+    
 	
-	<import resource="classpath:com/gateweb/einv/spring/spring_db.xml" />
+	<import resource="classpath:com/gateweb/einv/spring/spring_db.xml" /> 
 	<import resource="classpath:com/gateweb/einv/spring/spring_db2.xml" />
 	<import resource="classpath:com/gateweb/einv/spring/spring_amqp.xml" />
+	
+	
 
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

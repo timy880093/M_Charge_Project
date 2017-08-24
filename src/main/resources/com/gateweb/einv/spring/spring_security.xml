@@ -42,7 +42,7 @@
     </bean>	
     		
 	 <security:authentication-manager>
-		<security:authentication-provider user-service-ref="userFacade" >
+		<security:authentication-provider user-service-ref="chargeUserFacade" >
 		   <!--  <security:password-encoder hash="bcrypt" /> -->
 		</security:authentication-provider>
 	</security:authentication-manager>
@@ -95,7 +95,7 @@
 	/>
 	 <!-- enable remember me -->
    <security:remember-me 
-   		user-service-ref="userFacade"
+   		user-service-ref="chargeUserFacade"
         token-validity-seconds="1209600"
 		remember-me-parameter="remember-me"
 		token-repository-ref="tokenRepository" />	

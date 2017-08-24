@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.gateweb.einv.exception.EinvSysException;
@@ -40,6 +41,7 @@ public class EinvFacadeImpl implements EinvFacade {
 	 * InvoiceMainRepository
 	 */
 	@Autowired
+	//@Qualifier("invoiceMainRepository")
 	private InvoiceMainRepository invoiceMainRepository = null;
 	
 	
@@ -47,6 +49,7 @@ public class EinvFacadeImpl implements EinvFacade {
 	 * CompanyRepository
 	 */
 	@Autowired
+	//@Qualifier("companyRepository")
 	private CompanyRepository companyRepository = null;
 	
 	
@@ -54,6 +57,7 @@ public class EinvFacadeImpl implements EinvFacade {
 	 * UserRepository
 	 */
 	@Autowired
+	//@Qualifier("userRepository")
 	private UserRepository userRepository = null;
 	
 	
@@ -61,6 +65,7 @@ public class EinvFacadeImpl implements EinvFacade {
 	 * InvoiceDetailsRepository
 	 */
 	@Autowired
+	//@Qualifier("invoiceDetailsRepository")
 	private InvoiceDetailsRepository invoiceDetailsRepository = null;
 	
 

@@ -5,15 +5,13 @@
  */
 package com.gateweb.einv.repository; 
     
-import java.sql.SQLException;
-import java.util.Collection;
-import com.gateweb.einv.*;
-import com.gateweb.einv.model.*;
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
+
+import com.gateweb.einv.model.InvoiceMain;
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import java.io.Serializable;
-import java.util.List;
 /**
  * 
  * @author pkliu

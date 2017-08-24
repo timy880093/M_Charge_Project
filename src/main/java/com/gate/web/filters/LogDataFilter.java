@@ -1,7 +1,6 @@
 package com.gate.web.filters;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -22,7 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.gate.utils.TimeUtils;
-import com.gateweb.einv.model.User;
+import com.gateweb.charge.model.User;
 import com.google.gson.Gson;
 
 import dao.LogDataDAO;
