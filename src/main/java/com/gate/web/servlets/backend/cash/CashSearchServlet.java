@@ -31,10 +31,8 @@ import static com.gate.utils.DecimalUtils.getStrippingValue;
 public class CashSearchServlet extends SearchServlet {
     private static final String DOWNLOAD_FILE_NAME_OUT ="out_data";
     private static final String DOWNLOAD_FILE_NAME_INVOICE ="invoice_data";
-    private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT =
-            SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/out_temp.xls";
-    private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE =
-            SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/invoice_temp.xls";
+    //private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/out_temp.xls";
+    //private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/invoice_temp.xls";
     CashServiceImp cashServiceImp = new CashServiceImp();
     CalCycleServiceImp calCycleService = new CalCycleServiceImp();
 
@@ -94,7 +92,8 @@ public class CashSearchServlet extends SearchServlet {
         } else if(method.equals("outExcelym")){ //匯出Excel帳單-批次(請選擇出帳單年月)
             String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
             List cashMasterList =  cashServiceImp.getCashMasterDetail(outYM);
-            ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, TEMPLATE_EXCEL_DOWNLOAD_OUT);
+            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
+            ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
             responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_OUT+"_"+outYM);
 
@@ -103,7 +102,8 @@ public class CashSearchServlet extends SearchServlet {
             String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
             String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //多筆的選擇
             List cashMasterList =  cashServiceImp.getCashMasterDetail(outYM, destJson);
-            ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, TEMPLATE_EXCEL_DOWNLOAD_OUT);
+            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
+            ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
             responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_OUT+"_"+outYM);
 
@@ -160,7 +160,8 @@ public class CashSearchServlet extends SearchServlet {
         } else if(method.equals("invoiceExcelYM")){ //匯出發票資料-by 年月
             String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
             List invoiceItemList =  cashServiceImp.getInvoiceItem(outYM);
-            ExcelPoiWrapper excel= genInvoiceItemToExcel(invoiceItemList, TEMPLATE_EXCEL_DOWNLOAD_INVOICE);
+            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
+            ExcelPoiWrapper excel= genInvoiceItemToExcel(invoiceItemList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
             responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE+"_"+outYM);
 
@@ -168,7 +169,8 @@ public class CashSearchServlet extends SearchServlet {
         } else if(method.equals("invoiceExcel")){ //匯出發票資料-by 多筆
             String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //多筆的選擇
             List cashMasterList =  cashServiceImp.getInvoiceItem(null, destJson);
-            ExcelPoiWrapper excel= genInvoiceItemToExcel(cashMasterList, TEMPLATE_EXCEL_DOWNLOAD_INVOICE);
+            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
+            ExcelPoiWrapper excel= genInvoiceItemToExcel(cashMasterList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
             responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE);
 

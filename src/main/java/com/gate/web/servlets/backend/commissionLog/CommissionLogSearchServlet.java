@@ -20,8 +20,7 @@ import java.util.Map;
 @WebServlet(urlPatterns = "/backendAdmin/commissionLogSearchServlet")
 public class CommissionLogSearchServlet extends SearchServlet {
     private static final String DOWNLOAD_FILE_NAME_COMMISSION ="commission_temp";
-    private static final String TEMPLATE_EXCEL_DOWNLOAD_COMMISSION =
-            SystemConfig.getInstance().getParameter("uploadTempPath") + "//tempFile"+"//commission_temp.xls";
+    //private static final String TEMPLATE_EXCEL_DOWNLOAD_COMMISSION = SystemConfig.getInstance().getParameter("uploadTempPath") + "//tempFile"+"//commission_temp.xls";
 
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -74,9 +73,10 @@ public class CommissionLogSearchServlet extends SearchServlet {
             try{
                 String commissionLog = ((String[]) requestParameterMap.get("commissionLog"))[0]; //commission_log_id
                 List<Map> commissionLogList = serviceImp.exportCom(commissionLog);
-
-                ExcelPoiWrapper excel= genCommissionLogToExcel(commissionLogList, TEMPLATE_EXCEL_DOWNLOAD_COMMISSION);
+                String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/commission_temp.xls";
+                ExcelPoiWrapper excel= genCommissionLogToExcel(commissionLogList, filePath);
                 HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
+
                 responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_COMMISSION);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -129,6 +129,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
 
     //匯出發票資料Excel
     private ExcelPoiWrapper genCommissionLogToExcel(List<Map> excelList, String tempPath) throws Exception {
+    	System.out.println("genCommissionLogToExcel tempPath :  "+tempPath);
         ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
         HashMap packageMap = new HashMap();
         excel.setWorkSheet(1);

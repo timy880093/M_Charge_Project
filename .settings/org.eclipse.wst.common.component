@@ -2,10 +2,11 @@
     <wb-module deploy-name="Gateweb_Project">
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
-        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/aspectjs"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
         <property name="java-output-path" value="/chargeproject/target/classes"/>
         <property name="context-root" value="/"/>
     </wb-module>

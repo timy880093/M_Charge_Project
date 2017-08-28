@@ -286,7 +286,7 @@ public abstract class BaseServlet extends HttpServlet {
 	            otherMap.put(USER_ID, user.getUserId().toString());
 	            otherMap.put(ROLE_ID, user.getRoleId().toString());
 	            otherMap.put(ROLE_NAME,User.convRoleName(user.getRoleId()));
-	            otherMap.put(COMPANY_ID, user.getCompanyId());
+	            otherMap.put(COMPANY_ID, user.getCompanyId().toString());
 	            otherMap.put(LOGIN_NAME, user.getName());
 	            otherMap.put(EMAIL, user.getEmail());
             }

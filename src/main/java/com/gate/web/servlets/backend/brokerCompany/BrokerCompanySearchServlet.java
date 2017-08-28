@@ -18,8 +18,7 @@ import java.util.*;
 public class BrokerCompanySearchServlet extends SearchServlet {
 
     private static final String DOWNLOAD_FILE_NAME_BROKER ="broker_data";
-    private static final String TEMPLATE_EXCEL_DOWNLOAD_BROKER =
-            SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/broker_temp.xls";
+    //private static final String TEMPLATE_EXCEL_DOWNLOAD_BROKER = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/broker_temp.xls";
 
 
     @Override
@@ -41,7 +40,10 @@ public class BrokerCompanySearchServlet extends SearchServlet {
             String brokerCompany = ((String[]) requestParameterMap.get("brokerCompany"))[0]; //值
             List<Map> excelBrokerCompanyList = serviceImp.getExcelBrokerCompanyList(brokerType, brokerCompany);
 
-            ExcelPoiWrapper excel= genBrokerCpToExcel(excelBrokerCompanyList, TEMPLATE_EXCEL_DOWNLOAD_BROKER);
+            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/broker_temp.xls";
+            
+            //ExcelPoiWrapper excel= genBrokerCpToExcel(excelBrokerCompanyList, TEMPLATE_EXCEL_DOWNLOAD_BROKER);
+            ExcelPoiWrapper excel= genBrokerCpToExcel(excelBrokerCompanyList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
             responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_BROKER);
             return null;
@@ -86,6 +88,7 @@ public class BrokerCompanySearchServlet extends SearchServlet {
 
     //匯出發票資料Excel
     private ExcelPoiWrapper genBrokerCpToExcel(List<Map> excelList, String tempPath) throws Exception {
+    	System.out.println("tempPath:   "+tempPath);
         ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
         HashMap packageMap = new HashMap();
         excel.setWorkSheet(1);
