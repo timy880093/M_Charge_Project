@@ -151,14 +151,15 @@ public class CommissionLogSearchServlet extends SearchServlet {
                 excel.setValue(baseRow, index + 5, "佣金比例");
                 excel.setValue(baseRow, index + 6, "佣金付款狀態");
                 excel.setValue(baseRow, index + 7, "用戶名稱");
-                excel.setValue(baseRow, index + 8, "繳費類型");
-                excel.setValue(baseRow, index + 9, "方案名稱");
-                excel.setValue(baseRow, index + 10, "計算年月");
-                excel.setValue(baseRow, index + 11, "出帳年月");
-                excel.setValue(baseRow, index + 12, "入帳時間");
-                excel.setValue(baseRow, index + 13, "入帳金額(含稅)");
-                excel.setValue(baseRow, index + 14, "出入帳金額是否相同");
-                excel.setValue(baseRow, index + 15, "佣金金額");
+                excel.setValue(baseRow, index + 8, "統編");
+                excel.setValue(baseRow, index + 9, "繳費類型");
+                excel.setValue(baseRow, index + 10, "方案名稱");
+                excel.setValue(baseRow, index + 11, "計算年月");
+                excel.setValue(baseRow, index + 12, "出帳年月");
+                excel.setValue(baseRow, index + 13, "入帳時間");
+                excel.setValue(baseRow, index + 14, "入帳金額(含稅)");
+                excel.setValue(baseRow, index + 15, "出入帳金額是否相同");
+                excel.setValue(baseRow, index + 16, "佣金金額");
                 baseRow++;
             }
 
@@ -166,7 +167,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
             for(int i=0; i<details.size(); i++){
                 Map detailMap = (Map)details.get(i);
 
-                excel.copyRows(2, 15, 1, baseRow);
+                excel.copyRows(2, 16, 1, baseRow);
                 excel.setValue(baseRow, index + 1, master.getDealerCompanyName()); //所屬經銷商
                 excel.setValue(baseRow, index + 2, master.getInDateStart()); //入帳時間起
                 excel.setValue(baseRow, index + 3, master.getInDateEnd()); //入帳時間迄
@@ -174,20 +175,21 @@ public class CommissionLogSearchServlet extends SearchServlet {
                 excel.setValue(baseRow, index + 5, master.getStrMainPercent());//佣金比例
                 excel.setValue(baseRow, index + 6, master.getStrIsPaid());//佣金付款狀態
                 excel.setValue(baseRow, index + 7, detailMap.get("name")); //用戶名稱
-                excel.setValue(baseRow, index + 8, formatCashType((Integer)detailMap.get("cash_type"))); //繳費類型
-                excel.setValue(baseRow, index + 9, detailMap.get("package_name")); //方案名稱
-                excel.setValue(baseRow, index + 10, detailMap.get("cal_ym")); //計算年月
-                excel.setValue(baseRow, index + 11, detailMap.get("out_ym")); //出帳年月
-                excel.setValue(baseRow, index + 12, detailMap.get("in_date")); //入帳時間
-                excel.setValue(baseRow, index + 13, ((BigDecimal)detailMap.get("tax_inclusive_price")).doubleValue()); //入帳金額(含稅)
-                excel.setValue(baseRow, index + 14, isInoutMoneyUnmatch((String) detailMap.get("is_inout_money_unmatch"))); //cash_master的出入帳金額是否相同
-                excel.setValue(baseRow, index + 15, ((BigDecimal)detailMap.get("commission_amount")).doubleValue());//佣金金額
+                excel.setValue(baseRow, index + 8, detailMap.get("tax_no")); //統編
+                excel.setValue(baseRow, index + 9, formatCashType((Integer)detailMap.get("cash_type"))); //繳費類型
+                excel.setValue(baseRow, index + 10, detailMap.get("package_name")); //方案名稱
+                excel.setValue(baseRow, index + 11, detailMap.get("cal_ym")); //計算年月
+                excel.setValue(baseRow, index + 12, detailMap.get("out_ym")); //出帳年月
+                excel.setValue(baseRow, index + 13, detailMap.get("in_date")); //入帳時間
+                excel.setValue(baseRow, index + 14, ((BigDecimal)detailMap.get("tax_inclusive_price")).doubleValue()); //入帳金額(含稅)
+                excel.setValue(baseRow, index + 15, isInoutMoneyUnmatch((String) detailMap.get("is_inout_money_unmatch"))); //cash_master的出入帳金額是否相同
+                excel.setValue(baseRow, index + 16, ((BigDecimal)detailMap.get("commission_amount")).doubleValue());//佣金金額
                 baseRow++;
             }
 
-            excel.copyRows(2, 15, 1, baseRow);
-            excel.setValue(baseRow, index + 13, master.getInAmount()); //入帳總金額(含稅)
-            excel.setValue(baseRow, index + 15, master.getCommissionAmount());//佣金總金額
+            excel.copyRows(2, 16, 1, baseRow);
+            excel.setValue(baseRow, index + 14, master.getInAmount()); //入帳總金額(含稅)
+            excel.setValue(baseRow, index + 16, master.getCommissionAmount());//佣金總金額
             baseRow++;
 
         }
