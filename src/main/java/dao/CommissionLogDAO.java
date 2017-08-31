@@ -181,12 +181,7 @@ public class CommissionLogDAO extends BaseDAO {
         saveOrUpdateEntity(entity, entity.getCommissionLogId());
         return true;
     }
-    //刪除
-        public boolean delete(Integer commissionLogId)throws Exception{
-            CommissionLogEntity entity = (CommissionLogEntity)getEntity(CommissionLogEntity.class , commissionLogId);
-            deleteEntity(entity);
-            return true;
-    }
+    
     //佣金付款
     public boolean updatePayCommission(String commissionLog) throws Exception{
         Gson gson = new Gson();
