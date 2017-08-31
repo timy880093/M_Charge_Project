@@ -92,7 +92,7 @@ public class CommissionLogDAO extends BaseDAO {
                 //" where cd.status=1 and cd.cash_type=1 and cd.bill_type=1 and cm.in_date is not null and cd.commission_log_id is null " + //只有月租才算佣金，超額不算佣金；該筆算過佣金的話，不重新計算佣金
                 //cd.cash_type: 1.月租2.月租超額(只有月租才算佣金，超額不算佣金；該筆算過佣金的話，不重新計算佣金)  cd.bill_type: 1.月租 2.級距
                 " where cd.status=1 and cd.cash_type=1 and cm.in_date is not null and cd.commission_log_id is null " +
-                " and cm.in_date between to_date( ? ,'YYYY-MM-dd') and  to_date( ? ,'YYYY-MM-dd')+1 " +
+                " and cm.in_date between to_date( ? ,'YYYY-MM-dd') and  to_date( ? ,'YYYY-MM-dd') " +
                 " and cm.status >= 4 " + //出帳後，才可以算佣金
                 " and pm.dealer_company_id=?  ";
         List parameterList = new ArrayList();
@@ -154,9 +154,9 @@ public class CommissionLogDAO extends BaseDAO {
     //檢視佣金明細
     public List getCommissionLogDetailList(String commissionLogId) throws Exception{
 
-        String sql = " select cp.name, cp.tax_no, cd.cash_type, CASE WHEN cmc.package_name IS NULL THEN cmg.package_name ELSE cmc.package_name END, " +
-                " cd.cal_ym, cd.out_ym, to_char(cm.in_date, 'YYYY-MM-DD') in_date,cd.tax_inclusive_price,   " +
-                " cl.commission_type, cl.main_percent, cd.commission_amount, cm.is_inout_money_unmatch  " +
+        String sql = " select cp.name, cp.business_no, cd.cash_type, CASE WHEN cmc.package_name IS NULL THEN cmg.package_name ELSE cmc.package_name END, " +
+                " cd.cal_ym, cd.out_ym, to_char(cm.in_date, 'YYYY-MM-DD')in_date ,cd.tax_inclusive_price,   " +
+                " cl.commission_type, cl.main_percent,  cd.commission_amount , cm.is_inout_money_unmatch  " +
                 " from cash_detail cd left join company cp on cd.company_id=cp.company_id " +
                 " left join package_mode pm on cd.package_id = pm.package_id " +
                 " left join charge_mode_cycle cmc on pm.charge_id=cmc.charge_id and pm.package_type=1 " + //月租型
@@ -164,6 +164,8 @@ public class CommissionLogDAO extends BaseDAO {
                 " left join cash_master cm on cd.cash_master_id=cm.cash_master_id " +
                 " left join commission_log cl on cd.commission_log_id = cl.commission_log_id " +
                 " where cd.commission_log_id = ? ";
+
+
         List parameterList = new ArrayList();
         parameterList.add(Integer.parseInt(commissionLogId));
         Query query = createQuery(sql, parameterList, null);
@@ -179,7 +181,12 @@ public class CommissionLogDAO extends BaseDAO {
         saveOrUpdateEntity(entity, entity.getCommissionLogId());
         return true;
     }
-
+    //刪除
+        public boolean delete(Integer commissionLogId)throws Exception{
+            CommissionLogEntity entity = (CommissionLogEntity)getEntity(CommissionLogEntity.class , commissionLogId);
+            deleteEntity(entity);
+            return true;
+    }
     //佣金付款
     public boolean updatePayCommission(String commissionLog) throws Exception{
         Gson gson = new Gson();
@@ -214,6 +221,7 @@ public class CommissionLogDAO extends BaseDAO {
             Integer commissionLogId = bean.getCommissionLogId();
             CommissionLogEntity entity = (CommissionLogEntity)getEntity(CommissionLogEntity.class, commissionLogId);
             BeanUtils.copyProperties(bean, entity);
+
 
             //經銷公司的名字
             Integer commissionCpId = bean.getCommissionCpId();
@@ -263,3 +271,6 @@ public class CommissionLogDAO extends BaseDAO {
         return strIsPaid;
     }
 }
+
+
+
