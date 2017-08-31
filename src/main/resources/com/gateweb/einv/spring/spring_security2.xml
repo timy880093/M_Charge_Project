@@ -41,38 +41,28 @@
           class="org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl">
     </bean>	
     		
-	 <security:authentication-manager>
+	 <security:authentication-manager alias="authenticationManager">
 		<security:authentication-provider user-service-ref="chargeUserFacade" >
 		   <!--  <security:password-encoder hash="bcrypt" /> -->
 		</security:authentication-provider>
 	</security:authentication-manager>
 
-	<security:http pattern="/js/*" security="none" />
-	<security:http pattern="/flowplayer**/**" security="none" />
-	<security:http pattern="/flowplayer3/**" security="none" />
-	<security:http pattern="/resources/*" security="none" />
+	<security:http pattern="/js/**" security="none" />
+	<security:http pattern="/resources/**" security="none" />
 	<security:http pattern="/favicon.ico" security="none" />
 	<security:http pattern="/struts/**" security="none" />
-	<security:http pattern="/**/*.js" security="none" />
-	<security:http pattern="/**/*.css" security="none" />
-	<security:http pattern="/**/*.swf" security="none" />
-	<security:http pattern="/**/*.jpg" security="none" />
-	<security:http pattern="/**/*.png" security="none" />
-	<security:http pattern="/**/*.gif" security="none" />
-	<security:http pattern="/**/*fileName*.jpg" security="none" />
-	<security:http pattern="/MailSignature" security="none" />
-	<security:http pattern="/privatePage" security="none" />
-	<security:http pattern="/policyPage" security="none" />
-	<security:http pattern="/Unsubscribe" security="none" />
+	<security:http pattern="/**.js" security="none" />
+	<security:http pattern="/**.css" security="none" />
+	<security:http pattern="/**.swf" security="none" />
+	<security:http pattern="/**.jpg" security="none" />
+	<security:http pattern="/**.png" security="none" />
+	<security:http pattern="/**.gif" security="none" />
 	<security:http pattern="/themes/**" security="none" />
 	<security:http pattern="/images/**" security="none" />
-	<security:http pattern="/Index*" security="none" />
-	<security:http pattern="/ResetPassword*" security="none" />
+	<security:http pattern="/Index**" security="none" />
+	<security:http pattern="/ResetPassword**" security="none" />
 	<security:http pattern="/Login_recaptcha*" security="none" />
-	<security:http pattern="/service/*" security="none" />
 	
-	<security:http pattern="/Resource_redirect" security="none" />
-	<security:http pattern="/js/gadget/*" security="none" />
 	<security:http pattern="/assets/**" security="none" />
 	<security:http pattern="/vendors/**" security="none" />
 	<security:http pattern="/bootstrap**/**" security="none" />
@@ -87,11 +77,11 @@
 	<!-- <security:headers disabled="true"/> -->
 	<security:csrf disabled="true"/>
 	<security:form-login
-			login-page="/login.jsp" 
+			login-page="/login.jsp" username-parameter="username" password-parameter="password"
 			login-processing-url="/j_spring_security_check"
 			default-target-url="/backendAdmin/loginServlet" 
 			always-use-default-target="false"
-			authentication-failure-url="/login.jsp?loginError=true"
+			authentication-failure-url="/login_error.jsp"
 	/>
 	 <!-- enable remember me -->
    <security:remember-me 
@@ -107,30 +97,21 @@
 		<security:custom-filter before="CONCURRENT_SESSION_FILTER" ref="beforeSessionFilter"/>
 		<security:custom-filter before="FORM_LOGIN_FILTER" ref="beforeFormLoginFilter"/>
  -->
-		<security:intercept-url pattern="/**/OAuth*" access="permitAll" />
-		<security:intercept-url pattern="/**/j_spring_security_*" access="permitAll" />
-		<security:intercept-url pattern="/**/login.jsp" access="permitAll" />
-		<security:intercept-url pattern="/**/index.jsp" access="permitAll" />
-		<security:intercept-url pattern="/**/test*.jsp" access="permitAll" />
-		<security:intercept-url pattern="/**/xeon*.jsp" access="permitAll" />
+		<security:intercept-url pattern="/**j_spring_security_*" access="permitAll" />
+		<security:intercept-url pattern="/**login*.jsp" access="permitAll" />
+		<security:intercept-url pattern="/**index.jsp" access="permitAll" />
+		<security:intercept-url pattern="/**test*.jsp" access="permitAll" />
+		<security:intercept-url pattern="/**xeon*.jsp" access="permitAll" />
 		<security:intercept-url pattern="/pages/**.*" access="permitAll" />
-		<security:intercept-url pattern="/**/**.jsp" access="permitAll" />
 		<security:intercept-url pattern="/backendAdmin/dist/**" access="permitAll" />
 		<security:intercept-url pattern="/backendAdmin/actionUnhandledExceptionHandler.action*" access="permitAll" />
-		<security:intercept-url pattern="/backendAdmin/Registration*_input.action" access="permitAll" />
-		<security:intercept-url pattern="/backendAdmin/Registration*_insert.action" access="permitAll" />
-		<security:intercept-url pattern="/backendAdmin/RegistrationSuccess.action" access="permitAll" />
-		<security:intercept-url pattern="/backendAdmin/ContactUs*_input.action" access="permitAll" />
-		<security:intercept-url pattern="/backendAdmin/ContactUs*_insert.action" access="permitAll" />
-		<security:intercept-url pattern="/backendAdmin/ContactUsSuccess.action" access="permitAll" />
-		
-		<security:intercept-url pattern="/Admin**/**" access="hasAnyRole('ROLE_COMPANY_ADMIN','ROLE_ADMIN','ROLE_ROOT')" />
-		<security:intercept-url pattern="/backendAdmin/**" access="hasAnyRole('ROLE_COMPANY_ADMIN','ROLE_ADMIN','ROLE_ROOT')" />
-		<!-- <security:intercept-url pattern="/**" access="isAuthenticated()" /> -->
+		<security:intercept-url pattern="/Admin**/**" access="hasAnyRole('ROLE_COMPANYADMIN','ROLE_ADMIN','ROLE_ROOT')" />
+		<security:intercept-url pattern="/backendAdmin/**" access="hasAnyRole('ROLE_COMPANYADMIN','ROLE_ADMIN','ROLE_ROOT')" />
+		<security:intercept-url pattern="/**" access="isAuthenticated()" />
 		
 		<security:anonymous/>
 		<!-- <security:intercept-url pattern="/**" access="denyAll" /> -->
-		<security:logout 
+		<security:logout delete-cookies="JSESSIONID"
 		    invalidate-session="true" 
 		    logout-success-url="/login.jsp" 
 		    logout-url="/j_spring_security_logout" 

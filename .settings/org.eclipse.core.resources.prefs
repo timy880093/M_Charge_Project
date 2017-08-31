@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
+encoding//src/main/webapp/backendAdmin/commissionLog/commissionLog_list.jsp=UTF-8
 encoding//src/main/webapp/backendAdmin/index.jsp=UTF-8
 encoding//src/main/webapp/backendAdmin/login.jsp=UTF-8
 encoding//src/main/webapp/login.jsp=UTF-8

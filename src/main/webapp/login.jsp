@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%--
   Created by IntelliJ IDEA.
   User: simon
@@ -11,7 +13,7 @@
 <head>
 <title>關網資訊-會員中心</title>
 
-<link href="<%=request.getContextPath()%>/css/index_layout.css"
+<link href="/css/index_layout.css"
 	rel="stylesheet" type="text/css" />
 <style type="text/css">
 <!--
@@ -42,16 +44,16 @@
 	
 		<div align="center">
 			<br />
-            <table width="975" border="0" cellpadding="0" cellspacing="0" background="<%=request.getContextPath()%>/images/bg2.jpg">
+            <table width="975" border="0" cellpadding="0" cellspacing="0" background="/images/bg2.jpg">
 				<tr>
 					<td colspan="3"><img
-						src="<%=request.getContextPath()%>/images/003.jpg" width="975"   border="0"
+						src="/images/003.jpg" width="975"   border="0"
 						height="243" usemap="#Map2" /></td>
 				</tr>
 				<tr>
-					<td valign="top"><img src="<%=request.getContextPath()%>/images/004.jpg"
+					<td valign="top"><img src="/images/004.jpg"
 						width="364" height="150" /></td>
-					<td width="247"	background="<%=request.getContextPath()%>/images/007.jpg">
+					<td width="247"	background="/images/007.jpg">
 						<table width="100%" border="0" cellspacing="0" cellpadding="3">
 							<tr>
                                 系統維護時間:早上8:30~9:00<br>
@@ -60,14 +62,14 @@
 							</tr>
 							<tr>
 								<td width="65" align="left"><img
-									src="<%=request.getContextPath()%>/images/006.gif" width="32"
+									src="/images/006.gif" width="32"
 									height="18" /></td>
 								<td width="173" align="left"><INPUT type='text'
 									name='username' value=''></td>
 							</tr>
 							<tr>
 								<td align="left"><img
-									src="<%=request.getContextPath()%>/images/007.gif" width="32"
+									src="/images/007.gif" width="32"
 									height="18" /></td>
 								<td align="left"><INPUT type='password' name='password' autocomplete="off"
 									value='' onKeyPress="return submitenter(this,event)"></td>
@@ -82,8 +84,8 @@
 								</td>
 								<td align="left" class="style2" valign="top"><%-- 密碼+動態密碼 <INPUT type='submit' name='submit' value='登入'>--%>
 									<a href="javascript:submit()"><img
-										src="<%=request.getContextPath()%>/images/008.jpg" alt="登入"
-										width="75" height="26" hspace="5" hspace="5" border="0" /></a> <%--<a href="#"><img src="<%=request.getContextPath()%>/images/009.jpg" alt="申請帳號" width="75" height="26" border="0" /></a>--%>
+										src="/images/008.jpg" alt="登入"
+										width="75" height="26" hspace="5" hspace="5" border="0" /></a> <%--<a href="#"><img src="/images/009.jpg" alt="申請帳號" width="75" height="26" border="0" /></a>--%>
 								</td>
 							</tr>
 						</table>
@@ -92,7 +94,7 @@
 				</tr>
 				<tr>
 					<td colspan="3"><img
-						src="<%=request.getContextPath()%>/images/006.jpg" width="975" height="192" /></td>
+						src="/images/006.jpg" width="975" height="192" /></td>
 				</tr>
 			</table>
 			<table width="800" border="0" cellspacing="0" cellpadding="0">

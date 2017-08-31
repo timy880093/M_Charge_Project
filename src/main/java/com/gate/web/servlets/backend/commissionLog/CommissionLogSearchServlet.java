@@ -50,6 +50,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
                 if(null != requestParameterMap.get("inDateE")){
                     inDateE = ((String[]) requestParameterMap.get("inDateE"))[0];
                 }
+                System.out.println("dealerCompany:   "+dealerCompany+",inDateS:   "+inDateS+", inDateE:    "+inDateE);
                 serviceImp.calCommission(dealerCompany, inDateS, inDateE);
             } catch (Exception e) {
                 e.printStackTrace();
