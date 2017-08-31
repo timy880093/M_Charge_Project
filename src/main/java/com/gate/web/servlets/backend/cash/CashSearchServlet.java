@@ -261,7 +261,7 @@ public class CashSearchServlet extends SearchServlet {
             excel.setValue(baseRow, index + 1, masterBean.getBusinessNo());
             excel.setValue(baseRow, index + 2, masterBean.getInAmount());
             excel.setValue(baseRow, index + 6, masterBean.getCompanyName());
-            excel.setValue(baseRow, index + 7, masterBean.getCodeName());
+            excel.setValue(baseRow, index + 7, masterBean.getBusinessNo());
 
             List<CashDetailBean> cashDetailList = masterBean.getCashDetailList();
             for(CashDetailBean detail: cashDetailList){
