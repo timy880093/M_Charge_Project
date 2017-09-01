@@ -250,6 +250,7 @@
         }
 
         var url = path + "/backendAdmin/commissionLogSearchServlet?method=calCommission&dealerCompany=" + dealerCompany+"&inDateS="+inDateS+"&inDateE="+inDateE;
+        alert("url:  "+url);
         $.getJSON(url, function (data) {
             alert(data);
             window.location.reload();
