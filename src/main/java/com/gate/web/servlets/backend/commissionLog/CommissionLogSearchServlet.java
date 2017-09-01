@@ -176,7 +176,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
                 excel.setValue(baseRow, index + 5, master.getStrMainPercent());//佣金比例
                 excel.setValue(baseRow, index + 6, master.getStrIsPaid());//佣金付款狀態
                 excel.setValue(baseRow, index + 7, detailMap.get("name")); //用戶名稱
-                excel.setValue(baseRow, index + 8, detailMap.get("tax_no")); //統編
+                excel.setValue(baseRow, index + 8, detailMap.get("business_no")); //統編
                 excel.setValue(baseRow, index + 9, formatCashType((Integer)detailMap.get("cash_type"))); //繳費類型
                 excel.setValue(baseRow, index + 10, detailMap.get("package_name")); //方案名稱
                 excel.setValue(baseRow, index + 11, detailMap.get("cal_ym")); //計算年月
