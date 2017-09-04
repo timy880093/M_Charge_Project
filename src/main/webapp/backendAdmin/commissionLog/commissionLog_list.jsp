@@ -92,6 +92,11 @@
                     }else if(selectOption=='viewLogDetail'){
                         url=  path + '/backendAdmin/commissionLogEditServlet?method=edit&commission_log_id=' + id ;
                         MM_openBrWindow(url,1200,800);
+                    } else if(selectOption=='delete'){
+                        url=  path + '/backendAdmin/commissionLogEditServlet?method=delete&commission_log_id=' + id ;
+
+
+
                     }
                 });
             }
@@ -163,7 +168,7 @@
     }
 
     function formatNote(cellvalue, options, rowObject){
-//        alert("cellvalue="+cellvalue+",options="+options+",rowObject="+rowObject);
+//        alert("cellvalue="+cellvalue+",options="+optins+",rowObject="+rowObject);
         var str = "";
         if(cellvalue == undefined){
             str="<input type='text' id=note name=note size='15'/>";
@@ -180,6 +185,7 @@
         str = '<select name="fieldName" class="forms_Dropdown">' ;
         str+= '<option value="viewLogDetail">檢視佣金明細</option>' ;
         str+= '<option value="editCommission">修改備註</option>';
+        str+= '<option value="delete">刪除</option>';
         str+= '</select>';
         str+='<a href="#"  title="確定" class="butbox2"><span>確&nbsp;&nbsp;定</span></a>';
 
@@ -270,7 +276,7 @@
                 commissionLogAry[i] = commissionLog;
             }
             var commissionLogJson = JSON.stringify(commissionLogAry);
-            //alert(commissionLogJson);
+          //  alert(commissionLogJson);
             var url = path + "/backendAdmin/commissionLogSearchServlet?method=payCommission&commissionLog=" + commissionLogJson;
             $.getJSON(url, {commissionLog: commissionLogAry}, function (data) {
                 alert(data);

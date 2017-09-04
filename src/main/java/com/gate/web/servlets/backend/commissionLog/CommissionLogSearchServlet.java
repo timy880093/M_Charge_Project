@@ -165,6 +165,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
             }
 
 
+
             for(int i=0; i<details.size(); i++){
                 Map detailMap = (Map)details.get(i);
 

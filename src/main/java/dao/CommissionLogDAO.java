@@ -5,9 +5,11 @@ import com.gate.web.beans.CommissionLog;
 import com.gate.web.beans.QuerySettingVO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.querydsl.jpa.hibernate.HibernateUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
+import org.hibernate.Session;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -141,7 +143,7 @@ public class CommissionLogDAO extends BaseDAO {
             saveOrUpdateEntity(cashDetailEntity, cashDetailEntity.getCashDetailId());
 
         }
-        if(dataList.size()>0){
+        if(dataList.size()>=0){
             //佣金金額總計
             comLog.setInAmount(sumPrice);
             comLog.setCommissionAmount(sumComAmount);
@@ -155,7 +157,7 @@ public class CommissionLogDAO extends BaseDAO {
     public List getCommissionLogDetailList(String commissionLogId) throws Exception{
 
         String sql = " select cp.name, cp.business_no, cd.cash_type, CASE WHEN cmc.package_name IS NULL THEN cmg.package_name ELSE cmc.package_name END, " +
-                " cd.cal_ym, cd.out_ym, to_char(cm.in_date, 'YYYY-MM-DD')in_date ,cd.tax_inclusive_price,   " +
+                " cd.cal_ym, cd.out_ym, to_char(cm.in_date, 'YYYY-MM-DD')in_date ,cd.tax_inclusive_price , " +
                 " cl.commission_type, cl.main_percent,  cd.commission_amount , cm.is_inout_money_unmatch  " +
                 " from cash_detail cd left join company cp on cd.company_id=cp.company_id " +
                 " left join package_mode pm on cd.package_id = pm.package_id " +
@@ -181,9 +183,21 @@ public class CommissionLogDAO extends BaseDAO {
         saveOrUpdateEntity(entity, entity.getCommissionLogId());
         return true;
     }
-    
+    //刪除
+        public boolean delete(Integer commissionLogId)throws Exception{
+        CommissionLogEntity entity = (CommissionLogEntity)getEntity(CommissionLogEntity.class , commissionLogId);
+        deleteEntity(entity.getCommissionLogId());
+        return true;
+
+    }
+
+
+
+
+
+
     //佣金付款
-    public boolean updatePayCommission(String commissionLog) throws Exception{
+          public boolean updatePayCommission(String commissionLog) throws Exception{
         Gson gson = new Gson();
         Type collectionType = new TypeToken<List<CommissionLog>>(){}.getType();
         List<CommissionLog> comLogList = gson.fromJson(commissionLog, collectionType);
@@ -203,42 +217,45 @@ public class CommissionLogDAO extends BaseDAO {
     }
 
     //匯出excel的資料
-    public List<Map> exportCom(String commissionLog)throws Exception{
+    public List<Map> exportCom(String commissionLog)throws Exception {
         List<Map> exportCommissionLogList = new ArrayList<Map>();
 
         Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CommissionLog>>(){}.getType();
+        Type collectionType = new TypeToken<List<CommissionLog>>() {
+        }.getType();
         List<CommissionLog> comLogList = gson.fromJson(commissionLog, collectionType);
 
+
         //找出所有要付款的commission_log, 並付款
-        for(int i=0; i<comLogList.size(); i++){
-            CommissionLog bean = (CommissionLog)comLogList.get(i);
-            Integer commissionLogId = bean.getCommissionLogId();
-            CommissionLogEntity entity = (CommissionLogEntity)getEntity(CommissionLogEntity.class, commissionLogId);
-            BeanUtils.copyProperties(bean, entity);
+        for (int i = 0; i < comLogList.size(); i++) {
+                        CommissionLog bean = (CommissionLog) comLogList.get(i);
+                Integer commissionLogId = bean.getCommissionLogId();
+                CommissionLogEntity entity = (CommissionLogEntity) getEntity(CommissionLogEntity.class, commissionLogId);
+                BeanUtils.copyProperties(bean, entity);
+
+                //經銷公司的名字
+                Integer commissionCpId = bean.getCommissionCpId();
+                DealerCompanyEntity dealerCompanyEntity = (DealerCompanyEntity) getEntity(DealerCompanyEntity.class, commissionCpId);
+                String dealerCpName = dealerCompanyEntity.getDealerCompanyName();
+                bean.setDealerCompanyName(dealerCpName);
+
+                bean.setStrCommissionType(parseCommissionType(bean.getCommissionType())); //佣金類型說明
+                bean.setStrIsPaid(parseIsPaid(bean.getIsPaid())); //是否付款說明
+                bean.setStrMainPercent(((BigDecimal) bean.getMainPercent()).doubleValue() + "%");
+
+                Map commissionLogMap = new HashMap();
+                commissionLogMap.put("master", bean);
+
+                List detailList = getCommissionLogDetailList("" + entity.getCommissionLogId()); //佣金明細
+                commissionLogMap.put("detail", detailList);
 
 
-            //經銷公司的名字
-            Integer commissionCpId = bean.getCommissionCpId();
-            DealerCompanyEntity dealerCompanyEntity = (DealerCompanyEntity)getEntity(DealerCompanyEntity.class, commissionCpId);
-            String dealerCpName = dealerCompanyEntity.getDealerCompanyName();
-            bean.setDealerCompanyName(dealerCpName);
+                exportCommissionLogList.add(commissionLogMap);
+            }
 
-            bean.setStrCommissionType(parseCommissionType(bean.getCommissionType())); //佣金類型說明
-            bean.setStrIsPaid(parseIsPaid(bean.getIsPaid())); //是否付款說明
-            bean.setStrMainPercent(((BigDecimal)bean.getMainPercent()).doubleValue()+"%");
-
-            Map commissionLogMap = new HashMap();
-            commissionLogMap.put("master", bean);
-
-            List detailList = getCommissionLogDetailList(""+entity.getCommissionLogId()); //佣金明細
-            commissionLogMap.put("detail", detailList);
-
-            exportCommissionLogList.add(commissionLogMap);
+            return exportCommissionLogList;
         }
 
-        return exportCommissionLogList;
-    }
 
     //佣金類型0 固定金額, 1 固定比例, 2 經銷商
     public String parseCommissionType(String commissionType){

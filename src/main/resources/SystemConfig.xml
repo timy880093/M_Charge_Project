@@ -13,7 +13,7 @@
 
     <parameter>
         <name>uploadTempPath</name>
-        <value>E:\Temp\UploadTemp</value>
+        <value>D:\temp\UploadTemp</value>
     </parameter>
 
     <parameter>

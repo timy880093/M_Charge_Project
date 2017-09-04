@@ -2,6 +2,8 @@ package com.gate.web.facades;
 
 import com.gate.web.beans.QuerySettingVO;
 import dao.CommissionLogDAO;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,9 @@ public class CommissionLogServiceImp implements CommissionLogService {
 
     public boolean updateNote(Integer commissionLogId, String note) throws Exception{
         return dao.updateNote(commissionLogId, note);
+    }
+    public boolean delete(Integer commissionLogId)throws Exception{
+        return  dao.delete(commissionLogId);
     }
 
     public boolean payCommission(String commissionLog)throws Exception{

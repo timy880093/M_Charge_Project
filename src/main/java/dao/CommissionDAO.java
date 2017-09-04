@@ -87,7 +87,7 @@ public class CommissionDAO extends BaseDAO {
         return list;
     }
 
-    //取得殌銷商清單(下拉選單顯示經銷商列表)
+    //取得經銷商清單(下拉選單顯示經銷商列表)
     public List<DealerCompanyEntity> getDealerCompanyListForDropBox() throws Exception {
         List parameters = new ArrayList();
         StringBuffer sql = new StringBuffer();
