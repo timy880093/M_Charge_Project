@@ -1,5 +1,5 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%--
   Created by IntelliJ IDEA.
@@ -36,8 +36,15 @@
 
 <body>
 
-		 <div class="content bg-darken-1">
-			<div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-4 col-lg-offset-4">
+		 <div class="content">
+		 	<div id="leftMain" class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+		 	<ui>
+		 		<li class="alert alert-danger">系統更新公告：系統將於9月15號晚上23:00到隔日9月16號03：00進行更新，歷時系統將無法使用，請需要開立發票的公司行號，避開該時段開立或傳送發票。</li>
+		 		<li class="alert alert-warning">news 2</li>
+		 		<li class="alert alert-warning">news 3</li>
+		 	</ui>
+		 	</div>
+			<div id="main" class="col-xs-12 col-sm-12 col-md-6 col-lg-4 alert alert-success">
                     <div class="login-form">
                         <c:url var="loginUrl" value="/j_spring_security_check" />
                         <form action="${loginUrl}" method="post" class="form-horizontal">
@@ -46,12 +53,12 @@
                         	</div>
                             <c:if test="${param.error != null}">
                                 <div class="alert alert-danger">
-                                    <p>Invalid username and password.</p>
+                                    <p>使用者帳號和密碼不合！請檢查您的帳號和密碼，或洽客服。</p>
                                 </div>
                             </c:if>
                             <c:if test="${param.logout != null}">
                                 <div class="alert alert-success">
-                                    <p>You have been logged out successfully.</p>
+                                    <p>成功登出</p>
                                 </div>
                             </c:if>
                             <div class="input-group input-sm">
@@ -70,6 +77,15 @@
                         </form>
                 </div>
             </div>
+		 	<div id="rightMain" class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+            <ui>
+		 		<li class="alert alert-info">取消動態密碼登入設定</li>
+		 		<li class="alert alert-info">修正下入帳時間條件後,抓出來的入帳資料excel卻不符合</li>
+		 		<li class="alert alert-info">修正帶出資料請包含統編</li>
+		 		<li class="alert alert-info">匯出EXCEL帳單有問題 公司應該改為姓名 客戶識別碼須帶入統編</li>
+		 	</ui>
+		 	</div>
+            
         </div>
 </body>
 </html>
