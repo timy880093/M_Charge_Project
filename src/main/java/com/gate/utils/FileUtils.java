@@ -309,7 +309,7 @@ public class FileUtils {
 				}
 			}
 		} catch (RuntimeException e) {
-
+			e.printStackTrace();
 		}
 		return f;
 	}

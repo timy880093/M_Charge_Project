@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%--
@@ -9,179 +10,67 @@
 --%>
 
 <html>
-
 <head>
-<title>關網資訊-會員中心</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<link href="/css/index_layout.css"
-	rel="stylesheet" type="text/css" />
-<style type="text/css">
-<!--
-.style1 {
-	FONT-FAMILY: "微軟正黑體", "新細明體";
-	FONT-SIZE: 10px;
-	color: #CCCCCC;
-	padding-left: 10px;
-	padding-top: 15px;
-	line-height: 20px;
-}
-
-.style2 {
-	FONT-FAMILY: "微軟正黑體", "新細明體";
-	FONT-SIZE: 14px;
-	color: #FF0000;
-	line-height: 30px;
-}
--->
-</style>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<title>關網資訊-會員中心</title>
+	
+	<link href="/css/index_layout.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+            background:#fff;
+        }
+    </style>
 </head>
 
 <body>
-	<%--<%--%>
-	<%--session.invalidate();--%>
-	<%--%>--%>
-	<form action='j_spring_security_check' method="POST" id="loginForm">
-	
-		<div align="center">
-			<br />
-            <table width="975" border="0" cellpadding="0" cellspacing="0" background="/images/bg2.jpg">
-				<tr>
-					<td colspan="3"><img
-						src="/images/003.jpg" width="975"   border="0"
-						height="243" usemap="#Map2" /></td>
-				</tr>
-				<tr>
-					<td valign="top"><img src="/images/004.jpg"
-						width="364" height="150" /></td>
-					<td width="247"	background="/images/007.jpg">
-						<table width="100%" border="0" cellspacing="0" cellpadding="3">
-							<tr>
-                                系統維護時間:早上8:30~9:00<br>
-								系統時間:
-								<div id="dt">自動顯示時間</div>
-							</tr>
-							<tr>
-								<td width="65" align="left"><img
-									src="/images/006.gif" width="32"
-									height="18" /></td>
-								<td width="173" align="left"><INPUT type='text'
-									name='username' value=''></td>
-							</tr>
-							<tr>
-								<td align="left"><img
-									src="/images/007.gif" width="32"
-									height="18" /></td>
-								<td align="left"><INPUT type='password' name='password' autocomplete="off"
-									value='' onKeyPress="return submitenter(this,event)"></td>
-							</tr>
-							<%--<tr>--%>
-							<%--<td align="left">&nbsp;</td>--%>
-							<%--<td align="left"><span class="textstyle_03">${ERROR_MESSAGE}</span></td>--%>
-							<%--</tr>--%>
-							<tr>
-								<td align="left">
-									<%--<a href="http://gauth.apps.gbraad.nl/" target="_blank" class="link">忘記密碼</a>--%>
-								</td>
-								<td align="left" class="style2" valign="top"><%-- 密碼+動態密碼 <INPUT type='submit' name='submit' value='登入'>--%>
-									<a href="javascript:submit()"><img
-										src="/images/008.jpg" alt="登入"
-										width="75" height="26" hspace="5" hspace="5" border="0" /></a> <%--<a href="#"><img src="/images/009.jpg" alt="申請帳號" width="75" height="26" border="0" /></a>--%>
-								</td>
-							</tr>
-						</table>
-					</td>
-					<td valign="top" width="364"  height="150" border="0"></td>
-				</tr>
-				<tr>
-					<td colspan="3"><img
-						src="/images/006.jpg" width="975" height="192" /></td>
-				</tr>
-			</table>
-			<table width="800" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td align="center" class="style1">作業系統請使用微軟系統Windows 系列 │
-						建議瀏覽器： Google Chrome │ 解析度1024*768瀏覽，可獲得最佳的效果。&#13;<br />
-						使用上若有問題請E-Mall&nbsp;<u><a href="mailto:scm@bankpro.com.tw"
-							class="link">service01@gateweb.com.tw</a></u>&nbsp;
-						或電洽0986-577577洽客服人員詢問&#13;
-					</td>
-				</tr>
-			</table>
 
-			<br />
-			<p>&nbsp;</p>
-		</div>
-
-		<map name="Map" id="Map">
-            <area shape="rect" coords="153,27,290,48" href="https://drive.google.com/file/d/0B4d69aaoa3EuVW9HWENMd1lxSEk/view?usp=sharing" target="_blank" />
-            <area shape="rect" coords="155,60,280,76" href="https://drive.google.com/file/d/0B4d69aaoa3EudnZhRmFWTVNTaFE/view?usp=sharing" target="_blank" />
-            <area shape="rect" coords="138,89,280,115" href="http://www.stdtime.gov.tw/chinese/home.aspx" target="_blank" />
-            <area shape="rect" coords="138,121,301,141" href="http://www.google.com/intl/zh-TW/chrome/browser/" target="_blank" />
-		</map>
-		<map name="Map2" id="Map2">
-			<area shape="rect" coords="750,211,835,232"
-				href="http://gauth.apps.gbraad.nl/" target="_blank" />
-		</map>
-	</form>
-
-
+		 <div class="content bg-darken-1">
+			<div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-4 col-lg-offset-4">
+                    <div class="login-form">
+                        <c:url var="loginUrl" value="/j_spring_security_check" />
+                        <form action="${loginUrl}" method="post" class="form-horizontal">
+                        	<div class="text-center">
+                        	<img src="<%=request.getContextPath()%>/images/gateweb.png" />
+                        	</div>
+                            <c:if test="${param.error != null}">
+                                <div class="alert alert-danger">
+                                    <p>Invalid username and password.</p>
+                                </div>
+                            </c:if>
+                            <c:if test="${param.logout != null}">
+                                <div class="alert alert-success">
+                                    <p>You have been logged out successfully.</p>
+                                </div>
+                            </c:if>
+                            <div class="input-group input-sm">
+                                <label class="input-group-addon" for="username"><i class="fa fa-user"></i></label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
+                            </div>
+                            <div class="input-group input-sm">
+                                <label class="input-group-addon" for="password"><i class="fa fa-lock"></i></label> 
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+                            </div>
+                            <input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
+                                 
+                            <div class="form-group text-center">
+                                <input type="submit" class="btn btn-info" value="請使用email登入"><p></p>
+                            </div>
+                        </form>
+                </div>
+            </div>
+        </div>
 </body>
 </html>
 
-
-<script language="javascript">
-	function submitenter(myfield, e) {
-		var keycode;
-		if (window.event)
-			keycode = window.event.keyCode;
-		else if (e)
-			keycode = e.which;
-		else
-			return true;
-
-		if (keycode == 13) {
-			myfield.form.submit();
-			return false;
-		} else
-			return true;
-	}
-
-	function submit() {
-		document.getElementById("loginForm").submit();
-	}
-
-	var currentDate = new Date(
-<%=new java.util.Date().getTime()%>
-	);
-	function run() {
-		currentDate.setSeconds(currentDate.getSeconds() + 1);
-		var time = "";
-		var year = currentDate.getFullYear();
-		var month = currentDate.getMonth() + 1;
-		var day = currentDate.getDate();
-		var hour = currentDate.getHours();
-		var minute = currentDate.getMinutes();
-		var second = currentDate.getSeconds();
-		if (hour < 10) {
-			time += "0" + hour;
-		} else {
-			time += hour;
-		}
-		time += ":";
-		if (minute < 10) {
-			time += "0" + minute;
-		} else {
-			time += minute;
-		}
-		time += ":";
-		if (second < 10) {
-			time += "0" + second;
-		} else {
-			time += second;
-		}
-		document.getElementById("dt").innerHTML = year + "年" + month + "月"
-				+ day + "日" + time;
-	}
-	window.setInterval("run();", 1000);
-//    setTimeout ("self.location.reload ();" ,1000*60*15);
-</script>

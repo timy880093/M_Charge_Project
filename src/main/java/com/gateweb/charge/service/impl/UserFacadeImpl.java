@@ -30,7 +30,6 @@ public class UserFacadeImpl implements UserFacade {
 	@Override
 	public User getUserByLogin(String email) {
 		System.out.println("getUserByLogin email:"+email);
-		System.out.println("getUserByLogin TESTONE");
 		if (null == email) {
 			throw new IllegalArgumentException("Login is mandatory. Null value is forbidden.");
 		}
@@ -62,9 +61,7 @@ public class UserFacadeImpl implements UserFacade {
 	public UserDetails loadUserByUsername(String email)
 			throws UsernameNotFoundException, DataAccessException {
 		System.out.println("loadUserByUsername email:"+email);
-		User user = null;
-		System.out.println("loadUserByUsername TESTONE");
-		
+		User user = null;		
 		try {
 			user = getUserByLogin(email);
 			if (null == user) {

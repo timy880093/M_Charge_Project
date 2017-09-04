@@ -91,7 +91,9 @@
 			login-processing-url="/j_spring_security_check"
 			default-target-url="/backendAdmin/loginServlet" 
 			always-use-default-target="false"
-			authentication-failure-url="/login.jsp?loginError=true"
+			authentication-failure-url="/login.jsp?error=true"
+			username-parameter="username"
+			password-parameter="password"
 	/>
 	 <!-- enable remember me -->
    <security:remember-me 
@@ -132,7 +134,7 @@
 		<!-- <security:intercept-url pattern="/**" access="denyAll" /> -->
 		<security:logout 
 		    invalidate-session="true" 
-		    logout-success-url="/login.jsp" 
+		    logout-success-url="/login.jsp?logout=true" 
 		    logout-url="/j_spring_security_logout" 
 		/>
       
