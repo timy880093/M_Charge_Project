@@ -12,6 +12,11 @@
 <html>
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="關網資訊計費系統">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="Keywords" content=">關網資訊,計費系統,會員中心">
+	<title>關網資訊-計費系統</title>
 
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -20,11 +25,6 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
-	
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
-	<title>關網資訊-會員中心</title>
-	
 	<link href="/css/index_layout.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         body {
@@ -39,7 +39,7 @@
 		 <div class="content">
 		 	<div id="leftMain" class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
 		 	<ui>
-		 		<li class="alert alert-danger">系統更新公告：系統將於9月15號晚上23:00到隔日9月16號03：00進行更新，歷時系統將無法使用，請需要開立發票的公司行號，避開該時段開立或傳送發票。</li>
+		 		<li class="alert alert-danger fade in">系統更新公告：系統將於9月15號晚上23:00到隔日9月16號03：00進行更新，歷時系統將無法使用，請需要開立發票的公司行號，避開該時段開立或傳送發票。</li>
 		 		<li class="alert alert-warning">news 2</li>
 		 		<li class="alert alert-warning">news 3</li>
 		 	</ui>
