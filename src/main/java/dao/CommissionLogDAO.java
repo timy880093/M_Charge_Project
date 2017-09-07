@@ -143,7 +143,7 @@ public class CommissionLogDAO extends BaseDAO {
             saveOrUpdateEntity(cashDetailEntity, cashDetailEntity.getCashDetailId());
 
         }
-        if(dataList.size()>=0){
+        if(dataList.size()>0){
             //佣金金額總計
             comLog.setInAmount(sumPrice);
             comLog.setCommissionAmount(sumComAmount);
@@ -156,7 +156,7 @@ public class CommissionLogDAO extends BaseDAO {
     //檢視佣金明細
     public List getCommissionLogDetailList(String commissionLogId) throws Exception{
 
-        String sql = " select cp.name, cp.business_no, cd.cash_type, CASE WHEN cmc.package_name IS NULL THEN cmg.package_name ELSE cmc.package_name END, " +
+        String sql = " select cp.name, cp.business_no,cm.is_first, cd.cash_type, CASE WHEN cmc.package_name IS NULL THEN cmg.package_name ELSE cmc.package_name END, " +
                 " cd.cal_ym, cd.out_ym, to_char(cm.in_date, 'YYYY-MM-DD')in_date ,cd.tax_inclusive_price , " +
                 " cl.commission_type, cl.main_percent,  cd.commission_amount , cm.is_inout_money_unmatch  " +
                 " from cash_detail cd left join company cp on cd.company_id=cp.company_id " +
@@ -189,7 +189,12 @@ public class CommissionLogDAO extends BaseDAO {
         deleteEntity(entity.getCommissionLogId());
         return true;
 
+
+
+
     }
+
+
 
 
 

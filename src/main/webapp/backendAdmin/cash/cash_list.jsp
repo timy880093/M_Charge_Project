@@ -39,7 +39,6 @@
                             <option value="outExcelym">匯出Excel帳單-批次(請選擇出帳單年月)</option>
                             <option value="email">寄email明細通知-多筆(請勾選欲執行的資料)</option>
                             <option value="emailYM">寄email明細通知-批次(請選擇出帳單年月)</option>
-                            <option value="emailUnrecorded">寄email通知未入帳</option>
                             <option value="cancelOut">取消出帳-多筆(請勾選欲執行的資料)</option>
                             <option value="cancelOutYM">取消出帳-批次(請選擇出帳單年月)</option>
                             <option value="inExcel">入帳-匯入入帳資料(Excel)</option>
@@ -268,7 +267,7 @@
 
         str = '<select name="fieldName" class="forms_Dropdown">' +
                 '<option value="viewCashDetail">帳單明細</option>' +
-                '<option value="reSendEmail">寄Email通知</option>' +
+                '<option value="reSendEmail">寄Email通知未入帳</option>' +
                 '<option value="in">確認入帳</option>' +
                 '<option value="cancelIn">取消入帳</option>';
         str += '</select>';
@@ -408,9 +407,7 @@
             case "emailYM": //寄email明細通知-批次(請選擇出帳單年月)
                 runMethod("emailYM");
                 break;
-            case "emailUnrecorded"://寄email通知未入帳
-                runMethod("emailUnrecorded");
-                 break;
+
                 case "invoiceYM": //匯出發票資料-批次(by年月)
                 var outYm = $("#outYM").val();
                 if(outYm == ''){
