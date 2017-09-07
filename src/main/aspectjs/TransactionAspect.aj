@@ -1,4 +1,4 @@
-package dao;
+
 
 import com.gate.core.db.HibernateCoreUtils;
 import org.apache.log4j.Logger;

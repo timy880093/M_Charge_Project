@@ -650,7 +650,7 @@
                             <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
                         </goals>
                         <configuration>
-                            <aspectDirectory>src/main/aspect</aspectDirectory>
+                            <aspectDirectory>src/main/aspectjs</aspectDirectory>
                         </configuration>
                     </execution>
                 </executions>

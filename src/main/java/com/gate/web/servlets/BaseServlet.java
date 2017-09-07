@@ -177,7 +177,7 @@ public abstract class BaseServlet extends HttpServlet {
 	    		} else if (principal instanceof UserDetails) {
 	    	    		System.out.println("Admin 2:"+((UserDetails)principal).getUsername());
 	    	    		User user1 = new User();
-			    		user1.setEmail(((UserDetails)principal).getUsername());
+			    		user1.setAccount(((UserDetails)principal).getUsername());
 			    		List<User> usersList = chargeFacade.searchBy(user1);
 			    		if (usersList != null && usersList.size()>0){
 			    			//System.out.println("usersList.get(0):"+usersList.get(0));

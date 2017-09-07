@@ -30,14 +30,14 @@ public class UserFacadeImpl implements UserFacade {
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	@Override
-	public User getUserByLogin(String email) {
-		System.out.println("getUserByLogin email:"+email);
+	public User getUserByLogin(String account) {
+		System.out.println("getUserByLogin account:"+account);
 		System.out.println("getUserByLogin TESTONE");
-		if (null == email) {
+		if (null == account) {
 			throw new IllegalArgumentException("Login is mandatory. Null value is forbidden.");
 		}
 		User user = new User();
-		user.setEmail(email);
+		user.setAccount(account);
 		List<User> usersList = einvfacade.searchBy(user);
 		if (usersList != null && usersList.size()>0){
 			//System.out.println("usersList.get(0):"+usersList.get(0));
@@ -61,17 +61,17 @@ public class UserFacadeImpl implements UserFacade {
 	 * @return UserDetails
 	 */
 	@Override
-	public UserDetails loadUserByUsername(String email)
+	public UserDetails loadUserByUsername(String account)
 			throws UsernameNotFoundException, DataAccessException {
-		System.out.println("loadUserByUsername email:"+email);
+		System.out.println("loadUserByUsername account:"+account);
 		User user = null;
 		System.out.println("loadUserByUsername TESTONE");
 		
 		try {
-			user = getUserByLogin(email);
+			user = getUserByLogin(account);
 			if (null == user) {
-				log.error("User with login: " + email+ " not found in database.");
-				log.error("Authentication failed for user " + email);
+				log.error("User with login: " + account+ " not found in database.");
+				log.error("Authentication failed for user " + account);
 				throw new UsernameNotFoundException("Username not found");
 			}
 		} catch (IllegalArgumentException e) {
