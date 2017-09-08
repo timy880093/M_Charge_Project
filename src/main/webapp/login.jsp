@@ -49,7 +49,7 @@
                         <c:url var="loginUrl" value="/j_spring_security_check" />
                         <form action="${loginUrl}" method="post" class="form-horizontal">
                         	<div class="text-center">
-                        	<img src="<%=request.getContextPath()%>/images/gateweb.png" />
+                        	<img src="<%=request.getContextPath()%>/images/gateweb.png" class="img-responsive" alt="關網資訊"/>
                         	</div>
                             <c:if test="${param.error != null}">
                                 <div class="alert alert-danger">
@@ -72,17 +72,20 @@
                             <input type="hidden" name="${_csrf.parameterName}"   value="${_csrf.token}" />
                                  
                             <div class="form-group text-center">
-                                <input type="submit" class="btn btn-info" value="請使用email登入"><p></p>
+                                <input type="submit" class="btn btn-info" value="登入"><p></p>
                             </div>
                         </form>
                 </div>
             </div>
-		 	<div id="rightMain" class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+		 	<div id="rightMain" class="col-xs-12 col-sm-12 col-md-6 col-lg-4 alert alert-info">
             <ui>
-		 		<li class="alert alert-info">取消動態密碼登入設定</li>
-		 		<li class="alert alert-info">修正下入帳時間條件後,抓出來的入帳資料excel卻不符合</li>
-		 		<li class="alert alert-info">修正帶出資料請包含統編</li>
-		 		<li class="alert alert-info">匯出EXCEL帳單有問題 公司應該改為姓名 客戶識別碼須帶入統編</li>
+		 		<li >取消動態密碼登入設定</li>
+		 		<li >修正下入帳時間條件後,抓出來的入帳資料excel卻不符合</li>
+		 		<li >修正帶出資料請包含統編</li>
+		 		<li >匯出EXCEL帳單有問題 公司應該改為姓名 客戶識別碼須帶入統編</li>
+		 		<li >修正佣金計算可修改備註</li>
+		 		<li >修正佣金計算可刪除......NOT YET</li>
+		 		
 		 	</ui>
 		 	</div>
             

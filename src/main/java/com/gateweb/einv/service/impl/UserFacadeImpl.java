@@ -79,7 +79,7 @@ public class UserFacadeImpl implements UserFacade {
 			
 		}
 		//return user;
-		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), 
+		return new org.springframework.security.core.userdetails.User(user.getAccount(), user.getPassword(), 
 				true, true, true, true, user.getAuthorities());
 	}
 	

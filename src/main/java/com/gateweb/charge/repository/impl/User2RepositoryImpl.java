@@ -106,8 +106,11 @@ public class User2RepositoryImpl implements User2RepositoryCustom {
 		if ( vo.getModifyDate() != null ) {
 			builder.and(user.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		if ( vo.getAccount() != null && !"".equals(vo.getAccount())) {
+		/*if ( vo.getAccount() != null && !"".equals(vo.getAccount())) {
 			builder.and(user.account.equalsIgnoreCase(vo.getAccount())); //java.lang.String
+		}*/
+		if ( vo.getAccount() != null && !"".equals(vo.getAccount())) {
+			builder.and(user.account.eq(vo.getAccount())); //java.lang.String
 		}
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(user.email.equalsIgnoreCase(vo.getEmail())); //java.lang.String
