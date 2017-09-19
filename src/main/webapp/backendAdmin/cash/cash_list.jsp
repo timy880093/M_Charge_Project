@@ -25,8 +25,7 @@
                         用戶名稱
                         <input type="text" id="userCompany" name="userCompany" /><input type="button" value="..." id="allUserCompany">
                         <input type="hidden" id="userCompanyId" name="userCompanyId" />
-                        統編<input type="text" id="businessNo" name="businessNo" />
-                        公司名稱<input type="text" id="companyName" name=""companyName"" />
+                         公司名稱<input type="text" id="companyName" name=""companyName"" />
                         付款狀態
                         <select name="payStatus" id="payStatus" class="forms_Dropdown">
                             <option value="all">全部</option>
@@ -355,9 +354,8 @@
         var outYM = $("#outYM").val();
         var userCompanyId = $("#userCompanyId").val();
         var payStatus = $("#payStatus").val();
-        var businessNo = $("#businessNo").val();
         var companyName = $("#companyName").val();
-        var sdata = setSearchValue("outYM", encodeURIComponent(outYM), "userCompanyId", encodeURIComponent(userCompanyId), "payStatus", encodeURIComponent(payStatus),"businessNo", encodeURIComponent(businessNo),"companyName", encodeURIComponent(companyName));
+        var sdata = setSearchValue("outYM", encodeURIComponent(outYM), "userCompanyId", encodeURIComponent(userCompanyId), "payStatus", encodeURIComponent(payStatus),"companyName", encodeURIComponent(companyName));
         return sdata;
     }
 

@@ -36,10 +36,11 @@ public class CashDAO extends BaseDAO {
         StringBuffer countSb = new StringBuffer();
         StringBuffer whereSb = new StringBuffer();
         countSb.append("select count(1) from cash_master cm left join company cp on cm.company_id = cp.company_id  where 1=1 ");
-        dataSb.append(" select cm.cash_master_id,cm.company_id,cp.name,cm.out_ym,cm.bank_ym,cm.no_tax_inclusive_amount,cm.tax_type, " );
+        dataSb.append(" select cm.cash_master_id,cm.company_id,cp.name,cm.out_ym,cm.bank_ym,cm.no_tax_inclusive_amount,cm.tax_type," );
         dataSb.append("cm.tax_rate,cm.tax_amount,cm.tax_inclusive_amount,to_char(cm.out_date,'YYYY/MM/DD') out_date,cm.in_amount,to_char(cm.in_date, 'YYYY/MM/DD') in_date,cm.in_note,cm.email_sent_date,cm.is_first " );
         dataSb.append("from cash_master cm left join company cp on cm.company_id = cp.company_id ");
         dataSb.append(" where 1=1 ");
+
 
         if (querySettingVO.getSearchMap().size() > 0) {
             Map searchMap = querySettingVO.getSearchMap();
@@ -53,12 +54,6 @@ public class CashDAO extends BaseDAO {
                 if (StringUtils.isNotEmpty(searchMap.get("userCompanyId").toString())) {
                     whereSb.append(" and cp.company_id = ?");
                     parameters.add( Integer.parseInt((String)searchMap.get("userCompanyId")));
-                }
-            }
-            if (searchMap.containsKey("businessNo")) {
-                if (StringUtils.isNotEmpty(searchMap.get("businessNo").toString())) {
-                    whereSb.append(" and cp.business_no = ?");
-                    parameters.add( (String)searchMap.get("businessNo"));
                 }
             }
             if (searchMap.containsKey("companyName")) {
