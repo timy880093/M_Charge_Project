@@ -13,6 +13,7 @@ import javax.security.auth.login.LoginException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -152,6 +153,42 @@ public abstract class BaseServlet extends HttpServlet {
     protected void commonService(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {
+        	
+        	
+        	//debug purpose
+        	Enumeration<String> e = request.getParameterNames();
+        	while(e.hasMoreElements()) {
+        	    String param = e.nextElement();
+        	    String[] paramList = request.getParameterValues(param);
+        	    if(paramList != null && paramList.length>0){
+                	for(int i =0; i < paramList.length; i++){
+                		logger.debug("-------------param:"+param+"--------values:"+paramList[i]);
+                	}
+                }
+        	}
+        	logger.debug("--------");
+        	Enumeration names = request.getHeaderNames();
+            while (names.hasMoreElements()) {
+                String name = (String) names.nextElement();
+                logger.debug("-------------headername:"+name + ": " + request.getHeader(name));
+            }
+            logger.debug("--------");
+        	Enumeration attName = request.getAttributeNames();
+            while (attName.hasMoreElements()) {
+                String name = (String) attName.nextElement();
+                logger.debug("------------attName:"+name + ": " + request.getAttribute(name));
+            }
+            logger.debug("--------authType:"+ request.getAuthType());
+            logger.debug("--------contextPath:"+request.getContextPath());
+            logger.debug("--------localAddr:"+request.getLocalAddr());
+            
+            Cookie[] cookies = request.getCookies();
+            if(cookies != null && cookies.length>0){
+            	for(int i =0; i < cookies.length; i++){
+            		logger.debug("--------cookies:"+cookies[i].getName()+"   "+cookies[i].getValue());
+            	}
+            }
+            
         	User user = (User)request.getSession().getAttribute("loginUser");
         	//List<AccountReference> referenceList = (List<AccountReference>)request.getSession().getAttribute("accountReferenceList");
         	Company company = (Company)request.getSession().getAttribute("company");

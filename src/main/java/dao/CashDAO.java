@@ -55,6 +55,18 @@ public class CashDAO extends BaseDAO {
                     parameters.add( Integer.parseInt((String)searchMap.get("userCompanyId")));
                 }
             }
+            if (searchMap.containsKey("businessNo")) {
+                if (StringUtils.isNotEmpty(searchMap.get("businessNo").toString())) {
+                    whereSb.append(" and cp.business_no = ?");
+                    parameters.add( (String)searchMap.get("businessNo"));
+                }
+            }
+            if (searchMap.containsKey("companyName")) {
+                if (StringUtils.isNotEmpty(searchMap.get("companyName").toString())) {
+                    whereSb.append(" and cp.name like ?");
+                    parameters.add( "%"+(String)searchMap.get("companyName")+"%");
+                }
+            }
             if (searchMap.containsKey("payStatus")) {
                 if (StringUtils.isNotEmpty(searchMap.get("payStatus").toString())) {
                     if(searchMap.get("payStatus").toString().equals("all")){
