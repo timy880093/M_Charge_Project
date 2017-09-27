@@ -264,6 +264,9 @@ $(function () {
         changeMonth: true,
         changeYear: true,
         showOn: "button",
+        yearRange: '2014:2034',
+        minDate: new Date(2014, 10 - 1, 25),
+        maxDate: '+20Y',
         onClose: function (selectedDate) {
             //$("#realEndDate").datepicker("option", "minDate", selectedDate);
             countDayForEndDate();

@@ -32,6 +32,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.gate.core.bean.BaseFormBean;
 import com.gate.core.db.Dom4jUtils;
+import com.gate.utils.DateDeserializer;
 import com.gate.utils.RequestToMapUtils;
 import com.gate.web.authority.UserInfo;
 import com.gate.web.authority.UserInfoContext;
@@ -377,7 +378,9 @@ public abstract class BaseServlet extends HttpServlet {
         Object requestObj = otherMap.get(REQUEST_SEND_OBJECT);
         Object dispatch = otherMap.get(DISPATCH_PAGE);
 //        Gson gson = new Gson();
-        Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/dd HH:mm:ss").create();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+    	gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+        Gson gson = gsonBuilder.create();
         HttpSession session = request.getSession();
         if (sessionObj instanceof List) {
             List sessionList = (List) sessionObj;
@@ -410,7 +413,9 @@ public abstract class BaseServlet extends HttpServlet {
         Object jsonObj = otherMap.get(AJAX_JSON_OBJECT);
         if(jsonObj!=null){
 //            Gson gson = new Gson();
-            Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/dd HH:mm:ss").create();
+        	GsonBuilder gsonBuilder = new GsonBuilder();
+        	gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+            Gson gson = gsonBuilder.create();
             String jsonString = gson.toJson(jsonObj).replaceAll( "\\\\\"", "\\\\\\\\u0022");
             response.getWriter().write(jsonString);
         }

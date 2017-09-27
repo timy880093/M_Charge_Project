@@ -41,7 +41,7 @@
         <!--<property name="connection.password">gateweb87734300</property>-->
         <!--<property name="connection.url">jdbc:postgresql://59.125.56.90:5432/receipt_db</property>
         <property name="connection.url">jdbc:postgresql://122.116.230.247:5432/charge_db</property>-->
-        <property name="connection.url">jdbc:postgresql://192.168.1.208:5432/charge_db_uat</property>
+        <property name="connection.url">jdbc:postgresql://192.168.1.208:5432/charge_db_prod</property>
         <!--<property name="connection.url">jdbc:postgresql://localhost:5432/TestCharge_db</property>-->
 
         <!--<property name="connection.url">jdbc:postgresql://113.196.121.99:5432/receipt_db</property>-->
