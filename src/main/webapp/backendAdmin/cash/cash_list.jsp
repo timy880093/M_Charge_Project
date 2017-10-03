@@ -268,7 +268,7 @@
 
         str = '<select name="fieldName" class="forms_Dropdown">' +
                 '<option value="viewCashDetail">帳單明細</option>' +
-                '<option value="reSendEmail">寄Email通知未入帳</option>' +
+                '<option value="reSendEmail">明細email寄送</option>' +
                 '<option value="in">確認入帳</option>' +
                 '<option value="cancelIn">取消入帳</option>';
         str += '</select>';

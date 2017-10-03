@@ -145,18 +145,6 @@ public class CashSearchServlet extends SearchServlet {
             }
             otherMap.put(AJAX_JSON_OBJECT, data);
             return null;
-        } else if (method.equals("emailUnrecorded")){  //寄email未入帳
-            String data = "success!!";
-            try{
-                String calYM  = ((String[]) requestParameterMap.get("outYM"))[0];
-                int exeCnt = cashServiceImp.sendBillMailYM(calYM);
-                data += " total counts: " + exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
 
         } else if(method.equals("email")){  //多筆-寄email
             String data = "success!!";

@@ -185,7 +185,6 @@
         str = '<select name="fieldName" class="forms_Dropdown">' ;
         str+= '<option value="viewLogDetail">檢視佣金明細</option>' ;
         str+= '<option value="editCommission">修改備註</option>';
-        str+= '<option value="delete">刪除</option>';
         str+= '</select>';
         str+='<a href="#"  title="確定" class="butbox2"><span>確&nbsp;&nbsp;定</span></a>';
 
