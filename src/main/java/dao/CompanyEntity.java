@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  * To change this template use File | Settings | File Templates.
  */
 public class CompanyEntity  implements Serializable {
-    private Integer companyId;
+    public Integer companyId;
 
     public Integer getCompanyId() {
         return companyId;
@@ -21,7 +21,7 @@ public class CompanyEntity  implements Serializable {
         this.companyId = companyId;
     }
 
-    private Integer parentId;
+    public Integer parentId;
 
     public Integer getParentId() {
         return parentId;
@@ -31,7 +31,7 @@ public class CompanyEntity  implements Serializable {
         this.parentId = parentId;
     }
 
-    private String name;
+    public String name;
 
     public String getName() {
         return name;
@@ -41,7 +41,7 @@ public class CompanyEntity  implements Serializable {
         this.name = name;
     }
 
-    private String businessNo;
+    public String businessNo;
 
     public String getBusinessNo() {
         return businessNo;
@@ -51,7 +51,7 @@ public class CompanyEntity  implements Serializable {
         this.businessNo = businessNo;
     }
 
-    private Integer companyType;
+    public Integer companyType;
 
     public Integer getCompanyType() {
         return companyType;
@@ -61,7 +61,7 @@ public class CompanyEntity  implements Serializable {
         this.companyType = companyType;
     }
 
-    private Integer verifyStatus;
+    public Integer verifyStatus;
 
     public Integer getVerifyStatus() {
         return verifyStatus;
@@ -71,7 +71,7 @@ public class CompanyEntity  implements Serializable {
         this.verifyStatus = verifyStatus;
     }
 
-    private String codeName;
+    public String codeName;
 
     public String getCodeName() {
         return codeName;
@@ -81,7 +81,7 @@ public class CompanyEntity  implements Serializable {
         this.codeName = codeName;
     }
 
-    private String phone;
+    public String phone;
 
     public String getPhone() {
         return phone;
@@ -91,7 +91,7 @@ public class CompanyEntity  implements Serializable {
         this.phone = phone;
     }
 
-    private String fax;
+    public String fax;
 
     public String getFax() {
         return fax;
@@ -101,7 +101,7 @@ public class CompanyEntity  implements Serializable {
         this.fax = fax;
     }
 
-    private String contact1;
+    public String contact1;
 
     public String getContact1() {
         return contact1;
@@ -111,7 +111,7 @@ public class CompanyEntity  implements Serializable {
         this.contact1 = contact1;
     }
 
-    private String contactPhone1;
+    public String contactPhone1;
 
     public String getContactPhone1() {
         return contactPhone1;
@@ -121,7 +121,7 @@ public class CompanyEntity  implements Serializable {
         this.contactPhone1 = contactPhone1;
     }
 
-    private String contact2;
+    public String contact2;
 
     public String getContact2() {
         return contact2;
@@ -131,7 +131,7 @@ public class CompanyEntity  implements Serializable {
         this.contact2 = contact2;
     }
 
-    private String contactPhone2;
+    public String contactPhone2;
 
     public String getContactPhone2() {
         return contactPhone2;
@@ -141,7 +141,7 @@ public class CompanyEntity  implements Serializable {
         this.contactPhone2 = contactPhone2;
     }
 
-    private Integer cityId;
+    public Integer cityId;
 
     public Integer getCityId() {
         return cityId;
@@ -151,7 +151,7 @@ public class CompanyEntity  implements Serializable {
         this.cityId = cityId;
     }
 
-    private String companyAddress;
+    public String companyAddress;
 
     public String getCompanyAddress() {
         return companyAddress;
@@ -161,7 +161,7 @@ public class CompanyEntity  implements Serializable {
         this.companyAddress = companyAddress;
     }
 
-    private String mailingAddress;
+    public String mailingAddress;
 
     public String getMailingAddress() {
         return mailingAddress;
@@ -171,7 +171,7 @@ public class CompanyEntity  implements Serializable {
         this.mailingAddress = mailingAddress;
     }
 
-    private String taxNo;
+    public String taxNo;
 
     public String getTaxNo() {
         return taxNo;
@@ -181,7 +181,7 @@ public class CompanyEntity  implements Serializable {
         this.taxNo = taxNo;
     }
 
-    private String taxOffice;
+    public String taxOffice;
 
     public String getTaxOffice() {
         return taxOffice;
@@ -191,7 +191,7 @@ public class CompanyEntity  implements Serializable {
         this.taxOffice = taxOffice;
     }
 
-    private Integer creatorId;
+    public Integer creatorId;
 
     public Integer getCreatorId() {
         return creatorId;
@@ -201,7 +201,7 @@ public class CompanyEntity  implements Serializable {
         this.creatorId = creatorId;
     }
 
-    private Timestamp createDate;
+    public Timestamp createDate;
 
     public Timestamp getCreateDate() {
         return createDate;
@@ -211,7 +211,7 @@ public class CompanyEntity  implements Serializable {
         this.createDate = createDate;
     }
 
-    private Integer modifierId;
+    public Integer modifierId;
 
     public Integer getModifierId() {
         return modifierId;
@@ -221,7 +221,7 @@ public class CompanyEntity  implements Serializable {
         this.modifierId = modifierId;
     }
 
-    private Timestamp modifyDate;
+    public Timestamp modifyDate;
 
     public Timestamp getModifyDate() {
         return modifyDate;
@@ -231,7 +231,7 @@ public class CompanyEntity  implements Serializable {
         this.modifyDate = modifyDate;
     }
 
-    private Integer transferType;
+    public Integer transferType;
 
     public Integer getTransferType() {
         return transferType;
@@ -241,7 +241,7 @@ public class CompanyEntity  implements Serializable {
         this.transferType = transferType;
     }
 
-    private String topBanner;
+    public String topBanner;
 
     public String getTopBanner() {
         return topBanner;
@@ -251,7 +251,7 @@ public class CompanyEntity  implements Serializable {
         this.topBanner = topBanner;
     }
 
-    private String bottomBanner;
+    public String bottomBanner;
 
     public String getBottomBanner() {
         return bottomBanner;
@@ -261,7 +261,7 @@ public class CompanyEntity  implements Serializable {
         this.bottomBanner = bottomBanner;
     }
 
-    private String email1;
+    public String email1;
 
     public String getEmail1() {
         return email1;
@@ -271,7 +271,7 @@ public class CompanyEntity  implements Serializable {
         this.email1 = email1;
     }
 
-    private String email2;
+    public String email2;
 
     public String getEmail2() {
         return email2;
@@ -281,7 +281,7 @@ public class CompanyEntity  implements Serializable {
         this.email2 = email2;
     }
 
-    private String companyKey;
+    public String companyKey;
 
     public String getCompanyKey() {
         return companyKey;

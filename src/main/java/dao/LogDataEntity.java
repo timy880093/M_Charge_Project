@@ -7,13 +7,13 @@ import java.sql.Timestamp;
  * Created by Good688 on 2014/8/26.
  */
 public class LogDataEntity implements Serializable {
-    private Integer logId;
-    private String logUrl;
-    private Integer parameterId;
-    private Timestamp accessTime;
-    private String userName;
-    private String requestObj;
-    private String sessionObj;
+    public Integer logId;
+    public String logUrl;
+    public Integer parameterId;
+    public Timestamp accessTime;
+    public String userName;
+    public String requestObj;
+    public String sessionObj;
 
     public Integer getLogId() {
         return logId;

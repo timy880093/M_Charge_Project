@@ -9,24 +9,24 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class ChargeModeCycleEntity implements Serializable {
-    private Integer chargeId;
-    private String packageName;
-    private Integer chargeCycle;
-    private Integer baseQuantity;
-    private BigDecimal singlePrice;
-    private Integer maxPrice;
-    private Integer salesPrice;
-    private Integer prePayment;
-    private Integer freeQuantity;
-    private Integer status;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer freeMonth;
-    private Integer contractLimit;
-    private Integer prepaidAdditionEnable;
-    private Integer feePeriod;
+    public Integer chargeId;
+    public String packageName;
+    public Integer chargeCycle;
+    public Integer baseQuantity;
+    public BigDecimal singlePrice;
+    public Integer maxPrice;
+    public Integer salesPrice;
+    public Integer prePayment;
+    public Integer freeQuantity;
+    public Integer status;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer freeMonth;
+    public Integer contractLimit;
+    public Integer prepaidAdditionEnable;
+    public Integer feePeriod;
 
     public Integer getChargeId() {
         return chargeId;

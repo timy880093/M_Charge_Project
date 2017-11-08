@@ -8,21 +8,21 @@ import java.sql.Timestamp;
  * Created by emily on 2017/6/20.
  */
 public class WarrantyEntity implements Serializable{
-    private Integer warrantyId;
-    private String warrantyNo;
-    private Integer companyId;
-    private Date startDate;
-    private Date endDate;
-    private Boolean extend;
-    private String model;
-    private String note;
-    private Integer status;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer dealerCompanyId;
-    private Integer onlyShip;
+    public Integer warrantyId;
+    public String warrantyNo;
+    public Integer companyId;
+    public Date startDate;
+    public Date endDate;
+    public Boolean extend;
+    public String model;
+    public String note;
+    public Integer status;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer dealerCompanyId;
+    public Integer onlyShip;
 
     public Integer getWarrantyId() {
         return warrantyId;

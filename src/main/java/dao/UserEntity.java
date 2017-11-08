@@ -11,22 +11,22 @@ import java.sql.Timestamp;
  * To change this template use File | Settings | File Templates.
  */
 public class UserEntity implements Serializable {
-    private Integer userId;
-    private Integer companyId;
-    private Integer roleId;
-    private String account;
-    private String password;
-    private String name;
-    private String email;
-    private Boolean close;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer printerId;
-    private String authUrl;
-    private String authKey;
-    private Integer logoutTime;
+    public Integer userId;
+    public Integer companyId;
+    public Integer roleId;
+    public String account;
+    public String password;
+    public String name;
+    public String email;
+    public Boolean close;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer printerId;
+    public String authUrl;
+    public String authKey;
+    public Integer logoutTime;
 
     public Integer getUserId() {
         return userId;

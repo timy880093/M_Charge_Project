@@ -8,23 +8,23 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class DealerCompanyEntity implements Serializable {
-    private Integer dealerCompanyId;
-    private BigDecimal mainAmount;
-    private BigDecimal mainPercent;
-    private BigDecimal collectMoney;
-    private String commissionType;
-    private Integer status;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private BigDecimal additionPercent;
-    private String dealerCompanyName;
-    private String businessNo;
-    private String phone;
-    private String fax;
-    private String companyAddress;
-    private String email;
+    public Integer dealerCompanyId;
+    public BigDecimal mainAmount;
+    public BigDecimal mainPercent;
+    public BigDecimal collectMoney;
+    public String commissionType;
+    public Integer status;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public BigDecimal additionPercent;
+    public String dealerCompanyName;
+    public String businessNo;
+    public String phone;
+    public String fax;
+    public String companyAddress;
+    public String email;
 
     public Integer getDealerCompanyId() {
         return dealerCompanyId;

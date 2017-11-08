@@ -10,25 +10,25 @@ import java.sql.Timestamp;
  */
 public class CommissionLogEntity implements Serializable {
 
-    private Integer commissionLogId;
-    private Integer commissionCpId;
-    private String commissionYmd;
-    private Integer userCpId;
-    private Date inDateStart;
-    private Date inDateEnd;
-    private String commissionType;
-    private BigDecimal mainAmount;
-    private BigDecimal mainPercent;
-    private BigDecimal collectMoney;
-    private BigDecimal addtionPercent;
-    private BigDecimal inAmount;
-    private BigDecimal commissionAmount;
-    private String isPaid;
-    private String note;
-    private Timestamp createDate;
-    private Timestamp modifyDate;
-    private Integer creatorId;
-    private Integer modifierId;
+    public Integer commissionLogId;
+    public Integer commissionCpId;
+    public String commissionYmd;
+    public Integer userCpId;
+    public Date inDateStart;
+    public Date inDateEnd;
+    public String commissionType;
+    public BigDecimal mainAmount;
+    public BigDecimal mainPercent;
+    public BigDecimal collectMoney;
+    public BigDecimal addtionPercent;
+    public BigDecimal inAmount;
+    public BigDecimal commissionAmount;
+    public String isPaid;
+    public String note;
+    public Timestamp createDate;
+    public Timestamp modifyDate;
+    public Integer creatorId;
+    public Integer modifierId;
 
     public Integer getCommissionLogId() {
         return commissionLogId;

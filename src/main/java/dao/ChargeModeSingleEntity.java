@@ -8,20 +8,20 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class ChargeModeSingleEntity implements Serializable {
-    private Integer chargeId;
-    private String packageName;
-    private Integer baseQuantity;
-    private Integer salesPrice;
-    private Integer maxPrice;
-    private Date availableStart;
-    private Date availableEnd;
-    private Integer status;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Double pointPrice;
-    private Integer contractLimit;
+    public Integer chargeId;
+    public String packageName;
+    public Integer baseQuantity;
+    public Integer salesPrice;
+    public Integer maxPrice;
+    public Date availableStart;
+    public Date availableEnd;
+    public Integer status;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Double pointPrice;
+    public Integer contractLimit;
 
     public Integer getChargeId() {
         return chargeId;

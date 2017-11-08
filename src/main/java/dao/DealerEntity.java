@@ -7,15 +7,15 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class DealerEntity implements Serializable{
-    private Integer dealerId;
-    private String dealerName;
-    private String dealerPhone;
-    private String dealerEmail;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer dealerCompanyId;
+    public Integer dealerId;
+    public String dealerName;
+    public String dealerPhone;
+    public String dealerEmail;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer dealerCompanyId;
 
     public Integer getDealerId() {
         return dealerId;

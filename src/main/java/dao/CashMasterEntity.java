@@ -9,28 +9,28 @@ import java.sql.Timestamp;
  */
 public class CashMasterEntity  implements Serializable {
 
-    private Integer cashMasterId;
-    private String outYm;
-    private String bankYm;
-    private Integer companyId;
-    private BigDecimal noTaxInclusiveAmount;
-    private String taxType;
-    private Float taxRate;
-    private BigDecimal taxAmount;
-    private BigDecimal taxInclusiveAmount;
-    private Timestamp emailSentDate;
-    private Timestamp outDate;
-    private Timestamp excelOutDate;
-    private BigDecimal inAmount;
-    private String inNote;
-    private Timestamp inDate;
-    private Integer status;
-    private String isFirst;
-    private String isInoutMoneyUnmatch;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
+    public Integer cashMasterId;
+    public String outYm;
+    public String bankYm;
+    public Integer companyId;
+    public BigDecimal noTaxInclusiveAmount;
+    public String taxType;
+    public Float taxRate;
+    public BigDecimal taxAmount;
+    public BigDecimal taxInclusiveAmount;
+    public Timestamp emailSentDate;
+    public Timestamp outDate;
+    public Timestamp excelOutDate;
+    public BigDecimal inAmount;
+    public String inNote;
+    public Timestamp inDate;
+    public Integer status;
+    public String isFirst;
+    public String isInoutMoneyUnmatch;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
 
     public Integer getCashMasterId() {
         return cashMasterId;

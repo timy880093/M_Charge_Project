@@ -8,18 +8,18 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class ChargeModeSingleAddEntity implements Serializable {
-    private Integer additionId;
-    private Date startDate;
-    private Date endDate;
-    private Date realStartDate;
-    private Date realEndDate;
-    private Integer additionQuantity;
-    private Date buyDate;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer giftPrice;
+    public Integer additionId;
+    public Date startDate;
+    public Date endDate;
+    public Date realStartDate;
+    public Date realEndDate;
+    public Integer additionQuantity;
+    public Date buyDate;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer giftPrice;
 
     public Integer getAdditionId() {
         return additionId;

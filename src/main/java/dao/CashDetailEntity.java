@@ -9,31 +9,31 @@ import java.sql.Timestamp;
  */
 public class CashDetailEntity implements Serializable{
 
-    private Integer cashDetailId;
-    private Integer cashMasterId;
-    private String calYm;
-    private Integer companyId;
-    private Integer cashType;
-    private Integer billType;
-    private BigDecimal orgPrice;
-    private BigDecimal diffPrice;
-    private String diffPriceNote;
-    private BigDecimal noTaxInclusivePrice;
-    private String taxType;
-    private Float taxRate;
-    private BigDecimal taxPrice;
-    private BigDecimal taxInclusivePrice;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer billId;
-    private Integer packageId;
-    private Integer status;
-    private String outYm;
-    private Integer commissionLogId;
-    private BigDecimal commissionAmount;
-    private String isFirst;
+    public Integer cashDetailId;
+    public Integer cashMasterId;
+    public String calYm;
+    public Integer companyId;
+    public Integer cashType;
+    public Integer billType;
+    public BigDecimal orgPrice;
+    public BigDecimal diffPrice;
+    public String diffPriceNote;
+    public BigDecimal noTaxInclusivePrice;
+    public String taxType;
+    public Float taxRate;
+    public BigDecimal taxPrice;
+    public BigDecimal taxInclusivePrice;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer billId;
+    public Integer packageId;
+    public Integer status;
+    public String outYm;
+    public Integer commissionLogId;
+    public BigDecimal commissionAmount;
+    public String isFirst;
 
     public Integer getCashDetailId() {
         return cashDetailId;

@@ -7,15 +7,15 @@ import java.sql.Timestamp;
  * Created by emily on 2017/5/11.
  */
 public class GradeEntity implements Serializable{
-    private Integer gradeId;
-    private Integer chargeId;
-    private Integer cntStart;
-    private Integer cntEnd;
-    private Integer price;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
+    public Integer gradeId;
+    public Integer chargeId;
+    public Integer cntStart;
+    public Integer cntEnd;
+    public Integer price;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
 
     public Integer getGradeId() {
         return gradeId;

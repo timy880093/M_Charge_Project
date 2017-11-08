@@ -7,23 +7,23 @@ import java.sql.Timestamp;
  * Created by emily on 2017/5/12.
  */
 public class ChargeModeGradeEntity implements Serializable{
-    private Integer chargeId;
-    private String packageName;
-    private Integer chargeCycle;
-    private Integer status;
-    private Integer freeMonth;
-    private Integer contractLimit;
-    private Integer feePeriod;
-    private Integer baseQuantity;
-    private Integer salesPrice;
-    private String hasGrade;
-    private Integer gradePrice;
-    private Integer gradeCnt;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer prePayment;
+    public Integer chargeId;
+    public String packageName;
+    public Integer chargeCycle;
+    public Integer status;
+    public Integer freeMonth;
+    public Integer contractLimit;
+    public Integer feePeriod;
+    public Integer baseQuantity;
+    public Integer salesPrice;
+    public String hasGrade;
+    public Integer gradePrice;
+    public Integer gradeCnt;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer prePayment;
 
     public Integer getChargeId() {
         return chargeId;

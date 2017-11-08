@@ -8,31 +8,31 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class BillCycleEntity implements Serializable,Comparable<BillCycleEntity>{
-    private Integer billId;
-    private Integer billType;
-    private Integer packageId;
-    private Integer companyId;
-    private String yearMonth;
-    private BigDecimal price;
-    private Integer cnt;
-    private Integer cntLimit;
-    private Integer cntGift;
-    private Integer cntOver;
-    private BigDecimal priceOver;
-    private BigDecimal priceMax;
-    private BigDecimal payOver;
-    private BigDecimal payMonth;
-    private Integer cashOutOverId;
-    private Integer cashOutMonthId;
-    private Integer cashInOverId;
-    private Integer cashInMonthId;
-    private String status;
-    private String isPriceFree;
-    private BigDecimal singlePrice;
-    private Timestamp modifyDate;
-    private Integer modifierId;
-    private Timestamp createDate;
-    private Integer creatorId;
+    public Integer billId;
+    public Integer billType;
+    public Integer packageId;
+    public Integer companyId;
+    public String yearMonth;
+    public BigDecimal price;
+    public Integer cnt;
+    public Integer cntLimit;
+    public Integer cntGift;
+    public Integer cntOver;
+    public BigDecimal priceOver;
+    public BigDecimal priceMax;
+    public BigDecimal payOver;
+    public BigDecimal payMonth;
+    public Integer cashOutOverId;
+    public Integer cashOutMonthId;
+    public Integer cashInOverId;
+    public Integer cashInMonthId;
+    public String status;
+    public String isPriceFree;
+    public BigDecimal singlePrice;
+    public Timestamp modifyDate;
+    public Integer modifierId;
+    public Timestamp createDate;
+    public Integer creatorId;
 
     public Integer getBillId() {
         return billId;

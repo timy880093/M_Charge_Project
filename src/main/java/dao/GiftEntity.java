@@ -8,17 +8,17 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class GiftEntity implements Serializable{
-    private Integer giftId;
-    private Integer companyId;
-    private Date giftDate;
-    private Integer giftCnt;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer calId;
-    private Integer outId;
-    private Integer inId;
+    public Integer giftId;
+    public Integer companyId;
+    public Date giftDate;
+    public Integer giftCnt;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer calId;
+    public Integer outId;
+    public Integer inId;
 
     public Integer getGiftId() {
         return giftId;

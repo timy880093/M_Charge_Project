@@ -7,14 +7,14 @@ import java.sql.Timestamp;
  * Created by emily on 2017/5/19.
  */
 public class PrepayDeductMasterEntity implements Serializable{
-    private Integer prepayDeductMasterId;
-    private Integer companyId;
-    private Integer amount;
-    private String isEnableOver;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
+    public Integer prepayDeductMasterId;
+    public Integer companyId;
+    public Integer amount;
+    public String isEnableOver;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
 
     public Integer getPrepayDeductMasterId() {
         return prepayDeductMasterId;

@@ -7,22 +7,22 @@ import java.sql.Timestamp;
  * Created by emily on 2015/12/17.
  */
 public class PackageModeEntity implements Serializable{
-    private Integer packageId;
-    private Integer packageType;
-    private Integer chargeId;
-    private Integer additionId;
-    private Integer companyId;
-    private Integer dealerId;
-    private String status;
-    private Integer creatorId;
-    private Timestamp createDate;
-    private Integer modifierId;
-    private Timestamp modifyDate;
-    private Integer dealerCompanyId;
-    private String brokerCp2;
-    private String broker2;
-    private String brokerCp3;
-    private String broker3;
+    public Integer packageId;
+    public Integer packageType;
+    public Integer chargeId;
+    public Integer additionId;
+    public Integer companyId;
+    public Integer dealerId;
+    public String status;
+    public Integer creatorId;
+    public Timestamp createDate;
+    public Integer modifierId;
+    public Timestamp modifyDate;
+    public Integer dealerCompanyId;
+    public String brokerCp2;
+    public String broker2;
+    public String brokerCp3;
+    public String broker3;
 
     public Integer getPackageId() {
         return packageId;
