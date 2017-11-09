@@ -30,9 +30,6 @@ public class CommissionLogServiceImp implements CommissionLogService {
     public boolean updateNote(Integer commissionLogId, String note) throws Exception{
         return dao.updateNote(commissionLogId, note);
     }
-    public boolean delete(Integer commissionLogId)throws Exception{
-        return  dao.delete(commissionLogId);
-    }
 
     public boolean payCommission(String commissionLog)throws Exception{
         return dao.updatePayCommission(commissionLog);

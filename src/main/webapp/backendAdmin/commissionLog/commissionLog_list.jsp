@@ -92,10 +92,6 @@
                     }else if(selectOption=='viewLogDetail'){
                         url=  path + '/backendAdmin/commissionLogEditServlet?method=edit&commission_log_id=' + id ;
                         MM_openBrWindow(url,1200,800);
-                    } else if(selectOption=='delete'){
-                        url=  path + '/backendAdmin/commissionLogEditServlet?method=delete&commission_log_id=' + id ;
-
-
 
                     }
                 });

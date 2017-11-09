@@ -56,7 +56,7 @@ public class CashDAO extends BaseDAO {
                     parameters.add( Integer.parseInt((String)searchMap.get("userCompanyId")));
                 }
             }
-            if (searchMap.containsKey("companyName")) {
+                       if (searchMap.containsKey("companyName")) {
                 if (StringUtils.isNotEmpty(searchMap.get("companyName").toString())) {
                     whereSb.append(" and cp.name like ?");
                     parameters.add( "%"+(String)searchMap.get("companyName")+"%");

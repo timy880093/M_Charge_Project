@@ -25,7 +25,7 @@
                         用戶名稱
                         <input type="text" id="userCompany" name="userCompany" /><input type="button" value="..." id="allUserCompany">
                         <input type="hidden" id="userCompanyId" name="userCompanyId" />
-                         公司名稱<input type="text" id="companyName" name=""companyName"" />
+                        公司名稱<input type="text" id="companyName" name="companyName" />
                         付款狀態
                         <select name="payStatus" id="payStatus" class="forms_Dropdown">
                             <option value="all">全部</option>

@@ -20,7 +20,18 @@
                 <span class="select_div">
                     <form action="<%=request.getContextPath()%>/backendAdmin/calCycleSearchServlet?method=" method="post" id="calCycleForm" name="calCycleForm">
                         計算年月
-                        <select name="calYM" id="calYM" class="forms_Dropdown">
+                        <select name="calYM" id="calYM" class="forms_Dropdown"></select>
+                           付款狀態
+                        <select name="payStatus" id="payStatus" class="forms_Dropdown">
+                            <option value="all">全部</option>
+                            <option value="unpay">未繳費</option>
+                            <option value="paid">已繳費</option>
+                        </select>
+                        生效狀態
+                        <select name="Status" id="Status" class="forms_Dropdown">
+                            <option value="all">全部</option>
+                            <option value="effective">生效</option>
+                            <option value="void">作廢</option>
                         </select>
                         用戶名稱
                         <input type="text" id="userCompany" name="userCompany" /><input type="button" value="..." id="allUserCompany">
@@ -162,6 +173,19 @@
             })
     }
 
+
+    if (${!empty REQUEST_SEND_OBJECT_0}) {
+        //畫面的年月下拉選單
+        var select =   $("#cash_in_month_id");
+        var data = $.parseJSON('${REQUEST_SEND_OBJECT_0}');
+        select.show();
+        select.empty();
+        select.append(($('<option>').val("").html("請選擇")));
+        $.each(data,function(index,value){
+            select.append($('<option>').val(value.cash_in_month_id).html(value.cash_in_month_id));
+        })
+    }
+
     var cpData = [];
     var cpList;
     if (${!empty REQUEST_SEND_OBJECT_1}) {
@@ -301,7 +325,9 @@
     function searchCriteria(){
         var calYM = $("#calYM").val();
         var userCompanyId = $("#userCompanyId").val();
-        var sdata = setSearchValue("calYM", encodeURIComponent(calYM), "userCompanyId", encodeURIComponent(userCompanyId));
+        var payStatus = $("#payStatus").val();
+        var status = $("#status").val();
+        var sdata = setSearchValue("calYM", encodeURIComponent(calYM), "userCompanyId", encodeURIComponent(userCompanyId),"payStatus", encodeURIComponent(payStatus),"status",encodeURIComponent(status));
         return sdata;
     }
 
@@ -311,6 +337,8 @@
             alert("請先選擇計算年月");
             return false;
         }
+
+
 //        //callback handler for form submit
 //        $("#calCycleForm").submit(function(e)
 //        {

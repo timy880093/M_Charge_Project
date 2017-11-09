@@ -49,29 +49,8 @@ public class CommissionLogEditServlet extends BackendPopTemplateServlet {
             }
             otherMap.put(AJAX_JSON_OBJECT, data);
 
-        } else if (method.equals("delete")) {// 刪除
-           String data="sucess !!";
-            try {
-                Integer commissionLogId = 0;
-                String strCommissionLogId = ((String[]) requestParameterMap.get("commission_log_id"))[0];
-                if (null == strCommissionLogId) {
-                    commissionLogId = Integer.parseInt(strCommissionLogId);
-                }
-                serviceImp.delete(commissionLogId);
-
-            }catch (Exception e){
-                e.printStackTrace();
-                data = "delete error";
-
-            }
-        otherMap.put(AJAX_JSON_OBJECT,data);
         }
-
-
-
-
-        }
-
+    }
     public String getDispatch_page() {
         return "/backendAdmin/commissionLog/commissionLog_edit.jsp";
     }

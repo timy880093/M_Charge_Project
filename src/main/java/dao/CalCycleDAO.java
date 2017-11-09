@@ -31,9 +31,10 @@ public class CalCycleDAO extends BaseDAO {
         dataSb.append(" select bc.bill_id,bc.bill_type,bc.package_id,bc.company_id,cp.name,bc.year_month, price,  " );
         //dataSb.append(" case(bc.is_price_free) when '1' THEN 0 ELSE bc.price END price, " );
         dataSb.append(" bc.cnt, bc.cnt_limit, bc.cnt_gift, bc.cnt_over, bc.single_price,bc.price_over, bc.price_max,  " );
-        dataSb.append(" bc.pay_over, bc.pay_month, bc.cash_out_over_id, bc.cash_out_month_id,bc.cash_in_over_id, bc.cash_in_month_id,bc.status bc_status " );
+        dataSb.append(" bc.pay_over, bc.pay_month, bc.cash_out_over_id, bc.cash_out_month_id,bc.cash_in_over_id, bc.cash_in_month_id,bc.status bc_status" );
         dataSb.append(" from bill_cycle bc left join company cp on bc.company_id= cp.company_id " );
         dataSb.append(" where (bill_type=1 or bill_type=2) ");
+        dataSb.append(" to_char(cm.in_date, 'YYYY/MM/DD') in_date");
 
         if (querySettingVO.getSearchMap().size() > 0) {
             Map searchMap = querySettingVO.getSearchMap();
@@ -41,6 +42,28 @@ public class CalCycleDAO extends BaseDAO {
                 if (StringUtils.isNotEmpty(searchMap.get("calYM").toString())) {
                     whereSb.append(" and bc.year_month = ? ") ;
                     parameters.add(searchMap.get("calYM"));
+                }
+            }
+            if (searchMap.containsKey("payStatus")) {
+                if (StringUtils.isNotEmpty(searchMap.get("payStatus").toString())) {
+                    if(searchMap.get("payStatus").toString().equals("all")){
+                    }else if (searchMap.get("payStatus").toString().equals("paid")){
+                        whereSb.append(" and cm.in_date is not null ");
+                    }else if(searchMap.get("payStatus").toString().equals("unpay")){
+                        whereSb.append(" and cm.in_date is null");
+                    }
+                }
+            }
+
+            if (searchMap.containsKey("Status")) {
+                if (StringUtils.isNotEmpty(searchMap.get("Status").toString())) {
+                    if(searchMap.get("Status").toString().equals("all")){
+
+                    }else if (searchMap.get("Status").toString().equals("effective")){
+                        whereSb.append(" and cm.status is not null ");
+                    }else if(searchMap.get("Status").toString().equals("void")){
+                        whereSb.append(" and cm.status is null");
+                    }
                 }
             }
             if (searchMap.containsKey("userCompanyId")) {
