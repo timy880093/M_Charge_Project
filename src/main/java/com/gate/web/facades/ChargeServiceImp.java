@@ -22,6 +22,8 @@ public class ChargeServiceImp implements ChargeService{
         return returnMap;
     }
 
+
+
     public Integer insertChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
         return insertChargeModeCycle(bean);
     }

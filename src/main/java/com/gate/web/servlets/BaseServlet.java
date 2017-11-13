@@ -380,6 +380,7 @@ public abstract class BaseServlet extends HttpServlet {
 //        Gson gson = new Gson();
         GsonBuilder gsonBuilder = new GsonBuilder();
     	gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+    	gsonBuilder.setDateFormat("yyyy/MM/dd");
         Gson gson = gsonBuilder.create();
         HttpSession session = request.getSession();
         if (sessionObj instanceof List) {
