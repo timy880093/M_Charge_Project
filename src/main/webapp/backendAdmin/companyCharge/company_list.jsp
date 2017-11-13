@@ -180,7 +180,8 @@
         }
         return "";
     }
-
+    //續約快過期合約在查詢時若勾選包含作廢的無法執行
+    //反正作廢的本就不需續約,可否直接剃除,或在查詢時就不須帶出(本來作廢的就不該在快過期合約中,因為已作廢)
     function formatStatus(cellvalue, options, rowObject){
         var value = cellvalue;
         var str = '';
@@ -188,11 +189,12 @@
             str = '未生效';
         }else if(value=='1'){
             str = '生效';
-        } else if(value=='2'){
-            str = '作廢';
-        } else if(value=='3'){
-            str = '過期';
         }
+//        else if(value=='2'){
+//            str = '作廢';
+//        } else if(value=='3'){
+//            str = '過期';
+//        }
 
         return str;
     }
