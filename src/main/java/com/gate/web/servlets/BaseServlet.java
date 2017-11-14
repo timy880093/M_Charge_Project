@@ -34,6 +34,8 @@ import com.gate.core.bean.BaseFormBean;
 import com.gate.core.db.Dom4jUtils;
 import com.gate.utils.DateDeserializer;
 import com.gate.utils.RequestToMapUtils;
+import com.gate.utils.SqlDateDeserializer;
+import com.gate.utils.TimeStampDeserializer;
 import com.gate.web.authority.UserInfo;
 import com.gate.web.authority.UserInfoContext;
 import com.gate.web.exceptions.FormValidationException;
@@ -377,11 +379,13 @@ public abstract class BaseServlet extends HttpServlet {
         Object sessionObj = otherMap.get(SESSION_SEND_OBJECT);
         Object requestObj = otherMap.get(REQUEST_SEND_OBJECT);
         Object dispatch = otherMap.get(DISPATCH_PAGE);
-//        Gson gson = new Gson();
-        GsonBuilder gsonBuilder = new GsonBuilder();
-    	gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-    	//gsonBuilder.setDateFormat("yyyy/MM/dd");
-        Gson gson = gsonBuilder.create();
+        //JsonDeserializer<java.sql.Date> dateJsonDeserializer = (json, typeOfT, context) -> json == null ? null : new java.sql.Date(json.getAsLong());
+        //JsonSerializer<java.sql.Date> dateJsonSerializer = (src, typeOfT, context) -> src == null ? null : new JsonPrimitive(src.getTime());
+        Gson gson = new GsonBuilder()
+        				.registerTypeAdapter(java.sql.Date.class, new SqlDateDeserializer())
+        				.registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+        				.registerTypeAdapter(java.sql.Timestamp.class, new TimeStampDeserializer()).create();
+        
         HttpSession session = request.getSession();
         if (sessionObj instanceof List) {
             List sessionList = (List) sessionObj;
@@ -399,6 +403,7 @@ public abstract class BaseServlet extends HttpServlet {
             for (int i = 0; i < requestList.size(); i++) {
                 Object obj = requestList.get(i);
                 request.setAttribute(REQUEST_SEND_OBJECT + "_" + i, gson.toJson(obj).replaceAll( "\\\\\"", "\\\\\\\\u0022"));
+                System.out.println(i+":"+gson.toJson(obj).replaceAll( "\\\\\"", "\\\\\\\\u0022"));
             }
         } else {
             if (requestObj != null) {

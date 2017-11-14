@@ -4,8 +4,8 @@
 package com.gate.utils;
 
 import java.lang.reflect.Type;
+import java.sql.Date;
 import java.text.ParseException;
-import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.DateTime;
@@ -17,12 +17,13 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+
 /**
  * @author mac
  *
  */
-public class DateDeserializer implements JsonDeserializer<Date>, JsonSerializer<Date> {
-	
+public class SqlDateDeserializer implements JsonDeserializer<Date>, JsonSerializer<Date> {
+
 	String[] parsePatterns = { "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy-MM-dd HH:mm",
 			"yyyy/MM/dd", "yyyy-MM-dd'T'HH:mm:ss.SSSZZ" };
 
@@ -33,7 +34,7 @@ public class DateDeserializer implements JsonDeserializer<Date>, JsonSerializer<
 			return null;
 		}
 		try {
-			return DateUtils.parseDate(dateString, parsePatterns);
+			return new Date(DateUtils.parseDate(dateString, parsePatterns).getTime());
 		} catch (ParseException exp) {
 			System.err.println("Failed to parse Date:" + exp);
 			return null;

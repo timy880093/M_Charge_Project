@@ -1,4 +1,15 @@
 <script type="text/javascript" src="<%=request.getContextPath() %>/backendAdmin/js/company_charge.js"></script>
+<script type="text/javascript">
+
+	Date.prototype.defaultView = function(){
+		var dd=this.getDate();
+		if(dd<10)dd='0'+dd;
+		var mm=this.getMonth()+1;
+		if(mm<10)mm='0'+mm;
+		var yyyy=this.getFullYear();
+		return String(yyyy+"\/"+mm+"\/"+dd)
+	}
+</script>	
 <form id="companyChargeCycleForm" name="companyChargeCycleForm" method="post"
       action="<%=request.getContextPath()%>/backendAdmin/companyChargeEditServlet?method=insert&type=1">
     <table cellspacing="0" cellpadding="0" border="0" class="imglist">
@@ -140,51 +151,52 @@ $(function () {
     if (${!empty REQUEST_SEND_OBJECT_3}) {
         var historyList = $.parseJSON('${REQUEST_SEND_OBJECT_3}');
         $.each(historyList, function (i, element) {
-
+        	alert(element.status+"    "+i)
             if(i == 0 ){
-                $("#oldRealEndDate").val(element.real_end_date.substring(0,4)+'-'+(element.real_end_date.substring(5,7))+"-"+(element.real_end_date.substring(8,10)));
+                $("#oldRealEndDate").val(element.real_end_date);
+                //alert(element.real_end_date);
+                //alert($("#oldRealEndDate").val());
             }
-
             if(element.status == '1' && i==0){
                 $("#chargeHistory").append('<tr><td>' + element.package_name + '</td>' +
                         '<td>生效</td>'+
-                        '<td>' + element.start_date.substr(0,10) + '</td><td>' + element.end_date.substr(0,10) + '</td>' +
-                        '<td>' + element.real_start_date.substr(0,10) + '</td><td>' + element.real_end_date.substr(0,10) +
+                        '<td>' + element.start_date + '</td><td>' + element.end_date + '</td>' +
+                        '<td>' + element.real_start_date + '</td><td>' + element.real_end_date+
                         '<td><input type="button" value="檢視合約明細" onclick="viewChargeDetail(' + element.company_id + ',' + element.package_id + ','+ element.package_type +')"></td>'+
                         '<td><input type="button" value="終止合約(結清)" onclick="viewChargeDetail2(' + element.company_id + ','  + element.package_id + ','+ element.package_type +')"></td></tr>');
             } else if ( element.status == '0'  && i == 0){
                 $("#chargeHistory").append('<tr><td>' + element.package_name + '</td>' +
                         '<td>未生效</td>'+
-                        '<td>' + element.start_date.substr(0,10) + '</td><td>' + element.end_date.substr(0,10) + '</td>' +
-                        '<td>' + element.real_start_date.substr(0,10) + '</td><td>' + element.real_end_date.substr(0,10) +
+                        '<td>' + element.start_date + '</td><td>' + element.end_date + '</td>' +
+                        '<td>' + element.real_start_date + '</td><td>' + element.real_end_date+
                         '<td><input type="button" value="檢視合約明細" onclick="viewChargeDetail(' + element.company_id + ',' + element.package_id + ','+ element.package_type +')"></td>'+
                         '<td><input type="button" value="終止合約(結清)" onclick="viewChargeDetail2(' + element.company_id + ','  + element.package_id + ','+ element.package_type +')"></td></tr>');
             } else if (element.status == '2' ){
                 $("#chargeHistory").append('<tr><td>' + element.package_name + '</td>' +
                         '<td>作廢</td>'+
-                        '<td>' + element.start_date.substr(0,10) + '</td><td>' + element.end_date.substr(0,10) + '</td>' +
-                        '<td>' + element.real_start_date.substr(0,10) + '</td><td>' + element.real_end_date.substr(0,10) +
+                        '<td>' + element.start_date + '</td><td>' + element.end_date + '</td>' +
+                        '<td>' + element.real_start_date + '</td><td>' + element.real_end_date+
                         '<td><input type="button" value="檢視合約明細" onclick="viewChargeDetail(' + element.company_id + ',' + element.package_id + ','+ element.package_type +')"></td>'+
                         '<td></td></tr>');
             } else if (element.status == '0' ){
                 $("#chargeHistory").append('<tr><td>' + element.package_name + '</td>' +
                         '<td>未生效</td>'+
-                        '<td>' + element.start_date.substr(0,10) + '</td><td>' + element.end_date.substr(0,10) + '</td>' +
-                        '<td>' + element.real_start_date.substr(0,10) + '</td><td>' + element.real_end_date.substr(0,10) +
+                        '<td>' + element.start_date + '</td><td>' + element.end_date + '</td>' +
+                        '<td>' + element.real_start_date + '</td><td>' + element.real_end_date+
                         '<td><input type="button" value="檢視合約明細" onclick="viewChargeDetail(' + element.company_id + ',' + element.package_id + ','+ element.package_type +')"></td>'+
                         '<td></td></tr>');
             } else if(element.status == '1'){
                 $("#chargeHistory").append('<tr><td>' + element.package_name + '</td>' +
                         '<td>生效</td>'+
-                        '<td>' + element.start_date.substr(0,10) + '</td><td>' + element.end_date.substr(0,10) + '</td>' +
-                        '<td>' + element.real_start_date.substr(0,10) + '</td><td>' + element.real_end_date.substr(0,10) +
+                        '<td>' + element.start_date + '</td><td>' + element.end_date + '</td>' +
+                        '<td>' + element.real_start_date + '</td><td>' + element.real_end_date+
                         '<td><input type="button" value="檢視合約明細" onclick="viewChargeDetail(' + element.company_id + ',' + element.package_id + ','+ element.package_type +')"></td>'+
                         '<td></td></tr>');
             } else{
                 $("#chargeHistory").append('<tr><td>' + element.package_name + '</td>' +
                         '<td></td>'+
-                        '<td>' + element.start_date.substr(0,10) + '</td><td>' + element.end_date.substr(0,10) + '</td>' +
-                        '<td>' + element.real_start_date.substr(0,10) + '</td><td>' + element.real_end_date.substr(0,10) +
+                        '<td>' + element.start_date + '</td><td>' + element.end_date + '</td>' +
+                        '<td>' + element.real_start_date + '</td><td>' + element.real_end_date+
                         '<td><input type="button" value="檢視合約明細" onclick="viewChargeDetail(' + element.company_id + ',' + element.package_id + ','+ element.package_type +')"></td>'+
                         '<td></td></tr>');
             }
@@ -446,7 +458,9 @@ function countDay() {
         var date = new Date(strDate);
         date.setDate(date.getDate() + 1);
         var dd = date.getDate();
+        if(dd<10) dd= '0'+dd;
         var mm = date.getMonth() + 1;
+        if(mm<10) dd = '0'+mm;
         var yyyy = date.getFullYear();
         var someFormattedDate = yyyy + '-'+ mm + '-'+ dd;
         return someFormattedDate;
