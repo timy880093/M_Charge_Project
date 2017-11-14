@@ -382,10 +382,10 @@ public abstract class BaseServlet extends HttpServlet {
         //JsonDeserializer<java.sql.Date> dateJsonDeserializer = (json, typeOfT, context) -> json == null ? null : new java.sql.Date(json.getAsLong());
         //JsonSerializer<java.sql.Date> dateJsonSerializer = (src, typeOfT, context) -> src == null ? null : new JsonPrimitive(src.getTime());
         Gson gson = new GsonBuilder()
-        				.registerTypeAdapter(java.sql.Date.class, new SqlDateDeserializer())
-        				.registerTypeAdapter(java.util.Date.class, new DateDeserializer())
-        				.registerTypeAdapter(java.sql.Timestamp.class, new TimeStampDeserializer()).create();
-        
+                .registerTypeAdapter(java.sql.Date.class, new SqlDateDeserializer())
+                .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                .registerTypeAdapter(java.sql.Timestamp.class, new TimeStampDeserializer()).create();
+
         HttpSession session = request.getSession();
         if (sessionObj instanceof List) {
             List sessionList = (List) sessionObj;
@@ -403,7 +403,7 @@ public abstract class BaseServlet extends HttpServlet {
             for (int i = 0; i < requestList.size(); i++) {
                 Object obj = requestList.get(i);
                 request.setAttribute(REQUEST_SEND_OBJECT + "_" + i, gson.toJson(obj).replaceAll( "\\\\\"", "\\\\\\\\u0022"));
-                System.out.println(i+":"+gson.toJson(obj).replaceAll( "\\\\\"", "\\\\\\\\u0022"));
+            //    System.out.println(i+":"+gson.toJson(obj).replaceAll( "\\\\\"", "\\\\\\\\u0022"));
             }
         } else {
             if (requestObj != null) {
@@ -419,8 +419,8 @@ public abstract class BaseServlet extends HttpServlet {
         Object jsonObj = otherMap.get(AJAX_JSON_OBJECT);
         if(jsonObj!=null){
 //            Gson gson = new Gson();
-        	GsonBuilder gsonBuilder = new GsonBuilder();
-        	gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
             Gson gson = gsonBuilder.create();
             String jsonString = gson.toJson(jsonObj).replaceAll( "\\\\\"", "\\\\\\\\u0022");
             response.getWriter().write(jsonString);

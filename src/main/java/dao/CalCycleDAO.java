@@ -34,7 +34,7 @@ public class CalCycleDAO extends BaseDAO {
         dataSb.append(" bc.pay_over, bc.pay_month, bc.cash_out_over_id, bc.cash_out_month_id,bc.cash_in_over_id, bc.cash_in_month_id,bc.status bc_status" );
         dataSb.append(" from bill_cycle bc left join company cp on bc.company_id= cp.company_id " );
         dataSb.append(" where (bill_type=1 or bill_type=2) ");
-        dataSb.append(" to_char(cm.in_date, 'YYYY/MM/DD') in_date");
+        
 
         if (querySettingVO.getSearchMap().size() > 0) {
             Map searchMap = querySettingVO.getSearchMap();
