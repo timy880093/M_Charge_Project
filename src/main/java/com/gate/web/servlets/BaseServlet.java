@@ -419,9 +419,10 @@ public abstract class BaseServlet extends HttpServlet {
         Object jsonObj = otherMap.get(AJAX_JSON_OBJECT);
         if(jsonObj!=null){
 //            Gson gson = new Gson();
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-            Gson gson = gsonBuilder.create();
+        	Gson gson = new GsonBuilder()
+            				.registerTypeAdapter(java.sql.Date.class, new SqlDateDeserializer())
+            				.registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+            				.registerTypeAdapter(java.sql.Timestamp.class, new TimeStampDeserializer()).create();
             String jsonString = gson.toJson(jsonObj).replaceAll( "\\\\\"", "\\\\\\\\u0022");
             response.getWriter().write(jsonString);
         }
