@@ -9,7 +9,7 @@
 		var yyyy=this.getFullYear();
 		return String(yyyy+"\/"+mm+"\/"+dd)
 	}
-</script>	
+</script>
 <form id="companyChargeCycleForm" name="companyChargeCycleForm" method="post"
       action="<%=request.getContextPath()%>/backendAdmin/companyChargeEditServlet?method=insert&type=1">
     <table cellspacing="0" cellpadding="0" border="0" class="imglist">
@@ -151,7 +151,7 @@ $(function () {
     if (${!empty REQUEST_SEND_OBJECT_3}) {
         var historyList = $.parseJSON('${REQUEST_SEND_OBJECT_3}');
         $.each(historyList, function (i, element) {
-        	alert(element.status+"    "+i)
+        	//alert(element.status+"    "+i)
             if(i == 0 ){
                 $("#oldRealEndDate").val(element.real_end_date);
                 //alert(element.real_end_date);
@@ -284,9 +284,9 @@ $(function () {
             countDayForEndDate();
         }
     });
-    if($("#oldRealEndDate").val()!=""){
-        $("#realStartDate").datepicker("option", "minDate",addOneDay($("#oldRealEndDate").val()));
-    }
+//    if($("#oldRealEndDate").val()!=""){
+//        $("#realStartDate").datepicker("option", "minDate",addOneDay($("#oldRealEndDate").val()));
+//    }
 
     $("#realEndDate").datepicker({
         dateFormat: 'yy-mm-dd',
@@ -371,7 +371,7 @@ $(function () {
     $("#freeMonth").click(function(){
         countDayForEndDate();
     });
-    
+
     $("#packageType1").click(function () {
         //選擇「月租型」
         console.log("月租型");
