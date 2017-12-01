@@ -147,7 +147,9 @@ public class ChargeDAO extends BaseDAO {
         return null;
     }
 
-    //修改月租型方案
+
+
+//    //修改月租型方案
     public void updateChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
         ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
         DateConverter dateConverter = new DateConverter();
@@ -155,6 +157,9 @@ public class ChargeDAO extends BaseDAO {
         BeanUtils.copyProperties(entity,bean);
         updateEntity(entity, entity.getChargeId());
     }
+
+
+
 
     //新增或修改級距型方案
     public Integer insertChargeModeGrade(ChargeModeGradeBean bean) throws Exception {

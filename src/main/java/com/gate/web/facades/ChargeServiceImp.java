@@ -8,6 +8,7 @@ import dao.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +26,18 @@ public class ChargeServiceImp implements ChargeService{
 
 
     public Integer insertChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
-        return insertChargeModeCycle(bean);
+        ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
+        BeanUtils.copyProperties(entity, bean);
+        dao.saveEntity(entity);
+        return null;
     }
 
-
     public void updateChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
-        updateChargeModeCycle(bean);
+        ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
+        DateConverter dateConverter = new DateConverter();
+        dateConverter.setPattern("yyyy/MM/dd");
+        BeanUtils.copyProperties(entity,bean);
+        dao.updateEntity(entity, entity.getChargeId());
     }
 
     public ChargeModeCycleVO findChargeModeCycleByChargeId(Integer chargeId) throws Exception {

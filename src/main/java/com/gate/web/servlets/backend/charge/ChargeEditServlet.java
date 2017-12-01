@@ -77,6 +77,7 @@ public class ChargeEditServlet extends BackendPopTemplateServlet {
                     bean.setStatus(String.valueOf(1));
                     serviceImp.insertChargeModeCycle(bean);
                 }
+
             }else if("2".equals(charge_type)){ //級距型
                 ChargeModeGradeBean bean = new ChargeModeGradeBean();
                 MapBeanConverterUtils.mapToBean(requestParameterMap,bean);
