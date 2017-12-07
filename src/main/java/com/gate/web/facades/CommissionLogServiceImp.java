@@ -37,5 +37,9 @@ public class CommissionLogServiceImp implements CommissionLogService {
 
     public List<Map> exportCom(String commissionLog)throws Exception{
         return dao.exportCom(commissionLog);
-    }
+            }
+//    public boolean delCommissionLog(Integer commissionLogId)throws Exception{
+//        return dao.delCommissionLog(commissionLogId);
+//    }
+
 }

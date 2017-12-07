@@ -111,21 +111,25 @@ public class CalCycleSearchServlet extends SearchServlet {
             }
             String year = "" + now.get(Calendar.YEAR);
             String month = "";
-            if ((now.get(Calendar.MONTH) + 1)<10){
-                month = "0" + (now.get(Calendar.MONTH) + 1);
+            if ((now.get(Calendar.MONTH) + 2)<10){
+                month = "0" + (now.get(Calendar.MONTH) + 2);
             }else{
-                month = "" + (now.get(Calendar.MONTH) + 1);
+                month = "" + (now.get(Calendar.MONTH) + 2);
             }
+
             outList.add(year + month);
+
+
+
 
             //請先作完YYYYMM前的快到期合約續約後，才可作YYYYMM後的超額計算
             now.add(Calendar.MONTH, 3); //作快到期合約的年月
             String yearAlmost = "" + now.get(Calendar.YEAR);
             String monthAlmost = "";
-            if ((now.get(Calendar.MONTH) + 1)<10){
-                monthAlmost = "0" + (now.get(Calendar.MONTH) + 1);
+            if ((now.get(Calendar.MONTH) + 2)<10){
+                monthAlmost = "0" + (now.get(Calendar.MONTH) + 2);
             }else{
-                monthAlmost = "" + (now.get(Calendar.MONTH) + 1);
+                monthAlmost = "" + (now.get(Calendar.MONTH) + 2);
             }
             outList.add(yearAlmost + monthAlmost);
 

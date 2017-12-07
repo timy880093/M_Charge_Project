@@ -21,18 +21,18 @@
                     <form action="<%=request.getContextPath()%>/backendAdmin/calCycleSearchServlet?method=" method="post" id="calCycleForm" name="calCycleForm">
                         計算年月
                         <select name="calYM" id="calYM" class="forms_Dropdown"></select>
-                           付款狀態
-                        <select name="payStatus" id="payStatus" class="forms_Dropdown">
-                            <option value="all">全部</option>
-                            <option value="unpay">未繳費</option>
-                            <option value="paid">已繳費</option>
-                        </select>
-                        生效狀態
-                        <select name="Status" id="Status" class="forms_Dropdown">
-                            <option value="all">全部</option>
-                            <option value="effective">生效</option>
-                            <option value="void">作廢</option>
-                        </select>
+                           <%--付款狀態--%>
+                        <%--<select name="payStatus" id="payStatus" class="forms_Dropdown">--%>
+                            <%--<option value="all">全部</option>--%>
+                            <%--<option value="unpay">未繳費</option>--%>
+                            <%--<option value="paid">已繳費</option>--%>
+                        <%--</select>--%>
+                        <%--生效狀態--%>
+                        <%--<select name="Status" id="Status" class="forms_Dropdown">--%>
+                            <%--<option value="all">全部</option>--%>
+                            <%--<option value="effective">生效</option>--%>
+                            <%--<option value="void">作廢</option>--%>
+                        <%--</select>--%>
                         用戶名稱
                         <input type="text" id="userCompany" name="userCompany" /><input type="button" value="..." id="allUserCompany">
                         <input type="hidden" id="userCompanyId" name="userCompanyId" />
@@ -40,6 +40,7 @@
                         <select name="runItem" id="runItem" class="forms_Dropdown">
                             <option value="calOverYM">計算超額(批次,請選擇計算年月)</option>
                             <option value="calOver">計算超額(請選擇要計算哪幾筆)</option>
+                             <%--<option value="calOverPeriod">計算超額上期(請選擇月份)</option>--%>
                             <option value="calOverToCash">計算超額且出帳(請選擇年月、用戶、要計算哪幾筆)</option>
                             <option value="emailYM">寄E-mail(批次,請選擇計算年月)</option>
                             <option value="email">寄E-Mail(請選擇哪幾筆要寄E-Mail)</option>
@@ -325,9 +326,9 @@
     function searchCriteria(){
         var calYM = $("#calYM").val();
         var userCompanyId = $("#userCompanyId").val();
-        var payStatus = $("#payStatus").val();
-        var status = $("#status").val();
-        var sdata = setSearchValue("calYM", encodeURIComponent(calYM), "userCompanyId", encodeURIComponent(userCompanyId),"payStatus", encodeURIComponent(payStatus),"status",encodeURIComponent(status));
+//        var payStatus = $("#payStatus").val();
+//        var status = $("#status").val();
+        var sdata = setSearchValue("calYM", encodeURIComponent(calYM), "userCompanyId", encodeURIComponent(userCompanyId));
         return sdata;
     }
 

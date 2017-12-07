@@ -270,7 +270,48 @@ public class CommissionLogDAO extends BaseDAO {
 
         return strIsPaid;
     }
-}
+
+
+
+//        public boolean delCommissionLog(Integer commissionLogId)throws Exception{
+//            //先檢查帳單裡是否沒有任何明細
+//            boolean isCommissionLogEmpty = isCommissionLogEmpty(commissionLogId);
+//
+//            if(isCommissionLogEmpty){
+//                //刪除帳單
+//                CommissionLogEntity commissionLogEntity = (CommissionLogEntity) getEntity(CommissionLogEntity.class, commissionLogId);
+//                deleteEntity(commissionLogEntity);
+//                return true;
+//            }else{
+//                return false;
+//            }
+//        }
+//
+//
+//    public boolean isCommissionLogEmpty(Integer commissionLogId)throws Exception{
+//
+//        CommissionLogEntity searchCommissionLogEntity = new CommissionLogEntity();
+//        searchCommissionLogEntity.setCommissionLogId(commissionLogId);
+//        List commissionLogList=getSearchEntity(CommissionLogEntity.class,searchCommissionLogEntity);
+//
+//        if(null == commissionLogList || commissionLogList.size() == 0){
+//            return true; //沒有任何明細
+//        } else {
+//            return false; //有明細
+//        }
+//    }
+
+
+
+    }
+
+
+
+
+
+
+
+
 
 
 

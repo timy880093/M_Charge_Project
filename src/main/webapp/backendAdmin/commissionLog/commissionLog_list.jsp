@@ -82,6 +82,7 @@
                     var selectOption = $(this).prev().val();
                     var id =$(this).parent('td').parent('tr').find('td:eq(2)').text();
                     var note = $(this).parent('td').parent('tr').find('td:eq(11)').find("#note").val();
+
                     var url = '';
                     if(selectOption=='editCommission'){
                         url=  path + '/backendAdmin/commissionLogEditServlet?method=updateNote&commission_log_id=' + id +"&note="+note ;
@@ -93,11 +94,14 @@
                         url=  path + '/backendAdmin/commissionLogEditServlet?method=edit&commission_log_id=' + id ;
                         MM_openBrWindow(url,1200,800);
 
+
+
                     }
                 });
             }
 
         });
+
 
         $("#inDateS").datepicker({
             dateFormat: 'yy-mm-dd',
@@ -181,6 +185,7 @@
         str = '<select name="fieldName" class="forms_Dropdown">' ;
         str+= '<option value="viewLogDetail">檢視佣金明細</option>' ;
         str+= '<option value="editCommission">修改備註</option>';
+        //   str+= '<option value="editCommission">刪除</option>';
         str+= '</select>';
         str+='<a href="#"  title="確定" class="butbox2"><span>確&nbsp;&nbsp;定</span></a>';
 
@@ -303,5 +308,8 @@
             alert("請先勾選資料列。");
         }
     });
+
+
+
 
 </script>
