@@ -59,10 +59,39 @@ public class CashAjaxServlet extends BaseServlet {
                 if(exeCnt == 0){
                     data = "error";
                 }
-            }catch (EmailException e){
+            }catch (EmailException e) {
                 e.printStackTrace();
                 data = "error";
+                otherMap.put(AJAX_JSON_OBJECT, data);
+                return null;
             }
+            }else if(method.equals("reSendEmail1")){//輸入自行重計mail
+                String data = "success!!";
+                try {
+                    String cashMasterId = ((String[]) requestParameterMap.get("cashMasterId"))[0];
+                    String email =  ((String[]) requestParameterMap.get("email"))[0];
+                    int exeCnt = new CashDAO().reSendBillEmail(cashMasterId, email);
+                    if(exeCnt == 0){
+                        data = "error";
+                    }
+                }catch (EmailException e){
+                    e.printStackTrace();
+                    data = "error";
+                    otherMap.put(AJAX_JSON_OBJECT, data);
+                    return null;
+
+
+            }
+
+
+
+
+
+
+
+
+
+
             otherMap.put(AJAX_JSON_OBJECT, data);
             return null;
         } else if(method.equals("cancelIn")){ //取消入帳

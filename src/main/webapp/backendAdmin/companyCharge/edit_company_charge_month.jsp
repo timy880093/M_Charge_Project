@@ -29,7 +29,8 @@
             </td>
             <td>目前公司統編：</td>
             <td><label style="color: darkred"><span id="businessNo"></span></label></td>
-        </tr>
+
+                   </tr>
         <tr>
             <td>收費方式：</td>
             <td colspan="1">
@@ -65,6 +66,7 @@
             <%--<td colspan="3"><input type="number" id="additionQuantity" name="additionQuantity" value="0" min="0"/></td>--%>
 
         <%--</tr>--%>
+
         <tr>
             <td>實際起始日</td>
             <td>
@@ -108,7 +110,7 @@
                 <input type="text" id="broker3" name="broker3"/>
             </td>
         </tr>
-        <tr>
+               <tr>
             <td colspan="4">
                 <table width="100%" border="1" id="chargeHistory">
                     <tr>
