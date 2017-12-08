@@ -77,8 +77,6 @@ public class CashAjaxServlet extends BaseServlet {
                 }catch (EmailException e){
                     e.printStackTrace();
                     data = "error";
-                    otherMap.put(AJAX_JSON_OBJECT, data);
-                    return null;
 
 
             }
