@@ -1055,6 +1055,36 @@ public class CashDAO extends BaseDAO {
         return exeCnt;
     }
 
+    //多筆-寄帳單明細表
+    public Integer transactionSendBillMail1(String masterIdAry) throws Exception{
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<List<CashMasterBean>>(){}.getType();
+        List<CashMasterBean> cashMasterList = gson.fromJson(masterIdAry, collectionType);
+
+        int exeCnt = 0;
+        //找出所有要計算的MasterId
+        for(int i=0; i<cashMasterList.size(); i++) {
+            CashMasterBean bean = (CashMasterBean)cashMasterList.get(i);
+            Integer cashMasterId = (null == bean.getCashMasterId())?0:bean.getCashMasterId();
+            CashMasterEntity  cashMasterEntity = (CashMasterEntity)getEntity(CashMasterEntity.class, cashMasterId);
+            boolean isSend = sendMail(cashMasterEntity);
+            if(isSend){ //是否寄出
+                exeCnt++;//寄出
+                updateEmailDate(cashMasterEntity); //更新cash_master的email_sent_date(寄送email日期)
+            }
+        }
+        return exeCnt;
+    }
+
+
+
+
+
+
+
+
+
+
     //輸入自行要重寄的Email(帳單明細表)
     public Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception{
         int exeCnt = 0;

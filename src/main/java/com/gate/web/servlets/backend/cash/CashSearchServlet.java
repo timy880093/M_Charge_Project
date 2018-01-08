@@ -159,6 +159,19 @@ public class CashSearchServlet extends SearchServlet {
             otherMap.put(AJAX_JSON_OBJECT, data);
             return null;
 
+        } else if(method.equals("email1")){  //多筆-未繳費客戶通知
+            String data = "success!!";
+            try{
+                String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
+                int exeCnt = cashServiceImp.sendBillMail1(destJson);
+                data += " total counts: " + exeCnt;
+            }catch(Exception ex){
+                System.out.println(ex);
+                data = " fail!!";
+            }
+            otherMap.put(AJAX_JSON_OBJECT, data);
+            return null;
+
         } else if (method.equals("emailUnrecorded")){  //批次-寄email
             String data = "success!!";
             try{
@@ -274,7 +287,6 @@ public class CashSearchServlet extends SearchServlet {
 
             excel.setValue(baseRow, index + 1, masterBean.getBusinessNo());
             excel.setValue(baseRow, index + 2, masterBean.getInAmount());
-            excel.setValue(baseRow, index + 3, masterBean.getStatus());
             excel.setValue(baseRow, index + 6, masterBean.getCompanyName());
             excel.setValue(baseRow, index + 7, masterBean.getBusinessNo());
 

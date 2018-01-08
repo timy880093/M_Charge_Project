@@ -190,11 +190,11 @@
         }else if(value=='1'){
             str = '生效';
         }
-//        else if(value=='2'){
-//            str = '作廢';
-//        } else if(value=='3'){
-//            str = '過期';
-//        }
+        else if(value=='2'){
+            str = '作廢';
+        } else if(value=='3'){
+            str = '過期';
+        }
 
         return str;
     }

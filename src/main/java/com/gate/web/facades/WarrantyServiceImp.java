@@ -23,6 +23,9 @@ public class WarrantyServiceImp {
         return returnInt;
     }
 
+
+
+
     public WarrantyVO findWarrantyByWarrantyId(Integer warrantyId) throws Exception {
         WarrantyEntity warrantyEntity = (WarrantyEntity)dao.getEntity(WarrantyEntity.class,warrantyId);
         WarrantyVO warrantyVO = new WarrantyVO();
@@ -32,6 +35,15 @@ public class WarrantyServiceImp {
         warrantyVO.setModifier((String) map.get("modifier"));
         return warrantyVO;
     }
+
+
+
+
+
+    public List<Map> exportWar(String warranty)throws Exception{
+        return dao.exportWar(warranty);
+    }
+
 
     public List getUserDealerCompanyList() throws Exception{
         return dao.getUserDealerCompanyList();

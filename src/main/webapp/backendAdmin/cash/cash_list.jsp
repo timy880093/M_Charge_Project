@@ -146,7 +146,7 @@
                     var in_date = $(this).parent('td').parent('tr').find('td:eq(11)').children("input").val();
                     var in_note = $(this).parent('td').parent('tr').find('td:eq(12)').children("input").val();
                     var email = $(this).parent().find('[name=email]').val();
-                    var email1 = $(this).parent().find('[name=email]').val();
+                    var email1 = $(this).parent().find('[name=email1]').val();
                     //alert("selectOption="+selectOption+"cashMasterId="+cashMasterId+",in_amount="+in_amount+",in_date="+in_date+",in_note="+in_note);
 
                     var url = '';
@@ -166,12 +166,6 @@
                         $.getJSON(url, function (data) {
                             alert(data);
                         });
-                    }else if(selectOption =='reSendEmail1'){
-                        url = path + '/backendAdmin/cashAjaxServlet?method=reSendEmail1&cashMasterId=' + cashMasterId + "&email=" + email;
-                        $.getJSON(url, function (data) {
-                            alert(data);
-                        });
-
 
                     }else if(selectOption == 'cancelIn'){
                         url = path + '/backendAdmin/cashAjaxServlet?method=cancelIn&cashMasterId=' + cashMasterId ;
@@ -184,15 +178,6 @@
                 $('[name=fieldName]').bind('change', function () {
                     var value = $(this).val();
                     if(value == 'reSendEmail'){
-                        $(this).parent().find('[name=email]').show();
-                    } else {
-                        $(this).parent().find('[name=email]').hide();
-                    }
-
-                });
-                $('[name=fieldName]').bind('change', function () {
-                    var value = $(this).val();
-                    if(value == 'reSendEmail1'){
                         $(this).parent().find('[name=email]').show();
                     } else {
                         $(this).parent().find('[name=email]').hide();
@@ -292,8 +277,7 @@
         str = '<select name="fieldName" class="forms_Dropdown">' +
                 '<option value="viewCashDetail">帳單明細</option>' +
                 '<option value="reSendEmail">明細email寄送</option>' +
-            '<option value="reSendEmail1">未繳費客戶通知</option>' +
-                '<option value="in">確認入帳</option>' +
+                    '<option value="in">確認入帳</option>' +
                 '<option value="cancelIn">取消入帳</option>';
         str += '</select>';
         str += '<a href="#"  title="確定" class="butbox2"><span>確定</span></a>';
@@ -431,7 +415,7 @@
                 multiMethod("email");
                 break;
             case "email1"://寄email未繳費客戶email通知
-               runMethod("email1");
+               multiMethod("email1");
                break;
             case "emailYM": //寄email明細通知-批次(請選擇出帳單年月)
                 runMethod("emailYM");

@@ -77,7 +77,7 @@
             },
             loadComplete: function () {
 
-                //查詢後如無資料，請show"查無資料"的訊息。
+                //查詢後如無資料，請show"查無資料"的訊息。`
                 var ids =jQuery("#jqgrid").jqGrid('getDataIDs');
                 if(ids.length == 0){
                     alert("查無資料");

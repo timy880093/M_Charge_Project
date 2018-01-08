@@ -37,6 +37,7 @@
                                 <option value="3">退回</option>
                             </select>
                             <a href="#" id="send" title="執行" class="butbox"><span>查詢</span></a>
+                             <a href="#" id="exportWar" title="匯出" class="butbox"><span>匯出資料</span></a>
                             <a href="#" id="create" title="新增" class="butbox"><span>新&nbsp;&nbsp;增</span></a></span></td>
                         </form>
                     </span>
@@ -282,5 +283,34 @@
             datatype: "json", postData: sdata, page: 1, search: true
         }).trigger("reloadGrid");
     });
+
+    $("#exportWar").click(function(){
+        var _aIDs = $("#jqgrid").jqGrid('getGridParam','selarrrow');
+        if (_aIDs.length > 0) {
+            var warrantyAry = new Array(_aIDs.length);
+            for (var i=0; i < _aIDs.length; i++) {
+                var id = _aIDs[i];
+                var row = $("#jqgrid").jqGrid('getRowData', id);
+//                alert("勾選[" + (i+1) + "]=" + row.company_id + "," + row.package_id);
+                var warranty = new Object();
+                warranty.warrantyid = row.warranty_id;
+                warrantyAry[i] = warranty;
+            }
+            var warrantyJson = JSON.stringify(warrantyAry);
+            //alert(commissionLogJson);
+            var url = path + "/backendAdmin/warrantySearchServlet?method=exportWar&warranty=" + warrantyJson;
+
+            location.href = url;
+        } else {
+            alert("請先勾選資料列。");
+        }
+    });
+
+
+
+
+
+
+
 
 </script>

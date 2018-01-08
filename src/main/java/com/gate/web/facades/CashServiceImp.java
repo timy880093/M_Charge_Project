@@ -88,6 +88,10 @@ public class CashServiceImp implements CashService {
     public Integer sendBillMail(String masterIdAry) throws Exception{
         return dao.transactionSendBillMail(masterIdAry);
     }
+    public Integer sendBillMail1(String masterIdAry) throws Exception{
+        return dao.transactionSendBillMail1(masterIdAry);
+    }
+
 
     public List getInvoiceItem(String ym) throws Exception{
         return dao.getInvoiceItem(ym);

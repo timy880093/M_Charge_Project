@@ -93,14 +93,35 @@
                     }else if(selectOption=='viewLogDetail'){
                         url=  path + '/backendAdmin/commissionLogEditServlet?method=edit&commission_log_id=' + id ;
                         MM_openBrWindow(url,1200,800);
-
-
-
+                    }else if(selectOption=='delCommission')
+                    {
+                        $.ajax({
+                            url: "<c:url value='/backendAdmin/CommissionLogEditServlet?method=delete&commission_log_id=' />",
+                            datatype: "json",
+                            data: {
+                                download_id: commissionlogid
+                            },
+                            success: function (data, textStatus, jqXHR) {
+                                var response = jQuery.parseJSON(data);
+                                if(response['status']){
+                                    alert("刪除成功");
+                                    $('#CUdialog').dialog("close");
+                                    location.href="<c:url value='/backendAdmin/CommissionLogEditServlet'/>";
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert("無法刪除檔案");
+                            }
+                        });
                     }
+
+
                 });
             }
 
         });
+
+
 
 
         $("#inDateS").datepicker({
@@ -185,7 +206,7 @@
         str = '<select name="fieldName" class="forms_Dropdown">' ;
         str+= '<option value="viewLogDetail">檢視佣金明細</option>' ;
         str+= '<option value="editCommission">修改備註</option>';
-        //   str+= '<option value="editCommission">刪除</option>';
+        str+= '<option value="delCommission">刪除</option>';
         str+= '</select>';
         str+='<a href="#"  title="確定" class="butbox2"><span>確&nbsp;&nbsp;定</span></a>';
 
