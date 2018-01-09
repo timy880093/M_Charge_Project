@@ -40,9 +40,9 @@ public class WarrantyServiceImp {
 
 
 
-    public List<Map> exportWar(String warranty)throws Exception{
-        return dao.exportWar(warranty);
-    }
+//    public List<Map> exportWar(String warranty)throws Exception{
+//        return dao.exportWar(warranty);
+//    }
 
 
     public List getUserDealerCompanyList() throws Exception{

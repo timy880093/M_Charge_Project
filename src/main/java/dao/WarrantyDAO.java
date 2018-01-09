@@ -1,7 +1,6 @@
 package dao;
 
 import com.gate.utils.TimeUtils;
-import com.gate.web.beans.Warranty;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.formbeans.WarrantyBean;
 import com.google.gson.Gson;
@@ -132,35 +131,35 @@ public class WarrantyDAO extends BaseDAO {
         return query.list();
     }
    //匯出excel資料
-    public List<Map> exportWar(String warranty) throws Exception {
-        List<Map> exportWarrantyList = new ArrayList<Map>();
-
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<Warranty>>() {
-        }.getType();
-        List<Warranty> warrantyList= gson.fromJson(warranty, collectionType);
-
-        for (int i = 0; i < warrantyList.size(); i++) {
-              Warranty bean = (Warranty)warrantyList.get(i);
-             Integer warrantyId = bean.getWarrantyId();
-            WarrantyEntity entity = (WarrantyEntity) getEntity(WarrantyEntity.class, warrantyId);
-            BeanUtils.copyProperties(bean, entity);
-
-
-
-
-            Map warrantyMap = new HashMap();
-            warrantyMap.put("master",bean);
-
-            List detailList = getWarrantyList("" + entity.getWarrantyId());
-            warrantyMap.put("detail", detailList);
-
-
-            exportWarrantyList.add(warrantyMap);
-        }
-        return exportWarrantyList;
-    }
-
+//    public List<Map> exportWar(String warranty) throws Exception {
+//        List<Map> exportWarrantyList = new ArrayList<Map>();
+//
+//        Gson gson = new Gson();
+//        Type collectionType = new TypeToken<List<Warranty>>() {
+//        }.getType();
+//        List<Warranty> warrantyList= gson.fromJson(warranty, collectionType);
+//
+//        for (int i = 0; i < warrantyList.size(); i++) {
+//              Warranty bean = (Warranty)warrantyList.get(i);
+//             Integer warrantyId = bean.getWarrantyId();
+//            WarrantyEntity entity = (WarrantyEntity) getEntity(WarrantyEntity.class, warrantyId);
+//            BeanUtils.copyProperties(bean, entity);
+//
+//
+//
+//
+//            Map warrantyMap = new HashMap();
+//            warrantyMap.put("master",bean);
+//
+//            List detailList = getWarrantyList("" + entity.getWarrantyId());
+//            warrantyMap.put("detail", detailList);
+//
+//
+//            exportWarrantyList.add(warrantyMap);
+//        }
+//        return exportWarrantyList;
+//    }
+//
 
 
 

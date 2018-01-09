@@ -36,22 +36,23 @@ public class WarrantySearchServlet extends SearchServlet {
             Map pageMap = getData(requestParameterMap, querySettingVO, otherMap, "warrantySearchVO");
             otherMap.put(AJAX_JSON_OBJECT, pageMap);
             return null;
-        }else if(method.equals("exportWar")) { //匯出佣金資料
-            String data = "success!! ";
-            try {
-                String warranty = ((String[]) requestParameterMap.get("warranty"))[0]; //commission_log_id
-                List<Map> WarrantyList = warrantyService.exportWar(warranty);
-                String filePath = this.getClass().getResource("/").getPath() + "/tempFile" + "/warranty_temp.xls";
-                ExcelPoiWrapper excel = genWarrantyToExcel(WarrantyList, filePath);
-                HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
-                responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_WARRANTY);
-            } catch (Exception e) {
-                e.printStackTrace();
-                data = "error";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        }else{
+    }
+// else if(method.equals("exportWar")) { //匯出佣金資料
+//            String data = "success!! ";
+//            try {
+//                String warranty = ((String[]) requestParameterMap.get("warranty"))[0]; //commission_log_id
+//                List<Map> WarrantyList = warrantyService.exportWar(warranty);
+//                String filePath = this.getClass().getResource("/").getPath() + "/tempFile" + "/warranty_temp.xls";
+//                ExcelPoiWrapper excel = genWarrantyToExcel(WarrantyList, filePath);
+//                HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
+//                responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_WARRANTY);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                data = "error";
+//            }
+//            otherMap.put(AJAX_JSON_OBJECT, data);
+//            return null;
+        else{
             List userCompanyList = calCycleService.getUserCompanyList();
             outList.add(userCompanyList); //0.用戶清單
 
