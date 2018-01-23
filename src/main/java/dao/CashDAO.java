@@ -1134,7 +1134,19 @@ public class CashDAO extends BaseDAO {
                 content.append("請注意：本信件是由「關網資訊雲端電子發票系統」自動產生與發送，請勿直接回覆。")
                         .append("\n\n敬愛的 " + cpName + " 您好：")
                         .append("\n\n以下資訊為貴公司"+ bankYm +"月份繳款帳單之明細，請查收。")
-                        .append("\n<font color=\"#FF0000\">近期將寄發繳款單予貴公司，請留意email信箱，並惠予繳費。</font>\n\n");
+                        .append("\n<font color=\"#FF0000\">近期將寄發繳款單予貴公司，請留意email信箱，並惠予繳費。</font>\n")
+                        .append("\n\n<font color=\"#FF0000\">繳款方式如下:</font>\n")
+                        .append("\n<font color=\"FF0000\">1.可至連結網址下載繳費單：</font>")
+                        .append("\n<a title = \"上海銀行繳費平台 – 關網資訊股份有限公司\" href=\"https://payment.fesc.com.tw/fespay/pukii_fespay.htm\">上海銀行繳費平台 – 關網資訊股份有限公司</a>")
+                        .append("\n<font color=\"FF0000\">2.編號請輸入公司統編</font>")
+                        .append("\n<font color=\"FF0000\">3.登入後會顯示公司統編、名稱及繳費月份按下確定</font>")
+                        .append("\n<font color=\"FF0000\">4.勾選該繳費月份金額</font>")
+                        .append("\n<font color=\"FF0000\">5.選擇繳費方式：(以下擇一)</font>")
+                        .append("\n<font color=\"FF0000\">\t5-1金融卡付款→直接線上付款，依上海銀行線上的繳費方式進行操作</font>")
+                        .append("\n<font color=\"FF0000\">\t5-2帳單下載→下載繳款單列印並至超商or臨櫃匯款</font>\n")
+                        .append("\n<font color=\"FF0000\">★【詳細操作，請詳附件】★</font>\n");
+
+
 
                 content.append(" <table  style=\"border:2px black solid; border-collapse: collapse\" cellpadding=\"5\" border='2' > ")
                         .append(" <tr>")
