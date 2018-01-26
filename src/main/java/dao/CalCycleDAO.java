@@ -44,28 +44,7 @@ public class CalCycleDAO extends BaseDAO {
                     parameters.add(searchMap.get("calYM"));
                 }
             }
-//            if (searchMap.containsKey("payStatus")) {
-//                if (StringUtils.isNotEmpty(searchMap.get("payStatus").toString())) {
-//                    if(searchMap.get("payStatus").toString().equals("all")){
-//                    }else if (searchMap.get("payStatus").toString().equals("paid")){
-//                        whereSb.append(" and cm.in_date is not null ");
-//                    }else if(searchMap.get("payStatus").toString().equals("unpay")){
-//                        whereSb.append(" and cm.in_date is null");
-//                    }
-//                }
-//            }
-//
-//            if (searchMap.containsKey("Status")) {
-//                if (StringUtils.isNotEmpty(searchMap.get("Status").toString())) {
-//                    if(searchMap.get("Status").toString().equals("all")){
-//
-//                    }else if (searchMap.get("Status").toString().equals("effective")){
-//                        whereSb.append(" and cm.status is not null ");
-//                    }else if(searchMap.get("Status").toString().equals("void")){
-//                        whereSb.append(" and cm.status is null");
-//                    }
-//                }
-//            }
+
             if (searchMap.containsKey("userCompanyId")) {
                 if (StringUtils.isNotEmpty(searchMap.get("userCompanyId").toString())) {
                     whereSb.append(" and bc.company_id = ? ");
