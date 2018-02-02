@@ -126,15 +126,23 @@
 
 
     function formatType(cellvalue, options, rowObject) {
+        
         var value = cellvalue;
-        var str = value.toString();
-        switch(value){
-            case '0':str='抽傭金額'; break;
-            case '1':str='抽成%數'; break;
-            case '2':str='每筆代收'; break;
-        }
+        //var str = value.toString();
+        if(typeof value == "undefined"){
+        		value = "";
+        } else {
 
-        return str;
+	        if (value == 0) {
+	        		value = '抽傭金額';
+	        } else if (value == 1) {
+	        		value = '抽成%數';
+	        } else if (value == 2) {
+        		value = '每筆代收';
+
+	        }
+        }
+        return value;
 
     }
 

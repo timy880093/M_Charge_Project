@@ -295,14 +295,20 @@
 
 
     function billType(cellvalue, options, rowObject) {
+        
         var value = cellvalue;
-        var str = value;
-        if (value == '1') {
-            str = '月租';
-        } else if (value == '2') {
-            str = '預付';
+        //var str = value.toString();
+        if(typeof value == "undefined"){
+        		value = "";
+        } else {
+
+	        if (value == 1) {
+	        		value = '月租';
+	        } else if(value == 2) {
+	        		value = '預付';
+	        } 
         }
-        return str;
+        return value;
     }
 
     function verify(cellvalue, options, rowObject) {

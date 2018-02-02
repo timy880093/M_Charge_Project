@@ -83,9 +83,7 @@
         <aspose.cells>17.5</aspose.cells>
         <google.zxing>3.3.0</google.zxing>
         <chilkat.version>1.0</chilkat.version>
-        <realm.version>1.0</realm.version>
-        <mig.version>2.0.16-SNAPSHOT</mig.version>
-
+     
         <!--  -->
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
         <joda.version>2.9.9</joda.version>
@@ -461,35 +459,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!--third party library , not in maven repository -->
-        <!--run command first ,add customize lib to your local repository -->
-        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\MigPacket.jar -DgroupId=com.gateweb   -DartifactId=mig -Dversion=1.0 -Dpackaging=jar  -->
-        <!-- <dependency>
-            <groupId>com.gateweb</groupId>
-            <artifactId>mig</artifactId>
-            <version>${mig.version}</version>
-        </dependency> -->
-        <!--third party library , not in maven repository -->
-        <!--run command first ,add customize lib to your local repository -->
-        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\DB_Core.jar -DgroupId=com.gateweb   -DartifactId=db-core -Dversion=1.0 -Dpackaging=jar  -->
-        <!-- <dependency>
-            <groupId>com.gateweb</groupId>
-            <artifactId>db-core</artifactId>
-            <version>${gateweb.relation.version}</version>
-        </dependency> -->
-        <!--third party library , not in maven repository -->
-        <!--run command first ,add customize lib to your local repository -->
-        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\GatewebRealm.jar -DgroupId=com.gateweb   -DartifactId=realm -Dversion=1.0 -Dpackaging=jar  --><!-- 
-        <dependency>
-            <groupId>com.gateweb</groupId>
-            <artifactId>realm</artifactId>
-            <version>${gateweb.relation.version}</version>
-            <scope>provided</scope>
-        </dependency> -->
-        <!--third party library , not in maven repository -->
-        <!--run command first ,add customize lib to your local repository -->
-        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\chilkat.jar -DgroupId=com.chilkatsoft   -DartifactId=chilkat -Dversion=1.0 -Dpackaging=jar  -->
+		<dependency>
+            <groupId>com.aspose.cells</groupId>
+            <artifactId>aspose-cells</artifactId>
+            <version>${aspose.cells}</version>
+        </dependency>
         <dependency>
             <groupId>com.chilkatsoft</groupId>
             <artifactId>chilkat</artifactId>
