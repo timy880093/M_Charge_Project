@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.UserEntity;
+import com.gateweb.charge.model.UserEntity;
 
 /**
  * Created with IntelliJ IDEA.

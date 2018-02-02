@@ -1,6 +1,6 @@
 package com.gate.web.beans;
 
-import dao.CommissionLogEntity;
+import com.gateweb.charge.model.CommissionLogEntity;
 
 /**
  * Created by emily on 2016/1/12.

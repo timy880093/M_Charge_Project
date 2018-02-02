@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.ChargeModeCycleEntity;
+import com.gateweb.charge.model.ChargeModeCycleEntity;
 
 /**
  * Created with IntelliJ IDEA.

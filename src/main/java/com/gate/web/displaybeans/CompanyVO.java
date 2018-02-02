@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.CompanyEntity;
+import com.gateweb.charge.model.CompanyEntity;
 
 /**
  * Created with IntelliJ IDEA.

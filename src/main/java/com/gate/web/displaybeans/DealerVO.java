@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.DealerEntity;
+import com.gateweb.charge.model.DealerEntity;
 
 /**
  * Created with IntelliJ IDEA.

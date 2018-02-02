@@ -1,24 +1,43 @@
 package dao;
 
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.gate.utils.NullConstants;
 import com.gate.utils.SendEmailFileUtils;
 import com.gate.utils.TimeUtils;
 import com.gate.web.beans.CalOver;
 import com.gate.web.beans.QuerySettingVO;
+import com.gateweb.charge.model.BillCycleEntity;
+import com.gateweb.charge.model.CashDetailEntity;
+import com.gateweb.charge.model.CashMasterEntity;
+import com.gateweb.charge.model.ChargeModeCycleEntity;
+import com.gateweb.charge.model.ChargeModeGradeEntity;
+import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.DeductDetailEntity;
+import com.gateweb.charge.model.GradeEntity;
+import com.gateweb.charge.model.PackageModeEntity;
+import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
 
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.util.*;
-
-
+@Repository("calCycleDAO")
 public class CalCycleDAO extends BaseDAO {
-    CashDAO cashDAO = new CashDAO();
+	
+	@Autowired
+    CashDAO cashDAO;
 
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Timestamp evlS = TimeUtils.getCurrentTimestamp();

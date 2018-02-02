@@ -1,45 +1,51 @@
 package com.gate.web.facades;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.GiftVO;
-import com.gate.web.formbeans.GiftBean;
-import dao.BillCycleEntity;
-import dao.CalCycleDAO;
-import dao.CompanyEntity;
-import dao.GiftEntity;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.converters.DateConverter;
-
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.displaybeans.GiftVO;
+import com.gate.web.formbeans.GiftBean;
+import com.gateweb.charge.model.BillCycleEntity;
+import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.GiftEntity;
+
+import dao.CalCycleDAO;
+
+@Service("calCycleService")
 public class CalCycleServiceImp implements CalCycleService {
-    CalCycleDAO dao = new CalCycleDAO();
+	
+	@Autowired
+    CalCycleDAO calCycleDAO;
 
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
-        Map returnMap = dao.getBillCycleList(querySettingVO);
+        Map returnMap = calCycleDAO.getBillCycleList(querySettingVO);
         return returnMap;
     }
 
     public List getYM() throws Exception {
-        return dao.getYM();
+        return calCycleDAO.getYM();
     }
 
     public List getUserCompanyList() throws Exception{
-        return dao.getUserCompanyList();
+        return calCycleDAO.getUserCompanyList();
     }
 
     public Integer calBatchOver(String calYM) throws Exception {
-        return dao.transactionCalBatchOver(calYM);
+        return calCycleDAO.transactionCalBatchOver(calYM);
     }
 
     public Integer calOver(String calOverAry) throws Exception {
-        return dao.transactionCalOver(calOverAry);
+        return calCycleDAO.transactionCalOver(calOverAry);
     }
 
     public boolean calOverToCash(String calYM, Integer companyId, String calOverAry) throws Exception {
-        return dao.transactionCalOverToCash(calYM, companyId, calOverAry);
+        return calCycleDAO.transactionCalOverToCash(calYM, companyId, calOverAry);
     }
 
 //    public List calOver(String calYM, String companyId) throws Exception {
@@ -51,18 +57,18 @@ public class CalCycleServiceImp implements CalCycleService {
         DateConverter dateConverter = new DateConverter();
         dateConverter.setPattern("yyyy/MM/dd");
         BeanUtils.copyProperties(entity, bean);
-        dao.updateEntity(entity, entity.getGiftId());
+        calCycleDAO.updateEntity(entity, entity.getGiftId());
     }
 
     public Integer insertGift(GiftBean bean) throws Exception {
         GiftEntity entity = new GiftEntity();
         BeanUtils.copyProperties(entity, bean);
-        dao.saveEntity(entity);
+        calCycleDAO.saveEntity(entity);
         return null;
     }
 
     public GiftVO findGiftByBillId(Integer billId) throws Exception {
-        BillCycleEntity billCycleEntity = (BillCycleEntity)dao.getEntity(BillCycleEntity.class, billId);
+        BillCycleEntity billCycleEntity = (BillCycleEntity)calCycleDAO.getEntity(BillCycleEntity.class, billId);
         GiftVO giftVO = new GiftVO();
         giftVO.setBillId(billCycleEntity.getBillId());
         giftVO.setCompanyId(billCycleEntity.getCompanyId());
@@ -72,30 +78,30 @@ public class CalCycleServiceImp implements CalCycleService {
         if(null == billCycleEntity.getCashOutOverId()){
             giftVO.setIsCalculated(false); //超額已經計算的話，不能再修改贈送點數了。
         }
-        CompanyEntity cpEntity = (CompanyEntity)dao.getEntity(CompanyEntity.class, billCycleEntity.getCompanyId());
+        CompanyEntity cpEntity = (CompanyEntity)calCycleDAO.getEntity(CompanyEntity.class, billCycleEntity.getCompanyId());
         giftVO.setCompanyName(cpEntity.getName());
 
         return giftVO;
     }
 
     public boolean updateCntGiftByBillId(Integer billId, Integer cntGift) throws Exception {
-        BillCycleEntity billCycleEntity = (BillCycleEntity)dao.getEntity(BillCycleEntity.class, billId);
+        BillCycleEntity billCycleEntity = (BillCycleEntity)calCycleDAO.getEntity(BillCycleEntity.class, billId);
         billCycleEntity.setCntGift(cntGift);
-        dao.saveOrUpdateEntity(billCycleEntity, billId);
+        calCycleDAO.saveOrUpdateEntity(billCycleEntity, billId);
         return true;
     }
 
     public boolean deleteGiftByGiftId(Integer giftId) throws Exception {
-        GiftEntity giftEntity = (GiftEntity) dao.getEntity(GiftEntity.class,giftId);
-        dao.deleteEntity(giftEntity);
+        GiftEntity giftEntity = (GiftEntity) calCycleDAO.getEntity(GiftEntity.class,giftId);
+        calCycleDAO.deleteEntity(giftEntity);
         return true;
     }
 
     public Integer sendOverMailYM(String calYM) throws Exception{
-        return dao.sendOverMailYM(calYM);
+        return calCycleDAO.sendOverMailYM(calYM);
     }
 
     public Integer sendOverMail(String calOverAry) throws Exception{
-        return dao.sendOverMail(calOverAry);
+        return calCycleDAO.sendOverMail(calOverAry);
     }
 }

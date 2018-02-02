@@ -1,19 +1,21 @@
 package dao;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.DealerCompanyVO;
-import com.gate.web.displaybeans.DealerVO;
-import com.gate.web.formbeans.DealerCompanyBean;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.util.StringUtil;
-import org.hibernate.Query;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Repository;
 
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.displaybeans.DealerCompanyVO;
+import com.gate.web.displaybeans.DealerVO;
+import com.gate.web.formbeans.DealerCompanyBean;
+import com.gateweb.charge.model.DealerCompanyEntity;
+import com.gateweb.charge.model.DealerEntity;
+
+@Repository("commissionDAO")
 public class CommissionDAO extends BaseDAO {
 
     public Map getDealerCompanyList(QuerySettingVO querySettingVO) throws Exception {

@@ -1,16 +1,19 @@
 package dao;
 
-import com.gate.web.beans.QuerySettingVO;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
+
+import com.gate.web.beans.QuerySettingVO;
+
 /**
  * Created by emily on 2016/2/4.
  */
+@Repository("brokerCompanyDAO")
 public class BrokerCompanyDAO extends BaseDAO{
 
     //畫面查詢的資料

@@ -1,21 +1,20 @@
 package dao;
 
-import com.gate.utils.TimeUtils;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.formbeans.WarrantyBean;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
-
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
+
+import com.gate.utils.TimeUtils;
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.formbeans.WarrantyBean;
+import com.gateweb.charge.model.WarrantyEntity;
+
+@Repository("warrantyDAO")
 public class WarrantyDAO extends BaseDAO {
 
     public Map getWarrantyList(QuerySettingVO querySettingVO) throws Exception {

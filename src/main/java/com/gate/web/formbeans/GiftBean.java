@@ -1,8 +1,8 @@
 package com.gate.web.formbeans;
 
-import dao.GiftEntity;
-
 import java.sql.Timestamp;
+
+import com.gateweb.charge.model.GiftEntity;
 
 
 public class GiftBean{

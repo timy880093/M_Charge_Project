@@ -1,23 +1,34 @@
 package com.gate.web.servlets.backend.company;
 
+import static com.gate.utils.MapBeanConverterUtils.mapToBean;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.servlet.annotation.WebServlet;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.gate.config.SystemConfig;
 import com.gate.core.db.Dom4jUtils;
 import com.gate.web.beans.CityBean;
 import com.gate.web.displaybeans.CompanyVO;
-import com.gate.web.facades.CompanyServiceImp;
+import com.gate.web.facades.CompanyService;
 import com.gate.web.formbeans.CompanyBean;
 import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
-import org.apache.commons.lang.StringUtils;
-
-import javax.servlet.annotation.WebServlet;
-import java.io.File;
-import java.util.*;
-
-import static com.gate.utils.MapBeanConverterUtils.mapToBean;
 
 
 @WebServlet(urlPatterns = "/backendAdmin/companyEditServlet")
 public class CompanyEditServlet extends BackendPopTemplateServlet {
+
+	@Autowired
+    CompanyService companyService;
 
     @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -37,9 +48,8 @@ public class CompanyEditServlet extends BackendPopTemplateServlet {
         Set<CityBean> citys = new LinkedHashSet<CityBean>(cityBeans);
         outList.add(citys);
         if (method.equals("edit") ||  method.equals("read")) {
-            CompanyServiceImp serviceImp = new CompanyServiceImp();
             String[] values = (String[]) requestParameterMap.get("companyId");
-            CompanyVO companyVO = serviceImp.findCompanyByCompanyId(Integer.valueOf(values[0]));
+            CompanyVO companyVO = companyService.findCompanyByCompanyId(Integer.valueOf(values[0]));
             outList.add(companyVO);
             if(method.equals("read")){
                 outList.add("read");
@@ -49,10 +59,9 @@ public class CompanyEditServlet extends BackendPopTemplateServlet {
         } else if (method.equals("insert")) {
             CompanyBean companyBean = new CompanyBean();
             mapToBean(requestParameterMap, companyBean);
-            CompanyServiceImp serviceImp = new CompanyServiceImp();
             if (StringUtils.isNotEmpty(companyBean.getCompanyId())) {
                 if(companyBean.getTransferType().equals("3")
-                        && !(serviceImp.checkIfCompanyKeyExist(Integer.parseInt(companyBean.getCompanyId())))){         //改為介接廠商重新產生companyKey
+                        && !(companyService.checkIfCompanyKeyExist(Integer.parseInt(companyBean.getCompanyId())))){         //改為介接廠商重新產生companyKey
                     companyBean.setCompanyKey(UUID.randomUUID().toString());
                     //產生MigTransaction/src/companyKey的資料夾
                     //產生MigTransaction/bak/companyKey的資料夾
@@ -75,7 +84,7 @@ public class CompanyEditServlet extends BackendPopTemplateServlet {
                 if(companyBean.getTransferType().equals("3")){         //介接廠商
                     companyBean.setCompanyKey(UUID.randomUUID().toString());
                 }
-                serviceImp.insertCompany(companyBean);
+                companyService.insertCompany(companyBean);
             }
 
             otherMap.put(AJAX_JSON_OBJECT, "success");
@@ -83,8 +92,7 @@ public class CompanyEditServlet extends BackendPopTemplateServlet {
     }
 
     public void adminUpdate(CompanyBean companyBean) throws Exception {
-        CompanyServiceImp serviceImp = new CompanyServiceImp();
-        serviceImp.updateCompany(companyBean);
+    		companyService.updateCompany(companyBean);
     }
 
     public String getDispatch_page() {

@@ -1,15 +1,20 @@
 package com.gate.web.servlets.backend.commission;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.CommissionServiceImp;
-import com.gate.web.servlets.SearchServlet;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
-import java.util.List;
-import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.CommissionService;
+import com.gate.web.servlets.SearchServlet;
 
 @WebServlet(urlPatterns = "/backendAdmin/dealerCompanySearchServlet")
 public class DealerCompanySearchServlet extends SearchServlet {
+	
+	@Autowired
+    CommissionService CommissionService;
 
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -41,8 +46,7 @@ public class DealerCompanySearchServlet extends SearchServlet {
      * @throws Exception
      */
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        CommissionServiceImp serviceImp = new CommissionServiceImp();
-        Map dealerCompanyList = serviceImp.getDealerCompanyList(querySettingVO);
+        Map dealerCompanyList = CommissionService.getDealerCompanyList(querySettingVO);
         return dealerCompanyList;
     }
 

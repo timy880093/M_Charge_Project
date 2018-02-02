@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.ChargeModeSingleEntity;
+import com.gateweb.charge.model.ChargeModeSingleEntity;
 
 /**
  * Created with IntelliJ IDEA.

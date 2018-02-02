@@ -1,9 +1,8 @@
 package com.gate.web.beans;
 
-import dao.CashDetailEntity;
-import dao.CashMasterEntity;
-
 import java.util.List;
+
+import com.gateweb.charge.model.CashMasterEntity;
 
 /**
  * Created by emily on 2016/1/18.

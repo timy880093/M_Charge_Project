@@ -1,16 +1,23 @@
 package com.gate.web.servlets.backend.charge;
 
 import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.ChargeService;
 import com.gate.web.facades.ChargeServiceImp;
 import com.gate.web.servlets.SearchServlet;
 
 import javax.servlet.annotation.WebServlet;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = "/backendAdmin/chargeSearchServlet")
 public class ChargeSearchServlet extends SearchServlet {
 
+	@Autowired
+	ChargeService chargeService;
+	
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
         Object methodObj = requestParameterMap.get("method");
@@ -41,8 +48,8 @@ public class ChargeSearchServlet extends SearchServlet {
      * @throws Exception
      */
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        ChargeServiceImp serviceImp = new ChargeServiceImp();
-        Map chargeList = serviceImp.getChargeList(querySettingVO);
+
+        Map chargeList = chargeService.getChargeList(querySettingVO);
         return chargeList;
     }
 

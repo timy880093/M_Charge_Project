@@ -1,24 +1,26 @@
 package com.gate.web.servlets.backend.calCycle;
 
-import com.gate.utils.MapBeanConverterUtils;
-import com.gate.web.displaybeans.GiftVO;
-import com.gate.web.facades.CalCycleServiceImp;
-import com.gate.web.facades.CashServiceImp;
-import com.gate.web.formbeans.GiftBean;
-import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
-
-import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.web.displaybeans.GiftVO;
+import com.gate.web.facades.CalCycleService;
+import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 
 
 @WebServlet(urlPatterns = "/backendAdmin/calCycleEditServlet")
 public class CalCycleEditServlet extends BackendPopTemplateServlet {
 
+	@Autowired
+	CalCycleService calCycleService;
     @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        CalCycleServiceImp serviceImp = new CalCycleServiceImp();
+        
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -31,7 +33,7 @@ public class CalCycleEditServlet extends BackendPopTemplateServlet {
             String dispatch_page = "";
 
             if (billId != null) {
-                GiftVO giftVO = serviceImp.findGiftByBillId(billId);
+                GiftVO giftVO = calCycleService.findGiftByBillId(billId);
                 outList.add(giftVO);
             }
             dispatch_page = getEditDispatch_giftPage();
@@ -48,7 +50,7 @@ public class CalCycleEditServlet extends BackendPopTemplateServlet {
             }
 
             if (billId != null) {
-                serviceImp.updateCntGiftByBillId(billId, cntGift);
+            	calCycleService.updateCntGiftByBillId(billId, cntGift);
             }
             otherMap.put(AJAX_JSON_OBJECT, "ok");
         }

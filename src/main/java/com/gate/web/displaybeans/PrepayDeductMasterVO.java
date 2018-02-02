@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.PrepayDeductMasterEntity;
+import com.gateweb.charge.model.PrepayDeductMasterEntity;
 
 /**
  * Created by emily on 2017/5/23.

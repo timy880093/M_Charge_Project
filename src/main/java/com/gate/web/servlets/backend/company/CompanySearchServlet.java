@@ -1,24 +1,33 @@
 package com.gate.web.servlets.backend.company;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.CompanyChargeServiceImp;
-import com.gate.web.facades.CompanyServiceImp;
-import com.gate.web.servlets.SearchServlet;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
-import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.CompanyChargeService;
+import com.gate.web.facades.CompanyService;
+import com.gate.web.servlets.SearchServlet;
 
 
 @WebServlet(urlPatterns = "/backendAdmin/companySearchServlet")
 public class CompanySearchServlet extends SearchServlet {
 
+	@Autowired
+    CompanyService companyService;
+	
+	@Autowired
+    CompanyChargeService companyChargeService;
+
+	
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
-        CompanyChargeServiceImp serviceImp = new CompanyChargeServiceImp();
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -32,7 +41,7 @@ public class CompanySearchServlet extends SearchServlet {
 
             try{
                 String almostOut = ((String[]) requestParameterMap.get("almostOut"))[0]; //帳單年月
-                serviceImp.continuePackage(almostOut);
+                companyChargeService.continuePackage(almostOut);
             }catch(Exception ex){
                 System.out.println(ex);
                 data = " fail!!";
@@ -92,8 +101,7 @@ public class CompanySearchServlet extends SearchServlet {
      * @throws Exception
      */
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        CompanyServiceImp serviceImp = new CompanyServiceImp();
-        Map companyList = serviceImp.getCompanyList(querySettingVO);
+        Map companyList = companyService.getCompanyList(querySettingVO);
         return companyList;
     }
 

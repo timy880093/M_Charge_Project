@@ -1,11 +1,23 @@
 package dao;
 
 
-import com.gate.core.db.HibernateCoreUtils;
-import com.gate.core.utils.CustomBeanUtilsBean;
-import com.gate.utils.TimeUtils;
-import com.gate.web.authority.UserInfo;
-import com.gate.web.authority.UserInfoContext;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
@@ -17,15 +29,11 @@ import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
 import org.hibernate.transform.Transformers;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.Timestamp;
-import java.util.*;
+import com.gate.core.db.HibernateCoreUtils;
+import com.gate.core.utils.CustomBeanUtilsBean;
+import com.gate.utils.TimeUtils;
+import com.gate.web.authority.UserInfo;
+import com.gate.web.authority.UserInfoContext;
 
 /**
  * Created by simon on 2014/6/26.
@@ -48,6 +56,8 @@ public class BaseDAO {
         }
     }
 
+    @PersistenceContext(unitName = "chargeFacade")
+    protected EntityManager entityManager;
 
     /**
      * 抓取entity根據該物件的PK
@@ -57,7 +67,7 @@ public class BaseDAO {
      * @throws Exception
      */
     public Object getEntity(Class classObj, Serializable pk) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+    		Session session = (Session) entityManager.getDelegate();
         Object returnObj = null;
         returnObj = session.get(classObj, pk);
         session.evict(returnObj);//切斷關係
@@ -72,14 +82,14 @@ public class BaseDAO {
      * @throws Exception
      */
     public List getSearchEntity(Class classObj,Serializable entity) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Criteria criteria = session.createCriteria(classObj);
         criteria.add(Example.create(entity));
         return criteria.list();
     }
 
     public List getSearchEntity(Class classObj,Serializable entity, String orderby) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Criteria criteria = session.createCriteria(classObj);
         criteria.add(Example.create(entity));
         criteria.addOrder(Order.asc(orderby));
@@ -141,7 +151,7 @@ public class BaseDAO {
             }
         }
 
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         session.save(entity);
         session.flush();
         session.clear();
@@ -149,7 +159,7 @@ public class BaseDAO {
 
     public void deleteEntity(Object entity) throws Exception {
         Class c = entity.getClass();
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         session.delete(entity);
     }
 
@@ -161,7 +171,7 @@ public class BaseDAO {
      * @throws Exception
      */
     public void saveOrUpdateEntity(Object obj, Serializable pk) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Object beforeObj = SerializationUtils.clone((Serializable) obj); //beanUtils無法clone Timestamp所以改用SerializationUtils
         Object dbObj = session.get(obj.getClass(), (Serializable) pk);//這邊是從根據object 的pk去load ,object，所以本身是有在控管內的
         if (dbObj == null) {//新增
@@ -196,7 +206,7 @@ public class BaseDAO {
             }
         }
 
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Object beforeObj = SerializationUtils.clone((Serializable) obj);
         Object dbObj = session.get(obj.getClass(), (Serializable) pk);
         if (dbObj == null) {
@@ -217,7 +227,7 @@ public class BaseDAO {
      * @throws Exception
      */
     public void updateEntityIncludeNULL(Object obj, Serializable pk) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Object beforeObj = SerializationUtils.clone((Serializable) obj);
         Object dbObj = session.get(obj.getClass(), (Serializable) pk);
         if (dbObj == null) {
@@ -239,7 +249,7 @@ public class BaseDAO {
      */
     public Query createQueryForPage(String sql, int firstRowNum, int endRowNum,
                                     int fetchSize, Object resultObj) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Query query = session.createSQLQuery(sql);
         if (firstRowNum != -1) {
             query.setFirstResult(firstRowNum);
@@ -259,7 +269,7 @@ public class BaseDAO {
     }
 
     public <T> List<T> createQueryForList(String sql ,List parameterList, Class<T> object) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         SQLQuery q = session.createSQLQuery(sql);
 
         if (parameterList != null) {
@@ -276,7 +286,7 @@ public class BaseDAO {
 
     public Query createQueryForPage(String sql, List parameterList, int firstRowNum, int endRowNum,
                                     int fetchSize, Object resultObj) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Query query = session.createSQLQuery(sql);
         if (parameterList != null) {
             for (int i = 0; i < parameterList.size(); i++) {
@@ -342,7 +352,7 @@ public class BaseDAO {
      */
     public Query createQueryForPage(String sql, Map parameterMap, int firstRowNum, int endRowNum,
                                     int fetchSize, Object resultObj) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Query query = session.createSQLQuery(sql);
         if (parameterMap != null) {
             Set<String> keySet = parameterMap.keySet();
@@ -452,7 +462,7 @@ public class BaseDAO {
 
     //單純執行sql
     public void executeSql(String sql, List parameterList) throws Exception {
-        Session session = HibernateCoreUtils.getSession(null);
+        Session session = (Session) entityManager.getDelegate();
         Query query = session.createSQLQuery(sql);
         if (parameterList != null) {
             for (int i = 0; i < parameterList.size(); i++) {
@@ -502,17 +512,6 @@ public class BaseDAO {
         Query query = createQuery(sql, parameterList, null);
         return (Map) query.uniqueResult();
 
-    }
-
-
-    public static void main(String[] args) {
-        try {
-            BaseDAO baseDAO = new BaseDAO();
-
-            System.out.println("finally");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
 }

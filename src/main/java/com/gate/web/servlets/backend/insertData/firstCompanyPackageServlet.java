@@ -1,23 +1,12 @@
 package com.gate.web.servlets.backend.insertData;
 
-import com.gate.config.SystemConfig;
-import com.gate.utils.TimeUtils;
-import com.gate.web.facades.CashServiceImp;
-import com.gate.web.facades.CompanyServiceImp;
-import com.gate.web.servlets.BaseServlet;
-import com.gate.web.servlets.backend.common.BackendTemplateServlet;
-import dao.CompanyEntity;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
-import java.io.File;
-import java.io.FileInputStream;
-import java.text.SimpleDateFormat;
-import java.util.*;
+
+import com.gate.web.servlets.backend.common.BackendTemplateServlet;
 
 /**
  * Created by emily on 2016/2/4.

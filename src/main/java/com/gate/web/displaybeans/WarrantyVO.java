@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.WarrantyEntity;
+import com.gateweb.charge.model.WarrantyEntity;
 
 
 public class WarrantyVO extends WarrantyEntity {

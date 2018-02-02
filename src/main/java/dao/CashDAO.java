@@ -1,5 +1,23 @@
 package dao;
 
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
+
 import com.gate.utils.NullConstants;
 import com.gate.utils.SendEmailFileUtils;
 import com.gate.utils.TimeUtils;
@@ -9,25 +27,22 @@ import com.gate.web.beans.InvoiceExcelBean;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CashDetailVO;
 import com.gate.web.displaybeans.CashMasterVO;
+import com.gateweb.charge.model.BillCycleEntity;
+import com.gateweb.charge.model.CashDetailEntity;
+import com.gateweb.charge.model.CashMasterEntity;
+import com.gateweb.charge.model.ChargeModeCycleAddEntity;
+import com.gateweb.charge.model.ChargeModeCycleEntity;
+import com.gateweb.charge.model.ChargeModeGradeEntity;
+import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.DeductDetailEntity;
+import com.gateweb.charge.model.GradeEntity;
+import com.gateweb.charge.model.PackageModeEntity;
+import com.gateweb.charge.model.PrepayDeductMasterEntity;
+import com.gateweb.charge.model.PrepayDetailEntity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.util.StringUtil;
-import org.eclipse.core.runtime.Assert;
-import org.hibernate.Query;
 
-import java.lang.reflect.Type;
-import java.sql.Timestamp;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-
+@Repository("cashDAO")
 public class CashDAO extends BaseDAO {
 
     public Map getCashMaster(QuerySettingVO querySettingVO) throws Exception {

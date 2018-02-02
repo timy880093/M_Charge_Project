@@ -17,4 +17,14 @@ public interface CompanyService extends Service {
     public Map getCompanyList(QuerySettingVO querySettingVO) throws Exception;
     public Boolean checkBusinessNo(String businessNo, String companyId) throws Exception;
     public Map getCompanyByBusinessNo(String businessNo) throws Exception;
+	/**
+	 * @param parseInt
+	 * @return
+	 */
+	public Boolean checkIfCompanyKeyExist(Integer parseInt) throws Exception;
+	/**
+	 * @param parseInt
+	 * @return
+	 */
+	public Map getCompanyInfoByCompanyId(Integer parseInt)throws Exception;
 }

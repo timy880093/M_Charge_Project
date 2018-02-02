@@ -1,36 +1,40 @@
 package com.gate.web.facades;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.WarrantyVO;
-import com.gate.web.formbeans.WarrantyBean;
-import dao.WarrantyDAO;
-import dao.WarrantyEntity;
-import org.apache.commons.beanutils.BeanUtils;
-
 import java.util.List;
 import java.util.Map;
 
-public class WarrantyServiceImp {
-    WarrantyDAO dao= new WarrantyDAO();
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.displaybeans.WarrantyVO;
+import com.gate.web.formbeans.WarrantyBean;
+import com.gateweb.charge.model.WarrantyEntity;
+
+import dao.WarrantyDAO;
+
+@Service("warrantyService")
+public class WarrantyServiceImp implements WarrantyService{
+    
+	@Autowired
+	WarrantyDAO warrantyDAO;
 
     public Map getWarrantyList(QuerySettingVO querySettingVO) throws Exception {
-        Map returnMap = dao.getWarrantyList(querySettingVO);
+        Map returnMap = warrantyDAO.getWarrantyList(querySettingVO);
         return returnMap;
     }
 
     public int updateWarranty(WarrantyBean warrantyBean) throws Exception {
-        int returnInt = dao.updateWarranty(warrantyBean);
+        int returnInt = warrantyDAO.updateWarranty(warrantyBean);
         return returnInt;
     }
 
-
-
-
     public WarrantyVO findWarrantyByWarrantyId(Integer warrantyId) throws Exception {
-        WarrantyEntity warrantyEntity = (WarrantyEntity)dao.getEntity(WarrantyEntity.class,warrantyId);
+        WarrantyEntity warrantyEntity = (WarrantyEntity)warrantyDAO.getEntity(WarrantyEntity.class,warrantyId);
         WarrantyVO warrantyVO = new WarrantyVO();
         BeanUtils.copyProperties(warrantyVO, warrantyEntity);
-        Map map = dao.getCreatorAndModifier(warrantyVO.getCreatorId(),warrantyVO.getModifierId());
+        Map map = warrantyDAO.getCreatorAndModifier(warrantyVO.getCreatorId(),warrantyVO.getModifierId());
         warrantyVO.setCreator((String) map.get("creator"));
         warrantyVO.setModifier((String) map.get("modifier"));
         return warrantyVO;
@@ -41,11 +45,11 @@ public class WarrantyServiceImp {
 
 
 //    public List<Map> exportWar(String warranty)throws Exception{
-//        return dao.exportWar(warranty);
+//        return warrantyDAO.exportWar(warranty);
 //    }
 
 
     public List getUserDealerCompanyList() throws Exception{
-        return dao.getUserDealerCompanyList();
+        return warrantyDAO.getUserDealerCompanyList();
     }
 }

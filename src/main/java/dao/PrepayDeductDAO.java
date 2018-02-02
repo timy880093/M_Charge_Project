@@ -1,23 +1,31 @@
 package dao;
 
-import com.gate.utils.TimeUtils;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.PrepayDeductMasterVO;
-import com.gate.web.displaybeans.PrepayDetailVO;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
-
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.gate.utils.TimeUtils;
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.displaybeans.PrepayDetailVO;
+import com.gateweb.charge.model.CashDetailEntity;
+import com.gateweb.charge.model.CashMasterEntity;
+import com.gateweb.charge.model.PrepayDeductMasterEntity;
+import com.gateweb.charge.model.PrepayDetailEntity;
+
 /**
  * Created by emily on 2017/5/19.
  */
+@Repository("prepayDeductDAO")
 public class PrepayDeductDAO extends BaseDAO{
-    CashDAO cashDAO = new CashDAO();
+	
+	@Autowired
+    CashDAO cashDAO;
 
     public Map getPrepayDeductCompanyList(QuerySettingVO querySettingVO) throws Exception {
         List<Object> parameters = new ArrayList<Object>();

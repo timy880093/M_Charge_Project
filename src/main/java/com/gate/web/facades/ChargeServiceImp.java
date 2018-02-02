@@ -1,25 +1,32 @@
 package com.gate.web.facades;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.ChargeModeCycleVO;
-import com.gate.web.displaybeans.ChargeModeGradeVO;
-import com.gate.web.formbeans.*;
-import dao.*;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.converters.DateConverter;
-
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.displaybeans.ChargeModeCycleVO;
+import com.gate.web.displaybeans.ChargeModeGradeVO;
+import com.gate.web.formbeans.ChargeModeCycleBean;
+import com.gate.web.formbeans.ChargeModeGradeBean;
+import com.gateweb.charge.model.ChargeModeCycleEntity;
+import com.gateweb.charge.model.GradeEntity;
+
+import dao.ChargeDAO;
+
+@Service("chargeService")
 public class ChargeServiceImp implements ChargeService{
-    ChargeDAO dao = new ChargeDAO();
+	
+	@Autowired
+    ChargeDAO chargeDAO;
 
 
     public Map getChargeList(QuerySettingVO querySettingVO) throws Exception {
-        Map returnMap = dao.getChargeList(querySettingVO);
+        Map returnMap = chargeDAO.getChargeList(querySettingVO);
         return returnMap;
     }
 
@@ -28,7 +35,7 @@ public class ChargeServiceImp implements ChargeService{
     public Integer insertChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
         ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
         BeanUtils.copyProperties(entity, bean);
-        dao.saveEntity(entity);
+        chargeDAO.saveEntity(entity);
         return null;
     }
 
@@ -37,14 +44,14 @@ public class ChargeServiceImp implements ChargeService{
         DateConverter dateConverter = new DateConverter();
         dateConverter.setPattern("yyyy/MM/dd");
         BeanUtils.copyProperties(entity,bean);
-        dao.updateEntity(entity, entity.getChargeId());
+        chargeDAO.updateEntity(entity, entity.getChargeId());
     }
 
     public ChargeModeCycleVO findChargeModeCycleByChargeId(Integer chargeId) throws Exception {
-        ChargeModeCycleEntity chargeEntity = (ChargeModeCycleEntity) dao.getEntity(ChargeModeCycleEntity.class,chargeId);
+        ChargeModeCycleEntity chargeEntity = (ChargeModeCycleEntity) chargeDAO.getEntity(ChargeModeCycleEntity.class,chargeId);
         ChargeModeCycleVO chargeVO = new ChargeModeCycleVO();
         BeanUtils.copyProperties(chargeVO,chargeEntity);
-        Map map = dao.getCreatorAndModifier(chargeVO.getCreatorId(),chargeVO.getModifierId());
+        Map map = chargeDAO.getCreatorAndModifier(chargeVO.getCreatorId(),chargeVO.getModifierId());
         chargeVO.setCreator((String) map.get("creator"));
         chargeVO.setModifier((String) map.get("modifier"));
         return chargeVO;
@@ -52,24 +59,24 @@ public class ChargeServiceImp implements ChargeService{
 
     //新增或修改經銷商和經銷商業務員資訊
     public Integer transactionInsertChargeModeGrade(ChargeModeGradeBean bean) throws Exception {
-        return dao.insertChargeModeGrade(bean);
+        return chargeDAO.insertChargeModeGrade(bean);
     }
 
     //找到級距型方案的資料
     public ChargeModeGradeVO findChargeModeGradeByChargeId(Integer chargeId) throws Exception {
-        return dao.findChargeModeGradeByChargeId(chargeId);
+        return chargeDAO.findChargeModeGradeByChargeId(chargeId);
     }
 
     //取得某級距方案的級距清單
     public List<GradeEntity> getGradeList(Integer chargeId) throws Exception {
-        return dao.getGradeList(chargeId);
+        return chargeDAO.getGradeList(chargeId);
     }
 
     public void changeChargeModeStatus(String type, Integer chargeId, Integer status) throws Exception {
         if("1".equals(type)){
-            dao.changeChargeModeCycleStatus(chargeId, status);
+            chargeDAO.changeChargeModeCycleStatus(chargeId, status);
         } else if("2".equals(type)){
-            dao.changeChargeModeGradeStatus(chargeId, status);
+            chargeDAO.changeChargeModeGradeStatus(chargeId, status);
         }
     }
 

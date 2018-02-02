@@ -1,31 +1,32 @@
 package com.gate.web.servlets.backend.cash;
 
-import com.gate.config.SystemConfig;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.gate.utils.ExcelPoiWrapper;
 import com.gate.web.beans.CashDetailBean;
 import com.gate.web.beans.CashMasterBean;
 import com.gate.web.beans.InvoiceExcelBean;
 import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.CalCycleServiceImp;
+import com.gate.web.facades.CalCycleService;
+import com.gate.web.facades.CashService;
 import com.gate.web.facades.CashServiceImp;
 import com.gate.web.servlets.SearchServlet;
-import dao.CashDetailEntity;
-import dao.ChargeModeCycleEntity;
-import dao.CompanyEntity;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static com.gate.utils.DecimalUtils.getStrippingValue;
 
 @WebServlet(urlPatterns = "/backendAdmin/cashSearchServlet")
 public class CashSearchServlet extends SearchServlet {
@@ -33,8 +34,12 @@ public class CashSearchServlet extends SearchServlet {
     private static final String DOWNLOAD_FILE_NAME_INVOICE ="invoice_data";
     //private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/out_temp.xls";
     //private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/invoice_temp.xls";
-    CashServiceImp cashServiceImp = new CashServiceImp();
-    CalCycleServiceImp calCycleService = new CalCycleServiceImp();
+    
+    @Autowired
+    CashService cashService;
+    
+    @Autowired
+    CalCycleService calCycleService;
 
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -54,7 +59,7 @@ public class CashSearchServlet extends SearchServlet {
             Integer exeCnt = 0;
             try{
                 String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                exeCnt = cashServiceImp.out(destJson);
+                exeCnt = cashService.out(destJson);
                 data += "  total counts: "+exeCnt+"";
             }catch(Exception ex){
                 System.out.println(ex);
@@ -75,7 +80,7 @@ public class CashSearchServlet extends SearchServlet {
                         userCompanyId = Integer.parseInt(((String[]) requestParameterMap.get("userCompanyId"))[0]); //用戶id
                     }
                 }
-                exeCnt = cashServiceImp.outYM(outYM, userCompanyId);
+                exeCnt = cashService.outYM(outYM, userCompanyId);
                 data += "  total counts: "+exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);
@@ -91,7 +96,7 @@ public class CashSearchServlet extends SearchServlet {
             return null;
         } else if(method.equals("outExcelym")){ //匯出Excel帳單-批次(請選擇出帳單年月)
             String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
-            List cashMasterList =  cashServiceImp.getCashMasterDetail(outYM);
+            List cashMasterList =  cashService.getCashMasterDetail(outYM);
             String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
             ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
@@ -101,7 +106,7 @@ public class CashSearchServlet extends SearchServlet {
         }else if(method.equals("outExcel")){ //匯出Excel帳單-多筆(請勾選欲執行的資料)
             String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
             String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //多筆的選擇
-            List cashMasterList =  cashServiceImp.getCashMasterDetail(outYM, destJson);
+            List cashMasterList =  cashService.getCashMasterDetail(outYM, destJson);
             String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
             ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
@@ -112,7 +117,7 @@ public class CashSearchServlet extends SearchServlet {
             String data = "success!!";
             try{
                 String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
-                int exeCnt = cashServiceImp.cancelOutYM(outYM);
+                int exeCnt = cashService.cancelOutYM(outYM);
                 data += " total counts: " + exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);
@@ -124,7 +129,7 @@ public class CashSearchServlet extends SearchServlet {
             String data = "success!!";
             try{
                 String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                int exeCnt = cashServiceImp.cancelOut(destJson);
+                int exeCnt = cashService.cancelOut(destJson);
                 data += " total counts: " + exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);
@@ -137,7 +142,7 @@ public class CashSearchServlet extends SearchServlet {
             String data = "success!!";
             try{
                 String calYM  = ((String[]) requestParameterMap.get("outYM"))[0];
-                int exeCnt = cashServiceImp.sendBillMailYM(calYM);
+                int exeCnt = cashService.sendBillMailYM(calYM);
                 data += " total counts: " + exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);
@@ -150,7 +155,7 @@ public class CashSearchServlet extends SearchServlet {
             String data = "success!!";
             try{
                 String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                int exeCnt = cashServiceImp.sendBillMail(destJson);
+                int exeCnt = cashService.sendBillMail(destJson);
                 data += " total counts: " + exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);
@@ -163,7 +168,7 @@ public class CashSearchServlet extends SearchServlet {
             String data = "success!!";
             try{
                 String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                int exeCnt = cashServiceImp.sendBillMail1(destJson);
+                int exeCnt = cashService.sendBillMail1(destJson);
                 data += " total counts: " + exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);
@@ -176,7 +181,7 @@ public class CashSearchServlet extends SearchServlet {
             String data = "success!!";
             try{
                 String calYM  = ((String[]) requestParameterMap.get("outYM"))[0];
-                int exeCnt = cashServiceImp.sendBillMailYM(calYM);
+                int exeCnt = cashService.sendBillMailYM(calYM);
                 data += " total counts: " + exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);
@@ -186,7 +191,7 @@ public class CashSearchServlet extends SearchServlet {
             return null;
         } else if(method.equals("invoiceExcelYM")){ //匯出發票資料-by 年月
             String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
-            List invoiceItemList =  cashServiceImp.getInvoiceItem(outYM);
+            List invoiceItemList =  cashService.getInvoiceItem(outYM);
             String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
             ExcelPoiWrapper excel= genInvoiceItemToExcel(invoiceItemList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
@@ -195,7 +200,7 @@ public class CashSearchServlet extends SearchServlet {
             return null;
         } else if(method.equals("invoiceExcel")){ //匯出發票資料-by 多筆
             String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //多筆的選擇
-            List cashMasterList =  cashServiceImp.getInvoiceItem(null, destJson);
+            List cashMasterList =  cashService.getInvoiceItem(null, destJson);
             String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
             ExcelPoiWrapper excel= genInvoiceItemToExcel(cashMasterList, filePath);
             HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
@@ -203,7 +208,7 @@ public class CashSearchServlet extends SearchServlet {
 
             return null;
         } else {
-            List ymList = cashServiceImp.getYM();
+            List ymList = cashService.getYM();
             outList.add(ymList); //0.
             List userCompanyList = calCycleService.getUserCompanyList();
             outList.add(userCompanyList); //1.
@@ -243,15 +248,14 @@ public class CashSearchServlet extends SearchServlet {
      * @throws Exception
      */
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        CashServiceImp serviceImp = new CashServiceImp();
-        Map cashList = serviceImp.getCashMaster(querySettingVO);
+        Map cashList = cashService.getCashMaster(querySettingVO);
         return cashList;
     }
 
     @Override
     public Map doSearchDownloadData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
         Map map = new HashMap();
-        List cashMasterList =  cashServiceImp.getCashMasterDetail("201601");
+        List cashMasterList =  cashService.getCashMasterDetail("201601");
         map.put("cashMasterList",cashMasterList);
         return map;
     }

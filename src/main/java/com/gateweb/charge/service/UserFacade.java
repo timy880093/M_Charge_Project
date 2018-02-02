@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.gateweb.charge.model.User;
+import com.gateweb.charge.model.UserEntity;
 
 
 
@@ -15,7 +15,7 @@ public interface UserFacade extends UserDetailsService{
 	 * @param userName The param
 	 * @return User
 	 */
-	public User getUserByLogin(String userName);
+	public UserEntity getUserByLogin(String userName);
 
 	/**
 	 * search user name from database
@@ -29,7 +29,7 @@ public interface UserFacade extends UserDetailsService{
 	 * 從session取出LoginUser
 	 * @return
 	 */
-	User getCurrentLoginUser();
+	UserEntity getCurrentLoginUser();
 
 	/**
 	 * find user by email
@@ -37,7 +37,7 @@ public interface UserFacade extends UserDetailsService{
 	 * @return User
 	 * @
 	 */
-	public User findUserByEmail(String email);
+	public UserEntity findUserByEmail(String email);
 	
 	/**
 	 * check repeat by user email
@@ -45,7 +45,7 @@ public interface UserFacade extends UserDetailsService{
 	 * @return User
 	 * @
 	 */
-	public User checkRepeatByUserEmail(String email);
+	public UserEntity checkRepeatByUserEmail(String email);
 	
 	/**
 	 * 查詢使用者資料
@@ -53,5 +53,5 @@ public interface UserFacade extends UserDetailsService{
 	 * @return User
 	 * @
 	 */
-	public User findUserByUid(Integer uid);
+	public UserEntity findUserByUid(Integer uid);
 }

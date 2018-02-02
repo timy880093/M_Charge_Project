@@ -1,26 +1,34 @@
 package com.gate.web.servlets.backend.insertData;
 
-import com.gate.config.SystemConfig;
-import com.gate.web.beans.FirstCompanyPackageBean;
-import com.gate.web.facades.CashServiceImp;
-import com.gate.web.facades.FirstCompanyPackageService;
-import com.gate.web.facades.FirstCompanyPackageServiceImp;
-import com.gate.web.servlets.BaseServlet;
+import java.io.File;
+import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.annotation.WebServlet;
-import java.io.File;
-import java.io.FileInputStream;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.gate.config.SystemConfig;
+import com.gate.web.beans.FirstCompanyPackageBean;
+import com.gate.web.facades.FirstCompanyPackageService;
+import com.gate.web.servlets.BaseServlet;
 
 
 @WebServlet(urlPatterns = "/backendAdmin/firstCompanyPackageAjaxServlet")
 public class firstCompanyPackageAjaxServlet extends BaseServlet {
+
+	@Autowired
+    FirstCompanyPackageService firstCompanyPackageService;
 
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -44,7 +52,7 @@ public class firstCompanyPackageAjaxServlet extends BaseServlet {
                     fileTmpList.add(oriFilenames[i]+"<br>");
                     importLists.add(fileTmpList);
 
-                    List<String> result = parser$InExcelToList(filePath);
+                    List<String> result = parserInExcelToList(filePath);
                     importLists.add(result);
                 } catch (Exception e) {
                     List<String> error = new ArrayList();
@@ -63,8 +71,7 @@ public class firstCompanyPackageAjaxServlet extends BaseServlet {
     }
 
 
-    public List<String> parser$InExcelToList( String filePath) throws Exception {
-        FirstCompanyPackageService service = new FirstCompanyPackageServiceImp();
+    public List<String> parserInExcelToList( String filePath) throws Exception {
         FileInputStream file =  null;
         List<String> list = new ArrayList();
         List<FirstCompanyPackageBean> sourceList = new ArrayList<FirstCompanyPackageBean>();
@@ -223,7 +230,7 @@ public class firstCompanyPackageAjaxServlet extends BaseServlet {
             }
 
             //執行批次建立第一次的用戶綁合約的資料
-            String result = service.insertFirstCmpPkg(sourceList);
+            String result = firstCompanyPackageService.insertFirstCmpPkg(sourceList);
             System.out.println(result);
             list.add(result);
 

@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.CashDetailEntity;
+import com.gateweb.charge.model.CashDetailEntity;
 
 /**
  * Created by emily on 2016/1/6.

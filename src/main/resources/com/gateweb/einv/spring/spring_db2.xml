@@ -17,7 +17,8 @@
 		
 	<aop:config>
 		<aop:pointcut id="ChargeFacadePoint"
-			expression="execution(* com.gateweb.charge.service.impl.ChargeFacadeImpl.*(..))" />
+			expression="execution(* com.gateweb.charge.service.impl.ChargeFacadeImpl.*(..))
+		|| execution(* com.gate.web.facades.*Imp.*(..)) || execution(* dao.*DAO.*(..))|| execution(* dao.BaseDAO.*(..))"/>
 		<aop:advisor advice-ref="txAdviceCharge" pointcut-ref="ChargeFacadePoint" />
 	</aop:config>
 		
@@ -31,14 +32,17 @@
 		<property name="url" value="${charge.jdbc.url}" />
 		<property name="username" value="${charge.jdbc.username}" />
 		<property name="password" value="${charge.jdbc.password}" />
-		<property name="maxTotal" value="${jdbc.maxTotal}" />
-		<property name="initialSize" value="${jdbc.initialSize}" />
-		<property name="maxIdle" value="${jdbc.maxIdle}" />
-		<property name="maxWaitMillis" value="${jdbc.maxWaitMillis}" />
-		<property name="logAbandoned" value="${jdbc.logAbandoned}" />
-		<property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
-		<property name="removeAbandonedOnMaintenance" value="${jdbc.removeAbandonedOnMaintenance}" />
-		<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}" />
+		<property name="maxTotal" value="${jdbc.maxTotal}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        <property name="maxWaitMillis" value="${jdbc.maxWaitMillis}"/>
+        <property name="poolPreparedStatements" value="${jdbc.poolPreparedStatements}"/>
+		<property name="validationQuery" value="${jdbc.validationQuery}"/>
+        <property name="logAbandoned" value="${jdbc.logAbandoned}"/>
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}"/>
+        <property name="removeAbandonedOnMaintenance" value="${jdbc.removeAbandonedOnMaintenance}"/>
+        	<property name="removeAbandonedOnBorrow" value="${jdbc.removeAbandonedOnBorrow}"/>
+        <property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"/>
 	</bean>
 
 	<bean id="entityManagerFactoryCharge"
@@ -67,15 +71,23 @@
 	</bean>
 
 	<tx:advice id="txAdviceCharge" transaction-manager="transactionManagerCharge">
-		<tx:attributes>
-			<tx:method name="create*" propagation="REQUIRED" />
-			<tx:method name="delete*" propagation="REQUIRED" />
-			<tx:method name="update*" propagation="REQUIRED" />
-			<tx:method name="revert*" propagation="REQUIRED" />
-			<tx:method name="save*" propagation="REQUIRED" rollback-for="Throwable" />
-			<tx:method name="send*" propagation="REQUIRED" rollback-for="Throwable" />
-			<tx:method name="deprecate*" propagation="REQUIRED" rollback-for="Throwable" />						
-			<tx:method name="*" propagation="REQUIRED" read-only="true" />			
+		<tx:attributes>			
+			<tx:method name="transaction*" propagation="REQUIRED" rollback-for="Exception"/>
+            <tx:method name="create*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="import*" propagation="REQUIRED"/>
+            <tx:method name="open*" propagation="REQUIRED"/>
+            <tx:method name="cancel*" propagation="REQUIRED"/>
+            <tx:method name="void*" propagation="REQUIRED"/>
+            <tx:method name="batchUp*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="revert*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="send*" propagation="REQUIRED"/>
+            <tx:method name="clean*" propagation="REQUIRED"/>
+            <tx:method name="deprecate*" propagation="REQUIRED" rollback-for="Throwable"/>
+            <tx:method name="*" propagation="SUPPORTS" read-only="true"/>		
 		</tx:attributes>
 	</tx:advice>
 

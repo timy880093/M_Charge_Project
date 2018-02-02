@@ -1,22 +1,28 @@
 package com.gate.web.servlets.backend.calCycle;
 
-import com.gate.utils.SendEmailFileUtils;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.CalCycleServiceImp;
-import com.gate.web.servlets.SearchServlet;
-import org.apache.commons.mail.EmailException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
-import java.io.UnsupportedEncodingException;
-import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.CalCycleService;
+import com.gate.web.facades.CalCycleServiceImp;
+import com.gate.web.servlets.SearchServlet;
 
 @WebServlet(urlPatterns = "/backendAdmin/calCycleSearchServlet")
 public class CalCycleSearchServlet extends SearchServlet {
 
+	@Autowired
+	CalCycleService calCycleService;
+	
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
-        CalCycleServiceImp calCycleService = new CalCycleServiceImp();
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -153,8 +159,8 @@ public class CalCycleSearchServlet extends SearchServlet {
      * @throws Exception
      */
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        CalCycleServiceImp serviceImp = new CalCycleServiceImp();
-        Map giftList = serviceImp.getBillCycleList(querySettingVO);
+        
+        Map giftList = calCycleService.getBillCycleList(querySettingVO);
         return giftList;
     }
 

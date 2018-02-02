@@ -37,14 +37,16 @@
 				</repository>
 	  </repositories>
     <!--設定環境變數 -->
-    <properties>
+   <properties>
         <!--設定project name-->
-        <project.name>Gateweb_Project</project.name>
+        <project.name>b2b</project.name>
         <!--設定所有library版本-->
+        <java.version>1.8</java.version>
         <log4j.version>1.2.17</log4j.version>
         <jaxen.version>1.1.6</jaxen.version>
-        <hibernate.version>5.0.12.Final</hibernate.version>
-        <spring.version>4.3.9.RELEASE</spring.version>
+        <hibernate.version>5.2.12.Final</hibernate.version>
+        <hibernate-validator.version>5.4.2.Final</hibernate-validator.version>
+        <spring.version>5.0.1.RELEASE</spring.version>
         <commons.lang3.version>3.6</commons.lang3.version>
         <commons.io.version>2.5</commons.io.version>
         <commons.beanutils.version>1.9.3</commons.beanutils.version>
@@ -52,53 +54,61 @@
         <commons.lang.version>2.6</commons.lang.version>
         <commons.email.version>1.4</commons.email.version>
         <commons.httpcomponents.version>4.5.3</commons.httpcomponents.version>
+        <javax.validation.version>2.0.0.Final</javax.validation.version>
         <quartz.version>2.3.0</quartz.version>
         <jsr311.api.version>1.1.1</jsr311.api.version>
         <ws.rs.api.version>2.0.1</ws.rs.api.version>
         <jersey.guava.version>2.22.4</jersey.guava.version>
-        <opencvs.version>2.3</opencvs.version>
+        <opencsv.version>4.0</opencsv.version>
         <poi.relation.version>3.14</poi.relation.version>
         <openxml4j.version>1.0-beta</openxml4j.version>
         <xmlbeans.version>2.6.0</xmlbeans.version>
         <itext.pdf.version>5.5.11</itext.pdf.version>
         <mail.version>1.5.0-b01</mail.version>
         <jdom.version>1.1.3</jdom.version><!--can't upgrade v2 , because dependency.-->
-        <postgresql.jdbc.version>42.1.1</postgresql.jdbc.version>
+        <postgresql.jdbc.version>42.1.4</postgresql.jdbc.version>
         <aspectj.relation.version>1.8.10</aspectj.relation.version>
         <j2ee.version>7.0</j2ee.version>
         <gson.version>2.8.1</gson.version>
         <commons.net.version>3.6</commons.net.version>
         <dom4j.version>1.6.1</dom4j.version>
         <jta.version>1.1</jta.version>
-        <jersey-common.version>2.22.4</jersey-common.version>
-        <!--  <jersey-common.version>2.25.1</jersey-common.version> -->
+        <jersey-common.version>2.25.1</jersey-common.version>
         <slf4.relation.version>1.7.25</slf4.relation.version>
         <google-collections.version>1.0</google-collections.version>
         <!--setup test environment library.-->
         <junit.version>4.12</junit.version>
         <!--customized library, must need to import it by yourself.-->
-        <gateweb.relation.version>1.0</gateweb.relation.version>
+        <gateweb.relation.version>2.3.1</gateweb.relation.version>
+        <aspose.cells>17.5</aspose.cells>
+        <google.zxing>3.3.0</google.zxing>
+        <chilkat.version>1.0</chilkat.version>
+        <realm.version>1.0</realm.version>
+        <mig.version>2.0.16-SNAPSHOT</mig.version>
+
+        <!--  -->
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
         <joda.version>2.9.9</joda.version>
-		<spring-data-jpa.version>1.11.4.RELEASE</spring-data-jpa.version>
-        <spring-amqp.version>1.7.3.RELEASE</spring-amqp.version>
-		<querydsl.version>4.1.4</querydsl.version>
-		<jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
-        <hibernate-validator.version>6.0.2.Final</hibernate-validator.version>
-        <validation-api.version>2.0.0.Final</validation-api.version>
+        <spring-data-jpa.version>2.0.1.RELEASE</spring-data-jpa.version>
+        <querydsl.version>4.1.4</querydsl.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
-		<jstl.version>1.2</jstl.version>
-		<cors-filter.version>2.5</cors-filter.version>
-		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
+        <jstl.version>1.2</jstl.version>
+        <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
+        <freemarker.version>2.3.26-incubating</freemarker.version>
+        <jackson.version>2.9.2</jackson.version>
+        <com.sun.jersey.version>1.19.4</com.sun.jersey.version>
 		
-        
+        <!-- not used -->
+        <cors-filter.version>2.5</cors-filter.version>
+        <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+
     </properties>
     <dependencies>
     <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
 		<dependency>
 		    <groupId>javax.validation</groupId>
 		    <artifactId>validation-api</artifactId>
-		    <version>${validation-api.version}</version>
+		    <version>${javax.validation.version}</version>
 		</dependency>
 	    <dependency>
 		   <groupId>org.hibernate</groupId>
@@ -147,15 +157,15 @@
 			<artifactId>querydsl-apt</artifactId>
 			<version>${querydsl.version}</version>
 		</dependency>
-    	<dependency>
-			<groupId>org.springframework.amqp</groupId>
-			<artifactId>spring-rabbit</artifactId>
-			<version>${spring-amqp.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${jackson-mapper-asl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
     	<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -192,16 +202,18 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
 		<!-- <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency> -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jms</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
@@ -296,18 +308,7 @@
             <artifactId>quartz</artifactId>
             <version>${quartz.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.ws.rs/jsr311-api -->
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
-            <version>${jsr311.api.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>${ws.rs.api.version}</version>
-        </dependency>
+        
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.bundles.repackaged/jersey-guava -->
        <!--  <dependency>
             <groupId>org.glassfish.jersey.bundles.repackaged</groupId>
@@ -316,9 +317,9 @@
         </dependency> -->
         <!-- https://mvnrepository.com/artifact/net.sf.opencsv/opencsv -->
         <dependency>
-            <groupId>net.sf.opencsv</groupId>
+            <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>${opencvs.version}</version>
+            <version>${opencsv.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
@@ -370,10 +371,10 @@
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.5.0-b01</version>
-        </dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.6.0</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -464,37 +465,52 @@
         <!--third party library , not in maven repository -->
         <!--run command first ,add customize lib to your local repository -->
         <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\MigPacket.jar -DgroupId=com.gateweb   -DartifactId=mig -Dversion=1.0 -Dpackaging=jar  -->
-        <dependency>
+        <!-- <dependency>
             <groupId>com.gateweb</groupId>
             <artifactId>mig</artifactId>
-            <version>${gateweb.relation.version}</version>
-        </dependency>
+            <version>${mig.version}</version>
+        </dependency> -->
         <!--third party library , not in maven repository -->
         <!--run command first ,add customize lib to your local repository -->
         <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\DB_Core.jar -DgroupId=com.gateweb   -DartifactId=db-core -Dversion=1.0 -Dpackaging=jar  -->
-        <dependency>
+        <!-- <dependency>
             <groupId>com.gateweb</groupId>
             <artifactId>db-core</artifactId>
             <version>${gateweb.relation.version}</version>
-        </dependency>
+        </dependency> -->
         <!--third party library , not in maven repository -->
         <!--run command first ,add customize lib to your local repository -->
-        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\GatewebRealm.jar -DgroupId=com.gateweb   -DartifactId=realm -Dversion=1.0 -Dpackaging=jar  -->
+        <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\GatewebRealm.jar -DgroupId=com.gateweb   -DartifactId=realm -Dversion=1.0 -Dpackaging=jar  --><!-- 
         <dependency>
             <groupId>com.gateweb</groupId>
             <artifactId>realm</artifactId>
             <version>${gateweb.relation.version}</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency> -->
         <!--third party library , not in maven repository -->
         <!--run command first ,add customize lib to your local repository -->
         <!-- mvn install:install-file -Dfile=C:\IdeaProjects\Gateweb_Project\static_lib\chilkat.jar -DgroupId=com.chilkatsoft   -DartifactId=chilkat -Dversion=1.0 -Dpackaging=jar  -->
         <dependency>
             <groupId>com.chilkatsoft</groupId>
             <artifactId>chilkat</artifactId>
-            <version>${gateweb.relation.version}</version>
+            <version>${chilkat.version}</version>
         </dependency>
-       
+               <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
     </dependencies>
 
     <!--執行build的工作 -->
@@ -638,36 +654,6 @@
                 <configuration>
                     <failOnMissingWebXml>true</failOnMissingWebXml>
                 </configuration>
-            </plugin>
-            <!--新增aspectJ縫合-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>       <!-- use this goal to weave all your main classes -->
-                            <goal>test-compile</goal>  <!-- use this goal to weave all your test classes -->
-                        </goals>
-                        <configuration>
-                            <aspectDirectory>src/main/aspectjs</aspectDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <Xlint>error</Xlint>
-                    <warn>none</warn>
-                    <complianceLevel>1.8</complianceLevel>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjtools</artifactId>
-                        <version>${aspectj.relation.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

@@ -1,6 +1,6 @@
 package com.gate.web.formbeans;
 
-import dao.ChargeModeGradeEntity;
+import com.gateweb.charge.model.ChargeModeGradeEntity;
 
 /**
  * Created by emily on 2017/5/11.

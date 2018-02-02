@@ -1,20 +1,26 @@
 package com.gate.web.facades;
 
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.UserVO;
 import com.gate.web.formbeans.UserBean;
-import dao.UserDAO;
-import dao.UserEntity;
-import org.apache.commons.beanutils.BeanUtils;
+import com.gateweb.charge.model.UserEntity;
 
-import java.util.List;
-import java.util.Map;
+import dao.UserDAO;
 
 /**
  * Created by simon on 2014/7/11.
  */
+@Service("userService")
 public class UserServiceImp implements UserService{
-    UserDAO userDAO = new UserDAO();
+	
+	@Autowired
+    UserDAO userDAO;
 
     @Override
     public Integer insertUser(UserBean userBean) throws Exception {

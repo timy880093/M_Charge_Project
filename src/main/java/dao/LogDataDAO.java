@@ -2,6 +2,7 @@ package dao;
 
 import com.gate.web.beans.QuerySettingVO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Map;
 /**
  * Created by Good688 on 2014/8/26.
  */
+@Repository("logDataDAO")
 public class LogDataDAO extends BaseDAO {
     public Map getLogList (QuerySettingVO querySettingVO) throws Exception{
         List<Object> parameters = new ArrayList<Object>();

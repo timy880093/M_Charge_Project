@@ -21,11 +21,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.gate.utils.TimeUtils;
-import com.gateweb.charge.model.User;
+import com.gateweb.charge.model.LogDataEntity;
+import com.gateweb.charge.model.UserEntity;
 import com.google.gson.Gson;
 
 import dao.LogDataDAO;
-import dao.LogDataEntity;
 import dao.LogParameterDAO;
 
 /**
@@ -40,12 +40,12 @@ public class LogDataFilter implements Filter {
         HttpServletRequest request = ((HttpServletRequest)req);
         StringBuffer requestURL = request.getRequestURL();
         LogParameterDAO logParameterDAO = new LogParameterDAO();
-        User user = null;
+        UserEntity user = null;
         String userName = null;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	if (principal instanceof User) {
-    		System.out.println("Admin 1:"+((User)principal).getUsername());
-    		user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	if (principal instanceof UserEntity) {
+    		System.out.println("Admin 1:"+((UserEntity)principal).getUsername());
+    		user = (UserEntity)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     		System.out.println("Admin 2:"+user);
     		userName = user.getUsername();
 		} else if (principal instanceof UserDetails) {

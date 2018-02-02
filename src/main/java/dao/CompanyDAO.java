@@ -1,15 +1,19 @@
 package dao;
 
-import com.gate.utils.TimeUtils;
-import com.gate.web.beans.QuerySettingVO;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
+
+import com.gate.utils.TimeUtils;
+import com.gate.web.beans.QuerySettingVO;
+import com.gateweb.charge.model.CompanyEntity;
+
+@Repository("companyDAO")
 public class CompanyDAO extends BaseDAO {
 
     public Boolean checkBusinessNo(String businessNo) throws Exception {

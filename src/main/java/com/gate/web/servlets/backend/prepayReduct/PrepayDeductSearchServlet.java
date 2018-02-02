@@ -1,19 +1,26 @@
 package com.gate.web.servlets.backend.prepayReduct;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.CalCycleServiceImp;
-import com.gate.web.facades.PrepayDeductServiceImpl;
-import com.gate.web.servlets.SearchServlet;
-
-import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.annotation.WebServlet;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.CalCycleService;
+import com.gate.web.facades.PrepayDeductService;
+import com.gate.web.servlets.SearchServlet;
+
 @WebServlet(urlPatterns = "/backendAdmin/prepayDeductSearchServlet")
 public class PrepayDeductSearchServlet extends SearchServlet {
-    PrepayDeductServiceImpl serviceImp = new PrepayDeductServiceImpl();
-    CalCycleServiceImp calCycleService = new CalCycleServiceImp();
+
+	@Autowired
+    PrepayDeductService prepayDeductService;
+	
+	@Autowired
+	CalCycleService calCycleService;
 
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -32,7 +39,7 @@ public class PrepayDeductSearchServlet extends SearchServlet {
             try{
                 //新增使用預用金的用戶
                 String companyId  = ((String[]) requestParameterMap.get("companyId"))[0];
-                exeCnt = serviceImp.transactionCreatePdm(companyId);
+                exeCnt = prepayDeductService.transactionCreatePdm(companyId);
                 data += "  total counts: "+exeCnt+"";
             }catch(Exception ex){
                 System.out.println(ex);
@@ -64,7 +71,7 @@ public class PrepayDeductSearchServlet extends SearchServlet {
      * @throws Exception
      */
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        Map prepayReductCompanyList = serviceImp.getPrepayDeductCompanyList(querySettingVO);
+        Map prepayReductCompanyList = prepayDeductService.getPrepayDeductCompanyList(querySettingVO);
         return prepayReductCompanyList;
     }
 

@@ -20,10 +20,6 @@
 	
 	<import resource="classpath:com/gateweb/einv/spring/spring_db.xml" /> 
 	<import resource="classpath:com/gateweb/einv/spring/spring_db2.xml" />
-	<import resource="classpath:com/gateweb/einv/spring/spring_amqp.xml" />
-	
-	
-
 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="${mail.host}" />

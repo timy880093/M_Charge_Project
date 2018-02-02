@@ -1,26 +1,39 @@
 package dao;
 
-import com.gate.utils.TimeUtils;
-import com.gate.web.beans.ContinuePackage;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.formbeans.CompanyChargeCycleBean;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
-
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import com.gate.utils.TimeUtils;
+import com.gate.web.beans.ContinuePackage;
+import com.gate.web.formbeans.CompanyChargeCycleBean;
+import com.gateweb.charge.model.BillCycleEntity;
+import com.gateweb.charge.model.CashDetailEntity;
+import com.gateweb.charge.model.CashMasterEntity;
+import com.gateweb.charge.model.ChargeModeCycleAddEntity;
+import com.gateweb.charge.model.ChargeModeCycleEntity;
+import com.gateweb.charge.model.ChargeModeGradeEntity;
+import com.gateweb.charge.model.PackageModeEntity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+@Repository("companyChargeDAO")
 public class CompanyChargeDAO extends BaseDAO {
 
-    CashDAO cashDAO = new CashDAO();
+	@Autowired
+    CashDAO cashDAO;
 
     public List getChargeMonthList() throws Exception {
         String sql = "select charge_id,package_name from charge_mode_cycle where status = 1 ";
@@ -80,7 +93,7 @@ public class CompanyChargeDAO extends BaseDAO {
         BeanUtils.copyProperties(addEntity, bean);
         java.sql.Date sqlStartDate = new java.sql.Date(TimeUtils.getMonthOneDay(addEntity.getRealStartDate()).getTime()); //實際計算日起的當月的第一日，就是計算日起的日期
 
-        java.sql.Date sqlEndDate = addEntity.getRealEndDate();
+        java.util.Date sqlEndDate = addEntity.getRealEndDate();
         Calendar calEndDate = Calendar.getInstance();
         calEndDate.setTime(sqlEndDate);
         Date monthLastDay = TimeUtils.getMonthLastDay(calEndDate.getTime());

@@ -4,10 +4,30 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
     http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
 	<persistence-unit name="chargeFacade" transaction-type="RESOURCE_LOCAL">
-				<class>com.gateweb.charge.model.InvoiceMain</class>
-				<class>com.gateweb.charge.model.Company</class>
-				<class>com.gateweb.charge.model.User</class>
-				<class>com.gateweb.charge.model.InvoiceDetails</class>
+				<class>com.gateweb.charge.model.PrinterEntity</class>
+				<class>com.gateweb.charge.model.GradeEntity</class>
+				<class>com.gateweb.charge.model.ChargeModeCycleEntity</class>
+				<class>com.gateweb.charge.model.PackageModeEntity</class>
+				<class>com.gateweb.charge.model.CompanyEntity</class>
+				<class>com.gateweb.charge.model.InvoiceMainUniqueEntity</class>
+				<class>com.gateweb.charge.model.CashDetailEntity</class>
+				<class>com.gateweb.charge.model.DealerCompanyEntity</class>
+				<class>com.gateweb.charge.model.CommissionLogEntity</class>
+				<class>com.gateweb.charge.model.LogDataEntity</class>
+				<class>com.gateweb.charge.model.InvoiceTypeEntity</class>
+				<class>com.gateweb.charge.model.PrepayDetailEntity</class>
+				<class>com.gateweb.charge.model.DeductDetailEntity</class>
+				<class>com.gateweb.charge.model.InvoiceMainEntity</class>
+				<class>com.gateweb.charge.model.BillCycleEntity</class>
+				<class>com.gateweb.charge.model.LogParameterEntity</class>
+				<class>com.gateweb.charge.model.ChargeModeCycleAddEntity</class>
+				<class>com.gateweb.charge.model.DealerEntity</class>
+				<class>com.gateweb.charge.model.WarrantyEntity</class>
+				<class>com.gateweb.charge.model.ChargeModeGradeEntity</class>
+				<class>com.gateweb.charge.model.InvoiceSyncRelationEntity</class>
+				<class>com.gateweb.charge.model.CashMasterEntity</class>
+				<class>com.gateweb.charge.model.PrepayDeductMasterEntity</class>
+				<class>com.gateweb.charge.model.UserEntity</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>	
 	</persistence-unit>
 	<persistence-unit name="einvFacade" transaction-type="RESOURCE_LOCAL">

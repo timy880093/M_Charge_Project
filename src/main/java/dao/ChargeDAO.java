@@ -1,32 +1,29 @@
 package dao;
 
-import com.gate.config.SystemConfig;
-import com.gate.utils.TimeUtils;
-import com.gate.web.beans.QuerySettingVO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import com.gate.web.displaybeans.ChargeModeGradeVO;
-import com.gate.web.formbeans.ChargeModeCycleBean;
-import com.gate.web.formbeans.ChargeModeGradeBean;
-import com.gate.web.formbeans.CompanyChargeCycleBean;
-import com.gate.web.formbeans.CompanyChargeSingleBean;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Date;
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.displaybeans.ChargeModeGradeVO;
+import com.gate.web.formbeans.ChargeModeCycleBean;
+import com.gate.web.formbeans.ChargeModeGradeBean;
+import com.gateweb.charge.model.ChargeModeCycleEntity;
+import com.gateweb.charge.model.ChargeModeGradeEntity;
+import com.gateweb.charge.model.GradeEntity;
 
-
+@Repository("chargeDAO")
 public class ChargeDAO extends BaseDAO {
 
-    CashDAO cashDAO = new CashDAO();
-
+	@Autowired
+    CashDAO cashDAO;
+	
     public Map getChargeList(QuerySettingVO querySettingVO) throws Exception {
         List<Object> parameters = new ArrayList<Object>();
         StringBuffer dataSb = new StringBuffer();

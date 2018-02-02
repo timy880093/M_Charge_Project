@@ -5,7 +5,7 @@
  */
 package com.gateweb.einv.exception;
 
-import com.meshinnovation.base.exception.SystemException;
+import com.gateweb.base.exception.SystemException;
 
 /**
  * @author pkliu

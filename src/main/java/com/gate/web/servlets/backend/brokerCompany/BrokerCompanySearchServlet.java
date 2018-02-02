@@ -1,15 +1,19 @@
 package com.gate.web.servlets.backend.brokerCompany;
 
-import com.gate.config.SystemConfig;
-import com.gate.utils.ExcelPoiWrapper;
-import com.gate.web.beans.InvoiceExcelBean;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.BrokerCompanyServiceImp;
-import com.gate.web.servlets.SearchServlet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.utils.ExcelPoiWrapper;
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.BrokerCompanyService;
+import com.gate.web.servlets.SearchServlet;
 
 /**
  * Created by emily on 2016/2/4.
@@ -20,11 +24,13 @@ public class BrokerCompanySearchServlet extends SearchServlet {
     private static final String DOWNLOAD_FILE_NAME_BROKER ="broker_data";
     //private static final String TEMPLATE_EXCEL_DOWNLOAD_BROKER = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/broker_temp.xls";
 
-
+    @Autowired
+    BrokerCompanyService brokerCompanyService;
+    
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
-        BrokerCompanyServiceImp serviceImp = new BrokerCompanyServiceImp();
+        
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -38,7 +44,7 @@ public class BrokerCompanySearchServlet extends SearchServlet {
         } else if(method.equals("excel")){
             String brokerType = ((String[]) requestParameterMap.get("brokerType"))[0]; //2.介紹人公司，3.裝機公司
             String brokerCompany = ((String[]) requestParameterMap.get("brokerCompany"))[0]; //值
-            List<Map> excelBrokerCompanyList = serviceImp.getExcelBrokerCompanyList(brokerType, brokerCompany);
+            List<Map> excelBrokerCompanyList = brokerCompanyService.getExcelBrokerCompanyList(brokerType, brokerCompany);
 
             String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/broker_temp.xls";
             
@@ -48,9 +54,9 @@ public class BrokerCompanySearchServlet extends SearchServlet {
             responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_BROKER);
             return null;
         }else {
-            List brokerCp2List = serviceImp.getBrokerCp2List();
+            List brokerCp2List = brokerCompanyService.getBrokerCp2List();
             outList.add(brokerCp2List); //0. 介紹人公司
-            List brokerCp3List = serviceImp.getBrokerCp3List();
+            List brokerCp3List = brokerCompanyService.getBrokerCp3List();
             outList.add(brokerCp3List); //1. 裝機公司
 
             otherMap.put(REQUEST_SEND_OBJECT, outList);
@@ -67,8 +73,7 @@ public class BrokerCompanySearchServlet extends SearchServlet {
 
     @Override
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        BrokerCompanyServiceImp serviceImp = new BrokerCompanyServiceImp();
-        Map brokerCompanyMap = serviceImp.getBrokerCompanyList(querySettingVO);
+        Map brokerCompanyMap = brokerCompanyService.getBrokerCompanyList(querySettingVO);
         return brokerCompanyMap;
     }
 

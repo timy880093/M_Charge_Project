@@ -1,20 +1,21 @@
 package com.gate.web.servlets.backend.commissionLog;
 
-import com.gate.config.SystemConfig;
-import com.gate.utils.ExcelPoiWrapper;
-import com.gate.web.beans.CommissionLog;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.CommissionLogServiceImp;
-import com.gate.web.servlets.SearchServlet;
-import dao.CommissionLogEntity;
-
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.utils.ExcelPoiWrapper;
+import com.gate.web.beans.CommissionLog;
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.CommissionLogService;
+import com.gate.web.servlets.SearchServlet;
 
 
 @WebServlet(urlPatterns = "/backendAdmin/commissionLogSearchServlet")
@@ -22,10 +23,13 @@ public class CommissionLogSearchServlet extends SearchServlet {
     private static final String DOWNLOAD_FILE_NAME_COMMISSION ="commission_temp";
     //private static final String TEMPLATE_EXCEL_DOWNLOAD_COMMISSION = SystemConfig.getInstance().getParameter("uploadTempPath") + "//tempFile"+"//commission_temp.xls";
 
+    @Autowired
+    CommissionLogService commissionLogService;
+
+
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        CommissionLogServiceImp serviceImp = new CommissionLogServiceImp();
-
+       
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         List<Object> outList = new ArrayList<Object>();
@@ -51,7 +55,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
                     inDateE = ((String[]) requestParameterMap.get("inDateE"))[0];
                 }
                 System.out.println("dealerCompany:   "+dealerCompany+",inDateS:   "+inDateS+", inDateE:    "+inDateE);
-                serviceImp.calCommission(dealerCompany, inDateS, inDateE);
+                commissionLogService.calCommission(dealerCompany, inDateS, inDateE);
             } catch (Exception e) {
                 e.printStackTrace();
                 data = "calculate error";
@@ -62,7 +66,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
             String data="success!! ";
             try{
                 String commissionLog = ((String[]) requestParameterMap.get("commissionLog"))[0]; //commission_log_id
-                serviceImp.payCommission(commissionLog);
+                commissionLogService.payCommission(commissionLog);
             } catch (Exception e) {
                 e.printStackTrace();
                 data = "error";
@@ -73,7 +77,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
             String data="success!! ";
             try{
                 String commissionLog = ((String[]) requestParameterMap.get("commissionLog"))[0]; //commission_log_id
-                List<Map> commissionLogList = serviceImp.exportCom(commissionLog);
+                List<Map> commissionLogList = commissionLogService.exportCom(commissionLog);
                 String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/commission_temp.xls";
                 ExcelPoiWrapper excel= genCommissionLogToExcel(commissionLogList, filePath);
                 HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
@@ -85,7 +89,7 @@ public class CommissionLogSearchServlet extends SearchServlet {
             otherMap.put(AJAX_JSON_OBJECT, data);
             return null;
         }else{
-            List dealerCpList = serviceImp.getDealerCompanyList();
+            List dealerCpList = commissionLogService.getDealerCompanyList();
             outList.add(dealerCpList);
 
             otherMap.put(REQUEST_SEND_OBJECT, outList);
@@ -108,8 +112,8 @@ public class CommissionLogSearchServlet extends SearchServlet {
      * @throws Exception
      */
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        CommissionLogServiceImp serviceImp = new CommissionLogServiceImp();
-        Map commissionList = serviceImp.getCommissionMasterList(querySettingVO);
+        
+        Map commissionList = commissionLogService.getCommissionMasterList(querySettingVO);
         return commissionList;
     }
 

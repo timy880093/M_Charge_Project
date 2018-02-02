@@ -1,26 +1,30 @@
 package com.gate.web.servlets.backend.cash;
 
-import com.gate.utils.MapBeanConverterUtils;
-import com.gate.web.displaybeans.CashDetailVO;
-import com.gate.web.displaybeans.CashMasterVO;
-import com.gate.web.facades.CashServiceImp;
-import com.gate.web.formbeans.GiftBean;
-import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
-import dao.BillCycleEntity;
-import org.apache.commons.lang.StringUtils;
-
-import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.web.displaybeans.CashDetailVO;
+import com.gate.web.displaybeans.CashMasterVO;
+import com.gate.web.facades.CashService;
+import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
+import com.gateweb.charge.model.BillCycleEntity;
 
 
 @WebServlet(urlPatterns = "/backendAdmin/cashEditServlet")
 public class CashEditServlet extends BackendPopTemplateServlet {
 
+	@Autowired
+	CashService cashService;
+	
     @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        CashServiceImp serviceImp = new CashServiceImp();
+        
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -30,10 +34,10 @@ public class CashEditServlet extends BackendPopTemplateServlet {
             if (requestParameterMap.get("cashMasterId") != null) {
                 cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
             }
-            List<CashDetailVO> cashDetailList=serviceImp.getCashDetailListByMasterId(cashMasterId);
+            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
             outList.add(cashDetailList);
 
-            CashMasterVO cashMasterVO = serviceImp.getCashMasterByMasterId(cashMasterId);
+            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
             outList.add(cashMasterVO);
 
             String dispatch_page = getEditDispatch_page();
@@ -63,12 +67,12 @@ public class CashEditServlet extends BackendPopTemplateServlet {
                 }
             }
 
-            boolean isOK = serviceImp.updateCashDetail(cashDetailId, diffPrice, diffPriceNote);
+            boolean isOK = cashService.updateCashDetail(cashDetailId, diffPrice, diffPriceNote);
 
-            List<CashDetailVO> cashDetailList=serviceImp.getCashDetailListByMasterId(cashMasterId);
+            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
             outList.add(cashDetailList);
 
-            CashMasterVO cashMasterVO = serviceImp.getCashMasterByMasterId(cashMasterId);
+            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
             outList.add(cashMasterVO);
 
             String dispatch_page = getEditDispatch_page();
@@ -83,7 +87,7 @@ public class CashEditServlet extends BackendPopTemplateServlet {
             if (requestParameterMap.get("billType") != null) {
                 billType = Integer.parseInt(((String[]) requestParameterMap.get("billType"))[0]);
             }
-            List<BillCycleEntity> billCycleList=serviceImp.getOverListByDetailId(cashDetailId);
+            List<BillCycleEntity> billCycleList=cashService.getOverListByDetailId(cashDetailId);
             outList.add(billCycleList);
 
             String dispatch_page = getEditDispatch_OverListpage();
@@ -98,16 +102,16 @@ public class CashEditServlet extends BackendPopTemplateServlet {
                 cashDetailId = Integer.parseInt(((String[]) requestParameterMap.get("cashDetailId"))[0]);
             }
 
-            boolean isOK = serviceImp.cancelOver(cashDetailId);
+            boolean isOK = cashService.cancelOver(cashDetailId);
 
             Integer cashMasterId = null;
             if (requestParameterMap.get("cashMasterId") != null) {
                 cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
             }
-            List<CashDetailVO> cashDetailList=serviceImp.getCashDetailListByMasterId(cashMasterId);
+            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
             outList.add(cashDetailList);
 
-            CashMasterVO cashMasterVO = serviceImp.getCashMasterByMasterId(cashMasterId);
+            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
             outList.add(cashMasterVO);
 
             String dispatch_page = getEditDispatch_page();
@@ -119,16 +123,16 @@ public class CashEditServlet extends BackendPopTemplateServlet {
                 cashDetailId = Integer.parseInt(((String[]) requestParameterMap.get("cashDetailId"))[0]);
             }
 
-            boolean isOK = serviceImp.cancelPrepay(cashDetailId);
+            boolean isOK = cashService.cancelPrepay(cashDetailId);
 
             Integer cashMasterId = null;
             if (requestParameterMap.get("cashMasterId") != null) {
                 cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
             }
-            List<CashDetailVO> cashDetailList=serviceImp.getCashDetailListByMasterId(cashMasterId);
+            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
             outList.add(cashDetailList);
 
-            CashMasterVO cashMasterVO = serviceImp.getCashMasterByMasterId(cashMasterId);
+            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
             outList.add(cashMasterVO);
 
             String dispatch_page = getEditDispatch_page();
@@ -138,7 +142,7 @@ public class CashEditServlet extends BackendPopTemplateServlet {
             Integer cashMasterId = null;
             if (requestParameterMap.get("cashMasterId") != null) {
                 cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
-                serviceImp.delCashMaster(cashMasterId);
+                cashService.delCashMaster(cashMasterId);
                 otherMap.put(AJAX_JSON_OBJECT, "success");
             } else {
                 throw new Exception();

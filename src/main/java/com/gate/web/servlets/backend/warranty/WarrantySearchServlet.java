@@ -1,20 +1,20 @@
 package com.gate.web.servlets.backend.warranty;
 
-import com.gate.utils.ExcelPoiWrapper;
-import com.gate.web.beans.CommissionLog;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.facades.CalCycleServiceImp;
-import com.gate.web.facades.CashServiceImp;
-import com.gate.web.facades.WarrantyServiceImp;
-import com.gate.web.servlets.SearchServlet;
-
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.utils.ExcelPoiWrapper;
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.facades.CalCycleService;
+import com.gate.web.facades.WarrantyService;
+import com.gate.web.servlets.SearchServlet;
 
 /**
  * Created by emily on 2016/6/13.
@@ -22,10 +22,16 @@ import java.util.Map;
 @WebServlet(urlPatterns = "/backendAdmin/warrantySearchServlet")
 public class WarrantySearchServlet extends SearchServlet {
     private static final String DOWNLOAD_FILE_NAME_WARRANTY ="warranty_temp";
+
+    @Autowired
+    WarrantyService warrantyService;
+    
+    @Autowired
+    CalCycleService calCycleService;
+
+
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        CalCycleServiceImp calCycleService = new CalCycleServiceImp();
-        WarrantyServiceImp warrantyService = new WarrantyServiceImp();
 
         Object methodObj = requestParameterMap.get("method");
         String method = "";
@@ -73,8 +79,7 @@ public class WarrantySearchServlet extends SearchServlet {
 
     @Override
     public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        WarrantyServiceImp serviceImp = new WarrantyServiceImp();
-        Map warrantyList = serviceImp.getWarrantyList(querySettingVO);
+        Map warrantyList = warrantyService.getWarrantyList(querySettingVO);
         return warrantyList;
     }
 

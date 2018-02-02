@@ -1,27 +1,30 @@
 package dao;
 
-import com.gate.utils.TimeUtils;
-import com.gate.web.beans.CommissionLog;
-import com.gate.web.beans.QuerySettingVO;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.querydsl.jpa.hibernate.HibernateUtil;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
+
+import com.gate.utils.TimeUtils;
+import com.gate.web.beans.CommissionLog;
+import com.gate.web.beans.QuerySettingVO;
+import com.gateweb.charge.model.CashDetailEntity;
+import com.gateweb.charge.model.CommissionLogEntity;
+import com.gateweb.charge.model.DealerCompanyEntity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 /**
  * Created by emily on 2016/1/11.
  */
+@Repository("commissionLogDAO")
 public class CommissionLogDAO extends BaseDAO {
 
     public Map getCommissionMasterList(QuerySettingVO querySettingVO) throws Exception {

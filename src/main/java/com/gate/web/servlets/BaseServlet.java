@@ -41,8 +41,8 @@ import com.gate.web.authority.UserInfoContext;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.messages.ErrorMessages;
-import com.gateweb.charge.model.Company;
-import com.gateweb.charge.model.User;
+import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.UserEntity;
 import com.gateweb.charge.service.ChargeFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -192,17 +192,17 @@ public abstract class BaseServlet extends HttpServlet {
             	}
             }
             
-        	User user = (User)request.getSession().getAttribute("loginUser");
+        	UserEntity user = (UserEntity)request.getSession().getAttribute("loginUserEntity");
         	//List<AccountReference> referenceList = (List<AccountReference>)request.getSession().getAttribute("accountReferenceList");
-        	Company company = (Company)request.getSession().getAttribute("company");
+        	CompanyEntity company = (CompanyEntity)request.getSession().getAttribute("company");
         	UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userContext");
 
         	if(user == null){
 	            String userName = null;
 	        	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	        	if (principal instanceof User) {
-	        		System.out.println("Admin 1:"+((User)principal).getUsername());
-	        		user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	        	if (principal instanceof UserEntity) {
+	        		System.out.println("Admin 1:"+((UserEntity)principal).getUsername());
+	        		user = (UserEntity)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	        		System.out.println("Admin 2:"+user);
 	        		request.getSession().setAttribute("loginUser", user);
 	        		userName = user.getUsername();
@@ -216,9 +216,9 @@ public abstract class BaseServlet extends HttpServlet {
 	    			}*/
 	    		} else if (principal instanceof UserDetails) {
 	    	    		System.out.println("Admin 2:"+((UserDetails)principal).getUsername());
-	    	    		User user1 = new User();
+	    	    		UserEntity user1 = new UserEntity();
 			    		user1.setAccount(((UserDetails)principal).getUsername());
-			    		List<User> usersList = chargeFacade.searchBy(user1);
+			    		List<UserEntity> usersList = chargeFacade.searchBy(user1);
 			    		if (usersList != null && usersList.size()>0){
 			    			//System.out.println("usersList.get(0):"+usersList.get(0));
 			    			user = usersList.get(0);
@@ -231,7 +231,7 @@ public abstract class BaseServlet extends HttpServlet {
 			    			} else {
 			    				request.getSession().setAttribute("accountReferenceList", new ArrayList<AccountReference>());
 			    			}*/
-			    			company = chargeFacade.findCompanyById(user.getCompanyId());
+			    			company = chargeFacade.findCompanyById(user.getCompanyId().intValue());
 			    			request.getSession().setAttribute("company", company);
 			    			
 			    		}else{
@@ -249,7 +249,7 @@ public abstract class BaseServlet extends HttpServlet {
                 userInfo = new UserInfo();
                 userInfo.setUserId(user.getUserId().toString());
                 userInfo.setRoleId(user.getRoleId().toString());
-                userInfo.setRoleName(User.convRoleName(user.getRoleId()));
+                userInfo.setRoleName(UserEntity.convRoleName(user.getRoleId()));
                 userInfo.setCompanyId(user.getCompanyId().toString());
                 userInfo.setLoginName(user.getName());
                 userInfo.setEmail(user.getEmail());
@@ -325,7 +325,7 @@ public abstract class BaseServlet extends HttpServlet {
             if(user != null){
 	            otherMap.put(USER_ID, user.getUserId().toString());
 	            otherMap.put(ROLE_ID, user.getRoleId().toString());
-	            otherMap.put(ROLE_NAME,User.convRoleName(user.getRoleId()));
+	            otherMap.put(ROLE_NAME,UserEntity.convRoleName(user.getRoleId()));
 	            otherMap.put(COMPANY_ID, user.getCompanyId().toString());
 	            otherMap.put(LOGIN_NAME, user.getName());
 	            otherMap.put(EMAIL, user.getEmail());

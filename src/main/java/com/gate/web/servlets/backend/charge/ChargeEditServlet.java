@@ -1,28 +1,33 @@
 package com.gate.web.servlets.backend.charge;
 
-import com.gate.utils.MapBeanConverterUtils;
-import com.gate.utils.TimeUtils;
-import com.gate.web.displaybeans.ChargeModeCycleVO;
-import com.gate.web.displaybeans.ChargeModeGradeVO;
-import com.gate.web.facades.ChargeServiceImp;
-import com.gate.web.formbeans.ChargeModeCycleBean;
-import com.gate.web.formbeans.ChargeModeGradeBean;
-import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
-import dao.ChargeModeGradeEntity;
-import org.apache.commons.lang.StringUtils;
-
-import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.annotation.WebServlet;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.utils.MapBeanConverterUtils;
+import com.gate.web.displaybeans.ChargeModeCycleVO;
+import com.gate.web.displaybeans.ChargeModeGradeVO;
+import com.gate.web.facades.ChargeService;
+import com.gate.web.facades.ChargeServiceImp;
+import com.gate.web.formbeans.ChargeModeCycleBean;
+import com.gate.web.formbeans.ChargeModeGradeBean;
+import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
+
 
 @WebServlet(urlPatterns = "/backendAdmin/chargeEditServlet")
 public class ChargeEditServlet extends BackendPopTemplateServlet {
-    @Override
+
+	@Autowired
+	ChargeService chargeService;
+	
+	@Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
-        ChargeServiceImp serviceImp = new ChargeServiceImp();
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -46,7 +51,7 @@ public class ChargeEditServlet extends BackendPopTemplateServlet {
             String dispatch_page = "";
             if("1".equals(charge_type)){ //月租制
                 if(chargeId!=null){
-                    ChargeModeCycleVO chargeVO = serviceImp.findChargeModeCycleByChargeId(chargeId);
+                    ChargeModeCycleVO chargeVO = chargeService.findChargeModeCycleByChargeId(chargeId);
                     outList.add(chargeVO);
                 }
 
@@ -54,10 +59,10 @@ public class ChargeEditServlet extends BackendPopTemplateServlet {
             } else if("2".equals(charge_type)){ //級距制
                 if(chargeId!=null){
                     //級距型方案
-                    ChargeModeGradeVO chargeVO = serviceImp.findChargeModeGradeByChargeId(chargeId);
+                    ChargeModeGradeVO chargeVO = chargeService.findChargeModeGradeByChargeId(chargeId);
                     outList.add(chargeVO);
                     //級距型方案的級距表
-                    List gradeList = serviceImp.getGradeList(chargeId);
+                    List gradeList = chargeService.getGradeList(chargeId);
                     outList.add(gradeList);
                 }
 
@@ -72,23 +77,23 @@ public class ChargeEditServlet extends BackendPopTemplateServlet {
                 ChargeModeCycleBean bean = new ChargeModeCycleBean();
                 MapBeanConverterUtils.mapToBean(requestParameterMap,bean);
                 if(StringUtils.isNotEmpty(bean.getChargeId())){
-                    serviceImp.updateChargeModeCycle(bean);
+                    chargeService.updateChargeModeCycle(bean);
                 } else{
                     bean.setStatus(String.valueOf(1));
-                    serviceImp.insertChargeModeCycle(bean);
+                    chargeService.insertChargeModeCycle(bean);
                 }
 
             }else if("2".equals(charge_type)){ //級距型
                 ChargeModeGradeBean bean = new ChargeModeGradeBean();
                 MapBeanConverterUtils.mapToBean(requestParameterMap,bean);
 
-                serviceImp.transactionInsertChargeModeGrade(bean);
+                chargeService.transactionInsertChargeModeGrade(bean);
 //                Integer chargeModeGradeId = bean.getChargeId();
 //                if(null != chargeModeGradeId ){
-//                    serviceImp.transactionUpdateChargeModeGrade(bean);
+//                    chargeService.transactionUpdateChargeModeGrade(bean);
 //                } else{
 //                    bean.setStatus(1);
-//                    serviceImp.transactionInsertChargeModeGrade(bean);
+//                    chargeService.transactionInsertChargeModeGrade(bean);
 //                }
             }
         }

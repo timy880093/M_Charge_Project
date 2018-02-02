@@ -1,6 +1,5 @@
 package com.gate.web.formbeans;
 
-import dao.ChargeModeCycleAddEntity;
 /**
  * Created with IntelliJ IDEA.
  * User: good504

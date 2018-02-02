@@ -1,24 +1,35 @@
 package dao;
 
+import java.util.Calendar;
+import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.gate.utils.TimeUtils;
 import com.gate.web.beans.FirstCompanyPackageBean;
 import com.gate.web.formbeans.CompanyChargeCycleBean;
 import com.gate.web.formbeans.WarrantyBean;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Date;
-import java.util.Calendar;
-import java.util.List;
+import com.gateweb.charge.model.ChargeModeCycleEntity;
+import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.DealerCompanyEntity;
+import com.gateweb.charge.model.DealerEntity;
+import com.gateweb.charge.model.PackageModeEntity;
+import com.gateweb.charge.model.WarrantyEntity;
 
 /**
  * Created by emily on 2016/4/7.
  */
+@Repository("firstCompanyPackageDAO")
 public class FirstCompanyPackageDAO extends BaseDAO {
     String result = "";
     String successResult = "";
     String failResult = "";
-    CompanyChargeDAO dao = new CompanyChargeDAO();
+    
+    @Autowired
+    CompanyChargeDAO companyChargeDAO;
 
     //執行批次建立第一次的用戶綁合約的資料
     public String executionFirstCmpPkg( List<FirstCompanyPackageBean> excelDataList) throws Exception{
@@ -159,7 +170,7 @@ public class FirstCompanyPackageDAO extends BaseDAO {
 
             //6.原本用戶綁合約UI按下確定新增後，作的事情
             try{
-                dao.transactionInsertCompanyChargeCycle(bean);
+            		companyChargeDAO.transactionInsertCompanyChargeCycle(bean);
                 successResult += "<br>" + companyName + " " + businesscode + ",companyId=" + companyId + ",chargeId=" + chargeId +",freeMonth=" + freeMonth +
                         ",giftPrice=" + giftPrice +",realStartDate=" + realStartDate +",realEndDate=" + realEndDate +
                         ",dealerCompanyId=" + dealerCompanyId +",dealerId=" + dealerId + ",broker2CpName=" +

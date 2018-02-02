@@ -9,6 +9,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.annotation.WebServlet;
 import java.io.File;
@@ -25,7 +26,8 @@ import static com.gate.utils.DecimalUtils.getStrippingValue;
 @WebServlet(urlPatterns = "/backendAdmin/cashImportServlet")
 public class CashImportServlet extends BaseServlet {
 
-    CashServiceImp cashServiceImp = new CashServiceImp();
+	@Autowired
+	CashService cashService;
 
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -139,7 +141,7 @@ public class CashImportServlet extends BaseServlet {
                 }
 
                 //執行入帳
-                String result = cashServiceImp.excelSumIn(businesscode, inDate, bankYM, inMoney);
+                String result = cashService.excelSumIn(businesscode, inDate, bankYM, inMoney);
                 System.out.println(result);
                 list.add(result);
 

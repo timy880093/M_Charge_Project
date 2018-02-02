@@ -1,25 +1,33 @@
 package com.gate.web.servlets.backend.warranty;
 
-import com.gate.web.displaybeans.WarrantyVO;
-import com.gate.web.facades.CalCycleServiceImp;
-import com.gate.web.facades.WarrantyServiceImp;
-import com.gate.web.formbeans.WarrantyBean;
-import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
+import static com.gate.utils.MapBeanConverterUtils.mapToBean;
 
-import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.gate.utils.MapBeanConverterUtils.mapToBean;
+import javax.servlet.annotation.WebServlet;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.gate.web.displaybeans.WarrantyVO;
+import com.gate.web.facades.CalCycleService;
+import com.gate.web.facades.WarrantyService;
+import com.gate.web.formbeans.WarrantyBean;
+import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 
 @WebServlet(urlPatterns = "/backendAdmin/warrantyEditServlet")
 public class WarrantyEditServlet extends BackendPopTemplateServlet {
+	
+	@Autowired
+	CalCycleService calCycleService;
+	
+	@Autowired
+    WarrantyService warrantyService;
 
     @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        CalCycleServiceImp calCycleService = new CalCycleServiceImp();
-        WarrantyServiceImp warrantyService = new WarrantyServiceImp();
+        
 
         Object methodObj = requestParameterMap.get("method");
         String method = "";

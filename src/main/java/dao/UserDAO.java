@@ -3,11 +3,13 @@ package dao;
 import com.gate.web.beans.QuerySettingVO;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Repository("userDAO")
 public class UserDAO extends BaseDAO {
 
     public Map getUserList(QuerySettingVO querySettingVO,Integer companyId) throws Exception {

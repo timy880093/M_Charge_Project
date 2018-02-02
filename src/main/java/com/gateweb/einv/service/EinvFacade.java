@@ -6,7 +6,6 @@
 package com.gateweb.einv.service;
 import java.util.List;
 
-import com.gateweb.einv.model.AccountReference;
 import com.gateweb.einv.model.Company;
 import com.gateweb.einv.model.InvoiceDetails;
 import com.gateweb.einv.model.InvoiceMain;

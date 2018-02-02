@@ -37,19 +37,8 @@ public class InitServlet extends HttpServlet {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        CustomBeanUtilsBean.register();
-        log.info("init BeanUtil!!!!!");
-
-
-        String[] hibernateCfgXML =  {"hibernate.cfg.xml"};
-        try {
-            HibernateCoreUtils.getSessionFactory(null, hibernateCfgXML);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        log.info("init hibernate!!!!!");
-
-
+        //CustomBeanUtilsBean.register();
+        //log.info("init BeanUtil!!!!!");
 
         try {
             menuMap = MenuBuildUtils.getInstance().initMenu();

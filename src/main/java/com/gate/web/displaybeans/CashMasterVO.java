@@ -1,6 +1,6 @@
 package com.gate.web.displaybeans;
 
-import dao.CashMasterEntity;
+import com.gateweb.charge.model.CashMasterEntity;
 
 public class CashMasterVO extends CashMasterEntity {
     private String creator;

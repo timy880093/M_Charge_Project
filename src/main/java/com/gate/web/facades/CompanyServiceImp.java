@@ -1,20 +1,27 @@
 package com.gate.web.facades;
 
+import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CompanyVO;
 import com.gate.web.formbeans.CompanyBean;
-import dao.CompanyDAO;
-import dao.CompanyEntity;
-import org.apache.commons.beanutils.BeanUtils;
+import com.gateweb.charge.model.CompanyEntity;
 
-import java.util.List;
-import java.util.Map;
+import dao.CompanyDAO;
 
 /**
  * Created by simon on 2014/7/11.
  */
+
+@Service("companyService")
 public class CompanyServiceImp implements CompanyService{
-    CompanyDAO companyDAO = new CompanyDAO();
+	
+	@Autowired
+    CompanyDAO companyDAO;
 
     @Override
     public Integer insertCompany(CompanyBean companyBean) throws Exception {
@@ -84,5 +91,6 @@ public class CompanyServiceImp implements CompanyService{
     public Map getCompanyInfoByCompanyId(Integer companyId) throws Exception {
         return companyDAO.getCompanyInfo(companyId);
     }
+
 
 }

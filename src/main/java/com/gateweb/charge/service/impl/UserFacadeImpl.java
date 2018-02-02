@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.gateweb.charge.model.UserEntity;
 import com.gateweb.charge.service.ChargeFacade;
-import com.gateweb.charge.model.User;
 import com.gateweb.charge.service.UserFacade;
 
 
@@ -28,17 +28,17 @@ public class UserFacadeImpl implements UserFacade {
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	@Override
-	public User getUserByLogin(String account) {
+	public UserEntity getUserByLogin(String account) {
 		System.out.println("getUserByLogin account:"+account);
 		if (null == account) {
 			throw new IllegalArgumentException("Login is mandatory. Null value is forbidden.");
 		}
-		User user = new User();
+		UserEntity user = new UserEntity();
 		user.setAccount(account);
-		List<User> usersList = chargeFacade.searchBy(user);
+		List<UserEntity> usersList = chargeFacade.searchBy(user);
 		if (usersList != null && usersList.size()>0){
 			//System.out.println("usersList.get(0):"+usersList.get(0));
-			user = new User();
+			user = new UserEntity();
 			BeanUtils.copyProperties(usersList.get(0), user);
 			user.setGrantedAuthorities( user.getAuthorities().toArray(new GrantedAuthority[] {}));
 		}else{
@@ -61,7 +61,7 @@ public class UserFacadeImpl implements UserFacade {
 	public UserDetails loadUserByUsername(String account)
 			throws UsernameNotFoundException, DataAccessException {
 		System.out.println("loadUserByUsername account:"+account);
-		User user = null;		
+		UserEntity user = null;		
 		try {
 			user = getUserByLogin(account);
 			if (null == user) {
@@ -79,29 +79,29 @@ public class UserFacadeImpl implements UserFacade {
 	}
 	
 	@Override
-	public User getCurrentLoginUser() {
-		User user = (User) RequestContextHolder.currentRequestAttributes().getAttribute("loginUser", RequestAttributes.SCOPE_SESSION);
+	public UserEntity getCurrentLoginUser() {
+		UserEntity user = (UserEntity) RequestContextHolder.currentRequestAttributes().getAttribute("loginUser", RequestAttributes.SCOPE_SESSION);
 		return user;
 	}
 
 	@Override
-	public User findUserByEmail(String email) {
+	public UserEntity findUserByEmail(String email) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User checkRepeatByUserEmail(String email) {
+	public UserEntity checkRepeatByUserEmail(String email) {
 		return getUserByLogin(email);
 	}
 
 	@Override
-	public User findUserByUid(Integer uid) {
+	public UserEntity findUserByUid(Integer uid) {
 		return findUserByUid(uid);
 	}
 	
-	public User findUserByUid(Long uid) {
-		User user = chargeFacade.findUserById(uid);
+	public UserEntity findUserByUid(Long uid) {
+		UserEntity user = chargeFacade.findUserById(uid.intValue());
 		return user;
 	}
 

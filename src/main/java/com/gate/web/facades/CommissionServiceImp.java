@@ -1,41 +1,49 @@
 package com.gate.web.facades;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.DealerCompanyVO;
-import com.gate.web.formbeans.DealerCompanyBean;
-import dao.*;
-import com.gate.web.displaybeans.DealerVO;
-
 import java.util.List;
 import java.util.Map;
 
-public class CommissionServiceImp implements CommissionService{
-    CommissionDAO dao = new CommissionDAO();
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.gate.web.beans.QuerySettingVO;
+import com.gate.web.displaybeans.DealerCompanyVO;
+import com.gate.web.displaybeans.DealerVO;
+import com.gate.web.formbeans.DealerCompanyBean;
+import com.gateweb.charge.model.DealerCompanyEntity;
+
+import dao.CommissionDAO;
+
+
+@Service("commissionService")
+public class CommissionServiceImp implements CommissionService{
+	
+	@Autowired
+    CommissionDAO commissionDAO;
 
     public Map getDealerCompanyList(QuerySettingVO querySettingVO) throws Exception {
-        Map returnMap = dao.getDealerCompanyList(querySettingVO);
+        Map returnMap = commissionDAO.getDealerCompanyList(querySettingVO);
         return returnMap;
     }
 
     public void insertDealerCompany(DealerCompanyBean bean) throws Exception {
-        dao.transactionInsertDealerCompany(bean);
+        commissionDAO.transactionInsertDealerCompany(bean);
     }
 
     public DealerCompanyVO getDealerCompanyByDealerCompanyId(Integer dealerCompanyId) throws Exception {
-        return dao.getDealerCompanyByDealerCompanyId(dealerCompanyId);
+        return commissionDAO.getDealerCompanyByDealerCompanyId(dealerCompanyId);
     }
 
     public List<DealerVO> getDealerByDealerCompanyId(Integer dealerCompanyId) throws Exception{
-        return dao.getDealerByDealerCompanyId(dealerCompanyId);
+        return commissionDAO.getDealerByDealerCompanyId(dealerCompanyId);
     }
 
     public void updateCommissionStatus(Integer packageId,Integer status) throws Exception {
-        dao.updateCommissionStatus(packageId, status);
+        commissionDAO.updateCommissionStatus(packageId, status);
     }
 
     public List<DealerCompanyEntity> getDealerCompanyListForDropBox() throws Exception {
-        return dao.getDealerCompanyListForDropBox();
+        return commissionDAO.getDealerCompanyListForDropBox();
     }
 
 }
