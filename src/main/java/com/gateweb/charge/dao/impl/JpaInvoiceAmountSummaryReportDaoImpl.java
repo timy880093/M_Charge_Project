@@ -5,10 +5,10 @@
  */
 package com.gateweb.charge.dao.impl;
 
+import com.gateweb.db.dao.exception.DaoSystemException;
 import com.gateweb.charge.dao.InvoiceAmountSummaryReportDao;
 import com.gateweb.charge.model.InvoiceAmountSummaryReportEntity;
-import com.gateweb.db.dao.exception.DaoSystemException;
-import com.gateweb.jpa.dao.JpaGenericDaoImpl;
+import com.gateweb.jpa.dao.ChargeJpaGenericDaoImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
@@ -24,8 +24,8 @@ import java.util.List;
  *
  * This class provides methods to populate DB Table of InvoiceAmountSummaryReport
  */
-@Repository("invoiceAmountSummaryReportDao")
-public class JpaInvoiceAmountSummaryReportDaoImpl extends JpaGenericDaoImpl<InvoiceAmountSummaryReportEntity,        Long      > implements InvoiceAmountSummaryReportDao {
+@Repository("chargeInvoiceAmountSummaryReportDao")
+public class JpaInvoiceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoImpl<InvoiceAmountSummaryReportEntity,        Long      > implements InvoiceAmountSummaryReportDao {
 
 	/**
 	 *

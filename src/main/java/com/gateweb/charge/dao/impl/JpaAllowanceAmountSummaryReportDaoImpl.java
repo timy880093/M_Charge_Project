@@ -5,10 +5,10 @@
  */
 package com.gateweb.charge.dao.impl;
 
+import com.gateweb.db.dao.exception.DaoSystemException;
 import com.gateweb.charge.dao.AllowanceAmountSummaryReportDao;
 import com.gateweb.charge.model.AllowanceAmountSummaryReportEntity;
-import com.gateweb.db.dao.exception.DaoSystemException;
-import com.gateweb.jpa.dao.JpaGenericDaoImpl;
+import com.gateweb.jpa.dao.ChargeJpaGenericDaoImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
@@ -24,8 +24,8 @@ import java.util.List;
  *
  * This class provides methods to populate DB Table of AllowanceAmountSummaryReport
  */
-@Repository("allowanceAmountSummaryReportDao")
-public class JpaAllowanceAmountSummaryReportDaoImpl extends JpaGenericDaoImpl<AllowanceAmountSummaryReportEntity,        Long      > implements AllowanceAmountSummaryReportDao {
+@Repository("chargeAllowanceAmountSummaryReportDao")
+public class JpaAllowanceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoImpl<AllowanceAmountSummaryReportEntity,        Long      > implements AllowanceAmountSummaryReportDao {
 
 	/**
 	 *

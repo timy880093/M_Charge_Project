@@ -5,9 +5,9 @@
  */
 package com.gateweb.charge.dao;
 
-import com.gateweb.charge.model.AllowanceAmountSummaryReportEntity;
 import com.gateweb.db.dao.GenericDao;
 import com.gateweb.db.dao.exception.DaoSystemException;
+import com.gateweb.charge.model.AllowanceAmountSummaryReportEntity;
 
 import java.util.List;
 

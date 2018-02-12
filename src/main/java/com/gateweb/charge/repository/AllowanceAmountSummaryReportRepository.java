@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  *
  * This class provides methods to populate DB Table of AllowanceAmountSummaryReport
  */
- @Repository("allowanceAmountSummaryReport")
+ @Repository("chargeAllowanceAmountSummaryReportRepository")
 public interface AllowanceAmountSummaryReportRepository extends JpaRepository<AllowanceAmountSummaryReportEntity, Long>
 	, QuerydslPredicateExecutor<AllowanceAmountSummaryReportEntity> {
 	

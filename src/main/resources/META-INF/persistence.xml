@@ -28,7 +28,9 @@
 				<class>com.gateweb.charge.model.CashMasterEntity</class>
 				<class>com.gateweb.charge.model.PrepayDeductMasterEntity</class>
 				<class>com.gateweb.charge.model.UserEntity</class>
-		<exclude-unlisted-classes>true</exclude-unlisted-classes>	
+				<class>com.gateweb.charge.model.InvoiceAmountSummaryReportEntity</class>
+				<class>com.gateweb.charge.model.AllowanceAmountSummaryReportEntity</class>
+				<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 	<persistence-unit name="einvFacade" transaction-type="RESOURCE_LOCAL">
 				<class>com.gateweb.einv.model.InvoiceMain</class>
@@ -36,7 +38,9 @@
 				<class>com.gateweb.einv.model.User</class>
 				<class>com.gateweb.einv.model.AccountReference</class>
 				<class>com.gateweb.einv.model.InvoiceDetails</class>
-		<exclude-unlisted-classes>true</exclude-unlisted-classes>	
+				<class>com.gateweb.einv.model.InvoiceAmountSummaryReportEntity</class>
+				<class>com.gateweb.einv.model.AllowanceAmountSummaryReportEntity</class>
+				<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 
 </persistence>

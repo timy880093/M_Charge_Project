@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @author pkliu
  *
  */
-@Entity
+@Entity(name = "chargeAllowanceAmountSummaryReportEntity")
 @Table(name = "allowance_amount_summary_report")
 public class AllowanceAmountSummaryReportEntity implements Serializable {
 
