@@ -1,5 +1,6 @@
-package com.gateweb.jpa.dao;
+package com.gateweb.einv.dao.impl;
 
+import com.gateweb.jpa.dao.JpaGenericDao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;

@@ -8,7 +8,6 @@ package com.gateweb.charge.dao.impl;
 import com.gateweb.db.dao.exception.DaoSystemException;
 import com.gateweb.charge.dao.AllowanceAmountSummaryReportDao;
 import com.gateweb.charge.model.AllowanceAmountSummaryReportEntity;
-import com.gateweb.jpa.dao.ChargeJpaGenericDaoImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;

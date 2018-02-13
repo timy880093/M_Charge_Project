@@ -8,13 +8,10 @@ package com.gateweb.einv.dao.impl;
 import com.gateweb.einv.dao.AllowanceAmountSummaryReportDao;
 import com.gateweb.einv.model.AllowanceAmountSummaryReportEntity;
 import com.gateweb.db.dao.exception.DaoSystemException;
-import com.gateweb.jpa.dao.EinvJpaGenericDaoImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TransactionRequiredException;
 import java.util.ArrayList;
