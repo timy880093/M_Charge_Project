@@ -7,13 +7,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,29 +40,4 @@ public class InvoiceAmountSummaryReportDaoTest {
         }
     }
 
-    @Test
-    @Transactional
-    @Rollback(false)
-    public void copyDataFromEinvDatabase(){
-        List<com.gateweb.einv.model.InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
-                = einvInvoiceAmountSummaryReportDao.getAllDistinct();
-        List<com.gateweb.charge.model.InvoiceAmountSummaryReportEntity> resultList = new ArrayList<>();
-        //取得資料集
-        for(com.gateweb.einv.model.InvoiceAmountSummaryReportEntity targetInvoiceAmountSummaryReportEntity : invoiceAmountSummaryReportEntityList){
-            com.gateweb.charge.model.InvoiceAmountSummaryReportEntity result = new InvoiceAmountSummaryReportEntity();
-            try{
-                BeanUtils.copyProperties(result,targetInvoiceAmountSummaryReportEntity);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } finally {
-                resultList.add(result);
-            }
-        }
-        //寫入資料
-        for(InvoiceAmountSummaryReportEntity result : resultList){
-            chargeInvoiceAmountSummaryReportDao.update(result);
-        }
-    }
 }
