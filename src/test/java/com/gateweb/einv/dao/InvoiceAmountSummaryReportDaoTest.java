@@ -26,7 +26,7 @@ public class InvoiceAmountSummaryReportDaoTest {
     Gson gson = new Gson();
 
     @Test
-    @Transactional
+    @Transactional()
     public void invoiceAmountSummaryReportQueryTest() {
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList =
                 einvInvoiceAmountSummaryReportDao.getAllDistinct();

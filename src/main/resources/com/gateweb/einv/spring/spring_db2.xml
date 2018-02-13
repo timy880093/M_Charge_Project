@@ -17,7 +17,7 @@
 		
 	<aop:config>
 		<aop:pointcut id="ChargeFacadePoint"
-			expression="execution(* com.gateweb.charge.service.impl.ChargeFacadeImpl.*(..))
+			expression="execution(* com.gateweb.charge.service.impl.*Impl.*(..))
 		|| execution(* com.gate.web.facades.*Imp.*(..)) || execution(* dao.*DAO.*(..))|| execution(* dao.BaseDAO.*(..))"/>
 		<aop:advisor advice-ref="txAdviceCharge" pointcut-ref="ChargeFacadePoint" />
 	</aop:config>

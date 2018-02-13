@@ -24,6 +24,6 @@ public class InvocieAmountSummaryReportFacadeImpl {
     @Transactional
     @Rollback(false)
     public void copyDataFromEinvDatabase(){
-        invoiceAmountSummaryReportFacade.copyDataFromEinvDatabase();
+        invoiceAmountSummaryReportFacade.transactionInsertDataFromEinvDatabase();
     }
 }

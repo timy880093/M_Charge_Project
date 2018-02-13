@@ -5,5 +5,5 @@ package com.gateweb.charge.service;
  */
 public interface InvoiceAmountSummaryReportFacade {
 
-    void copyDataFromEinvDatabase();
+    void transactionInsertDataFromEinvDatabase();
 }

@@ -27,7 +27,7 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
     InvoiceAmountSummaryReportDao chargeInvoiceAmountSummaryReportDao;
 
     @Override
-    public void copyDataFromEinvDatabase(){
+    public void transactionInsertDataFromEinvDatabase(){
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
                 = einvInvoiceAmountSummaryReportDao.getAllDistinct();
         List<com.gateweb.charge.model.InvoiceAmountSummaryReportEntity> resultList = new ArrayList<>();
