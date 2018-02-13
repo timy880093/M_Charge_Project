@@ -2,14 +2,18 @@ package com.gateweb.charge.dao;
 
 import com.gateweb.charge.model.InvoiceAmountSummaryReportEntity;
 import com.google.gson.Gson;
+import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +22,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:com/gateweb/einv/spring/spring_web.xml"})
 public class InvoiceAmountSummaryReportDaoTest {
+
+    @Autowired
+    @Qualifier("einvInvoiceAmountSummaryReportDao")
+    com.gateweb.einv.dao.InvoiceAmountSummaryReportDao einvInvoiceAmountSummaryReportDao;
 
     @Autowired
     @Qualifier("chargeInvoiceAmountSummaryReportDao")
@@ -35,4 +43,29 @@ public class InvoiceAmountSummaryReportDaoTest {
         }
     }
 
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void copyDataFromEinvDatabase(){
+        List<com.gateweb.einv.model.InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
+                = einvInvoiceAmountSummaryReportDao.getAllDistinct();
+        List<com.gateweb.charge.model.InvoiceAmountSummaryReportEntity> resultList = new ArrayList<>();
+        //取得資料集
+        for(com.gateweb.einv.model.InvoiceAmountSummaryReportEntity targetInvoiceAmountSummaryReportEntity : invoiceAmountSummaryReportEntityList){
+            com.gateweb.charge.model.InvoiceAmountSummaryReportEntity result = new InvoiceAmountSummaryReportEntity();
+            try{
+                BeanUtils.copyProperties(result,targetInvoiceAmountSummaryReportEntity);
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } finally {
+                resultList.add(result);
+            }
+        }
+        //寫入資料
+        for(InvoiceAmountSummaryReportEntity result : resultList){
+            chargeInvoiceAmountSummaryReportDao.update(result);
+        }
+    }
 }

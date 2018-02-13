@@ -95,9 +95,7 @@
             <tx:method name="deprecate*" propagation="REQUIRED" rollback-for="Throwable"/>
             <tx:method name="*" propagation="SUPPORTS" read-only="true"/>		
 		</tx:attributes>
-	</tx:advice>	
-	
-<!--  -->
+	</tx:advice>
 
 
 </beans>
