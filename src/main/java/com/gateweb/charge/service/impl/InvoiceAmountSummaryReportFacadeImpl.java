@@ -49,5 +49,4 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
             chargeInvoiceAmountSummaryReportDao.save(result);
         }
     }
-
 }

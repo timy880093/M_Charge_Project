@@ -42,6 +42,6 @@
 
 	<bean id="invoiceAmountSummaryReportService" class="com.gateweb.charge.service.impl.InvoiceAmountSummaryReportFacadeImpl" />
 	<task:scheduled-tasks>
-		<task:scheduled ref="invoiceAmountSummaryReportService" method="transactionInsertDataFromEinvDatabase" cron="*/60 * * * * *"/>
+		<task:scheduled ref="invoiceAmountSummaryReportService" method="transactionInsertDataFromEinvDatabase" cron="* */60 * * * *"/>
 	</task:scheduled-tasks>
 </beans>
