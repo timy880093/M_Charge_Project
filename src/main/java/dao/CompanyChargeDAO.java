@@ -34,6 +34,9 @@ public class CompanyChargeDAO extends BaseDAO {
 
 	@Autowired
     CashDAO cashDAO;
+    @Autowired
+    CalCycleDAO calCycleDAO;
+
 
     public List getChargeMonthList() throws Exception {
         String sql = "select charge_id,package_name from charge_mode_cycle where status = 1 ";
@@ -728,7 +731,7 @@ public class CompanyChargeDAO extends BaseDAO {
                 calendar.setTime(endDate);
                 calendar.add(Calendar.MONTH, -2);
                 String calYM = TimeUtils.getYearMonth2(calendar.getTime());
-                new CalCycleDAO().CalOverIsEnd(companyId, calYM);
+//                new CalCycleDAO().CalOverIsEnd(companyId, calYM);
 
                 break; //續約最後一筆的合約就好<==這行可以拿掉了
             }

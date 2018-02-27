@@ -43,7 +43,7 @@ public class CompanySearchServlet extends SearchServlet {
                 String almostOut = ((String[]) requestParameterMap.get("almostOut"))[0]; //帳單年月
                 companyChargeService.continuePackage(almostOut);
             }catch(Exception ex){
-                System.out.println(ex);
+                ex.printStackTrace();
                 data = " fail!!";
             }
 

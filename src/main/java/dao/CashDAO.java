@@ -932,48 +932,48 @@ public class CashDAO extends BaseDAO {
         //BigDecimal noTaxInclusivePrice = cashDetailEntity.getNoTaxInclusivePrice();
 //undo 2017/12/1 robinson edit
         //假如有公司預佣金部分須把code加回去
-//        Integer companyId = cashDetailEntity.getCompanyId();
-//        String calYM = cashDetailEntity.getCalYm();
+        Integer companyId = cashDetailEntity.getCompanyId();
+        String calYM = cashDetailEntity.getCalYm();
         deleteEntity(cashDetailEntity);
 
         //4.把這筆cash_detail對應的扣抵的資料也刪掉
-//        CashDetailEntity searchDeductCashDetailEntity = new CashDetailEntity();
+        CashDetailEntity searchDeductCashDetailEntity = new CashDetailEntity();
         //不可加金額條件，因為該筆帳單有可能用完最後的預用金，所以超額不會全扣抵
         //searchDeductCashDetailEntity.setNoTaxInclusivePrice(new BigDecimal(0).subtract(noTaxInclusivePrice));
-//        searchDeductCashDetailEntity.setCompanyId(companyId);
-//        searchDeductCashDetailEntity.setCalYm(calYM);
-//        searchDeductCashDetailEntity.setCashType(7);
-//        List<CashDetailEntity> deductCashDetailList= getSearchEntity(CashDetailEntity.class, searchDeductCashDetailEntity);
-//        if(null == deductCashDetailList || deductCashDetailList.size()==0){
-//            throw new Exception();
-//        }
-//        CashDetailEntity deductCashDetailEntity = deductCashDetailList.get(0);
-//        Integer deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
-//        deleteEntity(deductCashDetailEntity);
+        searchDeductCashDetailEntity.setCompanyId(companyId);
+        searchDeductCashDetailEntity.setCalYm(calYM);
+        searchDeductCashDetailEntity.setCashType(7);
+        List<CashDetailEntity> deductCashDetailList= getSearchEntity(CashDetailEntity.class, searchDeductCashDetailEntity);
+        if(null == deductCashDetailList || deductCashDetailList.size()==0){
+            throw new Exception();
+        }
+        CashDetailEntity deductCashDetailEntity = deductCashDetailList.get(0);
+        Integer deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
+        deleteEntity(deductCashDetailEntity);
 
         //5.在prepay_deduct_master把錢加回去
-//        PrepayDeductMasterEntity searchPrepayDeductMaster = new PrepayDeductMasterEntity();
-//        searchPrepayDeductMaster.setCompanyId(companyId);
-//        List<PrepayDeductMasterEntity> prepayDeductMasterList= getSearchEntity(PrepayDeductMasterEntity.class, searchPrepayDeductMaster);
-//        if(null == prepayDeductMasterList || prepayDeductMasterList.size()==0){
-//            throw new Exception();
-//        }
-//        PrepayDeductMasterEntity prepayDeductMasterEntity = prepayDeductMasterList.get(0);
-//        Integer prepayDeductMasterId = prepayDeductMasterEntity.getPrepayDeductMasterId();
-//        Integer amount = prepayDeductMasterEntity.getAmount();
-//        amount = amount + deductMoney;
-//        prepayDeductMasterEntity.setAmount(amount);
-//        saveOrUpdateEntity(prepayDeductMasterEntity, prepayDeductMasterEntity.getPrepayDeductMasterId());
+        PrepayDeductMasterEntity searchPrepayDeductMaster = new PrepayDeductMasterEntity();
+        searchPrepayDeductMaster.setCompanyId(companyId);
+        List<PrepayDeductMasterEntity> prepayDeductMasterList= getSearchEntity(PrepayDeductMasterEntity.class, searchPrepayDeductMaster);
+        if(null == prepayDeductMasterList || prepayDeductMasterList.size()==0){
+            throw new Exception();
+        }
+        PrepayDeductMasterEntity prepayDeductMasterEntity = prepayDeductMasterList.get(0);
+        Integer prepayDeductMasterId = prepayDeductMasterEntity.getPrepayDeductMasterId();
+        Integer amount = prepayDeductMasterEntity.getAmount();
+        amount = amount + deductMoney;
+        prepayDeductMasterEntity.setAmount(amount);
+        saveOrUpdateEntity(prepayDeductMasterEntity, prepayDeductMasterEntity.getPrepayDeductMasterId());
 
         //6.在deduct_detail增加一筆還原(加回去)的紀錄
-//        DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
-//        deductDetailEntity.setPrepayDeductMasterId(prepayDeductMasterId);
-//        deductDetailEntity.setCashDetailId(0);
-//        deductDetailEntity.setCompanyId(companyId);
-//        deductDetailEntity.setCalYm(calYM);
-//        deductDetailEntity.setDeductType(6);
-//        deductDetailEntity.setMoney(deductMoney);
-//        saveEntity(deductDetailEntity);
+        DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
+        deductDetailEntity.setPrepayDeductMasterId(prepayDeductMasterId);
+        deductDetailEntity.setCashDetailId(0);
+        deductDetailEntity.setCompanyId(companyId);
+        deductDetailEntity.setCalYm(calYM);
+        deductDetailEntity.setDeductType(6);
+        deductDetailEntity.setMoney(deductMoney);
+        saveEntity(deductDetailEntity);
 
         return false;
     }
