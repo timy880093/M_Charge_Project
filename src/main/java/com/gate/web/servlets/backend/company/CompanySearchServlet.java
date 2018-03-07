@@ -24,7 +24,6 @@ public class CompanySearchServlet extends SearchServlet {
 	@Autowired
     CompanyChargeService companyChargeService;
 
-	
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 

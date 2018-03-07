@@ -4,6 +4,7 @@ import com.gateweb.charge.dao.InvoiceAmountSummaryReportDao;
 import com.gateweb.charge.service.InvoiceAmountSummaryReportFacade;
 import com.gateweb.einv.model.InvoiceAmountSummaryReportEntity;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import java.util.List;
  */
 @Service("invoiceAmountSummaryReportFacade")
 public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummaryReportFacade{
+
+    protected static final Logger logger = Logger.getLogger(InvoiceAmountSummaryReportFacadeImpl.class);
 
     @Autowired
     @Qualifier("einvInvoiceAmountSummaryReportDao")
@@ -46,7 +49,13 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
         }
         //寫入資料
         for(com.gateweb.charge.model.InvoiceAmountSummaryReportEntity result : resultList){
-            chargeInvoiceAmountSummaryReportDao.save(result);
+            com.gateweb.charge.model.InvoiceAmountSummaryReportEntity existsInvoiceAmountSummaryReportEntity
+                    =  chargeInvoiceAmountSummaryReportDao.get(result.getId());
+            if(existsInvoiceAmountSummaryReportEntity!=null){
+                logger.info(existsInvoiceAmountSummaryReportEntity.getId()+", 此筆記錄已存在。");
+            }else{
+                chargeInvoiceAmountSummaryReportDao.save(result);
+            }
         }
     }
 }

@@ -92,6 +92,9 @@ public class InvoiceAmountSummaryReportEntity implements Serializable {
 	@Column(name = "invoice_status")
 	protected Integer invoiceStatus;
 
+	@Column(name = "closed")
+	protected Boolean closed;
+
 	/**
 	 * 002
 	 * @return java.lang.String seller
@@ -247,7 +250,13 @@ public class InvoiceAmountSummaryReportEntity implements Serializable {
 		this.invoiceStatus = data;
 	}
 
+	public Boolean getClosed() {
+		return closed;
+	}
 
+	public void setClosed(Boolean closed) {
+		this.closed = closed;
+	}
 
 	/**
 	 *
@@ -281,6 +290,7 @@ public class InvoiceAmountSummaryReportEntity implements Serializable {
 		, String invoiceDate
 		, String buyer
 		, Integer invoiceStatus
+	    , Boolean closed
         ) {
 		this.setSeller(seller);
 		this.setAmount(amount);
@@ -293,9 +303,9 @@ public class InvoiceAmountSummaryReportEntity implements Serializable {
 		this.setInvoiceDate(invoiceDate);
 		this.setBuyer(buyer);
 		this.setInvoiceStatus(invoiceStatus);
+		this.setClosed(closed);
     }
 
-	
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
@@ -316,6 +326,7 @@ public class InvoiceAmountSummaryReportEntity implements Serializable {
 		.append("invoiceDate", this.invoiceDate)
 		.append("buyer", this.buyer)
 		.append("invoiceStatus", this.invoiceStatus)
+		.append("closed", this.closed)
 		.toString();
 	}	 
 
