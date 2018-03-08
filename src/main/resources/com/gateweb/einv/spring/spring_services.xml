@@ -40,8 +40,8 @@
 	<task:executor id="executor" pool-size="30" />
 	<task:scheduler id="scheduler" pool-size="60" />
 
-	<bean id="invoiceAmountSummaryReportService" class="com.gateweb.charge.service.impl.InvoiceAmountSummaryReportFacadeImpl" />
-	<task:scheduled-tasks>
-		<task:scheduled ref="invoiceAmountSummaryReportService" method="transactionInsertDataFromEinvDatabase" cron="* */60 * * * *"/>
-	</task:scheduled-tasks>
+	<!--<bean id="invoiceAmountSummaryReportService" class="com.gateweb.charge.service.impl.InvoiceAmountSummaryReportFacadeImpl" />-->
+	<!--<task:scheduled-tasks>-->
+		<!--<task:scheduled ref="invoiceAmountSummaryReportService" method="transactionInsertDataFromEinvDatabase" cron="* */60 * * * *"/>-->
+	<!--</task:scheduled-tasks>-->
 </beans>

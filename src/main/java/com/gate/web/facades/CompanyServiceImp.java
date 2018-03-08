@@ -2,7 +2,10 @@ package com.gate.web.facades;
 
 import java.util.Map;
 
+import com.gateweb.charge.repository.CompanyRepository;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +22,14 @@ import dao.CompanyDAO;
 
 @Service("companyService")
 public class CompanyServiceImp implements CompanyService{
+
+    private Log logger = LogFactory.getLog(this.getClass().getName());
 	
 	@Autowired
     CompanyDAO companyDAO;
+
+    @Autowired
+    CompanyRepository companyRepository;
 
     @Override
     public Integer insertCompany(CompanyBean companyBean) throws Exception {
@@ -91,6 +99,5 @@ public class CompanyServiceImp implements CompanyService{
     public Map getCompanyInfoByCompanyId(Integer companyId) throws Exception {
         return companyDAO.getCompanyInfo(companyId);
     }
-
 
 }

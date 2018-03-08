@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.utils.BeanConverterUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,12 @@ public class CompanyChargeDAO extends BaseDAO {
 
 	@Autowired
     CashDAO cashDAO;
+
     @Autowired
     CalCycleDAO calCycleDAO;
 
+    @Autowired
+    BeanConverterUtils beanConverterUtils;
 
     public List getChargeMonthList() throws Exception {
         String sql = "select charge_id,package_name from charge_mode_cycle where status = 1 ";
@@ -92,8 +96,7 @@ public class CompanyChargeDAO extends BaseDAO {
         }
 
         //新增charge_mode_cycle_add
-        ChargeModeCycleAddEntity addEntity = new ChargeModeCycleAddEntity();
-        BeanUtils.copyProperties(addEntity, bean);
+        ChargeModeCycleAddEntity addEntity = beanConverterUtils.companyChargeCycleBeanToChargeModeCycleEntity(bean);
         java.sql.Date sqlStartDate = new java.sql.Date(TimeUtils.getMonthOneDay(addEntity.getRealStartDate()).getTime()); //實際計算日起的當月的第一日，就是計算日起的日期
 
         java.util.Date sqlEndDate = addEntity.getRealEndDate();
