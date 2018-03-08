@@ -40,19 +40,18 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
 		java.lang.Integer companyId 
 	) throws DaoSystemException;
 
-	/*public CompanyEntity findByCompanyId(Long companyId);
+	public CompanyEntity findByCompanyId(Integer companyId);
 	
-	public Page<CompanyEntity> findByCompanyId(Long companyId, Pageable pageable);
-	
-	public boolean exists(Long companyId);
-	
-	public List<CompanyEntity> findAll();
-	
-	public List<CompanyEntity> findTop100ByCompanyId(Long companyId);
-	
-	public long count();*/
+//	public Page<CompanyEntity> findByCompanyId(Long companyId, Pageable pageable);
+//
+//	public boolean exists(Long companyId);
+//
+//	public List<CompanyEntity> findAll();
+//
+//	public List<CompanyEntity> findTop100ByCompanyId(Long companyId);
+//
+//	public long count();
 
-			
 }
 
 	

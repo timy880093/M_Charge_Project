@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.charge.vo.CashVO;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
@@ -99,6 +100,7 @@ public class CashDAO extends BaseDAO {
         return returnMap;
     }
 
+    //產生年月下拉選單。
     public List getYM() throws Exception {
         List list = new ArrayList<>();
         Calendar now = Calendar.getInstance();
@@ -926,11 +928,10 @@ public class CashDAO extends BaseDAO {
 
         }
 
-
         //3.把這筆cash_detail刪掉
         CashDetailEntity cashDetailEntity = (CashDetailEntity)getEntity(CashDetailEntity.class, cashDetailId);
         //BigDecimal noTaxInclusivePrice = cashDetailEntity.getNoTaxInclusivePrice();
-//undo 2017/12/1 robinson edit
+        //undo 2017/12/1 robinson edit
         //假如有公司預佣金部分須把code加回去
         Integer companyId = cashDetailEntity.getCompanyId();
         String calYM = cashDetailEntity.getCalYm();
@@ -1091,15 +1092,6 @@ public class CashDAO extends BaseDAO {
         return exeCnt;
     }
 
-
-
-
-
-
-
-
-
-
     //輸入自行要重寄的Email(帳單明細表)
     public Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception{
         int exeCnt = 0;
@@ -1118,16 +1110,6 @@ public class CashDAO extends BaseDAO {
      * 寄帳單明細
      * 需先出帳，才可以寄帳單。
      */
-
-
-
-
-
-
-
-
-
-
 
     public boolean sendMail(CashMasterEntity  cashMasterEntity) throws Exception{
         return sendMail(cashMasterEntity, null);
@@ -1408,7 +1390,6 @@ public class CashDAO extends BaseDAO {
 
         return getInvoiceItemList(selectOutList);
     }
-
 
     //匯出發票Excel的資料
     public List getInvoiceItemList(List masterList) throws Exception{
