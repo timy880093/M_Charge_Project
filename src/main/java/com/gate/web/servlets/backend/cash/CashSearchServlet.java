@@ -168,7 +168,7 @@ public class CashSearchServlet extends SearchServlet {
             String data = "success!!";
             try{
                 String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                int exeCnt = cashService.sendBillMail1(destJson);
+                int exeCnt = cashService.transactionSendBillMail1(destJson);
                 data += " total counts: " + exeCnt;
             }catch(Exception ex){
                 System.out.println(ex);

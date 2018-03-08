@@ -13,10 +13,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.charge.repository.CashMasterRepository;
 import com.gateweb.charge.vo.CashVO;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.gate.utils.NullConstants;
@@ -72,7 +74,7 @@ public class CashDAO extends BaseDAO {
                     parameters.add( Integer.parseInt((String)searchMap.get("userCompanyId")));
                 }
             }
-                       if (searchMap.containsKey("companyName")) {
+            if (searchMap.containsKey("companyName")) {
                 if (StringUtils.isNotEmpty(searchMap.get("companyName").toString())) {
                     whereSb.append(" and cp.name like ?");
                     parameters.add( "%"+(String)searchMap.get("companyName")+"%");
@@ -1072,41 +1074,6 @@ public class CashDAO extends BaseDAO {
         return exeCnt;
     }
 
-    //多筆-寄帳單明細表
-    public Integer transactionSendBillMail1(String masterIdAry) throws Exception{
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CashMasterBean>>(){}.getType();
-        List<CashMasterBean> cashMasterList = gson.fromJson(masterIdAry, collectionType);
-
-        int exeCnt = 0;
-        //找出所有要計算的MasterId
-        for(int i=0; i<cashMasterList.size(); i++) {
-            CashMasterBean bean = (CashMasterBean)cashMasterList.get(i);
-            Integer cashMasterId = (null == bean.getCashMasterId())?0:bean.getCashMasterId();
-            CashMasterEntity  cashMasterEntity = (CashMasterEntity)getEntity(CashMasterEntity.class, cashMasterId);
-            boolean isSend = sendMail(cashMasterEntity);
-            if(isSend){ //是否寄出
-                exeCnt++;//寄出
-                updateEmailDate(cashMasterEntity); //更新cash_master的email_sent_date(寄送email日期)
-            }
-        }
-        return exeCnt;
-    }
-
-    //輸入自行要重寄的Email(帳單明細表)
-    public Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception{
-        int exeCnt = 0;
-        //找出所有要計算的MasterId
-        Integer cashMasterId = (null == strCashMasterId)?0:Integer.parseInt(strCashMasterId);
-        CashMasterEntity  cashMasterEntity = (CashMasterEntity)getEntity(CashMasterEntity.class, cashMasterId);
-        boolean isSend = sendMail(cashMasterEntity, strReSendBillMail);
-        if(isSend){ //是否寄出
-            exeCnt++;//寄出
-            updateEmailDate(cashMasterEntity); //更新cash_master的email_sent_date(寄送email日期)
-        }
-        return exeCnt;
-    }
-
     /**
      * 寄帳單明細
      * 需先出帳，才可以寄帳單。
@@ -1145,16 +1112,13 @@ public class CashDAO extends BaseDAO {
                         .append("\n\n敬愛的 <font color=\"#FF0000\">" + cpName + "</font>您好：")
                         .append("\n\n以下資訊為貴公司"+ bankYm +"月份繳款帳單之明細，請查收。")
                         .append("\n<font color=\"#FF0000\">★近期將由<font face=\"標楷體\"><b><u>上海銀行</font></b></u>寄發繳款通知予貴公司，請留意email信箱，並惠予繳費。★</font>\n")
-                        .append("\n<font color=\"#FF0000\">★請於<font face=\"標楷體\"><b>編號處請輸入公司統編</font></b>即可進行費用繳納事宜。★</font>\n");
-//                        .append("\n<font color=\"FF0000\">★【詳細操作，請詳附件】★</font>\n");
+                        .append("\n<font color=\"#FF0000\">★請於<font face=\"標楷體\"><b>編號處請輸入公司統編</font></b>即可進行費用繳納事宜。★</font>\n")
+                        .append("\n<font color=\"FF0000\">★【詳細操作，請詳附件】★</font>\n");
 
                 content.append(" <table  style=\"border:2px black solid; border-collapse: collapse\" cellpadding=\"5\" border='2' > ")
                         .append(" <tr>")
                         .append(" <th>繳費類型</th><th>方案名稱</th><th>發票額度</th><th>含稅費用</th>")
                         .append(" </tr>");
-
-
-
 
                 int overIndex = -1;
                 int hasContext = 0; //如果一封email裡只有作廢的內容，那麼這封email不會被寄出去
@@ -1325,9 +1289,11 @@ public class CashDAO extends BaseDAO {
 
 //            SendEmailFileUtils.sendEmail(new String[]{email}, subject, content.toString());
                 if(null != reEmail){
-                    SendEmailFileUtils.sendEmail(reEmail, cpName , subject, content.toString());
+                    String[] reEmailList = new String[]{reEmail};
+                    String path = this.getClass().getResource("/").getPath()+"/tempFile"+"/scsbPayBillTutorial.pdf";
+                    SendEmailFileUtils.sendEmail(reEmailList, subject, content.toString(),path,"scsbPayBillTutorial.pdf");
                 }else{
-                    SendEmailFileUtils.sendEmail(email, cpName , subject, content.toString());
+                    SendEmailFileUtils.sendEmail(reEmail, cpName , subject, content.toString());
                 }
             }
             return true;

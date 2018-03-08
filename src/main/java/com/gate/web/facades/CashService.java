@@ -43,7 +43,6 @@ public interface CashService extends Service {
     public Integer sendBillMailYM(String outYM) throws Exception;
 
     public Integer sendBillMail(String masterIdAry) throws Exception;
-    public Integer sendBillMail1(String masterIdAry) throws Exception;
 
     public List getInvoiceItem(String ym) throws Exception;
 
@@ -54,4 +53,10 @@ public interface CashService extends Service {
     public boolean cancelPrepay(Integer cashDetailId) throws Exception;
 
     public boolean delCashMaster(Integer cashMasterId)throws Exception;
+
+    //多筆-寄帳單明細表
+    Integer transactionSendBillMail1(String masterIdAry) throws Exception;
+
+    //輸入自行要重寄的Email(帳單明細表)
+    Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception;
 }

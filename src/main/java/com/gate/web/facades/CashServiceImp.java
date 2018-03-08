@@ -117,9 +117,6 @@ public class CashServiceImp implements CashService {
     public Integer sendBillMail(String masterIdAry) throws Exception{
         return cashDAO.transactionSendBillMail(masterIdAry);
     }
-    public Integer sendBillMail1(String masterIdAry) throws Exception{
-        return cashDAO.transactionSendBillMail1(masterIdAry);
-    }
 
     public Integer transactionCancelIn(String strCashMasterId) throws Exception{
         return cashDAO.transactionCancelIn(strCashMasterId);
@@ -300,6 +297,44 @@ public class CashServiceImp implements CashService {
 
         return list;
     }
+
+    //多筆-寄帳單明細表
+    @Override
+    public Integer transactionSendBillMail1(String masterIdAry) throws Exception{
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<List<CashMasterBean>>(){}.getType();
+        List<CashMasterBean> cashMasterList = gson.fromJson(masterIdAry, collectionType);
+
+        int exeCnt = 0;
+        //找出所有要計算的MasterId
+        for(int i=0; i<cashMasterList.size(); i++) {
+            CashMasterBean bean = (CashMasterBean)cashMasterList.get(i);
+            Integer cashMasterId = (null == bean.getCashMasterId())?0:bean.getCashMasterId();
+            CashMasterEntity cashMasterEntity = (CashMasterEntity)cashDAO.getEntity(CashMasterEntity.class, cashMasterId);
+            boolean isSend = cashDAO.sendMail(cashMasterEntity);
+            if(isSend){ //是否寄出
+                exeCnt++;//寄出
+                cashDAO.updateEmailDate(cashMasterEntity); //更新cash_master的email_sent_date(寄送email日期)
+            }
+        }
+        return exeCnt;
+    }
+
+    //輸入自行要重寄的Email(帳單明細表)
+    @Override
+    public Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception{
+        int exeCnt = 0;
+        //找出所有要計算的MasterId
+        Integer cashMasterId = (null == strCashMasterId)?0:Integer.parseInt(strCashMasterId);
+        CashMasterEntity  cashMasterEntity = (CashMasterEntity)cashDAO.getEntity(CashMasterEntity.class, cashMasterId);
+        boolean isSend = cashDAO.sendMail(cashMasterEntity, strReSendBillMail);
+        if(isSend){ //是否寄出
+            exeCnt++;//寄出
+            cashDAO.updateEmailDate(cashMasterEntity); //更新cash_master的email_sent_date(寄送email日期)
+        }
+        return exeCnt;
+    }
+
 
     /**
      *

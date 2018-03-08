@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gate.web.facades.CashService;
 import com.gate.web.servlets.BaseServlet;
 
-import dao.CashDAO;
-
 /**
  * Created by emily on 2016/1/21.
  */
@@ -20,7 +18,6 @@ public class CashAjaxServlet extends BaseServlet {
 
 	@Autowired
     CashService cashService;
-
     
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -60,7 +57,7 @@ public class CashAjaxServlet extends BaseServlet {
             try {
                 String cashMasterId = ((String[]) requestParameterMap.get("cashMasterId"))[0];
                 String email =  ((String[]) requestParameterMap.get("email"))[0];
-                int exeCnt = new CashDAO().reSendBillEmail(cashMasterId, email);
+                int exeCnt = cashService.reSendBillEmail(cashMasterId, email);
                 if(exeCnt == 0){
                     data = "error";
                 }
