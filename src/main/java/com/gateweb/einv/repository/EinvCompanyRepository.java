@@ -18,9 +18,9 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  *
  * This class provides methods to populate DB Table of Company
  */
- @Repository("company2Repository")
-public interface Company2Repository extends JpaRepository<Company, Long>
-	, QuerydslPredicateExecutor<Company> ,Company2RepositoryCustom {
+ @Repository
+public interface EinvCompanyRepository extends JpaRepository<Company, Long>
+	, QuerydslPredicateExecutor<Company> ,EinvCompanyRepositoryCustom {
 	
     /**
      * Delete a record in Database.

@@ -19,7 +19,7 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  * This class provides methods to populate DB Table of Company
  */
 @NoRepositoryBean
-public interface Company2RepositoryCustom {
+public interface EinvCompanyRepositoryCustom {
 	
 
 	/**

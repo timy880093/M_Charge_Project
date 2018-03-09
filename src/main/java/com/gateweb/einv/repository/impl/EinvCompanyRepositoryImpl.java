@@ -16,8 +16,8 @@ import org.springframework.data.domain.Pageable;
 
 import com.gateweb.einv.model.Company;
 import com.gateweb.einv.model.QCompany;
-import com.gateweb.einv.repository.Company2Repository;
-import com.gateweb.einv.repository.Company2RepositoryCustom;
+import com.gateweb.einv.repository.EinvCompanyRepository;
+import com.gateweb.einv.repository.EinvCompanyRepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 
@@ -29,7 +29,7 @@ import com.querydsl.core.BooleanBuilder;
  * This class provides methods to populate DB Table of Company
  */
 //@Repository("companyRepositoryCustom")
-public class Company2RepositoryImpl implements Company2RepositoryCustom {
+public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 	
 	/**
 	 * <p>
@@ -46,10 +46,9 @@ public class Company2RepositoryImpl implements Company2RepositoryCustom {
 	}*/
 
 	@Autowired
-	@Qualifier("company2Repository")
-	Company2Repository company2Repository;
+	EinvCompanyRepository einvCompanyRepository;
 	
-	public Company2RepositoryImpl(){
+	public EinvCompanyRepositoryImpl(){
 	}
 	
 
@@ -144,7 +143,7 @@ public class Company2RepositoryImpl implements Company2RepositoryCustom {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
 		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(company2Repository.findAll(builder.getValue()));	
+		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -238,7 +237,7 @@ public class Company2RepositoryImpl implements Company2RepositoryCustom {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
 		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(company2Repository.findAll(builder.getValue(), pageable));	
+		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue(), pageable));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -338,7 +337,7 @@ public class Company2RepositoryImpl implements Company2RepositoryCustom {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
 		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(company2Repository.findAll(builder.getValue()));
+		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue()));
 	}		
 	
 	
@@ -434,7 +433,7 @@ public class Company2RepositoryImpl implements Company2RepositoryCustom {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
 		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(company2Repository.findAll(builder.getValue(), pageable));
+		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue(), pageable));
 	}	
 	
 	@SuppressWarnings("unchecked")
