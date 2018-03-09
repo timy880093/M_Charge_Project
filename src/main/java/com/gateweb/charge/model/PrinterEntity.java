@@ -93,7 +93,8 @@ public class PrinterEntity implements Serializable {
      * printer_id java.lang.Integer , PK     * @GeneratedValue(strategy = GenerationType.AUTO)
      */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//移除直接指定id的限制
 	@Column(name = "printer_id", unique = true, nullable = false)
 	protected java.lang.Integer printerId;
 	

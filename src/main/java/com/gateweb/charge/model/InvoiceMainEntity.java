@@ -153,7 +153,8 @@ public class InvoiceMainEntity implements Serializable {
      * invoice_id java.lang.Long , PK     * @GeneratedValue(strategy = GenerationType.AUTO)
      */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//移除指定ID的限制。
 	@Column(name = "invoice_id", unique = true, nullable = false)
 	protected java.lang.Long invoiceId;
 	

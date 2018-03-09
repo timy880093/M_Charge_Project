@@ -70,7 +70,8 @@ public class UserEntity implements UserDetails, Serializable {
 	     * user_id java.lang.Long , PK     * @GeneratedValue(strategy = GenerationType.AUTO)
 	     */
 		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
+//		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		//移除直接指定ID的限制。
 		@Column(name = "user_id", unique = true, nullable = false)
 		protected java.lang.Long userId;
 		
