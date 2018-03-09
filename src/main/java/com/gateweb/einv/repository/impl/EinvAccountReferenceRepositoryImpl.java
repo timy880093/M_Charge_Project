@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.gateweb.einv.model.AccountReference;
 import com.gateweb.einv.model.QAccountReference;
-import com.gateweb.einv.repository.AccountReference2Repository;
+import com.gateweb.einv.repository.EinvAccountReferenceRepository;
 import com.gateweb.einv.repository.AccountReference2RepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
@@ -29,7 +29,7 @@ import com.querydsl.core.BooleanBuilder;
  * This class provides methods to populate DB Table of AccountReference
  */
 //@Repository("accountReferenceRepositoryCustom")
-public class AccountReference2RepositoryImpl implements AccountReference2RepositoryCustom {
+public class EinvAccountReferenceRepositoryImpl implements AccountReference2RepositoryCustom {
 	
 	/**
 	 * <p>
@@ -46,10 +46,9 @@ public class AccountReference2RepositoryImpl implements AccountReference2Reposit
 	}*/
 
 	@Autowired
-	@Qualifier("accountReference2Repository")
-	AccountReference2Repository accountReference2Repository;
+	EinvAccountReferenceRepository einvAccountReferenceRepository;
 	
-	public AccountReference2RepositoryImpl(){
+	public EinvAccountReferenceRepositoryImpl(){
 	}
 	
 
@@ -73,7 +72,7 @@ public class AccountReference2RepositoryImpl implements AccountReference2Reposit
 		}	
 		
 		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(accountReference2Repository.findAll(builder.getValue()));	
+		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -96,7 +95,7 @@ public class AccountReference2RepositoryImpl implements AccountReference2Reposit
 		}	
 		
 		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(accountReference2Repository.findAll(builder.getValue(), pageable));	
+		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue(), pageable));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -125,7 +124,7 @@ public class AccountReference2RepositoryImpl implements AccountReference2Reposit
 		}	
 		
 		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(accountReference2Repository.findAll(builder.getValue()));
+		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue()));
 	}		
 	
 	
@@ -150,7 +149,7 @@ public class AccountReference2RepositoryImpl implements AccountReference2Reposit
 		}	
 		
 		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(accountReference2Repository.findAll(builder.getValue(), pageable));
+		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue(), pageable));
 	}	
 	
 	@SuppressWarnings("unchecked")

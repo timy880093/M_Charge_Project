@@ -18,8 +18,8 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  *
  * This class provides methods to populate DB Table of AccountReference
  */
- @Repository("accountReference2Repository")
-public interface AccountReference2Repository extends JpaRepository<AccountReference, Long>
+ @Repository
+public interface EinvAccountReferenceRepository extends JpaRepository<AccountReference, Long>
 	, QuerydslPredicateExecutor<AccountReference> ,AccountReference2RepositoryCustom {
 	
     /**
