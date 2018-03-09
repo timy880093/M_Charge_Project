@@ -21,7 +21,7 @@ import com.gateweb.einv.model.User;
 import com.gateweb.einv.repository.Company2Repository;
 import com.gateweb.einv.repository.InvoiceDetails2Repository;
 import com.gateweb.einv.repository.InvoiceMain2Repository;
-import com.gateweb.einv.repository.User2Repository;
+import com.gateweb.einv.repository.EinvUserRepository;
 import com.gateweb.einv.service.EinvFacade;
 /**
  * @author pkliu
@@ -57,7 +57,7 @@ public class EinvFacadeImpl implements EinvFacade {
 	 */
 	@Autowired
 	@Qualifier("user2Repository")
-	private User2Repository user2Repository = null;
+	private EinvUserRepository user2Repository = null;
 	
 	
 	/**
@@ -96,7 +96,7 @@ public class EinvFacadeImpl implements EinvFacade {
 	/**
 	 *
 	 */
-	public void setUser2Repository(User2Repository setRepository){
+	public void setUser2Repository(EinvUserRepository setRepository){
 		this.user2Repository = setRepository;
 	}
 	

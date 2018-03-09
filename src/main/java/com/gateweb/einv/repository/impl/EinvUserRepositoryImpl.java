@@ -10,14 +10,13 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.gateweb.einv.model.QUser;
 import com.gateweb.einv.model.User;
-import com.gateweb.einv.repository.User2Repository;
-import com.gateweb.einv.repository.User2RepositoryCustom;
+import com.gateweb.einv.repository.EinvUserRepository;
+import com.gateweb.einv.repository.EinvUserRepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 
@@ -29,7 +28,7 @@ import com.querydsl.core.BooleanBuilder;
  * This class provides methods to populate DB Table of User
  */
 //@Repository("userRepositoryCustom")
-public class User2RepositoryImpl implements User2RepositoryCustom {
+public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 	
 	/**
 	 * <p>
@@ -46,9 +45,9 @@ public class User2RepositoryImpl implements User2RepositoryCustom {
 	}*/
 
 	@Autowired
-	User2Repository user2Repository;
+	EinvUserRepository einvUserRepository;
 	
-	public User2RepositoryImpl(){
+	public EinvUserRepositoryImpl(){
 	}
 	
 
@@ -113,7 +112,7 @@ public class User2RepositoryImpl implements User2RepositoryCustom {
 			builder.and(user.email.equalsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
 		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(user2Repository.findAll(builder.getValue()));	
+		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -177,7 +176,7 @@ public class User2RepositoryImpl implements User2RepositoryCustom {
 			builder.and(user.email.equalsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
 		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(user2Repository.findAll(builder.getValue(), pageable));	
+		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue(), pageable));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -247,7 +246,7 @@ public class User2RepositoryImpl implements User2RepositoryCustom {
 			builder.and(user.email.containsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
 		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(user2Repository.findAll(builder.getValue()));
+		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue()));
 	}		
 	
 	
@@ -313,7 +312,7 @@ public class User2RepositoryImpl implements User2RepositoryCustom {
 			builder.and(user.email.containsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
 		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(user2Repository.findAll(builder.getValue(), pageable));
+		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue(), pageable));
 	}	
 	
 	@SuppressWarnings("unchecked")

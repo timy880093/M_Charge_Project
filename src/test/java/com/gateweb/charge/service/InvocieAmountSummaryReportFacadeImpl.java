@@ -1,4 +1,4 @@
-package com.gateweb.com.gateweb.charge.service;
+package com.gateweb.charge.service;
 
 import com.gateweb.charge.service.InvoiceAmountSummaryReportFacade;
 import org.junit.Test;

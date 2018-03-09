@@ -18,9 +18,9 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  *
  * This class provides methods to populate DB Table of User
  */
- @Repository("user2Repository")
-public interface User2Repository extends JpaRepository<User, Long>
-	, QuerydslPredicateExecutor<User> ,User2RepositoryCustom {
+ @Repository
+public interface EinvUserRepository extends JpaRepository<User, Long>
+	, QuerydslPredicateExecutor<User> ,EinvUserRepositoryCustom {
 	
     /**
      * Delete a record in Database.

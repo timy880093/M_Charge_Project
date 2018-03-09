@@ -19,7 +19,7 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  * This class provides methods to populate DB Table of User
  */
 @NoRepositoryBean
-public interface User2RepositoryCustom {
+public interface EinvUserRepositoryCustom {
 	
 
 	/**
