@@ -12,14 +12,13 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  * @author Giulio
@@ -77,8 +76,7 @@ public class EncryptMessage {
         byte[] raw = cipher.doFinal(stringBytes);
 
         // converts to base64 for easier display.
-        BASE64Encoder encoder = new BASE64Encoder();
-        String base64 = encoder.encode(raw);
+        String base64 = Base64.getEncoder().encodeToString(raw);
 
         return base64;
     }
@@ -92,8 +90,7 @@ public class EncryptMessage {
         cipher.init(Cipher.DECRYPT_MODE, key);
 
         //decode the BASE64 coded message
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] raw = decoder.decodeBuffer(encrypted);
+        byte[] raw = Base64.getDecoder().decode(encrypted);
 
         //decode the message
         byte[] stringBytes = cipher.doFinal(raw);

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.gateweb.einv.model.InvoiceMain;
 import com.meshinnovation.db.dao.exception.DaoSystemException;
 
+import java.util.List;
+
 /**
  * 
  * @author pkliu
@@ -19,8 +21,8 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  * This class provides methods to populate DB Table of InvoiceMain
  */
  @Repository("invoiceMain2Repository")
-public interface InvoiceMain2Repository extends JpaRepository<InvoiceMain, Long>
-	, QuerydslPredicateExecutor<InvoiceMain> ,InvoiceMain2RepositoryCustom {
+public interface EinvInvoiceMainRepository extends JpaRepository<InvoiceMain, Long>
+	, QuerydslPredicateExecutor<InvoiceMain> ,EinvInvoiceMainRepositoryCustom {
 	
     /**
      * Delete a record in Database.
@@ -43,7 +45,8 @@ public interface InvoiceMain2Repository extends JpaRepository<InvoiceMain, Long>
 //	
 //	public long count();
 
-			
+	public List<InvoiceMain> findTop100ByCYearMonth(String yearMonth);
+
 }
 
 	

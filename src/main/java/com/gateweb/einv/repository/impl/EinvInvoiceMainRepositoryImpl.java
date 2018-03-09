@@ -10,14 +10,13 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.gateweb.einv.model.InvoiceMain;
 import com.gateweb.einv.model.QInvoiceMain;
-import com.gateweb.einv.repository.InvoiceMain2Repository;
-import com.gateweb.einv.repository.InvoiceMain2RepositoryCustom;
+import com.gateweb.einv.repository.EinvInvoiceMainRepository;
+import com.gateweb.einv.repository.EinvInvoiceMainRepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 
@@ -29,7 +28,7 @@ import com.querydsl.core.BooleanBuilder;
  * This class provides methods to populate DB Table of InvoiceMain
  */
 //@Repository("invoiceMainRepositoryCustom")
-public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom {
+public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryCustom {
 	
 	/**
 	 * <p>
@@ -46,10 +45,9 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 	}*/
 
 	@Autowired
-	@Qualifier("invoiceMain2Repository")
-	InvoiceMain2Repository invoiceMain2Repository;
+	EinvInvoiceMainRepository einvInvoiceMainRepository;
 	
-	public InvoiceMain2RepositoryImpl(){
+	public EinvInvoiceMainRepositoryImpl(){
 	}
 	
 
@@ -227,8 +225,8 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 		if ( vo.getInvoiceDate() != null && !"".equals(vo.getInvoiceDate())) {
 			builder.and(invoiceMain.invoiceDate.equalsIgnoreCase(vo.getInvoiceDate())); //java.lang.String
 		}
-		if ( vo.getCMemberNumer() != null && !"".equals(vo.getCMemberNumer())) {
-			builder.and(invoiceMain.cMemberNumer.equalsIgnoreCase(vo.getCMemberNumer())); //java.lang.String
+		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
+			builder.and(invoiceMain.cMemberNumber.equalsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
 		}
 		if ( vo.getSellerTelephoneNumber() != null && !"".equals(vo.getSellerTelephoneNumber())) {
 			builder.and(invoiceMain.sellerTelephoneNumber.equalsIgnoreCase(vo.getSellerTelephoneNumber())); //java.lang.String
@@ -279,7 +277,7 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 			builder.and(invoiceMain.sellerCustomerNumber.equalsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
 		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceMain2Repository.findAll(builder.getValue()));	
+		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -456,8 +454,8 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 		if ( vo.getInvoiceDate() != null && !"".equals(vo.getInvoiceDate())) {
 			builder.and(invoiceMain.invoiceDate.equalsIgnoreCase(vo.getInvoiceDate())); //java.lang.String
 		}
-		if ( vo.getCMemberNumer() != null && !"".equals(vo.getCMemberNumer())) {
-			builder.and(invoiceMain.cMemberNumer.equalsIgnoreCase(vo.getCMemberNumer())); //java.lang.String
+		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
+			builder.and(invoiceMain.cMemberNumber.equalsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
 		}
 		if ( vo.getSellerTelephoneNumber() != null && !"".equals(vo.getSellerTelephoneNumber())) {
 			builder.and(invoiceMain.sellerTelephoneNumber.equalsIgnoreCase(vo.getSellerTelephoneNumber())); //java.lang.String
@@ -508,7 +506,7 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 			builder.and(invoiceMain.sellerCustomerNumber.equalsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
 		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceMain2Repository.findAll(builder.getValue(), pageable));	
+		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue(), pageable));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -691,8 +689,8 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 		if ( vo.getInvoiceDate() != null && !"".equals(vo.getInvoiceDate())) {
 			builder.and(invoiceMain.invoiceDate.containsIgnoreCase(vo.getInvoiceDate())); //java.lang.String
 		}
-		if ( vo.getCMemberNumer() != null && !"".equals(vo.getCMemberNumer())) {
-			builder.and(invoiceMain.cMemberNumer.containsIgnoreCase(vo.getCMemberNumer())); //java.lang.String
+		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
+			builder.and(invoiceMain.cMemberNumber.containsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
 		}
 		if ( vo.getSellerTelephoneNumber() != null && !"".equals(vo.getSellerTelephoneNumber())) {
 			builder.and(invoiceMain.sellerTelephoneNumber.containsIgnoreCase(vo.getSellerTelephoneNumber())); //java.lang.String
@@ -743,7 +741,7 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 			builder.and(invoiceMain.sellerCustomerNumber.containsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
 		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceMain2Repository.findAll(builder.getValue()));
+		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue()));
 	}		
 	
 	
@@ -922,8 +920,8 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 		if ( vo.getInvoiceDate() != null && !"".equals(vo.getInvoiceDate())) {
 			builder.and(invoiceMain.invoiceDate.containsIgnoreCase(vo.getInvoiceDate())); //java.lang.String
 		}
-		if ( vo.getCMemberNumer() != null && !"".equals(vo.getCMemberNumer())) {
-			builder.and(invoiceMain.cMemberNumer.containsIgnoreCase(vo.getCMemberNumer())); //java.lang.String
+		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
+			builder.and(invoiceMain.cMemberNumber.containsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
 		}
 		if ( vo.getSellerTelephoneNumber() != null && !"".equals(vo.getSellerTelephoneNumber())) {
 			builder.and(invoiceMain.sellerTelephoneNumber.containsIgnoreCase(vo.getSellerTelephoneNumber())); //java.lang.String
@@ -974,7 +972,7 @@ public class InvoiceMain2RepositoryImpl implements InvoiceMain2RepositoryCustom 
 			builder.and(invoiceMain.sellerCustomerNumber.containsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
 		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceMain2Repository.findAll(builder.getValue(), pageable));
+		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue(), pageable));
 	}	
 	
 	@SuppressWarnings("unchecked")

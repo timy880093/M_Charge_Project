@@ -19,7 +19,7 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  * This class provides methods to populate DB Table of InvoiceMain
  */
 @NoRepositoryBean
-public interface InvoiceMain2RepositoryCustom {
+public interface EinvInvoiceMainRepositoryCustom {
 	
 
 	/**

@@ -379,10 +379,10 @@ public class InvoiceMain extends BaseObject{
 	protected java.lang.String invoiceDate;
 	
 	/**
-	 * c_member_numer
+	 * c_member_number
 	 */
-	@Column(name = "c_member_numer")
-	protected java.lang.String cMemberNumer;
+	@Column(name = "c_member_number")
+	protected java.lang.String cMemberNumber;
 	
 	/**
 	 * seller_telephone_number
@@ -1270,17 +1270,17 @@ public class InvoiceMain extends BaseObject{
 	}	
 	/**
 	 * 002
-	 * @return java.lang.String cMemberNumer
+	 * @return java.lang.String cMemberNumber
 	 */
-	public java.lang.String getCMemberNumer() {
-		return this.cMemberNumer;
+	public java.lang.String getCMemberNumber() {
+		return this.cMemberNumber;
 	}
 	
 	/** 0001
-	 * @param data Set the cMemberNumer
+	 * @param data Set the cMemberNumber
 	 */	
-	public void setCMemberNumer(java.lang.String data) {
-		this.cMemberNumer = data;
+	public void setCMemberNumber(java.lang.String data) {
+		this.cMemberNumber = data;
 	}	
 	/**
 	 * 002
@@ -1573,7 +1573,7 @@ public class InvoiceMain extends BaseObject{
 	 * @param cPosRemark4 
 	 * @param buyerCustomerNumber 
 	 * @param invoiceDate 
-	 * @param cMemberNumer 
+	 * @param cMemberNumber
 	 * @param sellerTelephoneNumber 
 	 * @param invoiceType 
 	 * @param currency 
@@ -1648,7 +1648,7 @@ public class InvoiceMain extends BaseObject{
 		, java.lang.String cPosRemark4 
 		, java.lang.String buyerCustomerNumber 
 		, java.lang.String invoiceDate 
-		, java.lang.String cMemberNumer 
+		, java.lang.String cMemberNumber
 		, java.lang.String sellerTelephoneNumber 
 		, java.lang.String invoiceType 
 		, java.lang.String currency 
@@ -1722,7 +1722,7 @@ public class InvoiceMain extends BaseObject{
 		this.setCPosRemark4(cPosRemark4);
 		this.setBuyerCustomerNumber(buyerCustomerNumber);
 		this.setInvoiceDate(invoiceDate);
-		this.setCMemberNumer(cMemberNumer);
+		this.setCMemberNumber(cMemberNumber);
 		this.setSellerTelephoneNumber(sellerTelephoneNumber);
 		this.setInvoiceType(invoiceType);
 		this.setCurrency(currency);
