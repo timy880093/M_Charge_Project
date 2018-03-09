@@ -10,14 +10,13 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.gateweb.einv.model.InvoiceDetails;
 import com.gateweb.einv.model.QInvoiceDetails;
-import com.gateweb.einv.repository.InvoiceDetails2Repository;
-import com.gateweb.einv.repository.InvoiceDetails2RepositoryCustom;
+import com.gateweb.einv.repository.EinvInvoiceDetailsRepository;
+import com.gateweb.einv.repository.EinvInvoiceDetailsRepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 
@@ -29,7 +28,7 @@ import com.querydsl.core.BooleanBuilder;
  * This class provides methods to populate DB Table of InvoiceDetails
  */
 //@Repository("invoiceDetailsRepositoryCustom")
-public class InvoiceDetails2RepositoryImpl implements InvoiceDetails2RepositoryCustom {
+public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepositoryCustom {
 	
 	/**
 	 * <p>
@@ -46,9 +45,9 @@ public class InvoiceDetails2RepositoryImpl implements InvoiceDetails2RepositoryC
 	}*/
 
 	@Autowired
-	InvoiceDetails2Repository invoiceDetails2Repository;
+	EinvInvoiceDetailsRepository einvInvoiceDetailsRepository;
 	
-	public InvoiceDetails2RepositoryImpl(){
+	public EinvInvoiceDetailsRepositoryImpl(){
 	}
 	
 
@@ -137,7 +136,7 @@ public class InvoiceDetails2RepositoryImpl implements InvoiceDetails2RepositoryC
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
 		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceDetails2Repository.findAll(builder.getValue()));	
+		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -225,7 +224,7 @@ public class InvoiceDetails2RepositoryImpl implements InvoiceDetails2RepositoryC
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
 		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceDetails2Repository.findAll(builder.getValue(), pageable));	
+		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue(), pageable));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -319,7 +318,7 @@ public class InvoiceDetails2RepositoryImpl implements InvoiceDetails2RepositoryC
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
 		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceDetails2Repository.findAll(builder.getValue()));
+		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue()));
 	}		
 	
 	
@@ -409,7 +408,7 @@ public class InvoiceDetails2RepositoryImpl implements InvoiceDetails2RepositoryC
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
 		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
-		return Lists.newArrayList(invoiceDetails2Repository.findAll(builder.getValue(), pageable));
+		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue(), pageable));
 	}	
 	
 	@SuppressWarnings("unchecked")

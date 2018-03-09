@@ -20,7 +20,7 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  */
  @Repository
 public interface EinvAccountReferenceRepository extends JpaRepository<AccountReference, Long>
-	, QuerydslPredicateExecutor<AccountReference> ,AccountReference2RepositoryCustom {
+	, QuerydslPredicateExecutor<AccountReference> ,EinvAccountReferenceRepositoryCustom {
 	
     /**
      * Delete a record in Database.

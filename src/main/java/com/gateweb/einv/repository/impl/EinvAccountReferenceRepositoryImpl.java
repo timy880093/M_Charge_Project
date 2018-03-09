@@ -10,14 +10,13 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.gateweb.einv.model.AccountReference;
 import com.gateweb.einv.model.QAccountReference;
 import com.gateweb.einv.repository.EinvAccountReferenceRepository;
-import com.gateweb.einv.repository.AccountReference2RepositoryCustom;
+import com.gateweb.einv.repository.EinvAccountReferenceRepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 
@@ -29,7 +28,7 @@ import com.querydsl.core.BooleanBuilder;
  * This class provides methods to populate DB Table of AccountReference
  */
 //@Repository("accountReferenceRepositoryCustom")
-public class EinvAccountReferenceRepositoryImpl implements AccountReference2RepositoryCustom {
+public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceRepositoryCustom {
 	
 	/**
 	 * <p>

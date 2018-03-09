@@ -18,9 +18,9 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  *
  * This class provides methods to populate DB Table of InvoiceDetails
  */
-@Repository("invoiceDetails2Repository")
-public interface InvoiceDetails2Repository extends JpaRepository<InvoiceDetails, Long>
-	, QuerydslPredicateExecutor<InvoiceDetails> ,InvoiceDetails2RepositoryCustom {
+@Repository
+public interface EinvInvoiceDetailsRepository extends JpaRepository<InvoiceDetails, Long>
+	, QuerydslPredicateExecutor<InvoiceDetails> ,EinvInvoiceDetailsRepositoryCustom {
 	
     /**
      * Delete a record in Database.

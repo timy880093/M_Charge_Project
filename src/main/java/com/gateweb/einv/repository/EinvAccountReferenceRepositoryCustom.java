@@ -19,7 +19,7 @@ import com.meshinnovation.db.dao.exception.DaoSystemException;
  * This class provides methods to populate DB Table of AccountReference
  */
 @NoRepositoryBean
-public interface AccountReference2RepositoryCustom {
+public interface EinvAccountReferenceRepositoryCustom {
 	
 
 	/**
