@@ -35,20 +35,25 @@ public class SyncUserDataFacadeImpl implements SyncUserDataFacade {
         for(User user : einvUserList){
             UserEntity existsUserEntity = userRepository.findByUserId(user.getUserId());
             if(existsUserEntity!=null){
-                BeanUtils.copyProperties(existsUserEntity,user);
-                logger.info("Update User :" + existsUserEntity.getUserId());
+                transactionUpdateUserDataFromEinvDatabase(existsUserEntity,user);
             }else{
-                existsUserEntity = new UserEntity();
-                BeanUtils.copyProperties(existsUserEntity,user);
-                logger.info("Insert User :" + user.getUserId());
+                transactionInsertUserDataFromEinvDatabase(user);
             }
-            //處理account衝突的情況。
-            UserEntity collisionEntity = userRepository.findByAccount(user.getAccount());
-            if(collisionEntity!=null){
-                //刪除原來的帳號
-                userRepository.deleteByUserId(collisionEntity.getUserId());
-            }
-            userRepository.save(existsUserEntity);
         }
     }
+
+    public void transactionUpdateUserDataFromEinvDatabase(UserEntity existsUserEntity, User einvUserEntity) throws InvocationTargetException, IllegalAccessException {
+        BeanUtils.copyProperties(existsUserEntity,einvUserEntity);
+        logger.info("Update User :" + existsUserEntity.getUserId());
+        userRepository.save(existsUserEntity);
+    }
+
+    public void transactionInsertUserDataFromEinvDatabase(User einvUserEntity) throws InvocationTargetException, IllegalAccessException {
+        UserEntity newUserEntity = new UserEntity();
+        BeanUtils.copyProperties(newUserEntity,einvUserEntity);
+        logger.info("Insert User :" + newUserEntity.getUserId());
+        userRepository.save(newUserEntity);
+    }
+
+
 }

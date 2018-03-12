@@ -32,8 +32,7 @@ public class PrepayDeductEditServlet extends MvcBaseServlet {
 
 	@Autowired
     PrepayDeductService prepayDeductService;
-	
-    @Override
+
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
         Object methodObj = requestParameterMap.get("method");
         String method = "";
