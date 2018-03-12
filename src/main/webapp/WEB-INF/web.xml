@@ -75,7 +75,20 @@
         <!-- apply Spring Security authentication to error-pages -->
         <dispatcher>ERROR</dispatcher>
 	</filter-mapping>
-
+	<servlet>
+	    <servlet-name>mvc</servlet-name>
+	    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	    <init-param>
+	      <param-name>contextConfigLocation</param-name>
+	      <param-value>classpath:com/gateweb/einv/spring/mvc-servlet.xml</param-value>
+	    </init-param>
+	    <load-on-startup>1</load-on-startup>
+	    <multipart-config/>
+	  </servlet>
+	  <servlet-mapping>
+	    <servlet-name>mvc</servlet-name>
+	    <url-pattern>/</url-pattern>
+	  </servlet-mapping>
 <!--      <filter>
         <filter-name>LogDataFilter</filter-name>
         <filter-class>com.gate.web.filters.LogDataFilter</filter-class>

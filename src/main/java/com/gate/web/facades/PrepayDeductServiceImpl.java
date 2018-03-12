@@ -27,8 +27,8 @@ public class PrepayDeductServiceImpl implements PrepayDeductService{
         return returnMap;
     }
 
-    public Integer transactionCreatePdm(String calYM) throws Exception {
-        return prepayDeductDAO.transactionCreatePdm(calYM);
+    public Integer transactionCreatePdm(Integer strCompanyId) throws Exception {
+        return prepayDeductDAO.transactionCreatePdm(strCompanyId);
     }
 
     public PrepayDeductMasterEntity getPrepayDeductMaster(Integer companyId) throws Exception{

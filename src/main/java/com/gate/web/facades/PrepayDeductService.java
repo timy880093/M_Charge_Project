@@ -15,7 +15,7 @@ public interface PrepayDeductService extends Service{
 
     public Map getPrepayDeductCompanyList(QuerySettingVO querySettingVO) throws Exception;
 
-    public Integer transactionCreatePdm(String calYM) throws Exception;
+    public Integer transactionCreatePdm(Integer companyId) throws Exception;
 
     public PrepayDeductMasterEntity getPrepayDeductMaster(Integer companyId) throws Exception;
 

@@ -57,10 +57,9 @@ public class PrepayDeductDAO extends BaseDAO{
     }
 
     //新增使用預用金的用戶
-    public Integer transactionCreatePdm(String strCompanyId) throws Exception {
+    public Integer transactionCreatePdm(Integer companyId) throws Exception {
         Integer cnt = 0;  //計算了幾筆
-        Integer companyId = Integer.parseInt(strCompanyId);
-
+       
         PrepayDeductMasterEntity entity = new PrepayDeductMasterEntity();
         entity.setCompanyId(companyId);
         entity.setAmount(0); //總預用金

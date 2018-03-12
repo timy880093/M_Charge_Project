@@ -1,0 +1,113 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+   xmlns:context="http://www.springframework.org/schema/context"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:mvc="http://www.springframework.org/schema/mvc"
+   xsi:schemaLocation="
+   http://www.springframework.org/schema/beans     
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/mvc 
+   http://www.springframework.org/schema/mvc/spring-mvc.xsd 
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context.xsd">
+
+   <context:component-scan base-package="com.gate.web.servlets" />  
+   <mvc:annotation-driven/>
+<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="prefix" value="/backendAdmin/" />
+      <property name="suffix" value=".jsp" />
+   </bean> -->
+   
+   <bean id="appPropertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:app.properties</value>
+			</list>
+		</property>
+	</bean>
+   
+   <!-- resource mapping -->
+	<mvc:resources mapping="/backendAdmin/images/**" location="/backendAdmin/images/" />
+	
+	<mvc:resources mapping="/backendAdmin/css/**" location="/backendAdmin/css/" />
+	
+	<mvc:resources mapping="/backendAdmin/js/**" location="/backendAdmin/js/" />
+	
+	<mvc:resources mapping="/backendAdmin/template/**" location="/backendAdmin/template/" />
+	
+	<mvc:resources mapping="/backendAdmin/dist/plugins/**" location="/backendAdmin/dist/plugins/" />
+	
+	<mvc:resources mapping="/backendAdmin/dist/**" location="/backendAdmin/dist/" />
+	
+	<mvc:resources mapping="/images/**" location="/images/" />
+	
+	<mvc:resources mapping="/css/**" location="/css/" />
+	
+	<mvc:resources mapping="/fonts/**" location="/fonts" />
+	
+	<mvc:resources mapping="/syncServer/**" location="/syncServer/" />
+	
+	<mvc:resources mapping="/testServer/**" location="/testServer/" />
+	
+	<mvc:resources mapping="/register/**" location="/register/" />
+	
+	<mvc:resources mapping="/nonAuthPage/**" location="/nonAuthPage/" />
+	
+	<mvc:resources mapping="/js/**" location="/js/" />
+	
+	<mvc:resources mapping="/include/**" location="/include/" />
+	
+	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
+
+	<mvc:resources mapping="/download/**" location="/download/" />
+	
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+	
+<!-- 	<bean name="remoteUserService2" class="com.gateweb.einv.service.impl.UserFacadeImpl2" />
+	<bean name="/remoting/UserService2" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="remoteUserService2"/>
+        <property name="serviceInterface" value="com.gateweb.einv.service.UserFacade2"/>
+    </bean> -->
+	
+	<!-- 
+	<mvc:interceptors>
+	    <mvc:interceptor>
+	        <mvc:mapping path="/j_spring_security_logout" />
+	        <bean class="com.gate.web.servlets.BeforeLogoutInterceptor" />
+	    </mvc:interceptor>
+	</mvc:interceptors> -->
+	<!-- resource bundle -->
+	<bean id="messageSource" parent="baseMessageSource" />
+
+	<!-- exception mappgin -->
+	<!-- <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
+	<property name="defaultErrorView" value="/backendAdmin/exception.jsp"/>
+	<property name="exceptionAttribute" value="ex"></property>  
+    <property name="exceptionMappings">  
+        <props>  
+            <prop key="NumberFormatException">/backendAdmin/exception.jsp</prop>
+            <prop key="NullPointerException">/backendAdmin/exception.jsp</prop>
+            <prop key="IOException">/backendAdmin/exception.jsp</prop>  
+            <prop key="java.sql.SQLException">/backendAdmin/exception.jsp</prop>
+    		<prop key="ServletException">/backendAdmin/exception.jsp</prop>
+    		<prop key="FormValidationException">/backendAdmin/exception.jsp</prop>
+    		<prop key="ReturnPathException">/backendAdmin/exception.jsp</prop>
+    		<prop key="Exception">/backendAdmin/exception.jsp</prop>
+    		
+    		<prop key="EinvSysException">/backendAdmin/applicationException.jsp</prop>
+    		
+   
+        </props>  
+    </property>  
+    
+    <property name="statusCodes">
+        <props>  
+            <prop key="exception">500</prop>
+            <prop key="applicationException">500</prop>
+            <prop key="error">503</prop>  
+        </props>  
+    </property>  
+    <property name="defaultStatusCode" value="404"/></bean>  
+ -->
+</beans>

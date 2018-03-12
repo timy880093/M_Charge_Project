@@ -85,7 +85,8 @@ public abstract class MvcBaseServlet {
     protected static final String POP_TEMPLATE_RELOAD_PAGE = "/backendAdmin/template/pop_templateWithReload.jsp";
 
     protected static final String IMPORT_TEMPLATE_PAGE = "/backendAdmin/template/import_template.jsp";
-    public static final String TIME_LIMIT = SystemConfig.getInstance().getParameter("servlet_log_time_limit");
+    //public static final String TIME_LIMIT = SystemConfig.getInstance().getParameter("servlet_log_time_limit");
+    public static final String TIME_LIMIT = "180";
     
     public static Integer ROLE_ADMIN = 100;
     public static Integer ROLE_FIRM_USER = 300;
