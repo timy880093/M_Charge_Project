@@ -176,7 +176,7 @@ public class PrepayDeductSearchServlet extends MvcBaseServlet {
 
 		QuerySettingVO querySettingVO = new QuerySettingVO();
 		Map searchMap = new HashMap();
-		if (searchField != null) {
+		if (searchField != null && searchString != null && searchField.size() == searchString.size()) {
 			for (int i = 0; i < searchField.size(); i++) {
 				searchMap.put(searchField.get(i), java.net.URLDecoder.decode(searchString.get(i), "UTF-8"));
 			}

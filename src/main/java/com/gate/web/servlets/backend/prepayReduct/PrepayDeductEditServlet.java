@@ -7,10 +7,13 @@ import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gate.utils.MapBeanConverterUtils;
 import com.gate.web.facades.PrepayDeductService;
 import com.gate.web.facades.PrepayDeductServiceImpl;
+import com.gate.web.servlets.MvcBaseServlet;
 import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.gateweb.charge.model.PrepayDetailEntity;
@@ -19,8 +22,13 @@ import com.gateweb.charge.model.PrepayDetailEntity;
  * Created by emily on 2017/5/23.
  */
 
-@WebServlet(urlPatterns = "/backendAdmin/prepayDeductEditServlet")
-public class PrepayDeductEditServlet extends BackendPopTemplateServlet {
+@RequestMapping("/backendAdmin/prepayDeductEditServlet")
+@Controller
+public class PrepayDeductEditServlet extends MvcBaseServlet {
+	
+	private static final String DEFAULT_EDIT_DISPATCH_PAGE = "/backendAdmin/prepayDeduct/edit_prepay.jsp";
+	private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/prepayDeduct/prepayDeductCompany_list.jsp";
+	private static final String DEFAULT_CREATE_DISPATCH_PAGE = "/backendAdmin/prepayDeduct/item_create.jsp";
 
 	@Autowired
     PrepayDeductService prepayDeductService;

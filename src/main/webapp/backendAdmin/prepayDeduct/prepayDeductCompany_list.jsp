@@ -66,6 +66,13 @@
                     search: true
                 });
             },
+            loadonce: false,
+            loadError: function(xhr, textStatus, errorThrown)  {
+                var error_msg = xhr.responseText;
+                var msg = "伺服器回應錯誤，搜尋失敗，請稍後再試.....";
+                msg += '\n\nstatus :' + textStatus;
+                alert(msg);
+            },
             loadComplete:function(){
 
                 //查詢後如無資料，請show"查無資料"的訊息。
