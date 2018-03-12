@@ -7,5 +7,5 @@ import java.lang.reflect.InvocationTargetException;
  */
 public interface SyncCompanyDataFacade {
 
-    void transactionInsertCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException;
+    void transactionSyncCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException;
 }

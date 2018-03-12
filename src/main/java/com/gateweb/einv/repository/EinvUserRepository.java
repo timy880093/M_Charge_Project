@@ -31,7 +31,7 @@ public interface EinvUserRepository extends JpaRepository<User, Long>
 		java.lang.Long userId 
 	) throws DaoSystemException;
 
-//	public User findByUserId(Long userId);
+	public User findByUserId(Long userId);
 //	
 //	public Page<User> findByUserId(Long userId, Pageable pageable);
 //	

@@ -2946,7 +2946,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			+"userId = "+ userId
 		);	
 		try {
-			data = userRepository.findById(userId);	
+			data = userRepository.findById(userId);
 			if(data.isPresent()) {
 				return data.get();
 			}

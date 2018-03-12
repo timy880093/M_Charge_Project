@@ -13,14 +13,13 @@ import java.lang.reflect.InvocationTargetException;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:com/gateweb/einv/spring/spring_web.xml"})
-public class SyncCompanyDataFacadeImplTest {
-
+public class SyncUserDataFacadeImplTest {
     @Autowired
-    SyncCompanyDataFacade syncCompanyDataFacade;
+    SyncUserDataFacade syncUserDataFacade;
 
     @Test
     public void syncCompanyDataTest() throws InvocationTargetException, IllegalAccessException {
-        syncCompanyDataFacade.transactionSyncCompanyDataFromEinvDatabase();
+        syncUserDataFacade.transactionSyncUserDataFromEinvDatabase();
     }
 
 }

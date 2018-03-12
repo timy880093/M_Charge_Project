@@ -32,7 +32,7 @@ public class SyncCompanyDataFacadeImpl implements SyncCompanyDataFacade {
      * @throws IllegalAccessException
      */
     @Override
-    public void transactionInsertCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
+    public void transactionSyncCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
         List<Company> einvCompanyEntityList = einvCompanyRepository.findAll();
 
         for(Company company : einvCompanyEntityList){
@@ -43,7 +43,7 @@ public class SyncCompanyDataFacadeImpl implements SyncCompanyDataFacade {
             }else{
                 existsCompanyEntity = new CompanyEntity();
                 BeanUtils.copyProperties(existsCompanyEntity,company);
-                logger.info("Insert Company :" + company);
+                logger.info("Insert Company :" + company.getCompanyId());
             }
             companyRepository.save(existsCompanyEntity);
         }

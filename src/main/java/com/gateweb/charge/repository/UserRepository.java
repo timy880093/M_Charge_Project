@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  *
  * This class provides methods to populate DB Table of User
  */
- @Repository("user")
+ @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer>
 	, QuerydslPredicateExecutor<UserEntity> ,UserRepositoryCustom {
 	
@@ -40,7 +40,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer>
 		java.lang.Integer userId 
 	) throws DaoSystemException;
 
-//	public UserEntity findByUserId(Long userId);
+	public UserEntity findByUserId(Long userId);
 //	
 //	public Page<UserEntity> findByUserId(Long userId, Pageable pageable);
 //	
@@ -51,7 +51,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer>
 //	public List<UserEntity> findTop100ByUserId(Long userId);
 //	
 //	public long count();
-
 			
 }
 
