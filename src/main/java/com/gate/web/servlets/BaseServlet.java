@@ -24,7 +24,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,7 +55,7 @@ import com.google.gson.GsonBuilder;
 public abstract class BaseServlet extends HttpServlet {
 
 
-    protected static final Logger logger = Logger.getLogger(BaseServlet.class);
+    protected static final Logger logger = LogManager.getLogger(BaseServlet.class);
     protected static final String REQUEST = "REQUEST";
     protected static final String RESPONSE = "RESPONSE";
     protected static final String FORM_BEAN = "FORM_BEAN";

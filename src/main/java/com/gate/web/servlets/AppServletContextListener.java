@@ -7,7 +7,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -18,7 +19,7 @@ import com.gate.web.facades.CompanyService;
 @WebListener
 public class AppServletContextListener implements ServletContextListener {
 
-	protected static final Logger logger = Logger.getLogger(AppServletContextListener.class);
+	protected static final Logger logger = LogManager.getLogger(AppServletContextListener.class);
 	
 	@Autowired
 	CompanyService companyService;

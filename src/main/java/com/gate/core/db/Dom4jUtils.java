@@ -1,17 +1,27 @@
 package com.gate.core.db;
 
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
-import org.dom4j.*;
-import org.dom4j.io.SAXReader;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
 
 
 
@@ -20,7 +30,7 @@ import java.util.*;
  */
 public class Dom4jUtils {
 
-    public static Logger logger = Logger.getLogger(Dom4jUtils.class);
+    public static Logger logger = LogManager.getLogger(Dom4jUtils.class);
     public static String RESOURCE_FILE = "resource.xml";
     public static String VALIDATION_FILE = "validation.xml";
 

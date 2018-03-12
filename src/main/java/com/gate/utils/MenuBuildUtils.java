@@ -1,16 +1,21 @@
 package com.gate.utils;
 
-import com.gate.core.db.Dom4jUtils;
-import com.gate.web.beans.MenuBean;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import com.gate.core.db.Dom4jUtils;
+import com.gate.web.beans.MenuBean;
 
 /**
  * Created by simon on 2015/12/11.

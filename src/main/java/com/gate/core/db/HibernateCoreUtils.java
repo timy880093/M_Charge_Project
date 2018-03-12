@@ -1,17 +1,18 @@
 package com.gate.core.db;
 
-import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 /**
  * Created by simon on 2014/6/25.
@@ -21,7 +22,7 @@ public class HibernateCoreUtils {
     private static final ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();
 
     private static SessionFactory sessionFactory = null;
-    protected static Logger logger = Logger.getLogger(HibernateCoreUtils.class);
+    protected static Logger logger = LogManager.getLogger(HibernateCoreUtils.class);
     protected static final String DEFAULT_HIBERNATE_FILE = "hibernate.cfg.xml";
     private static List<String> dynamicHibernateList = new ArrayList<String>();
 

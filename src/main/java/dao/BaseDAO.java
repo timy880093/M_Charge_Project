@@ -20,7 +20,8 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.SerializationUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -29,7 +30,6 @@ import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
 import org.hibernate.transform.Transformers;
 
-import com.gate.core.db.HibernateCoreUtils;
 import com.gate.core.utils.CustomBeanUtilsBean;
 import com.gate.utils.TimeUtils;
 import com.gate.web.authority.UserInfo;
@@ -51,7 +51,7 @@ public class BaseDAO {
     public BaseDAO() {
         synchronized (this) {
             if (logger == null) {
-                logger = Logger.getLogger(getClass().getName());
+                logger = LogManager.getLogger(getClass().getName());
             }
         }
     }

@@ -20,7 +20,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,7 +57,7 @@ import com.google.gson.GsonBuilder;
 public abstract class MvcBaseServlet {
 
 
-    protected Logger logger = Logger.getLogger(getClass());
+    protected Logger logger = LogManager.getLogger(getClass());
     protected static final String REQUEST = "REQUEST";
     protected static final String RESPONSE = "RESPONSE";
     protected static final String FORM_BEAN = "FORM_BEAN";

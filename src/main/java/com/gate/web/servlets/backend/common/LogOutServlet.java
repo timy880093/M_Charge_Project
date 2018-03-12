@@ -1,7 +1,8 @@
 package com.gate.web.servlets.backend.common;
 
 
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,14 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.sql.Date;
-import java.util.Calendar;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @WebServlet("/backendAdmin/logOutServlet")
 public class LogOutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    protected Logger logger = Logger.getLogger(getClass());
+    protected Logger logger = LogManager.getLogger(getClass());
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException

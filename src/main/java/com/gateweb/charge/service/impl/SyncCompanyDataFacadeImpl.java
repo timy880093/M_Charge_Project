@@ -1,24 +1,26 @@
 package com.gateweb.charge.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.gateweb.charge.model.CompanyEntity;
 import com.gateweb.charge.repository.CompanyRepository;
 import com.gateweb.charge.service.SyncCompanyDataFacade;
 import com.gateweb.einv.model.Company;
 import com.gateweb.einv.repository.EinvCompanyRepository;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * Created by Eason on 3/9/2018.
  */
 @Service
 public class SyncCompanyDataFacadeImpl implements SyncCompanyDataFacade {
-    protected static final Logger logger = Logger.getLogger(InvoiceAmountSummaryReportFacadeImpl.class);
+    protected static final Logger logger = LogManager.getLogger(InvoiceAmountSummaryReportFacadeImpl.class);
 
     @Autowired
     CompanyRepository companyRepository;

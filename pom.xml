@@ -42,7 +42,7 @@
         <project.name>b2b</project.name>
         <!--設定所有library版本-->
         <java.version>1.8</java.version>
-        <log4j.version>1.2.17</log4j.version>
+        <log4j.version>2.10.0</log4j.version>
         <jaxen.version>1.1.6</jaxen.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
         <hibernate-validator.version>5.4.2.Final</hibernate-validator.version>
@@ -222,12 +222,29 @@
 			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-api</artifactId>
+		    <version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>${log4j.version}</version>
+		</dependency>
+		<!-- tell Slf4j using Log4j2 -->
+		<!-- <dependency> 
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-slf4j-impl</artifactId>
+		    <version>${log4j.version}</version>
+		</dependency> -->
+		<!-- tell commons logging using Log4j2 -->
+		<dependency> 
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-jcl</artifactId>
+		    <version>${log4j.version}</version>
+		</dependency>
         <!-- https://mvnrepository.com/artifact/jaxen/jaxen -->
         <dependency>
             <groupId>jaxen</groupId>
@@ -330,6 +347,12 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>openxml4j</artifactId>
             <version>${openxml4j.version}</version>
+            <exclusions>
+            	<exclusion>
+            		<groupId>log4j</groupId>
+            		<artifactId>log4j</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
         <dependency>
@@ -429,7 +452,7 @@
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <artifactId>slf4j-api</artifactId>
             <version>${slf4.relation.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->

@@ -1,24 +1,26 @@
 package com.gateweb.charge.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.gateweb.charge.model.UserEntity;
 import com.gateweb.charge.repository.UserRepository;
 import com.gateweb.charge.service.SyncUserDataFacade;
 import com.gateweb.einv.model.User;
 import com.gateweb.einv.repository.EinvUserRepository;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * Created by Eason on 3/9/2018.
  */
 @Service
 public class SyncUserDataFacadeImpl implements SyncUserDataFacade {
-    protected static final Logger logger = Logger.getLogger(SyncUserDataFacadeImpl.class);
+    protected static final Logger logger = LogManager.getLogger(SyncUserDataFacadeImpl.class);
 
     @Autowired
     UserRepository userRepository;
