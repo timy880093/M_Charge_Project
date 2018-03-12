@@ -32,7 +32,7 @@ public class EinvInvoiceDetailsRepositoryTest {
         for(InvoiceMain invoiceMain: einvInvoiceList){
             InvoiceDetails conditionEntity = new InvoiceDetails();
             conditionEntity.setInvoiceNumber(invoiceMain.getInvoiceNumber());
-            conditionEntity.setCYearMonth(invoiceMain.getCYearMonth());
+            conditionEntity.setCYearMonth(invoiceMain.getcYearMonth());
             List<InvoiceDetails> einvInvoiceDetailsList = einvInvoiceDetailsRepository.searchLikeVo(conditionEntity);
             for(InvoiceDetails invoiceDetails : einvInvoiceDetailsList){
                 System.out.println(gson.toJson(invoiceDetails));

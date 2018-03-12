@@ -1,7 +1,6 @@
 package com.gateweb.charge.repository;
 
 import com.gateweb.charge.model.UserEntity;
-import com.gateweb.charge.service.SyncCompanyDataFacade;
 import com.gateweb.charge.service.SyncUserDataFacade;
 import com.gateweb.einv.model.User;
 import com.gateweb.einv.repository.EinvUserRepository;
@@ -45,7 +44,7 @@ public class UserRepositoryTest {
 
     @Test
     public void syncUserDataTest() throws InvocationTargetException, IllegalAccessException {
-        syncUserDataFacade.transactionSyncUserDataFromEinvDatabase();
+        syncUserDataFacade.syncUserDataFromEinvDatabase();
     }
 
     @Test
@@ -60,6 +59,7 @@ public class UserRepositoryTest {
                 existsUserEntity = new UserEntity();
                 BeanUtils.copyProperties(existsUserEntity,user);
             }
+            userRepository.save(existsUserEntity);
         }
     }
 }

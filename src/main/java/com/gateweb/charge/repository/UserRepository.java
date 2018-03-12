@@ -20,6 +20,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -33,14 +34,17 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer>
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param $pkVar.columnName   PK
+	 * @param userId
 	 * @throws DaoSystemException	if system is wrong.
      */
-	void deleteByUserId(	
-		java.lang.Integer userId 
+	void deleteByUserId(
+			Long userId
 	) throws DaoSystemException;
 
 	public UserEntity findByUserId(Long userId);
+
+	public UserEntity findByAccount(String account);
 //	
 //	public Page<UserEntity> findByUserId(Long userId, Pageable pageable);
 //	

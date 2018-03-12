@@ -36,7 +36,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  */
 @Entity
 @Table(name = "invoice_details")
-public class InvoiceDetails extends BaseObject{
+public class InvoiceDetailsEntity extends BaseObject{
 
 //long serialVersionUID jdk tool: serialver.exe 
 
@@ -573,7 +573,7 @@ public class InvoiceDetails extends BaseObject{
 	/**
 	 *
 	 */
-	public InvoiceDetails(){
+	public InvoiceDetailsEntity(){
 	}
 
 	/**
@@ -605,7 +605,7 @@ public class InvoiceDetails extends BaseObject{
 	 * @param allowanceQuantity 
 	 * @param modifyDate 
 	 */
-	public InvoiceDetails (
+	public InvoiceDetailsEntity (
 		 java.lang.String cRemark1 
 		, java.lang.String cRemark2 
 		, java.lang.String description 
@@ -691,10 +691,10 @@ public class InvoiceDetails extends BaseObject{
 		if (this == obj)
 			return true;
 
-		if (obj == null || !(obj instanceof InvoiceDetails))
+		if (obj == null || !(obj instanceof InvoiceDetailsEntity))
 			return false;
 
-		InvoiceDetails key = (InvoiceDetails) obj;
+		InvoiceDetailsEntity key = (InvoiceDetailsEntity) obj;
 		if (this.invoiceDetailsId != key.invoiceDetailsId ) 
         	return false;
 

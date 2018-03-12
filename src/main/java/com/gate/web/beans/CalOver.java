@@ -1,7 +1,5 @@
 package com.gate.web.beans;
 
-import org.aspectj.org.eclipse.jdt.internal.core.util.Util;
-
 /**
  * Created by emily on 2016/1/5.
  */

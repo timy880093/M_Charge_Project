@@ -61,6 +61,7 @@
 	       <props>
 	            <prop key="hibernate.hbm2ddl.auto">${jdbc.hbm2dll.auto}</prop>
 	            <prop key="hibernate.default_schema">${jdbc.default.schema}</prop>
+			    <!--<prop key="hibernate.enable_lazy_load_no_trans">true</prop>-->
 	       </props>
 		</property>	
 	</bean>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.gateweb.einv.model.InvoiceMain;
 import com.meshinnovation.db.dao.exception.DaoSystemException;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -34,7 +35,9 @@ public interface EinvInvoiceMainRepository extends JpaRepository<InvoiceMain, Lo
 	) throws DaoSystemException;
 
 //	public InvoiceMain findByInvoiceId(Long invoiceId);
-//	
+//
+	public List<InvoiceMain> findByCYearMonth(String yearMonth);
+
 //	public Page<InvoiceMain> findByInvoiceId(Long invoiceId, Pageable pageable);
 //	
 //	public boolean exists(Long invoiceId);
@@ -46,6 +49,8 @@ public interface EinvInvoiceMainRepository extends JpaRepository<InvoiceMain, Lo
 //	public long count();
 
 	public List<InvoiceMain> findTop100ByCYearMonth(String yearMonth);
+
+	public List<InvoiceMain> findByModifyDateIsGreaterThan(Timestamp timestamp);
 
 }
 

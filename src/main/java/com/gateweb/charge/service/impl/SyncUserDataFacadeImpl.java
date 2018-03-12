@@ -29,7 +29,7 @@ public class SyncUserDataFacadeImpl implements SyncUserDataFacade {
     EinvUserRepository einvUserRepository;
 
     @Override
-    public void transactionSyncUserDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
+    public void syncUserDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
         List<User> einvUserList = einvUserRepository.findAll();
 
         for(User user : einvUserList){
@@ -42,6 +42,13 @@ public class SyncUserDataFacadeImpl implements SyncUserDataFacade {
                 BeanUtils.copyProperties(existsUserEntity,user);
                 logger.info("Insert User :" + user.getUserId());
             }
+            //處理account衝突的情況。
+            UserEntity collisionEntity = userRepository.findByAccount(user.getAccount());
+            if(collisionEntity!=null){
+                //刪除原來的帳號
+                userRepository.deleteByUserId(collisionEntity.getUserId());
+            }
+            userRepository.save(existsUserEntity);
         }
     }
 }

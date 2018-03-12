@@ -188,7 +188,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getFreeTaxSalesAmount() != null ) {
 			sb.append(" AND obj.freeTaxSalesAmount = :freeTaxSalesAmount "); //java.math.BigDecimal
 		}
-		if ( data.getCPrinterId() != null ) {
+		if ( data.getcPrinterId() != null ) {
 			sb.append(" AND obj.cPrinterId = :cPrinterId "); //java.lang.Integer
 		}
 		if ( data.getInvoiceId() != null ) {
@@ -200,7 +200,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getDonateMark() != null ) {
 			sb.append(" AND obj.donateMark = :donateMark "); //java.lang.String
 		}
-		if ( data.getCKey() != null ) {
+		if ( data.getcKey() != null ) {
 			sb.append(" AND obj.cKey = :cKey "); //java.lang.String
 		}
 		if ( data.getCreateDate() != null ) {
@@ -212,7 +212,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBondedAreaConfirm() != null ) {
 			sb.append(" AND obj.bondedAreaConfirm = :bondedAreaConfirm "); //java.lang.String
 		}
-		if ( data.getCMemberNumber() != null ) {
+		if ( data.getcMemberNumber() != null ) {
 			sb.append(" AND obj.cMemberNumber = :cMemberNumber "); //java.lang.String
 		}
 		if ( data.getExchangeRate() != null ) {
@@ -227,16 +227,16 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintDate() != null ) {
 			sb.append(" AND obj.syncPrintDate = :syncPrintDate "); //java.sql.Timestamp
 		}
-		if ( data.getCEmail() != null ) {
+		if ( data.getcEmail() != null ) {
 			sb.append(" AND obj.cEmail = :cEmail "); //java.lang.String
 		}
-		if ( data.getCPhoneCode() != null ) {
+		if ( data.getcPhoneCode() != null ) {
 			sb.append(" AND obj.cPhoneCode = :cPhoneCode "); //java.lang.String
 		}
 		if ( data.getSalesAmount() != null ) {
 			sb.append(" AND obj.salesAmount = :salesAmount "); //java.math.BigDecimal
 		}
-		if ( data.getCYearMonth() != null ) {
+		if ( data.getcYearMonth() != null ) {
 			sb.append(" AND obj.cYearMonth = :cYearMonth "); //java.lang.String
 		}
 		if ( data.getBuyerFacsimileNumber() != null ) {
@@ -254,10 +254,10 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerRemark() != null ) {
 			sb.append(" AND obj.buyerRemark = :buyerRemark "); //java.lang.String
 		}
-		if ( data.getCPosRemark2() != null ) {
+		if ( data.getcPosRemark2() != null ) {
 			sb.append(" AND obj.cPosRemark2 = :cPosRemark2 "); //java.lang.String
 		}
-		if ( data.getCPosRemark1() != null ) {
+		if ( data.getcPosRemark1() != null ) {
 			sb.append(" AND obj.cPosRemark1 = :cPosRemark1 "); //java.lang.String
 		}
 		if ( data.getTaxType() != null ) {
@@ -281,13 +281,13 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintMark() != null ) {
 			sb.append(" AND obj.syncPrintMark is :syncPrintMark "); //java.lang.Boolean
 		}
-		if ( data.getCNaturalPerson() != null ) {
+		if ( data.getcNaturalPerson() != null ) {
 			sb.append(" AND obj.cNaturalPerson = :cNaturalPerson "); //java.lang.String
 		}
 		if ( data.getBuyerPersonInCharge() != null ) {
 			sb.append(" AND obj.buyerPersonInCharge = :buyerPersonInCharge "); //java.lang.String
 		}
-		if ( data.getCPrinterNo() != null ) {
+		if ( data.getcPrinterNo() != null ) {
 			sb.append(" AND obj.cPrinterNo = :cPrinterNo "); //java.lang.String
 		}
 		if ( data.getInvoiceTime() != null ) {
@@ -296,7 +296,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getZeroTaxSalesAmount() != null ) {
 			sb.append(" AND obj.zeroTaxSalesAmount = :zeroTaxSalesAmount "); //java.math.BigDecimal
 		}
-		if ( data.getCPosRemark3() != null ) {
+		if ( data.getcPosRemark3() != null ) {
 			sb.append(" AND obj.cPosRemark3 = :cPosRemark3 "); //java.lang.String
 		}
 		if ( data.getSyncPrintUser() != null ) {
@@ -305,7 +305,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerTelephoneNumber() != null ) {
 			sb.append(" AND obj.buyerTelephoneNumber = :buyerTelephoneNumber "); //java.lang.String
 		}
-		if ( data.getCPosRemark4() != null ) {
+		if ( data.getcPosRemark4() != null ) {
 			sb.append(" AND obj.cPosRemark4 = :cPosRemark4 "); //java.lang.String
 		}
 		if ( data.getBuyerCustomerNumber() != null ) {
@@ -347,13 +347,13 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getConfirmStatus() != null ) {
 			sb.append(" AND obj.confirmStatus = :confirmStatus "); //java.lang.Integer
 		}
-		if ( data.getCInvoiceStatus() != null ) {
+		if ( data.getcInvoiceStatus() != null ) {
 			sb.append(" AND obj.cInvoiceStatus = :cInvoiceStatus "); //java.lang.Integer
 		}
 		if ( data.getAcceptStatus() != null ) {
 			sb.append(" AND obj.acceptStatus = :acceptStatus "); //java.lang.Integer
 		}
-		if ( data.getCMemberType() != null ) {
+		if ( data.getcMemberType() != null ) {
 			sb.append(" AND obj.cMemberType = :cMemberType "); //java.lang.String
 		}
 		if ( data.getModifierId() != null ) {
@@ -436,8 +436,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getFreeTaxSalesAmount() != null ) {
 			q.setParameter("freeTaxSalesAmount", data.getFreeTaxSalesAmount());
 		}
-		if ( data.getCPrinterId() != null ) {
-			q.setParameter("cPrinterId", data.getCPrinterId());
+		if ( data.getcPrinterId() != null ) {
+			q.setParameter("cPrinterId", data.getcPrinterId());
 		}
 		if ( data.getInvoiceId() != null ) {
 			q.setParameter("invoiceId", data.getInvoiceId());
@@ -448,8 +448,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getDonateMark() != null ) {
 			q.setParameter("donateMark", data.getDonateMark());
 		}
-		if ( data.getCKey() != null ) {
-			q.setParameter("cKey", data.getCKey());
+		if ( data.getcKey() != null ) {
+			q.setParameter("cKey", data.getcKey());
 		}
 		if ( data.getCreateDate() != null ) {
 			q.setParameter("createDate", data.getCreateDate());
@@ -460,8 +460,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBondedAreaConfirm() != null ) {
 			q.setParameter("bondedAreaConfirm", data.getBondedAreaConfirm());
 		}
-		if ( data.getCMemberNumber() != null ) {
-			q.setParameter("cMemberNumber", data.getCMemberNumber());
+		if ( data.getcMemberNumber() != null ) {
+			q.setParameter("cMemberNumber", data.getcMemberNumber());
 		}
 		if ( data.getExchangeRate() != null ) {
 			q.setParameter("exchangeRate", data.getExchangeRate());
@@ -475,17 +475,17 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintDate() != null ) {
 			q.setParameter("syncPrintDate", data.getSyncPrintDate());
 		}
-		if ( data.getCEmail() != null ) {
-			q.setParameter("cEmail", data.getCEmail());
+		if ( data.getcEmail() != null ) {
+			q.setParameter("cEmail", data.getcEmail());
 		}
-		if ( data.getCPhoneCode() != null ) {
-			q.setParameter("cPhoneCode", data.getCPhoneCode());
+		if ( data.getcPhoneCode() != null ) {
+			q.setParameter("cPhoneCode", data.getcPhoneCode());
 		}
 		if ( data.getSalesAmount() != null ) {
 			q.setParameter("salesAmount", data.getSalesAmount());
 		}
-		if ( data.getCYearMonth() != null ) {
-			q.setParameter("cYearMonth", data.getCYearMonth());
+		if ( data.getcYearMonth() != null ) {
+			q.setParameter("cYearMonth", data.getcYearMonth());
 		}
 		if ( data.getBuyerFacsimileNumber() != null ) {
 			q.setParameter("buyerFacsimileNumber", data.getBuyerFacsimileNumber());
@@ -502,11 +502,11 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerRemark() != null ) {
 			q.setParameter("buyerRemark", data.getBuyerRemark());
 		}
-		if ( data.getCPosRemark2() != null ) {
-			q.setParameter("cPosRemark2", data.getCPosRemark2());
+		if ( data.getcPosRemark2() != null ) {
+			q.setParameter("cPosRemark2", data.getcPosRemark2());
 		}
-		if ( data.getCPosRemark1() != null ) {
-			q.setParameter("cPosRemark1", data.getCPosRemark1());
+		if ( data.getcPosRemark1() != null ) {
+			q.setParameter("cPosRemark1", data.getcPosRemark1());
 		}
 		if ( data.getTaxType() != null ) {
 			q.setParameter("taxType", data.getTaxType());
@@ -529,14 +529,14 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintMark() != null ) {
 			q.setParameter("syncPrintMark", data.getSyncPrintMark());
 		}
-		if ( data.getCNaturalPerson() != null ) {
-			q.setParameter("cNaturalPerson", data.getCNaturalPerson());
+		if ( data.getcNaturalPerson() != null ) {
+			q.setParameter("cNaturalPerson", data.getcNaturalPerson());
 		}
 		if ( data.getBuyerPersonInCharge() != null ) {
 			q.setParameter("buyerPersonInCharge", data.getBuyerPersonInCharge());
 		}
-		if ( data.getCPrinterNo() != null ) {
-			q.setParameter("cPrinterNo", data.getCPrinterNo());
+		if ( data.getcPrinterNo() != null ) {
+			q.setParameter("cPrinterNo", data.getcPrinterNo());
 		}
 		if ( data.getInvoiceTime() != null ) {
 			q.setParameter("invoiceTime", data.getInvoiceTime());
@@ -544,8 +544,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getZeroTaxSalesAmount() != null ) {
 			q.setParameter("zeroTaxSalesAmount", data.getZeroTaxSalesAmount());
 		}
-		if ( data.getCPosRemark3() != null ) {
-			q.setParameter("cPosRemark3", data.getCPosRemark3());
+		if ( data.getcPosRemark3() != null ) {
+			q.setParameter("cPosRemark3", data.getcPosRemark3());
 		}
 		if ( data.getSyncPrintUser() != null ) {
 			q.setParameter("syncPrintUser", data.getSyncPrintUser());
@@ -553,8 +553,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerTelephoneNumber() != null ) {
 			q.setParameter("buyerTelephoneNumber", data.getBuyerTelephoneNumber());
 		}
-		if ( data.getCPosRemark4() != null ) {
-			q.setParameter("cPosRemark4", data.getCPosRemark4());
+		if ( data.getcPosRemark4() != null ) {
+			q.setParameter("cPosRemark4", data.getcPosRemark4());
 		}
 		if ( data.getBuyerCustomerNumber() != null ) {
 			q.setParameter("buyerCustomerNumber", data.getBuyerCustomerNumber());
@@ -595,14 +595,14 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getConfirmStatus() != null ) {
 			q.setParameter("confirmStatus", data.getConfirmStatus());
 		}
-		if ( data.getCInvoiceStatus() != null ) {
-			q.setParameter("cInvoiceStatus", data.getCInvoiceStatus());
+		if ( data.getcInvoiceStatus() != null ) {
+			q.setParameter("cInvoiceStatus", data.getcInvoiceStatus());
 		}
 		if ( data.getAcceptStatus() != null ) {
 			q.setParameter("acceptStatus", data.getAcceptStatus());
 		}
-		if ( data.getCMemberType() != null ) {
-			q.setParameter("cMemberType", data.getCMemberType());
+		if ( data.getcMemberType() != null ) {
+			q.setParameter("cMemberType", data.getcMemberType());
 		}
 		if ( data.getModifierId() != null ) {
 			q.setParameter("modifierId", data.getModifierId());
@@ -683,7 +683,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getFreeTaxSalesAmount() != null ) {
 			sb.append(" AND obj.freeTaxSalesAmount >= :freeTaxSalesAmount "); // java.math.BigDecimal
 		}
-		if ( data.getCPrinterId() != null && !"".equals(data.getCPrinterId())) {
+		if ( data.getcPrinterId() != null && !"".equals(data.getcPrinterId())) {
 			sb.append(" AND obj.cPrinterId Like :cPrinterId "); //java.lang.Integer
 		}
 		if ( data.getInvoiceId() != null ) {
@@ -695,7 +695,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getDonateMark() != null && !"".equals(data.getDonateMark())) {
 			sb.append(" AND obj.donateMark Like :donateMark "); //java.lang.String
 		}
-		if ( data.getCKey() != null && !"".equals(data.getCKey())) {
+		if ( data.getcKey() != null && !"".equals(data.getcKey())) {
 			sb.append(" AND obj.cKey Like :cKey "); //java.lang.String
 		}
 		if ( data.getCreateDate() != null && !"".equals(data.getCreateDate())) {
@@ -707,7 +707,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBondedAreaConfirm() != null && !"".equals(data.getBondedAreaConfirm())) {
 			sb.append(" AND obj.bondedAreaConfirm Like :bondedAreaConfirm "); //java.lang.String
 		}
-		if ( data.getCMemberNumber() != null && !"".equals(data.getCMemberNumber())) {
+		if ( data.getcMemberNumber() != null && !"".equals(data.getcMemberNumber())) {
 			sb.append(" AND obj.cMemberNumber Like :cMemberNumber "); //java.lang.String
 		}
 		if ( data.getExchangeRate() != null ) {
@@ -722,16 +722,16 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintDate() != null && !"".equals(data.getSyncPrintDate())) {
 			sb.append(" AND obj.syncPrintDate Like :syncPrintDate "); //java.sql.Timestamp
 		}
-		if ( data.getCEmail() != null && !"".equals(data.getCEmail())) {
+		if ( data.getcEmail() != null && !"".equals(data.getcEmail())) {
 			sb.append(" AND obj.cEmail Like :cEmail "); //java.lang.String
 		}
-		if ( data.getCPhoneCode() != null && !"".equals(data.getCPhoneCode())) {
+		if ( data.getcPhoneCode() != null && !"".equals(data.getcPhoneCode())) {
 			sb.append(" AND obj.cPhoneCode Like :cPhoneCode "); //java.lang.String
 		}
 		if ( data.getSalesAmount() != null ) {
 			sb.append(" AND obj.salesAmount >= :salesAmount "); // java.math.BigDecimal
 		}
-		if ( data.getCYearMonth() != null && !"".equals(data.getCYearMonth())) {
+		if ( data.getcYearMonth() != null && !"".equals(data.getcYearMonth())) {
 			sb.append(" AND obj.cYearMonth Like :cYearMonth "); //java.lang.String
 		}
 		if ( data.getBuyerFacsimileNumber() != null && !"".equals(data.getBuyerFacsimileNumber())) {
@@ -749,10 +749,10 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerRemark() != null && !"".equals(data.getBuyerRemark())) {
 			sb.append(" AND obj.buyerRemark Like :buyerRemark "); //java.lang.String
 		}
-		if ( data.getCPosRemark2() != null && !"".equals(data.getCPosRemark2())) {
+		if ( data.getcPosRemark2() != null && !"".equals(data.getcPosRemark2())) {
 			sb.append(" AND obj.cPosRemark2 Like :cPosRemark2 "); //java.lang.String
 		}
-		if ( data.getCPosRemark1() != null && !"".equals(data.getCPosRemark1())) {
+		if ( data.getcPosRemark1() != null && !"".equals(data.getcPosRemark1())) {
 			sb.append(" AND obj.cPosRemark1 Like :cPosRemark1 "); //java.lang.String
 		}
 		if ( data.getTaxType() != null && !"".equals(data.getTaxType())) {
@@ -776,13 +776,13 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintMark() != null ) {
 			sb.append(" AND obj.syncPrintMark is :syncPrintMark "); //java.lang.Boolean
 		}
-		if ( data.getCNaturalPerson() != null && !"".equals(data.getCNaturalPerson())) {
+		if ( data.getcNaturalPerson() != null && !"".equals(data.getcNaturalPerson())) {
 			sb.append(" AND obj.cNaturalPerson Like :cNaturalPerson "); //java.lang.String
 		}
 		if ( data.getBuyerPersonInCharge() != null && !"".equals(data.getBuyerPersonInCharge())) {
 			sb.append(" AND obj.buyerPersonInCharge Like :buyerPersonInCharge "); //java.lang.String
 		}
-		if ( data.getCPrinterNo() != null && !"".equals(data.getCPrinterNo())) {
+		if ( data.getcPrinterNo() != null && !"".equals(data.getcPrinterNo())) {
 			sb.append(" AND obj.cPrinterNo Like :cPrinterNo "); //java.lang.String
 		}
 		if ( data.getInvoiceTime() != null && !"".equals(data.getInvoiceTime())) {
@@ -791,7 +791,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getZeroTaxSalesAmount() != null ) {
 			sb.append(" AND obj.zeroTaxSalesAmount >= :zeroTaxSalesAmount "); // java.math.BigDecimal
 		}
-		if ( data.getCPosRemark3() != null && !"".equals(data.getCPosRemark3())) {
+		if ( data.getcPosRemark3() != null && !"".equals(data.getcPosRemark3())) {
 			sb.append(" AND obj.cPosRemark3 Like :cPosRemark3 "); //java.lang.String
 		}
 		if ( data.getSyncPrintUser() != null && !"".equals(data.getSyncPrintUser())) {
@@ -800,7 +800,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerTelephoneNumber() != null && !"".equals(data.getBuyerTelephoneNumber())) {
 			sb.append(" AND obj.buyerTelephoneNumber Like :buyerTelephoneNumber "); //java.lang.String
 		}
-		if ( data.getCPosRemark4() != null && !"".equals(data.getCPosRemark4())) {
+		if ( data.getcPosRemark4() != null && !"".equals(data.getcPosRemark4())) {
 			sb.append(" AND obj.cPosRemark4 Like :cPosRemark4 "); //java.lang.String
 		}
 		if ( data.getBuyerCustomerNumber() != null && !"".equals(data.getBuyerCustomerNumber())) {
@@ -842,13 +842,13 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getConfirmStatus() != null && !"".equals(data.getConfirmStatus())) {
 			sb.append(" AND obj.confirmStatus Like :confirmStatus "); //java.lang.Integer
 		}
-		if ( data.getCInvoiceStatus() != null && !"".equals(data.getCInvoiceStatus())) {
+		if ( data.getcInvoiceStatus() != null && !"".equals(data.getcInvoiceStatus())) {
 			sb.append(" AND obj.cInvoiceStatus Like :cInvoiceStatus "); //java.lang.Integer
 		}
 		if ( data.getAcceptStatus() != null && !"".equals(data.getAcceptStatus())) {
 			sb.append(" AND obj.acceptStatus Like :acceptStatus "); //java.lang.Integer
 		}
-		if ( data.getCMemberType() != null && !"".equals(data.getCMemberType())) {
+		if ( data.getcMemberType() != null && !"".equals(data.getcMemberType())) {
 			sb.append(" AND obj.cMemberType Like :cMemberType "); //java.lang.String
 		}
 		if ( data.getModifierId() != null && !"".equals(data.getModifierId())) {
@@ -931,8 +931,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getFreeTaxSalesAmount() != null ) {
 			q.setParameter("freeTaxSalesAmount", data.getFreeTaxSalesAmount());
 		}  	
-		if ( data.getCPrinterId() != null && !"".equals(data.getCPrinterId()) ) {
-			q.setParameter("cPrinterId", data.getCPrinterId()+"%");
+		if ( data.getcPrinterId() != null && !"".equals(data.getcPrinterId()) ) {
+			q.setParameter("cPrinterId", data.getcPrinterId()+"%");
 		}
 		if ( data.getInvoiceId() != null ) {
 			q.setParameter("invoiceId", data.getInvoiceId());
@@ -943,8 +943,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getDonateMark() != null && !"".equals(data.getDonateMark()) ) {
 			q.setParameter("donateMark", data.getDonateMark()+"%");
 		}
-		if ( data.getCKey() != null && !"".equals(data.getCKey()) ) {
-			q.setParameter("cKey", data.getCKey()+"%");
+		if ( data.getcKey() != null && !"".equals(data.getcKey()) ) {
+			q.setParameter("cKey", data.getcKey()+"%");
 		}
 		if ( data.getCreateDate() != null && !"".equals(data.getCreateDate()) ) {
 			q.setParameter("createDate", data.getCreateDate()+"%");
@@ -955,8 +955,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBondedAreaConfirm() != null && !"".equals(data.getBondedAreaConfirm()) ) {
 			q.setParameter("bondedAreaConfirm", data.getBondedAreaConfirm()+"%");
 		}
-		if ( data.getCMemberNumber() != null && !"".equals(data.getCMemberNumber()) ) {
-			q.setParameter("cMemberNumber", data.getCMemberNumber()+"%");
+		if ( data.getcMemberNumber() != null && !"".equals(data.getcMemberNumber()) ) {
+			q.setParameter("cMemberNumber", data.getcMemberNumber()+"%");
 		}
 		if ( data.getExchangeRate() != null && !"".equals(data.getExchangeRate()) ) {
 			q.setParameter("exchangeRate", data.getExchangeRate()+"%");
@@ -970,17 +970,17 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintDate() != null && !"".equals(data.getSyncPrintDate()) ) {
 			q.setParameter("syncPrintDate", data.getSyncPrintDate()+"%");
 		}
-		if ( data.getCEmail() != null && !"".equals(data.getCEmail()) ) {
-			q.setParameter("cEmail", data.getCEmail()+"%");
+		if ( data.getcEmail() != null && !"".equals(data.getcEmail()) ) {
+			q.setParameter("cEmail", data.getcEmail()+"%");
 		}
-		if ( data.getCPhoneCode() != null && !"".equals(data.getCPhoneCode()) ) {
-			q.setParameter("cPhoneCode", data.getCPhoneCode()+"%");
+		if ( data.getcPhoneCode() != null && !"".equals(data.getcPhoneCode()) ) {
+			q.setParameter("cPhoneCode", data.getcPhoneCode()+"%");
 		}
 		if ( data.getSalesAmount() != null ) {
 			q.setParameter("salesAmount", data.getSalesAmount());
 		}  	
-		if ( data.getCYearMonth() != null && !"".equals(data.getCYearMonth()) ) {
-			q.setParameter("cYearMonth", data.getCYearMonth()+"%");
+		if ( data.getcYearMonth() != null && !"".equals(data.getcYearMonth()) ) {
+			q.setParameter("cYearMonth", data.getcYearMonth()+"%");
 		}
 		if ( data.getBuyerFacsimileNumber() != null && !"".equals(data.getBuyerFacsimileNumber()) ) {
 			q.setParameter("buyerFacsimileNumber", data.getBuyerFacsimileNumber()+"%");
@@ -997,11 +997,11 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerRemark() != null && !"".equals(data.getBuyerRemark()) ) {
 			q.setParameter("buyerRemark", data.getBuyerRemark()+"%");
 		}
-		if ( data.getCPosRemark2() != null && !"".equals(data.getCPosRemark2()) ) {
-			q.setParameter("cPosRemark2", data.getCPosRemark2()+"%");
+		if ( data.getcPosRemark2() != null && !"".equals(data.getcPosRemark2()) ) {
+			q.setParameter("cPosRemark2", data.getcPosRemark2()+"%");
 		}
-		if ( data.getCPosRemark1() != null && !"".equals(data.getCPosRemark1()) ) {
-			q.setParameter("cPosRemark1", data.getCPosRemark1()+"%");
+		if ( data.getcPosRemark1() != null && !"".equals(data.getcPosRemark1()) ) {
+			q.setParameter("cPosRemark1", data.getcPosRemark1()+"%");
 		}
 		if ( data.getTaxType() != null && !"".equals(data.getTaxType()) ) {
 			q.setParameter("taxType", data.getTaxType()+"%");
@@ -1024,14 +1024,14 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getSyncPrintMark() != null ) {
 			q.setParameter("syncPrintMark", data.getSyncPrintMark());
 		}  	
-		if ( data.getCNaturalPerson() != null && !"".equals(data.getCNaturalPerson()) ) {
-			q.setParameter("cNaturalPerson", data.getCNaturalPerson()+"%");
+		if ( data.getcNaturalPerson() != null && !"".equals(data.getcNaturalPerson()) ) {
+			q.setParameter("cNaturalPerson", data.getcNaturalPerson()+"%");
 		}
 		if ( data.getBuyerPersonInCharge() != null && !"".equals(data.getBuyerPersonInCharge()) ) {
 			q.setParameter("buyerPersonInCharge", data.getBuyerPersonInCharge()+"%");
 		}
-		if ( data.getCPrinterNo() != null && !"".equals(data.getCPrinterNo()) ) {
-			q.setParameter("cPrinterNo", data.getCPrinterNo()+"%");
+		if ( data.getcPrinterNo() != null && !"".equals(data.getcPrinterNo()) ) {
+			q.setParameter("cPrinterNo", data.getcPrinterNo()+"%");
 		}
 		if ( data.getInvoiceTime() != null && !"".equals(data.getInvoiceTime()) ) {
 			q.setParameter("invoiceTime", data.getInvoiceTime()+"%");
@@ -1039,8 +1039,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getZeroTaxSalesAmount() != null ) {
 			q.setParameter("zeroTaxSalesAmount", data.getZeroTaxSalesAmount());
 		}  	
-		if ( data.getCPosRemark3() != null && !"".equals(data.getCPosRemark3()) ) {
-			q.setParameter("cPosRemark3", data.getCPosRemark3()+"%");
+		if ( data.getcPosRemark3() != null && !"".equals(data.getcPosRemark3()) ) {
+			q.setParameter("cPosRemark3", data.getcPosRemark3()+"%");
 		}
 		if ( data.getSyncPrintUser() != null && !"".equals(data.getSyncPrintUser()) ) {
 			q.setParameter("syncPrintUser", data.getSyncPrintUser()+"%");
@@ -1048,8 +1048,8 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getBuyerTelephoneNumber() != null && !"".equals(data.getBuyerTelephoneNumber()) ) {
 			q.setParameter("buyerTelephoneNumber", data.getBuyerTelephoneNumber()+"%");
 		}
-		if ( data.getCPosRemark4() != null && !"".equals(data.getCPosRemark4()) ) {
-			q.setParameter("cPosRemark4", data.getCPosRemark4()+"%");
+		if ( data.getcPosRemark4() != null && !"".equals(data.getcPosRemark4()) ) {
+			q.setParameter("cPosRemark4", data.getcPosRemark4()+"%");
 		}
 		if ( data.getBuyerCustomerNumber() != null && !"".equals(data.getBuyerCustomerNumber()) ) {
 			q.setParameter("buyerCustomerNumber", data.getBuyerCustomerNumber()+"%");
@@ -1090,14 +1090,14 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		if ( data.getConfirmStatus() != null && !"".equals(data.getConfirmStatus()) ) {
 			q.setParameter("confirmStatus", data.getConfirmStatus()+"%");
 		}
-		if ( data.getCInvoiceStatus() != null && !"".equals(data.getCInvoiceStatus()) ) {
-			q.setParameter("cInvoiceStatus", data.getCInvoiceStatus()+"%");
+		if ( data.getcInvoiceStatus() != null && !"".equals(data.getcInvoiceStatus()) ) {
+			q.setParameter("cInvoiceStatus", data.getcInvoiceStatus()+"%");
 		}
 		if ( data.getAcceptStatus() != null && !"".equals(data.getAcceptStatus()) ) {
 			q.setParameter("acceptStatus", data.getAcceptStatus()+"%");
 		}
-		if ( data.getCMemberType() != null && !"".equals(data.getCMemberType()) ) {
-			q.setParameter("cMemberType", data.getCMemberType()+"%");
+		if ( data.getcMemberType() != null && !"".equals(data.getcMemberType()) ) {
+			q.setParameter("cMemberType", data.getcMemberType()+"%");
 		}
 		if ( data.getModifierId() != null && !"".equals(data.getModifierId()) ) {
 			q.setParameter("modifierId", data.getModifierId()+"%");

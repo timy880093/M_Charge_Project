@@ -15,6 +15,8 @@ import com.gateweb.charge.service.SyncCompanyDataFacade;
 import com.gateweb.einv.model.Company;
 import com.gateweb.einv.repository.EinvCompanyRepository;
 
+import static com.gateweb.einv.model.QCompany.company;
+
 /**
  * Created by Eason on 3/9/2018.
  */
@@ -34,20 +36,29 @@ public class SyncCompanyDataFacadeImpl implements SyncCompanyDataFacade {
      * @throws IllegalAccessException
      */
     @Override
-    public void transactionSyncCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
+    public void syncCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
         List<Company> einvCompanyEntityList = einvCompanyRepository.findAll();
 
         for(Company company : einvCompanyEntityList){
             CompanyEntity existsCompanyEntity = companyRepository.findByCompanyId(company.getCompanyId().intValue());
             if(existsCompanyEntity!=null){
-                BeanUtils.copyProperties(existsCompanyEntity,company);
-                logger.info("Update Company :" + existsCompanyEntity.getCompanyId());
+                transactionUpdateCompanyDataFromEinvDatabase(existsCompanyEntity,company);
             }else{
-                existsCompanyEntity = new CompanyEntity();
-                BeanUtils.copyProperties(existsCompanyEntity,company);
-                logger.info("Insert Company :" + company.getCompanyId());
+                transactionInsertCompanyDataFromEinvDatabase(company);
             }
-            companyRepository.save(existsCompanyEntity);
         }
+    }
+
+    public void transactionUpdateCompanyDataFromEinvDatabase(CompanyEntity existsCompanyEntity, Company einvCompanyEntity) throws InvocationTargetException, IllegalAccessException {
+        BeanUtils.copyProperties(existsCompanyEntity,einvCompanyEntity);
+        logger.info("Update Company :" + existsCompanyEntity.getCompanyId());
+        companyRepository.save(existsCompanyEntity);
+    }
+
+    public void transactionInsertCompanyDataFromEinvDatabase(Company einvCompanyEntity) throws InvocationTargetException, IllegalAccessException {
+        CompanyEntity newCompanyEntity = new CompanyEntity();
+        BeanUtils.copyProperties(newCompanyEntity,einvCompanyEntity);
+        logger.info("Insert Company :" + einvCompanyEntity.getCompanyId());
+        companyRepository.save(newCompanyEntity);
     }
 }

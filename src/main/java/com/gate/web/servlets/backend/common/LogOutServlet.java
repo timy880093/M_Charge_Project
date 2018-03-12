@@ -1,5 +1,7 @@
 package com.gate.web.servlets.backend.common;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -11,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @WebServlet("/backendAdmin/logOutServlet")
 public class LogOutServlet extends HttpServlet {

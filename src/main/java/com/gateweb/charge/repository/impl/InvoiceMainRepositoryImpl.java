@@ -57,6 +57,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 	InvoiceMainRepository invoiceMainRepository;
 	
 	public InvoiceMainRepositoryImpl(){
+
 	}
 	
 
@@ -117,8 +118,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getFreeTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.freeTaxSalesAmount.eq(vo.getFreeTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPrinterId() != null ) {
-			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getCPrinterId())); //java.lang.Integer
+		if ( vo.getcPrinterId() != null ) {
+			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getcPrinterId())); //java.lang.Integer
 		}	
 		if ( vo.getInvoiceId() != null ) {
 			builder.and(invoiceMainEntity.invoiceId.eq(vo.getInvoiceId())); //java.lang.Long
@@ -129,8 +130,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getDonateMark() != null && !"".equals(vo.getDonateMark())) {
 			builder.and(invoiceMainEntity.donateMark.equalsIgnoreCase(vo.getDonateMark())); //java.lang.String
 		}
-		if ( vo.getCKey() != null && !"".equals(vo.getCKey())) {
-			builder.and(invoiceMainEntity.cKey.equalsIgnoreCase(vo.getCKey())); //java.lang.String
+		if ( vo.getcKey() != null && !"".equals(vo.getcKey())) {
+			builder.and(invoiceMainEntity.cKey.equalsIgnoreCase(vo.getcKey())); //java.lang.String
 		}
 		if ( vo.getCreateDate() != null ) {
 			builder.and(invoiceMainEntity.createDate.eq(vo.getCreateDate())); //java.sql.Timestamp
@@ -141,8 +142,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBondedAreaConfirm() != null && !"".equals(vo.getBondedAreaConfirm())) {
 			builder.and(invoiceMainEntity.bondedAreaConfirm.equalsIgnoreCase(vo.getBondedAreaConfirm())); //java.lang.String
 		}
-		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
-			builder.and(invoiceMainEntity.cMemberNumber.equalsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
+		if ( vo.getcMemberNumber() != null && !"".equals(vo.getcMemberNumber())) {
+			builder.and(invoiceMainEntity.cMemberNumber.equalsIgnoreCase(vo.getcMemberNumber())); //java.lang.String
 		}
 		if ( vo.getExchangeRate() != null ) {
 			builder.and(invoiceMainEntity.exchangeRate.eq(vo.getExchangeRate())); //java.lang.Float
@@ -156,17 +157,17 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintDate() != null ) {
 			builder.and(invoiceMainEntity.syncPrintDate.eq(vo.getSyncPrintDate())); //java.sql.Timestamp
 		}	
-		if ( vo.getCEmail() != null && !"".equals(vo.getCEmail())) {
-			builder.and(invoiceMainEntity.cEmail.equalsIgnoreCase(vo.getCEmail())); //java.lang.String
+		if ( vo.getcEmail() != null && !"".equals(vo.getcEmail())) {
+			builder.and(invoiceMainEntity.cEmail.equalsIgnoreCase(vo.getcEmail())); //java.lang.String
 		}
-		if ( vo.getCPhoneCode() != null && !"".equals(vo.getCPhoneCode())) {
-			builder.and(invoiceMainEntity.cPhoneCode.equalsIgnoreCase(vo.getCPhoneCode())); //java.lang.String
+		if ( vo.getcPhoneCode() != null && !"".equals(vo.getcPhoneCode())) {
+			builder.and(invoiceMainEntity.cPhoneCode.equalsIgnoreCase(vo.getcPhoneCode())); //java.lang.String
 		}
 		if ( vo.getSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.salesAmount.eq(vo.getSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCYearMonth() != null && !"".equals(vo.getCYearMonth())) {
-			builder.and(invoiceMainEntity.cYearMonth.equalsIgnoreCase(vo.getCYearMonth())); //java.lang.String
+		if ( vo.getcYearMonth() != null && !"".equals(vo.getcYearMonth())) {
+			builder.and(invoiceMainEntity.cYearMonth.equalsIgnoreCase(vo.getcYearMonth())); //java.lang.String
 		}
 		if ( vo.getBuyerFacsimileNumber() != null && !"".equals(vo.getBuyerFacsimileNumber())) {
 			builder.and(invoiceMainEntity.buyerFacsimileNumber.equalsIgnoreCase(vo.getBuyerFacsimileNumber())); //java.lang.String
@@ -183,11 +184,11 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerRemark() != null && !"".equals(vo.getBuyerRemark())) {
 			builder.and(invoiceMainEntity.buyerRemark.equalsIgnoreCase(vo.getBuyerRemark())); //java.lang.String
 		}
-		if ( vo.getCPosRemark2() != null && !"".equals(vo.getCPosRemark2())) {
-			builder.and(invoiceMainEntity.cPosRemark2.equalsIgnoreCase(vo.getCPosRemark2())); //java.lang.String
+		if ( vo.getcPosRemark2() != null && !"".equals(vo.getcPosRemark2())) {
+			builder.and(invoiceMainEntity.cPosRemark2.equalsIgnoreCase(vo.getcPosRemark2())); //java.lang.String
 		}
-		if ( vo.getCPosRemark1() != null && !"".equals(vo.getCPosRemark1())) {
-			builder.and(invoiceMainEntity.cPosRemark1.equalsIgnoreCase(vo.getCPosRemark1())); //java.lang.String
+		if ( vo.getcPosRemark1() != null && !"".equals(vo.getcPosRemark1())) {
+			builder.and(invoiceMainEntity.cPosRemark1.equalsIgnoreCase(vo.getcPosRemark1())); //java.lang.String
 		}
 		if ( vo.getTaxType() != null && !"".equals(vo.getTaxType())) {
 			builder.and(invoiceMainEntity.taxType.equalsIgnoreCase(vo.getTaxType())); //java.lang.String
@@ -210,14 +211,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintMark() != null ) {
 			builder.and(invoiceMainEntity.syncPrintMark.eq(vo.getSyncPrintMark())); //java.lang.Boolean
 		}	
-		if ( vo.getCNaturalPerson() != null && !"".equals(vo.getCNaturalPerson())) {
-			builder.and(invoiceMainEntity.cNaturalPerson.equalsIgnoreCase(vo.getCNaturalPerson())); //java.lang.String
+		if ( vo.getcNaturalPerson() != null && !"".equals(vo.getcNaturalPerson())) {
+			builder.and(invoiceMainEntity.cNaturalPerson.equalsIgnoreCase(vo.getcNaturalPerson())); //java.lang.String
 		}
 		if ( vo.getBuyerPersonInCharge() != null && !"".equals(vo.getBuyerPersonInCharge())) {
 			builder.and(invoiceMainEntity.buyerPersonInCharge.equalsIgnoreCase(vo.getBuyerPersonInCharge())); //java.lang.String
 		}
-		if ( vo.getCPrinterNo() != null && !"".equals(vo.getCPrinterNo())) {
-			builder.and(invoiceMainEntity.cPrinterNo.equalsIgnoreCase(vo.getCPrinterNo())); //java.lang.String
+		if ( vo.getcPrinterNo() != null && !"".equals(vo.getcPrinterNo())) {
+			builder.and(invoiceMainEntity.cPrinterNo.equalsIgnoreCase(vo.getcPrinterNo())); //java.lang.String
 		}
 		if ( vo.getInvoiceTime() != null && !"".equals(vo.getInvoiceTime())) {
 			builder.and(invoiceMainEntity.invoiceTime.equalsIgnoreCase(vo.getInvoiceTime())); //java.lang.String
@@ -225,8 +226,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getZeroTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.zeroTaxSalesAmount.eq(vo.getZeroTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPosRemark3() != null && !"".equals(vo.getCPosRemark3())) {
-			builder.and(invoiceMainEntity.cPosRemark3.equalsIgnoreCase(vo.getCPosRemark3())); //java.lang.String
+		if ( vo.getcPosRemark3() != null && !"".equals(vo.getcPosRemark3())) {
+			builder.and(invoiceMainEntity.cPosRemark3.equalsIgnoreCase(vo.getcPosRemark3())); //java.lang.String
 		}
 		if ( vo.getSyncPrintUser() != null ) {
 			builder.and(invoiceMainEntity.syncPrintUser.eq(vo.getSyncPrintUser())); //java.lang.Integer
@@ -234,8 +235,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerTelephoneNumber() != null && !"".equals(vo.getBuyerTelephoneNumber())) {
 			builder.and(invoiceMainEntity.buyerTelephoneNumber.equalsIgnoreCase(vo.getBuyerTelephoneNumber())); //java.lang.String
 		}
-		if ( vo.getCPosRemark4() != null && !"".equals(vo.getCPosRemark4())) {
-			builder.and(invoiceMainEntity.cPosRemark4.equalsIgnoreCase(vo.getCPosRemark4())); //java.lang.String
+		if ( vo.getcPosRemark4() != null && !"".equals(vo.getcPosRemark4())) {
+			builder.and(invoiceMainEntity.cPosRemark4.equalsIgnoreCase(vo.getcPosRemark4())); //java.lang.String
 		}
 		if ( vo.getBuyerCustomerNumber() != null && !"".equals(vo.getBuyerCustomerNumber())) {
 			builder.and(invoiceMainEntity.buyerCustomerNumber.equalsIgnoreCase(vo.getBuyerCustomerNumber())); //java.lang.String
@@ -276,14 +277,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getConfirmStatus() != null ) {
 			builder.and(invoiceMainEntity.confirmStatus.eq(vo.getConfirmStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCInvoiceStatus() != null ) {
-			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getCInvoiceStatus())); //java.lang.Integer
+		if ( vo.getcInvoiceStatus() != null ) {
+			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getcInvoiceStatus())); //java.lang.Integer
 		}	
 		if ( vo.getAcceptStatus() != null ) {
 			builder.and(invoiceMainEntity.acceptStatus.eq(vo.getAcceptStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCMemberType() != null && !"".equals(vo.getCMemberType())) {
-			builder.and(invoiceMainEntity.cMemberType.equalsIgnoreCase(vo.getCMemberType())); //java.lang.String
+		if ( vo.getcMemberType() != null && !"".equals(vo.getcMemberType())) {
+			builder.and(invoiceMainEntity.cMemberType.equalsIgnoreCase(vo.getcMemberType())); //java.lang.String
 		}
 		if ( vo.getModifierId() != null ) {
 			builder.and(invoiceMainEntity.modifierId.eq(vo.getModifierId())); //java.lang.Integer
@@ -361,8 +362,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getFreeTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.freeTaxSalesAmount.eq(vo.getFreeTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPrinterId() != null ) {
-			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getCPrinterId())); //java.lang.Integer
+		if ( vo.getcPrinterId() != null ) {
+			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getcPrinterId())); //java.lang.Integer
 		}	
 		if ( vo.getInvoiceId() != null ) {
 			builder.and(invoiceMainEntity.invoiceId.eq(vo.getInvoiceId())); //java.lang.Long
@@ -373,8 +374,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getDonateMark() != null && !"".equals(vo.getDonateMark())) {
 			builder.and(invoiceMainEntity.donateMark.equalsIgnoreCase(vo.getDonateMark())); //java.lang.String
 		}
-		if ( vo.getCKey() != null && !"".equals(vo.getCKey())) {
-			builder.and(invoiceMainEntity.cKey.equalsIgnoreCase(vo.getCKey())); //java.lang.String
+		if ( vo.getcKey() != null && !"".equals(vo.getcKey())) {
+			builder.and(invoiceMainEntity.cKey.equalsIgnoreCase(vo.getcKey())); //java.lang.String
 		}
 		if ( vo.getCreateDate() != null ) {
 			builder.and(invoiceMainEntity.createDate.eq(vo.getCreateDate())); //java.sql.Timestamp
@@ -385,8 +386,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBondedAreaConfirm() != null && !"".equals(vo.getBondedAreaConfirm())) {
 			builder.and(invoiceMainEntity.bondedAreaConfirm.equalsIgnoreCase(vo.getBondedAreaConfirm())); //java.lang.String
 		}
-		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
-			builder.and(invoiceMainEntity.cMemberNumber.equalsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
+		if ( vo.getcMemberNumber() != null && !"".equals(vo.getcMemberNumber())) {
+			builder.and(invoiceMainEntity.cMemberNumber.equalsIgnoreCase(vo.getcMemberNumber())); //java.lang.String
 		}
 		if ( vo.getExchangeRate() != null ) {
 			builder.and(invoiceMainEntity.exchangeRate.eq(vo.getExchangeRate())); //java.lang.Float
@@ -400,17 +401,17 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintDate() != null ) {
 			builder.and(invoiceMainEntity.syncPrintDate.eq(vo.getSyncPrintDate())); //java.sql.Timestamp
 		}	
-		if ( vo.getCEmail() != null && !"".equals(vo.getCEmail())) {
-			builder.and(invoiceMainEntity.cEmail.equalsIgnoreCase(vo.getCEmail())); //java.lang.String
+		if ( vo.getcEmail() != null && !"".equals(vo.getcEmail())) {
+			builder.and(invoiceMainEntity.cEmail.equalsIgnoreCase(vo.getcEmail())); //java.lang.String
 		}
-		if ( vo.getCPhoneCode() != null && !"".equals(vo.getCPhoneCode())) {
-			builder.and(invoiceMainEntity.cPhoneCode.equalsIgnoreCase(vo.getCPhoneCode())); //java.lang.String
+		if ( vo.getcPhoneCode() != null && !"".equals(vo.getcPhoneCode())) {
+			builder.and(invoiceMainEntity.cPhoneCode.equalsIgnoreCase(vo.getcPhoneCode())); //java.lang.String
 		}
 		if ( vo.getSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.salesAmount.eq(vo.getSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCYearMonth() != null && !"".equals(vo.getCYearMonth())) {
-			builder.and(invoiceMainEntity.cYearMonth.equalsIgnoreCase(vo.getCYearMonth())); //java.lang.String
+		if ( vo.getcYearMonth() != null && !"".equals(vo.getcYearMonth())) {
+			builder.and(invoiceMainEntity.cYearMonth.equalsIgnoreCase(vo.getcYearMonth())); //java.lang.String
 		}
 		if ( vo.getBuyerFacsimileNumber() != null && !"".equals(vo.getBuyerFacsimileNumber())) {
 			builder.and(invoiceMainEntity.buyerFacsimileNumber.equalsIgnoreCase(vo.getBuyerFacsimileNumber())); //java.lang.String
@@ -427,11 +428,11 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerRemark() != null && !"".equals(vo.getBuyerRemark())) {
 			builder.and(invoiceMainEntity.buyerRemark.equalsIgnoreCase(vo.getBuyerRemark())); //java.lang.String
 		}
-		if ( vo.getCPosRemark2() != null && !"".equals(vo.getCPosRemark2())) {
-			builder.and(invoiceMainEntity.cPosRemark2.equalsIgnoreCase(vo.getCPosRemark2())); //java.lang.String
+		if ( vo.getcPosRemark2() != null && !"".equals(vo.getcPosRemark2())) {
+			builder.and(invoiceMainEntity.cPosRemark2.equalsIgnoreCase(vo.getcPosRemark2())); //java.lang.String
 		}
-		if ( vo.getCPosRemark1() != null && !"".equals(vo.getCPosRemark1())) {
-			builder.and(invoiceMainEntity.cPosRemark1.equalsIgnoreCase(vo.getCPosRemark1())); //java.lang.String
+		if ( vo.getcPosRemark1() != null && !"".equals(vo.getcPosRemark1())) {
+			builder.and(invoiceMainEntity.cPosRemark1.equalsIgnoreCase(vo.getcPosRemark1())); //java.lang.String
 		}
 		if ( vo.getTaxType() != null && !"".equals(vo.getTaxType())) {
 			builder.and(invoiceMainEntity.taxType.equalsIgnoreCase(vo.getTaxType())); //java.lang.String
@@ -454,14 +455,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintMark() != null ) {
 			builder.and(invoiceMainEntity.syncPrintMark.eq(vo.getSyncPrintMark())); //java.lang.Boolean
 		}	
-		if ( vo.getCNaturalPerson() != null && !"".equals(vo.getCNaturalPerson())) {
-			builder.and(invoiceMainEntity.cNaturalPerson.equalsIgnoreCase(vo.getCNaturalPerson())); //java.lang.String
+		if ( vo.getcNaturalPerson() != null && !"".equals(vo.getcNaturalPerson())) {
+			builder.and(invoiceMainEntity.cNaturalPerson.equalsIgnoreCase(vo.getcNaturalPerson())); //java.lang.String
 		}
 		if ( vo.getBuyerPersonInCharge() != null && !"".equals(vo.getBuyerPersonInCharge())) {
 			builder.and(invoiceMainEntity.buyerPersonInCharge.equalsIgnoreCase(vo.getBuyerPersonInCharge())); //java.lang.String
 		}
-		if ( vo.getCPrinterNo() != null && !"".equals(vo.getCPrinterNo())) {
-			builder.and(invoiceMainEntity.cPrinterNo.equalsIgnoreCase(vo.getCPrinterNo())); //java.lang.String
+		if ( vo.getcPrinterNo() != null && !"".equals(vo.getcPrinterNo())) {
+			builder.and(invoiceMainEntity.cPrinterNo.equalsIgnoreCase(vo.getcPrinterNo())); //java.lang.String
 		}
 		if ( vo.getInvoiceTime() != null && !"".equals(vo.getInvoiceTime())) {
 			builder.and(invoiceMainEntity.invoiceTime.equalsIgnoreCase(vo.getInvoiceTime())); //java.lang.String
@@ -469,8 +470,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getZeroTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.zeroTaxSalesAmount.eq(vo.getZeroTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPosRemark3() != null && !"".equals(vo.getCPosRemark3())) {
-			builder.and(invoiceMainEntity.cPosRemark3.equalsIgnoreCase(vo.getCPosRemark3())); //java.lang.String
+		if ( vo.getcPosRemark3() != null && !"".equals(vo.getcPosRemark3())) {
+			builder.and(invoiceMainEntity.cPosRemark3.equalsIgnoreCase(vo.getcPosRemark3())); //java.lang.String
 		}
 		if ( vo.getSyncPrintUser() != null ) {
 			builder.and(invoiceMainEntity.syncPrintUser.eq(vo.getSyncPrintUser())); //java.lang.Integer
@@ -478,8 +479,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerTelephoneNumber() != null && !"".equals(vo.getBuyerTelephoneNumber())) {
 			builder.and(invoiceMainEntity.buyerTelephoneNumber.equalsIgnoreCase(vo.getBuyerTelephoneNumber())); //java.lang.String
 		}
-		if ( vo.getCPosRemark4() != null && !"".equals(vo.getCPosRemark4())) {
-			builder.and(invoiceMainEntity.cPosRemark4.equalsIgnoreCase(vo.getCPosRemark4())); //java.lang.String
+		if ( vo.getcPosRemark4() != null && !"".equals(vo.getcPosRemark4())) {
+			builder.and(invoiceMainEntity.cPosRemark4.equalsIgnoreCase(vo.getcPosRemark4())); //java.lang.String
 		}
 		if ( vo.getBuyerCustomerNumber() != null && !"".equals(vo.getBuyerCustomerNumber())) {
 			builder.and(invoiceMainEntity.buyerCustomerNumber.equalsIgnoreCase(vo.getBuyerCustomerNumber())); //java.lang.String
@@ -520,14 +521,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getConfirmStatus() != null ) {
 			builder.and(invoiceMainEntity.confirmStatus.eq(vo.getConfirmStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCInvoiceStatus() != null ) {
-			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getCInvoiceStatus())); //java.lang.Integer
+		if ( vo.getcInvoiceStatus() != null ) {
+			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getcInvoiceStatus())); //java.lang.Integer
 		}	
 		if ( vo.getAcceptStatus() != null ) {
 			builder.and(invoiceMainEntity.acceptStatus.eq(vo.getAcceptStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCMemberType() != null && !"".equals(vo.getCMemberType())) {
-			builder.and(invoiceMainEntity.cMemberType.equalsIgnoreCase(vo.getCMemberType())); //java.lang.String
+		if ( vo.getcMemberType() != null && !"".equals(vo.getcMemberType())) {
+			builder.and(invoiceMainEntity.cMemberType.equalsIgnoreCase(vo.getcMemberType())); //java.lang.String
 		}
 		if ( vo.getModifierId() != null ) {
 			builder.and(invoiceMainEntity.modifierId.eq(vo.getModifierId())); //java.lang.Integer
@@ -611,8 +612,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getFreeTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.freeTaxSalesAmount.eq(vo.getFreeTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPrinterId() != null ) {
-			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getCPrinterId())); //java.lang.Integer
+		if ( vo.getcPrinterId() != null ) {
+			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getcPrinterId())); //java.lang.Integer
 		}	
 		if ( vo.getInvoiceId() != null ) {
 			builder.and(invoiceMainEntity.invoiceId.eq(vo.getInvoiceId())); //java.lang.Long
@@ -623,8 +624,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getDonateMark() != null && !"".equals(vo.getDonateMark())) {
 			builder.and(invoiceMainEntity.donateMark.containsIgnoreCase(vo.getDonateMark())); //java.lang.String
 		}
-		if ( vo.getCKey() != null && !"".equals(vo.getCKey())) {
-			builder.and(invoiceMainEntity.cKey.containsIgnoreCase(vo.getCKey())); //java.lang.String
+		if ( vo.getcKey() != null && !"".equals(vo.getcKey())) {
+			builder.and(invoiceMainEntity.cKey.containsIgnoreCase(vo.getcKey())); //java.lang.String
 		}
 		if ( vo.getCreateDate() != null ) {
 			builder.and(invoiceMainEntity.createDate.eq(vo.getCreateDate())); //java.sql.Timestamp
@@ -635,8 +636,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBondedAreaConfirm() != null && !"".equals(vo.getBondedAreaConfirm())) {
 			builder.and(invoiceMainEntity.bondedAreaConfirm.containsIgnoreCase(vo.getBondedAreaConfirm())); //java.lang.String
 		}
-		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
-			builder.and(invoiceMainEntity.cMemberNumber.containsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
+		if ( vo.getcMemberNumber() != null && !"".equals(vo.getcMemberNumber())) {
+			builder.and(invoiceMainEntity.cMemberNumber.containsIgnoreCase(vo.getcMemberNumber())); //java.lang.String
 		}
 		if ( vo.getExchangeRate() != null ) {
 			builder.and(invoiceMainEntity.exchangeRate.eq(vo.getExchangeRate())); //java.lang.Float
@@ -650,17 +651,17 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintDate() != null ) {
 			builder.and(invoiceMainEntity.syncPrintDate.eq(vo.getSyncPrintDate())); //java.sql.Timestamp
 		}	
-		if ( vo.getCEmail() != null && !"".equals(vo.getCEmail())) {
-			builder.and(invoiceMainEntity.cEmail.containsIgnoreCase(vo.getCEmail())); //java.lang.String
+		if ( vo.getcEmail() != null && !"".equals(vo.getcEmail())) {
+			builder.and(invoiceMainEntity.cEmail.containsIgnoreCase(vo.getcEmail())); //java.lang.String
 		}
-		if ( vo.getCPhoneCode() != null && !"".equals(vo.getCPhoneCode())) {
-			builder.and(invoiceMainEntity.cPhoneCode.containsIgnoreCase(vo.getCPhoneCode())); //java.lang.String
+		if ( vo.getcPhoneCode() != null && !"".equals(vo.getcPhoneCode())) {
+			builder.and(invoiceMainEntity.cPhoneCode.containsIgnoreCase(vo.getcPhoneCode())); //java.lang.String
 		}
 		if ( vo.getSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.salesAmount.eq(vo.getSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCYearMonth() != null && !"".equals(vo.getCYearMonth())) {
-			builder.and(invoiceMainEntity.cYearMonth.containsIgnoreCase(vo.getCYearMonth())); //java.lang.String
+		if ( vo.getcYearMonth() != null && !"".equals(vo.getcYearMonth())) {
+			builder.and(invoiceMainEntity.cYearMonth.containsIgnoreCase(vo.getcYearMonth())); //java.lang.String
 		}
 		if ( vo.getBuyerFacsimileNumber() != null && !"".equals(vo.getBuyerFacsimileNumber())) {
 			builder.and(invoiceMainEntity.buyerFacsimileNumber.containsIgnoreCase(vo.getBuyerFacsimileNumber())); //java.lang.String
@@ -677,11 +678,11 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerRemark() != null && !"".equals(vo.getBuyerRemark())) {
 			builder.and(invoiceMainEntity.buyerRemark.containsIgnoreCase(vo.getBuyerRemark())); //java.lang.String
 		}
-		if ( vo.getCPosRemark2() != null && !"".equals(vo.getCPosRemark2())) {
-			builder.and(invoiceMainEntity.cPosRemark2.containsIgnoreCase(vo.getCPosRemark2())); //java.lang.String
+		if ( vo.getcPosRemark2() != null && !"".equals(vo.getcPosRemark2())) {
+			builder.and(invoiceMainEntity.cPosRemark2.containsIgnoreCase(vo.getcPosRemark2())); //java.lang.String
 		}
-		if ( vo.getCPosRemark1() != null && !"".equals(vo.getCPosRemark1())) {
-			builder.and(invoiceMainEntity.cPosRemark1.containsIgnoreCase(vo.getCPosRemark1())); //java.lang.String
+		if ( vo.getcPosRemark1() != null && !"".equals(vo.getcPosRemark1())) {
+			builder.and(invoiceMainEntity.cPosRemark1.containsIgnoreCase(vo.getcPosRemark1())); //java.lang.String
 		}
 		if ( vo.getTaxType() != null && !"".equals(vo.getTaxType())) {
 			builder.and(invoiceMainEntity.taxType.containsIgnoreCase(vo.getTaxType())); //java.lang.String
@@ -704,14 +705,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintMark() != null ) {
 			builder.and(invoiceMainEntity.syncPrintMark.eq(vo.getSyncPrintMark())); //java.lang.Boolean
 		}	
-		if ( vo.getCNaturalPerson() != null && !"".equals(vo.getCNaturalPerson())) {
-			builder.and(invoiceMainEntity.cNaturalPerson.containsIgnoreCase(vo.getCNaturalPerson())); //java.lang.String
+		if ( vo.getcNaturalPerson() != null && !"".equals(vo.getcNaturalPerson())) {
+			builder.and(invoiceMainEntity.cNaturalPerson.containsIgnoreCase(vo.getcNaturalPerson())); //java.lang.String
 		}
 		if ( vo.getBuyerPersonInCharge() != null && !"".equals(vo.getBuyerPersonInCharge())) {
 			builder.and(invoiceMainEntity.buyerPersonInCharge.containsIgnoreCase(vo.getBuyerPersonInCharge())); //java.lang.String
 		}
-		if ( vo.getCPrinterNo() != null && !"".equals(vo.getCPrinterNo())) {
-			builder.and(invoiceMainEntity.cPrinterNo.containsIgnoreCase(vo.getCPrinterNo())); //java.lang.String
+		if ( vo.getcPrinterNo() != null && !"".equals(vo.getcPrinterNo())) {
+			builder.and(invoiceMainEntity.cPrinterNo.containsIgnoreCase(vo.getcPrinterNo())); //java.lang.String
 		}
 		if ( vo.getInvoiceTime() != null && !"".equals(vo.getInvoiceTime())) {
 			builder.and(invoiceMainEntity.invoiceTime.containsIgnoreCase(vo.getInvoiceTime())); //java.lang.String
@@ -719,8 +720,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getZeroTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.zeroTaxSalesAmount.eq(vo.getZeroTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPosRemark3() != null && !"".equals(vo.getCPosRemark3())) {
-			builder.and(invoiceMainEntity.cPosRemark3.containsIgnoreCase(vo.getCPosRemark3())); //java.lang.String
+		if ( vo.getcPosRemark3() != null && !"".equals(vo.getcPosRemark3())) {
+			builder.and(invoiceMainEntity.cPosRemark3.containsIgnoreCase(vo.getcPosRemark3())); //java.lang.String
 		}
 		if ( vo.getSyncPrintUser() != null ) {
 			builder.and(invoiceMainEntity.syncPrintUser.eq(vo.getSyncPrintUser())); //java.lang.Integer
@@ -728,8 +729,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerTelephoneNumber() != null && !"".equals(vo.getBuyerTelephoneNumber())) {
 			builder.and(invoiceMainEntity.buyerTelephoneNumber.containsIgnoreCase(vo.getBuyerTelephoneNumber())); //java.lang.String
 		}
-		if ( vo.getCPosRemark4() != null && !"".equals(vo.getCPosRemark4())) {
-			builder.and(invoiceMainEntity.cPosRemark4.containsIgnoreCase(vo.getCPosRemark4())); //java.lang.String
+		if ( vo.getcPosRemark4() != null && !"".equals(vo.getcPosRemark4())) {
+			builder.and(invoiceMainEntity.cPosRemark4.containsIgnoreCase(vo.getcPosRemark4())); //java.lang.String
 		}
 		if ( vo.getBuyerCustomerNumber() != null && !"".equals(vo.getBuyerCustomerNumber())) {
 			builder.and(invoiceMainEntity.buyerCustomerNumber.containsIgnoreCase(vo.getBuyerCustomerNumber())); //java.lang.String
@@ -770,14 +771,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getConfirmStatus() != null ) {
 			builder.and(invoiceMainEntity.confirmStatus.eq(vo.getConfirmStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCInvoiceStatus() != null ) {
-			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getCInvoiceStatus())); //java.lang.Integer
+		if ( vo.getcInvoiceStatus() != null ) {
+			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getcInvoiceStatus())); //java.lang.Integer
 		}	
 		if ( vo.getAcceptStatus() != null ) {
 			builder.and(invoiceMainEntity.acceptStatus.eq(vo.getAcceptStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCMemberType() != null && !"".equals(vo.getCMemberType())) {
-			builder.and(invoiceMainEntity.cMemberType.containsIgnoreCase(vo.getCMemberType())); //java.lang.String
+		if ( vo.getcMemberType() != null && !"".equals(vo.getcMemberType())) {
+			builder.and(invoiceMainEntity.cMemberType.containsIgnoreCase(vo.getcMemberType())); //java.lang.String
 		}
 		if ( vo.getModifierId() != null ) {
 			builder.and(invoiceMainEntity.modifierId.eq(vo.getModifierId())); //java.lang.Integer
@@ -857,8 +858,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getFreeTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.freeTaxSalesAmount.eq(vo.getFreeTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPrinterId() != null ) {
-			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getCPrinterId())); //java.lang.Integer
+		if ( vo.getcPrinterId() != null ) {
+			builder.and(invoiceMainEntity.cPrinterId.eq(vo.getcPrinterId())); //java.lang.Integer
 		}	
 		if ( vo.getInvoiceId() != null ) {
 			builder.and(invoiceMainEntity.invoiceId.eq(vo.getInvoiceId())); //java.lang.Long
@@ -869,8 +870,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getDonateMark() != null && !"".equals(vo.getDonateMark())) {
 			builder.and(invoiceMainEntity.donateMark.containsIgnoreCase(vo.getDonateMark())); //java.lang.String
 		}
-		if ( vo.getCKey() != null && !"".equals(vo.getCKey())) {
-			builder.and(invoiceMainEntity.cKey.containsIgnoreCase(vo.getCKey())); //java.lang.String
+		if ( vo.getcKey() != null && !"".equals(vo.getcKey())) {
+			builder.and(invoiceMainEntity.cKey.containsIgnoreCase(vo.getcKey())); //java.lang.String
 		}
 		if ( vo.getCreateDate() != null ) {
 			builder.and(invoiceMainEntity.createDate.eq(vo.getCreateDate())); //java.sql.Timestamp
@@ -881,8 +882,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBondedAreaConfirm() != null && !"".equals(vo.getBondedAreaConfirm())) {
 			builder.and(invoiceMainEntity.bondedAreaConfirm.containsIgnoreCase(vo.getBondedAreaConfirm())); //java.lang.String
 		}
-		if ( vo.getCMemberNumber() != null && !"".equals(vo.getCMemberNumber())) {
-			builder.and(invoiceMainEntity.cMemberNumber.containsIgnoreCase(vo.getCMemberNumber())); //java.lang.String
+		if ( vo.getcMemberNumber() != null && !"".equals(vo.getcMemberNumber())) {
+			builder.and(invoiceMainEntity.cMemberNumber.containsIgnoreCase(vo.getcMemberNumber())); //java.lang.String
 		}
 		if ( vo.getExchangeRate() != null ) {
 			builder.and(invoiceMainEntity.exchangeRate.eq(vo.getExchangeRate())); //java.lang.Float
@@ -896,17 +897,17 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintDate() != null ) {
 			builder.and(invoiceMainEntity.syncPrintDate.eq(vo.getSyncPrintDate())); //java.sql.Timestamp
 		}	
-		if ( vo.getCEmail() != null && !"".equals(vo.getCEmail())) {
-			builder.and(invoiceMainEntity.cEmail.containsIgnoreCase(vo.getCEmail())); //java.lang.String
+		if ( vo.getcEmail() != null && !"".equals(vo.getcEmail())) {
+			builder.and(invoiceMainEntity.cEmail.containsIgnoreCase(vo.getcEmail())); //java.lang.String
 		}
-		if ( vo.getCPhoneCode() != null && !"".equals(vo.getCPhoneCode())) {
-			builder.and(invoiceMainEntity.cPhoneCode.containsIgnoreCase(vo.getCPhoneCode())); //java.lang.String
+		if ( vo.getcPhoneCode() != null && !"".equals(vo.getcPhoneCode())) {
+			builder.and(invoiceMainEntity.cPhoneCode.containsIgnoreCase(vo.getcPhoneCode())); //java.lang.String
 		}
 		if ( vo.getSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.salesAmount.eq(vo.getSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCYearMonth() != null && !"".equals(vo.getCYearMonth())) {
-			builder.and(invoiceMainEntity.cYearMonth.containsIgnoreCase(vo.getCYearMonth())); //java.lang.String
+		if ( vo.getcYearMonth() != null && !"".equals(vo.getcYearMonth())) {
+			builder.and(invoiceMainEntity.cYearMonth.containsIgnoreCase(vo.getcYearMonth())); //java.lang.String
 		}
 		if ( vo.getBuyerFacsimileNumber() != null && !"".equals(vo.getBuyerFacsimileNumber())) {
 			builder.and(invoiceMainEntity.buyerFacsimileNumber.containsIgnoreCase(vo.getBuyerFacsimileNumber())); //java.lang.String
@@ -923,11 +924,11 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerRemark() != null && !"".equals(vo.getBuyerRemark())) {
 			builder.and(invoiceMainEntity.buyerRemark.containsIgnoreCase(vo.getBuyerRemark())); //java.lang.String
 		}
-		if ( vo.getCPosRemark2() != null && !"".equals(vo.getCPosRemark2())) {
-			builder.and(invoiceMainEntity.cPosRemark2.containsIgnoreCase(vo.getCPosRemark2())); //java.lang.String
+		if ( vo.getcPosRemark2() != null && !"".equals(vo.getcPosRemark2())) {
+			builder.and(invoiceMainEntity.cPosRemark2.containsIgnoreCase(vo.getcPosRemark2())); //java.lang.String
 		}
-		if ( vo.getCPosRemark1() != null && !"".equals(vo.getCPosRemark1())) {
-			builder.and(invoiceMainEntity.cPosRemark1.containsIgnoreCase(vo.getCPosRemark1())); //java.lang.String
+		if ( vo.getcPosRemark1() != null && !"".equals(vo.getcPosRemark1())) {
+			builder.and(invoiceMainEntity.cPosRemark1.containsIgnoreCase(vo.getcPosRemark1())); //java.lang.String
 		}
 		if ( vo.getTaxType() != null && !"".equals(vo.getTaxType())) {
 			builder.and(invoiceMainEntity.taxType.containsIgnoreCase(vo.getTaxType())); //java.lang.String
@@ -950,14 +951,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getSyncPrintMark() != null ) {
 			builder.and(invoiceMainEntity.syncPrintMark.eq(vo.getSyncPrintMark())); //java.lang.Boolean
 		}	
-		if ( vo.getCNaturalPerson() != null && !"".equals(vo.getCNaturalPerson())) {
-			builder.and(invoiceMainEntity.cNaturalPerson.containsIgnoreCase(vo.getCNaturalPerson())); //java.lang.String
+		if ( vo.getcNaturalPerson() != null && !"".equals(vo.getcNaturalPerson())) {
+			builder.and(invoiceMainEntity.cNaturalPerson.containsIgnoreCase(vo.getcNaturalPerson())); //java.lang.String
 		}
 		if ( vo.getBuyerPersonInCharge() != null && !"".equals(vo.getBuyerPersonInCharge())) {
 			builder.and(invoiceMainEntity.buyerPersonInCharge.containsIgnoreCase(vo.getBuyerPersonInCharge())); //java.lang.String
 		}
-		if ( vo.getCPrinterNo() != null && !"".equals(vo.getCPrinterNo())) {
-			builder.and(invoiceMainEntity.cPrinterNo.containsIgnoreCase(vo.getCPrinterNo())); //java.lang.String
+		if ( vo.getcPrinterNo() != null && !"".equals(vo.getcPrinterNo())) {
+			builder.and(invoiceMainEntity.cPrinterNo.containsIgnoreCase(vo.getcPrinterNo())); //java.lang.String
 		}
 		if ( vo.getInvoiceTime() != null && !"".equals(vo.getInvoiceTime())) {
 			builder.and(invoiceMainEntity.invoiceTime.containsIgnoreCase(vo.getInvoiceTime())); //java.lang.String
@@ -965,8 +966,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getZeroTaxSalesAmount() != null ) {
 			builder.and(invoiceMainEntity.zeroTaxSalesAmount.eq(vo.getZeroTaxSalesAmount())); //java.math.BigDecimal
 		}	
-		if ( vo.getCPosRemark3() != null && !"".equals(vo.getCPosRemark3())) {
-			builder.and(invoiceMainEntity.cPosRemark3.containsIgnoreCase(vo.getCPosRemark3())); //java.lang.String
+		if ( vo.getcPosRemark3() != null && !"".equals(vo.getcPosRemark3())) {
+			builder.and(invoiceMainEntity.cPosRemark3.containsIgnoreCase(vo.getcPosRemark3())); //java.lang.String
 		}
 		if ( vo.getSyncPrintUser() != null ) {
 			builder.and(invoiceMainEntity.syncPrintUser.eq(vo.getSyncPrintUser())); //java.lang.Integer
@@ -974,8 +975,8 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getBuyerTelephoneNumber() != null && !"".equals(vo.getBuyerTelephoneNumber())) {
 			builder.and(invoiceMainEntity.buyerTelephoneNumber.containsIgnoreCase(vo.getBuyerTelephoneNumber())); //java.lang.String
 		}
-		if ( vo.getCPosRemark4() != null && !"".equals(vo.getCPosRemark4())) {
-			builder.and(invoiceMainEntity.cPosRemark4.containsIgnoreCase(vo.getCPosRemark4())); //java.lang.String
+		if ( vo.getcPosRemark4() != null && !"".equals(vo.getcPosRemark4())) {
+			builder.and(invoiceMainEntity.cPosRemark4.containsIgnoreCase(vo.getcPosRemark4())); //java.lang.String
 		}
 		if ( vo.getBuyerCustomerNumber() != null && !"".equals(vo.getBuyerCustomerNumber())) {
 			builder.and(invoiceMainEntity.buyerCustomerNumber.containsIgnoreCase(vo.getBuyerCustomerNumber())); //java.lang.String
@@ -1016,14 +1017,14 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getConfirmStatus() != null ) {
 			builder.and(invoiceMainEntity.confirmStatus.eq(vo.getConfirmStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCInvoiceStatus() != null ) {
-			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getCInvoiceStatus())); //java.lang.Integer
+		if ( vo.getcInvoiceStatus() != null ) {
+			builder.and(invoiceMainEntity.cInvoiceStatus.eq(vo.getcInvoiceStatus())); //java.lang.Integer
 		}	
 		if ( vo.getAcceptStatus() != null ) {
 			builder.and(invoiceMainEntity.acceptStatus.eq(vo.getAcceptStatus())); //java.lang.Integer
 		}	
-		if ( vo.getCMemberType() != null && !"".equals(vo.getCMemberType())) {
-			builder.and(invoiceMainEntity.cMemberType.containsIgnoreCase(vo.getCMemberType())); //java.lang.String
+		if ( vo.getcMemberType() != null && !"".equals(vo.getcMemberType())) {
+			builder.and(invoiceMainEntity.cMemberType.containsIgnoreCase(vo.getcMemberType())); //java.lang.String
 		}
 		if ( vo.getModifierId() != null ) {
 			builder.and(invoiceMainEntity.modifierId.eq(vo.getModifierId())); //java.lang.Integer

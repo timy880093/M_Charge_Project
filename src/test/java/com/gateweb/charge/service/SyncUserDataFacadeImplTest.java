@@ -20,7 +20,7 @@ public class SyncUserDataFacadeImplTest {
 
     @Test
     public void syncCompanyDataTest() throws InvocationTargetException, IllegalAccessException {
-        syncUserDataFacade.transactionSyncUserDataFromEinvDatabase();
+        syncUserDataFacade.syncUserDataFromEinvDatabase();
     }
 
 }

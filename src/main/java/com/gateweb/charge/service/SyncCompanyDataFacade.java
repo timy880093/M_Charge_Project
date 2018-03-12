@@ -6,6 +6,5 @@ import java.lang.reflect.InvocationTargetException;
  * Created by Eason on 3/9/2018.
  */
 public interface SyncCompanyDataFacade {
-
-    void transactionSyncCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException;
+    void syncCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException;
 }

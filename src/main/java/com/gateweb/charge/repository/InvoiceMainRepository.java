@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  *
  * This class provides methods to populate DB Table of InvoiceMain
  */
- @Repository("invoiceMain")
+ @Repository("invoiceMainRepository")
 public interface InvoiceMainRepository extends JpaRepository<InvoiceMainEntity, Long>
 	, QuerydslPredicateExecutor<InvoiceMainEntity> ,InvoiceMainRepositoryCustom {
 	
@@ -51,6 +51,8 @@ public interface InvoiceMainRepository extends JpaRepository<InvoiceMainEntity, 
 //	public List<InvoiceMainEntity> findTop100ByInvoiceId(Long invoiceId);
 //	
 //	public long count();
+
+	public InvoiceMainEntity findByInvoiceIdAndCYearMonth(Long invoiceId, String yearMonth);
 
 			
 }

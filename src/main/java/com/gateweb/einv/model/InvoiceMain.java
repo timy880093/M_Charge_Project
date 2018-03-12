@@ -5,29 +5,15 @@
  */
 package com.gateweb.einv.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.GenerationType.AUTO;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import com.meshinnovation.db.model.BaseObject;
-
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  *
@@ -113,6 +99,12 @@ public class InvoiceMain extends BaseObject{
 	protected java.lang.String buyerRoleRemark;
 	
 	/**
+	 * allowance_count
+	 */
+	@Column(name = "allowance_count")
+	protected java.lang.Integer allowanceCount;
+	
+	/**
 	 * check_number
 	 */
 	@Column(name = "check_number")
@@ -187,6 +179,12 @@ public class InvoiceMain extends BaseObject{
 	protected java.lang.String bondedAreaConfirm;
 	
 	/**
+	 * c_member_number
+	 */
+	@Column(name = "c_member_number")
+	protected java.lang.String cMemberNumber;
+	
+	/**
 	 * exchange_rate
 	 */
 	@Column(name = "exchange_rate")
@@ -239,6 +237,12 @@ public class InvoiceMain extends BaseObject{
 	 */
 	@Column(name = "buyer_facsimile_number")
 	protected java.lang.String buyerFacsimileNumber;
+	
+	/**
+	 * mig_type
+	 */
+	@Column(name = "mig_type")
+	protected java.lang.String migType;
 	
 	/**
 	 * sync_company_key
@@ -379,12 +383,6 @@ public class InvoiceMain extends BaseObject{
 	protected java.lang.String invoiceDate;
 	
 	/**
-	 * c_member_number
-	 */
-	@Column(name = "c_member_number")
-	protected java.lang.String cMemberNumber;
-	
-	/**
 	 * seller_telephone_number
 	 */
 	@Column(name = "seller_telephone_number")
@@ -445,10 +443,22 @@ public class InvoiceMain extends BaseObject{
 	protected java.lang.String sellerAddress;
 	
 	/**
+	 * confirm_status
+	 */
+	@Column(name = "confirm_status")
+	protected java.lang.Integer confirmStatus;
+	
+	/**
 	 * c_invoice_status
 	 */
 	@Column(name = "c_invoice_status")
-	protected java.lang.Long cInvoiceStatus;
+	protected java.lang.Integer cInvoiceStatus;
+	
+	/**
+	 * accept_status
+	 */
+	@Column(name = "accept_status")
+	protected java.lang.Integer acceptStatus;
 	
 	/**
 	 * c_member_type
@@ -480,1305 +490,919 @@ public class InvoiceMain extends BaseObject{
 	@Column(name = "seller_customer_number")
 	protected java.lang.String sellerCustomerNumber;
 	
+	/**
+	 * upload_status
+	 */
+	@Column(name = "upload_status")
+	protected java.lang.String uploadStatus;
 
-
-
-    
-	/**
-	 * 002
-	 * @return java.lang.String seller
-	 */
-	public java.lang.String getSeller() {
-		return this.seller;
-	}
-	
-	/** 0001
-	 * @param data Set the seller
-	 */	
-	public void setSeller(java.lang.String data) {
-		this.seller = data;
-	}	
-	/**
-	 * 002
-	 * @return java.math.BigDecimal taxAmount
-	 */
-	public java.math.BigDecimal getTaxAmount() {
-		return this.taxAmount;
-	}
-	
-	/** 0001
-	 * @param data Set the taxAmount
-	 */	
-	public void setTaxAmount(java.math.BigDecimal data) {
-		this.taxAmount = data;
-	}	
-	/**
-	 * 002
-	 * @return java.math.BigDecimal discountAmount
-	 */
-	public java.math.BigDecimal getDiscountAmount() {
-		return this.discountAmount;
-	}
-	
-	/** 0001
-	 * @param data Set the discountAmount
-	 */	
-	public void setDiscountAmount(java.math.BigDecimal data) {
-		this.discountAmount = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String mainRemark
-	 */
-	public java.lang.String getMainRemark() {
-		return this.mainRemark;
-	}
-	
-	/** 0001
-	 * @param data Set the mainRemark
-	 */	
-	public void setMainRemark(java.lang.String data) {
-		this.mainRemark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerName
-	 */
-	public java.lang.String getBuyerName() {
-		return this.buyerName;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerName
-	 */	
-	public void setBuyerName(java.lang.String data) {
-		this.buyerName = data;
-	}	
-	/**
-	 * 002
-	 * @return java.math.BigDecimal originalCurrencyAmount
-	 */
-	public java.math.BigDecimal getOriginalCurrencyAmount() {
-		return this.originalCurrencyAmount;
-	}
-	
-	/** 0001
-	 * @param data Set the originalCurrencyAmount
-	 */	
-	public void setOriginalCurrencyAmount(java.math.BigDecimal data) {
-		this.originalCurrencyAmount = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Float taxRate
-	 */
-	public java.lang.Float getTaxRate() {
-		return this.taxRate;
-	}
-	
-	/** 0001
-	 * @param data Set the taxRate
-	 */	
-	public void setTaxRate(java.lang.Float data) {
-		this.taxRate = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String relateNumber
-	 */
-	public java.lang.String getRelateNumber() {
-		return this.relateNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the relateNumber
-	 */	
-	public void setRelateNumber(java.lang.String data) {
-		this.relateNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String carrierId2
-	 */
-	public java.lang.String getCarrierId2() {
-		return this.carrierId2;
-	}
-	
-	/** 0001
-	 * @param data Set the carrierId2
-	 */	
-	public void setCarrierId2(java.lang.String data) {
-		this.carrierId2 = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String carrierId1
-	 */
-	public java.lang.String getCarrierId1() {
-		return this.carrierId1;
-	}
-	
-	/** 0001
-	 * @param data Set the carrierId1
-	 */	
-	public void setCarrierId1(java.lang.String data) {
-		this.carrierId1 = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String npoban
-	 */
-	public java.lang.String getNpoban() {
-		return this.npoban;
-	}
-	
-	/** 0001
-	 * @param data Set the npoban
-	 */	
-	public void setNpoban(java.lang.String data) {
-		this.npoban = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerRoleRemark
-	 */
-	public java.lang.String getBuyerRoleRemark() {
-		return this.buyerRoleRemark;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerRoleRemark
-	 */	
-	public void setBuyerRoleRemark(java.lang.String data) {
-		this.buyerRoleRemark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String checkNumber
-	 */
-	public java.lang.String getCheckNumber() {
-		return this.checkNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the checkNumber
-	 */	
-	public void setCheckNumber(java.lang.String data) {
-		this.checkNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String carrierType
-	 */
-	public java.lang.String getCarrierType() {
-		return this.carrierType;
-	}
-	
-	/** 0001
-	 * @param data Set the carrierType
-	 */	
-	public void setCarrierType(java.lang.String data) {
-		this.carrierType = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerName
-	 */
-	public java.lang.String getSellerName() {
-		return this.sellerName;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerName
-	 */	
-	public void setSellerName(java.lang.String data) {
-		this.sellerName = data;
-	}	
-	/**
-	 * 002
-	 * @return java.math.BigDecimal freeTaxSalesAmount
-	 */
-	public java.math.BigDecimal getFreeTaxSalesAmount() {
-		return this.freeTaxSalesAmount;
-	}
-	
-	/** 0001
-	 * @param data Set the freeTaxSalesAmount
-	 */	
-	public void setFreeTaxSalesAmount(java.math.BigDecimal data) {
-		this.freeTaxSalesAmount = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Long cPrinterId
-	 */
-	public java.lang.Long getCPrinterId() {
-		return this.cPrinterId;
-	}
-	
-	/** 0001
-	 * @param data Set the cPrinterId
-	 */	
-	public void setCPrinterId(java.lang.Long data) {
-		this.cPrinterId = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Long invoiceId
-	 */
-	public java.lang.Long getInvoiceId() {
-		return this.invoiceId;
-	}
-	
-	/** 0001
-	 * @param data Set the invoiceId
-	 */	
-	public void setInvoiceId(java.lang.Long data) {
-		this.invoiceId = data;    //zzz
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerFacsimileNumber
-	 */
-	public java.lang.String getSellerFacsimileNumber() {
-		return this.sellerFacsimileNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerFacsimileNumber
-	 */	
-	public void setSellerFacsimileNumber(java.lang.String data) {
-		this.sellerFacsimileNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String donateMark
-	 */
-	public java.lang.String getDonateMark() {
-		return this.donateMark;
-	}
-	
-	/** 0001
-	 * @param data Set the donateMark
-	 */	
-	public void setDonateMark(java.lang.String data) {
-		this.donateMark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cKey
-	 */
-	public java.lang.String getCKey() {
-		return this.cKey;
-	}
-	
-	/** 0001
-	 * @param data Set the cKey
-	 */	
-	public void setCKey(java.lang.String data) {
-		this.cKey = data;
-	}	
-	/**
-	 * 002
-	 * @return java.sql.Timestamp createDate
-	 */
-	public java.sql.Timestamp getCreateDate() {
-		return this.createDate;
-	}
-	
-	/** 0001
-	 * @param data Set the createDate
-	 */	
-	public void setCreateDate(java.sql.Timestamp data) {
-		this.createDate = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String invoiceNumber
-	 */
-	public java.lang.String getInvoiceNumber() {
-		return this.invoiceNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the invoiceNumber
-	 */	
-	public void setInvoiceNumber(java.lang.String data) {
-		this.invoiceNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String bondedAreaConfirm
-	 */
-	public java.lang.String getBondedAreaConfirm() {
-		return this.bondedAreaConfirm;
-	}
-	
-	/** 0001
-	 * @param data Set the bondedAreaConfirm
-	 */	
-	public void setBondedAreaConfirm(java.lang.String data) {
-		this.bondedAreaConfirm = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Float exchangeRate
-	 */
-	public java.lang.Float getExchangeRate() {
-		return this.exchangeRate;
-	}
-	
-	/** 0001
-	 * @param data Set the exchangeRate
-	 */	
-	public void setExchangeRate(java.lang.Float data) {
-		this.exchangeRate = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerRoleRemark
-	 */
-	public java.lang.String getSellerRoleRemark() {
-		return this.sellerRoleRemark;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerRoleRemark
-	 */	
-	public void setSellerRoleRemark(java.lang.String data) {
-		this.sellerRoleRemark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerEmailAddress
-	 */
-	public java.lang.String getBuyerEmailAddress() {
-		return this.buyerEmailAddress;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerEmailAddress
-	 */	
-	public void setBuyerEmailAddress(java.lang.String data) {
-		this.buyerEmailAddress = data;
-	}	
-	/**
-	 * 002
-	 * @return java.sql.Timestamp syncPrintDate
-	 */
-	public java.sql.Timestamp getSyncPrintDate() {
-		return this.syncPrintDate;
-	}
-	
-	/** 0001
-	 * @param data Set the syncPrintDate
-	 */	
-	public void setSyncPrintDate(java.sql.Timestamp data) {
-		this.syncPrintDate = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cEmail
-	 */
-	public java.lang.String getCEmail() {
-		return this.cEmail;
-	}
-	
-	/** 0001
-	 * @param data Set the cEmail
-	 */	
-	public void setCEmail(java.lang.String data) {
-		this.cEmail = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cPhoneCode
-	 */
-	public java.lang.String getCPhoneCode() {
-		return this.cPhoneCode;
-	}
-	
-	/** 0001
-	 * @param data Set the cPhoneCode
-	 */	
-	public void setCPhoneCode(java.lang.String data) {
-		this.cPhoneCode = data;
-	}	
-	/**
-	 * 002
-	 * @return java.math.BigDecimal salesAmount
-	 */
-	public java.math.BigDecimal getSalesAmount() {
-		return this.salesAmount;
-	}
-	
-	/** 0001
-	 * @param data Set the salesAmount
-	 */	
-	public void setSalesAmount(java.math.BigDecimal data) {
-		this.salesAmount = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cYearMonth
-	 */
-	public java.lang.String getCYearMonth() {
-		return this.cYearMonth;
-	}
-	
-	/** 0001
-	 * @param data Set the cYearMonth
-	 */	
-	public void setCYearMonth(java.lang.String data) {
-		this.cYearMonth = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerFacsimileNumber
-	 */
-	public java.lang.String getBuyerFacsimileNumber() {
-		return this.buyerFacsimileNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerFacsimileNumber
-	 */	
-	public void setBuyerFacsimileNumber(java.lang.String data) {
-		this.buyerFacsimileNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String syncCompanyKey
-	 */
-	public java.lang.String getSyncCompanyKey() {
-		return this.syncCompanyKey;
-	}
-	
-	/** 0001
-	 * @param data Set the syncCompanyKey
-	 */	
-	public void setSyncCompanyKey(java.lang.String data) {
-		this.syncCompanyKey = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyer
-	 */
-	public java.lang.String getBuyer() {
-		return this.buyer;
-	}
-	
-	/** 0001
-	 * @param data Set the buyer
-	 */	
-	public void setBuyer(java.lang.String data) {
-		this.buyer = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerRemark
-	 */
-	public java.lang.String getBuyerRemark() {
-		return this.buyerRemark;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerRemark
-	 */	
-	public void setBuyerRemark(java.lang.String data) {
-		this.buyerRemark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cPosRemark2
-	 */
-	public java.lang.String getCPosRemark2() {
-		return this.cPosRemark2;
-	}
-	
-	/** 0001
-	 * @param data Set the cPosRemark2
-	 */	
-	public void setCPosRemark2(java.lang.String data) {
-		this.cPosRemark2 = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cPosRemark1
-	 */
-	public java.lang.String getCPosRemark1() {
-		return this.cPosRemark1;
-	}
-	
-	/** 0001
-	 * @param data Set the cPosRemark1
-	 */	
-	public void setCPosRemark1(java.lang.String data) {
-		this.cPosRemark1 = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String taxType
-	 */
-	public java.lang.String getTaxType() {
-		return this.taxType;
-	}
-	
-	/** 0001
-	 * @param data Set the taxType
-	 */	
-	public void setTaxType(java.lang.String data) {
-		this.taxType = data;
-	}	
-	/**
-	 * 002
-	 * @return java.math.BigDecimal totalAmount
-	 */
-	public java.math.BigDecimal getTotalAmount() {
-		return this.totalAmount;
-	}
-	
-	/** 0001
-	 * @param data Set the totalAmount
-	 */	
-	public void setTotalAmount(java.math.BigDecimal data) {
-		this.totalAmount = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String randomNumber
-	 */
-	public java.lang.String getRandomNumber() {
-		return this.randomNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the randomNumber
-	 */	
-	public void setRandomNumber(java.lang.String data) {
-		this.randomNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Long creatorId
-	 */
-	public java.lang.Long getCreatorId() {
-		return this.creatorId;
-	}
-	
-	/** 0001
-	 * @param data Set the creatorId
-	 */	
-	public void setCreatorId(java.lang.Long data) {
-		this.creatorId = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String customsClearanceMark
-	 */
-	public java.lang.String getCustomsClearanceMark() {
-		return this.customsClearanceMark;
-	}
-	
-	/** 0001
-	 * @param data Set the customsClearanceMark
-	 */	
-	public void setCustomsClearanceMark(java.lang.String data) {
-		this.customsClearanceMark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerEmailAddress
-	 */
-	public java.lang.String getSellerEmailAddress() {
-		return this.sellerEmailAddress;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerEmailAddress
-	 */	
-	public void setSellerEmailAddress(java.lang.String data) {
-		this.sellerEmailAddress = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Boolean syncPrintMark
-	 */
-	public java.lang.Boolean getSyncPrintMark() {
-		return this.syncPrintMark;
-	}
-	
-	/** 0001
-	 * @param data Set the syncPrintMark
-	 */	
-	public void setSyncPrintMark(java.lang.Boolean data) {
-		this.syncPrintMark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cNaturalPerson
-	 */
-	public java.lang.String getCNaturalPerson() {
-		return this.cNaturalPerson;
-	}
-	
-	/** 0001
-	 * @param data Set the cNaturalPerson
-	 */	
-	public void setCNaturalPerson(java.lang.String data) {
-		this.cNaturalPerson = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerPersonInCharge
-	 */
-	public java.lang.String getBuyerPersonInCharge() {
-		return this.buyerPersonInCharge;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerPersonInCharge
-	 */	
-	public void setBuyerPersonInCharge(java.lang.String data) {
-		this.buyerPersonInCharge = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cPrinterNo
-	 */
-	public java.lang.String getCPrinterNo() {
-		return this.cPrinterNo;
-	}
-	
-	/** 0001
-	 * @param data Set the cPrinterNo
-	 */	
-	public void setCPrinterNo(java.lang.String data) {
-		this.cPrinterNo = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String invoiceTime
-	 */
-	public java.lang.String getInvoiceTime() {
-		return this.invoiceTime;
-	}
-	
-	/** 0001
-	 * @param data Set the invoiceTime
-	 */	
-	public void setInvoiceTime(java.lang.String data) {
-		this.invoiceTime = data;
-	}	
-	/**
-	 * 002
-	 * @return java.math.BigDecimal zeroTaxSalesAmount
-	 */
-	public java.math.BigDecimal getZeroTaxSalesAmount() {
-		return this.zeroTaxSalesAmount;
-	}
-	
-	/** 0001
-	 * @param data Set the zeroTaxSalesAmount
-	 */	
-	public void setZeroTaxSalesAmount(java.math.BigDecimal data) {
-		this.zeroTaxSalesAmount = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cPosRemark3
-	 */
-	public java.lang.String getCPosRemark3() {
-		return this.cPosRemark3;
-	}
-	
-	/** 0001
-	 * @param data Set the cPosRemark3
-	 */	
-	public void setCPosRemark3(java.lang.String data) {
-		this.cPosRemark3 = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Long syncPrintUser
-	 */
-	public java.lang.Long getSyncPrintUser() {
-		return this.syncPrintUser;
-	}
-	
-	/** 0001
-	 * @param data Set the syncPrintUser
-	 */	
-	public void setSyncPrintUser(java.lang.Long data) {
-		this.syncPrintUser = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerTelephoneNumber
-	 */
-	public java.lang.String getBuyerTelephoneNumber() {
-		return this.buyerTelephoneNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerTelephoneNumber
-	 */	
-	public void setBuyerTelephoneNumber(java.lang.String data) {
-		this.buyerTelephoneNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cPosRemark4
-	 */
-	public java.lang.String getCPosRemark4() {
-		return this.cPosRemark4;
-	}
-	
-	/** 0001
-	 * @param data Set the cPosRemark4
-	 */	
-	public void setCPosRemark4(java.lang.String data) {
-		this.cPosRemark4 = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerCustomerNumber
-	 */
-	public java.lang.String getBuyerCustomerNumber() {
-		return this.buyerCustomerNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerCustomerNumber
-	 */	
-	public void setBuyerCustomerNumber(java.lang.String data) {
-		this.buyerCustomerNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String invoiceDate
-	 */
-	public java.lang.String getInvoiceDate() {
-		return this.invoiceDate;
-	}
-	
-	/** 0001
-	 * @param data Set the invoiceDate
-	 */	
-	public void setInvoiceDate(java.lang.String data) {
-		this.invoiceDate = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cMemberNumber
-	 */
-	public java.lang.String getCMemberNumber() {
-		return this.cMemberNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the cMemberNumber
-	 */	
-	public void setCMemberNumber(java.lang.String data) {
-		this.cMemberNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerTelephoneNumber
-	 */
-	public java.lang.String getSellerTelephoneNumber() {
-		return this.sellerTelephoneNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerTelephoneNumber
-	 */	
-	public void setSellerTelephoneNumber(java.lang.String data) {
-		this.sellerTelephoneNumber = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String invoiceType
-	 */
-	public java.lang.String getInvoiceType() {
-		return this.invoiceType;
-	}
-	
-	/** 0001
-	 * @param data Set the invoiceType
-	 */	
-	public void setInvoiceType(java.lang.String data) {
-		this.invoiceType = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String currency
-	 */
-	public java.lang.String getCurrency() {
-		return this.currency;
-	}
-	
-	/** 0001
-	 * @param data Set the currency
-	 */	
-	public void setCurrency(java.lang.String data) {
-		this.currency = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String printMark
-	 */
-	public java.lang.String getPrintMark() {
-		return this.printMark;
-	}
-	
-	/** 0001
-	 * @param data Set the printMark
-	 */	
-	public void setPrintMark(java.lang.String data) {
-		this.printMark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerPersonInCharge
-	 */
-	public java.lang.String getSellerPersonInCharge() {
-		return this.sellerPersonInCharge;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerPersonInCharge
-	 */	
-	public void setSellerPersonInCharge(java.lang.String data) {
-		this.sellerPersonInCharge = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String groupMark
-	 */
-	public java.lang.String getGroupMark() {
-		return this.groupMark;
-	}
-	
-	/** 0001
-	 * @param data Set the groupMark
-	 */	
-	public void setGroupMark(java.lang.String data) {
-		this.groupMark = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String buyerAddress
-	 */
-	public java.lang.String getBuyerAddress() {
-		return this.buyerAddress;
-	}
-	
-	/** 0001
-	 * @param data Set the buyerAddress
-	 */	
-	public void setBuyerAddress(java.lang.String data) {
-		this.buyerAddress = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Long assignId
-	 */
-	public java.lang.Long getAssignId() {
-		return this.assignId;
-	}
-	
-	/** 0001
-	 * @param data Set the assignId
-	 */	
-	public void setAssignId(java.lang.Long data) {
-		this.assignId = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String b2bFlag
-	 */
-	public java.lang.String getB2bFlag() {
-		return this.b2bFlag;
-	}
-	
-	/** 0001
-	 * @param data Set the b2bFlag
-	 */	
-	public void setB2bFlag(java.lang.String data) {
-		this.b2bFlag = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerAddress
-	 */
-	public java.lang.String getSellerAddress() {
-		return this.sellerAddress;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerAddress
-	 */	
-	public void setSellerAddress(java.lang.String data) {
-		this.sellerAddress = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Long cInvoiceStatus
-	 */
-	public java.lang.Long getCInvoiceStatus() {
-		return this.cInvoiceStatus;
-	}
-	
-	/** 0001
-	 * @param data Set the cInvoiceStatus
-	 */	
-	public void setCInvoiceStatus(java.lang.Long data) {
-		this.cInvoiceStatus = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String cMemberType
-	 */
-	public java.lang.String getCMemberType() {
-		return this.cMemberType;
-	}
-	
-	/** 0001
-	 * @param data Set the cMemberType
-	 */	
-	public void setCMemberType(java.lang.String data) {
-		this.cMemberType = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.Long modifierId
-	 */
-	public java.lang.Long getModifierId() {
-		return this.modifierId;
-	}
-	
-	/** 0001
-	 * @param data Set the modifierId
-	 */	
-	public void setModifierId(java.lang.Long data) {
-		this.modifierId = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String category
-	 */
-	public java.lang.String getCategory() {
-		return this.category;
-	}
-	
-	/** 0001
-	 * @param data Set the category
-	 */	
-	public void setCategory(java.lang.String data) {
-		this.category = data;
-	}	
-	/**
-	 * 002
-	 * @return java.sql.Timestamp modifyDate
-	 */
-	public java.sql.Timestamp getModifyDate() {
-		return this.modifyDate;
-	}
-	
-	/** 0001
-	 * @param data Set the modifyDate
-	 */	
-	public void setModifyDate(java.sql.Timestamp data) {
-		this.modifyDate = data;
-	}	
-	/**
-	 * 002
-	 * @return java.lang.String sellerCustomerNumber
-	 */
-	public java.lang.String getSellerCustomerNumber() {
-		return this.sellerCustomerNumber;
-	}
-	
-	/** 0001
-	 * @param data Set the sellerCustomerNumber
-	 */	
-	public void setSellerCustomerNumber(java.lang.String data) {
-		this.sellerCustomerNumber = data;
-	}	
-
-
-
-	/**
-	 *
-	 */
-	public InvoiceMain(){
+	public Integer getAcceptStatus() {
+		return acceptStatus;
 	}
 
-	/**
-	 * full constructor 
-	 * @param seller 
-	 * @param taxAmount 
-	 * @param discountAmount 
-	 * @param mainRemark 
-	 * @param buyerName 
-	 * @param originalCurrencyAmount 
-	 * @param taxRate 
-	 * @param relateNumber 
-	 * @param carrierId2 
-	 * @param carrierId1 
-	 * @param npoban 
-	 * @param buyerRoleRemark 
-	 * @param checkNumber 
-	 * @param carrierType 
-	 * @param sellerName 
-	 * @param freeTaxSalesAmount 
-	 * @param cPrinterId 
-	 * @param invoiceId 
-	 * @param sellerFacsimileNumber 
-	 * @param donateMark 
-	 * @param cKey 
-	 * @param createDate 
-	 * @param invoiceNumber 
-	 * @param bondedAreaConfirm 
-	 * @param exchangeRate 
-	 * @param sellerRoleRemark 
-	 * @param buyerEmailAddress 
-	 * @param syncPrintDate 
-	 * @param cEmail 
-	 * @param cPhoneCode 
-	 * @param salesAmount 
-	 * @param cYearMonth 
-	 * @param buyerFacsimileNumber 
-	 * @param syncCompanyKey 
-	 * @param buyer 
-	 * @param buyerRemark 
-	 * @param cPosRemark2 
-	 * @param cPosRemark1 
-	 * @param taxType 
-	 * @param totalAmount 
-	 * @param randomNumber 
-	 * @param creatorId 
-	 * @param customsClearanceMark 
-	 * @param sellerEmailAddress 
-	 * @param syncPrintMark 
-	 * @param cNaturalPerson 
-	 * @param buyerPersonInCharge 
-	 * @param cPrinterNo 
-	 * @param invoiceTime 
-	 * @param zeroTaxSalesAmount 
-	 * @param cPosRemark3 
-	 * @param syncPrintUser 
-	 * @param buyerTelephoneNumber 
-	 * @param cPosRemark4 
-	 * @param buyerCustomerNumber 
-	 * @param invoiceDate 
-	 * @param cMemberNumber
-	 * @param sellerTelephoneNumber 
-	 * @param invoiceType 
-	 * @param currency 
-	 * @param printMark 
-	 * @param sellerPersonInCharge 
-	 * @param groupMark 
-	 * @param buyerAddress 
-	 * @param assignId 
-	 * @param b2bFlag 
-	 * @param sellerAddress 
-	 * @param cInvoiceStatus 
-	 * @param cMemberType 
-	 * @param modifierId 
-	 * @param category 
-	 * @param modifyDate 
-	 * @param sellerCustomerNumber 
-	 */
-	public InvoiceMain (
-		 java.lang.String seller 
-		, java.math.BigDecimal taxAmount 
-		, java.math.BigDecimal discountAmount 
-		, java.lang.String mainRemark 
-		, java.lang.String buyerName 
-		, java.math.BigDecimal originalCurrencyAmount 
-		, java.lang.Float taxRate 
-		, java.lang.String relateNumber 
-		, java.lang.String carrierId2 
-		, java.lang.String carrierId1 
-		, java.lang.String npoban 
-		, java.lang.String buyerRoleRemark 
-		, java.lang.String checkNumber 
-		, java.lang.String carrierType 
-		, java.lang.String sellerName 
-		, java.math.BigDecimal freeTaxSalesAmount 
-		, java.lang.Long cPrinterId 
-		, java.lang.Long invoiceId 
-		, java.lang.String sellerFacsimileNumber 
-		, java.lang.String donateMark 
-		, java.lang.String cKey 
-		, java.sql.Timestamp createDate 
-		, java.lang.String invoiceNumber 
-		, java.lang.String bondedAreaConfirm 
-		, java.lang.Float exchangeRate 
-		, java.lang.String sellerRoleRemark 
-		, java.lang.String buyerEmailAddress 
-		, java.sql.Timestamp syncPrintDate 
-		, java.lang.String cEmail 
-		, java.lang.String cPhoneCode 
-		, java.math.BigDecimal salesAmount 
-		, java.lang.String cYearMonth 
-		, java.lang.String buyerFacsimileNumber 
-		, java.lang.String syncCompanyKey 
-		, java.lang.String buyer 
-		, java.lang.String buyerRemark 
-		, java.lang.String cPosRemark2 
-		, java.lang.String cPosRemark1 
-		, java.lang.String taxType 
-		, java.math.BigDecimal totalAmount 
-		, java.lang.String randomNumber 
-		, java.lang.Long creatorId 
-		, java.lang.String customsClearanceMark 
-		, java.lang.String sellerEmailAddress 
-		, java.lang.Boolean syncPrintMark 
-		, java.lang.String cNaturalPerson 
-		, java.lang.String buyerPersonInCharge 
-		, java.lang.String cPrinterNo 
-		, java.lang.String invoiceTime 
-		, java.math.BigDecimal zeroTaxSalesAmount 
-		, java.lang.String cPosRemark3 
-		, java.lang.Long syncPrintUser 
-		, java.lang.String buyerTelephoneNumber 
-		, java.lang.String cPosRemark4 
-		, java.lang.String buyerCustomerNumber 
-		, java.lang.String invoiceDate 
-		, java.lang.String cMemberNumber
-		, java.lang.String sellerTelephoneNumber 
-		, java.lang.String invoiceType 
-		, java.lang.String currency 
-		, java.lang.String printMark 
-		, java.lang.String sellerPersonInCharge 
-		, java.lang.String groupMark 
-		, java.lang.String buyerAddress 
-		, java.lang.Long assignId 
-		, java.lang.String b2bFlag 
-		, java.lang.String sellerAddress 
-		, java.lang.Long cInvoiceStatus 
-		, java.lang.String cMemberType 
-		, java.lang.Long modifierId 
-		, java.lang.String category 
-		, java.sql.Timestamp modifyDate 
-		, java.lang.String sellerCustomerNumber 
-        ) {
-		this.setSeller(seller);
-		this.setTaxAmount(taxAmount);
-		this.setDiscountAmount(discountAmount);
-		this.setMainRemark(mainRemark);
-		this.setBuyerName(buyerName);
-		this.setOriginalCurrencyAmount(originalCurrencyAmount);
-		this.setTaxRate(taxRate);
-		this.setRelateNumber(relateNumber);
-		this.setCarrierId2(carrierId2);
-		this.setCarrierId1(carrierId1);
-		this.setNpoban(npoban);
-		this.setBuyerRoleRemark(buyerRoleRemark);
-		this.setCheckNumber(checkNumber);
-		this.setCarrierType(carrierType);
-		this.setSellerName(sellerName);
-		this.setFreeTaxSalesAmount(freeTaxSalesAmount);
-		this.setCPrinterId(cPrinterId);
-		this.setInvoiceId(invoiceId);
-		this.setSellerFacsimileNumber(sellerFacsimileNumber);
-		this.setDonateMark(donateMark);
-		this.setCKey(cKey);
-		this.setCreateDate(createDate);
-		this.setInvoiceNumber(invoiceNumber);
-		this.setBondedAreaConfirm(bondedAreaConfirm);
-		this.setExchangeRate(exchangeRate);
-		this.setSellerRoleRemark(sellerRoleRemark);
-		this.setBuyerEmailAddress(buyerEmailAddress);
-		this.setSyncPrintDate(syncPrintDate);
-		this.setCEmail(cEmail);
-		this.setCPhoneCode(cPhoneCode);
-		this.setSalesAmount(salesAmount);
-		this.setCYearMonth(cYearMonth);
-		this.setBuyerFacsimileNumber(buyerFacsimileNumber);
-		this.setSyncCompanyKey(syncCompanyKey);
-		this.setBuyer(buyer);
-		this.setBuyerRemark(buyerRemark);
-		this.setCPosRemark2(cPosRemark2);
-		this.setCPosRemark1(cPosRemark1);
-		this.setTaxType(taxType);
-		this.setTotalAmount(totalAmount);
-		this.setRandomNumber(randomNumber);
-		this.setCreatorId(creatorId);
-		this.setCustomsClearanceMark(customsClearanceMark);
-		this.setSellerEmailAddress(sellerEmailAddress);
-		this.setSyncPrintMark(syncPrintMark);
-		this.setCNaturalPerson(cNaturalPerson);
-		this.setBuyerPersonInCharge(buyerPersonInCharge);
-		this.setCPrinterNo(cPrinterNo);
-		this.setInvoiceTime(invoiceTime);
-		this.setZeroTaxSalesAmount(zeroTaxSalesAmount);
-		this.setCPosRemark3(cPosRemark3);
-		this.setSyncPrintUser(syncPrintUser);
-		this.setBuyerTelephoneNumber(buyerTelephoneNumber);
-		this.setCPosRemark4(cPosRemark4);
-		this.setBuyerCustomerNumber(buyerCustomerNumber);
-		this.setInvoiceDate(invoiceDate);
-		this.setCMemberNumber(cMemberNumber);
-		this.setSellerTelephoneNumber(sellerTelephoneNumber);
-		this.setInvoiceType(invoiceType);
-		this.setCurrency(currency);
-		this.setPrintMark(printMark);
-		this.setSellerPersonInCharge(sellerPersonInCharge);
-		this.setGroupMark(groupMark);
-		this.setBuyerAddress(buyerAddress);
-		this.setAssignId(assignId);
-		this.setB2bFlag(b2bFlag);
-		this.setSellerAddress(sellerAddress);
-		this.setCInvoiceStatus(cInvoiceStatus);
-		this.setCMemberType(cMemberType);
-		this.setModifierId(modifierId);
-		this.setCategory(category);
-		this.setModifyDate(modifyDate);
-		this.setSellerCustomerNumber(sellerCustomerNumber);
-    }
+	public void setAcceptStatus(Integer acceptStatus) {
+		this.acceptStatus = acceptStatus;
+	}
 
-	
+	public Integer getAllowanceCount() {
+		return allowanceCount;
+	}
+
+	public void setAllowanceCount(Integer allowanceCount) {
+		this.allowanceCount = allowanceCount;
+	}
+
+	public Long getAssignId() {
+		return assignId;
+	}
+
+	public void setAssignId(Long assignId) {
+		this.assignId = assignId;
+	}
+
+	public String getB2bFlag() {
+		return b2bFlag;
+	}
+
+	public void setB2bFlag(String b2bFlag) {
+		this.b2bFlag = b2bFlag;
+	}
+
+	public String getBondedAreaConfirm() {
+		return bondedAreaConfirm;
+	}
+
+	public void setBondedAreaConfirm(String bondedAreaConfirm) {
+		this.bondedAreaConfirm = bondedAreaConfirm;
+	}
+
+	public String getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
+	}
+
+	public String getBuyerAddress() {
+		return buyerAddress;
+	}
+
+	public void setBuyerAddress(String buyerAddress) {
+		this.buyerAddress = buyerAddress;
+	}
+
+	public String getBuyerCustomerNumber() {
+		return buyerCustomerNumber;
+	}
+
+	public void setBuyerCustomerNumber(String buyerCustomerNumber) {
+		this.buyerCustomerNumber = buyerCustomerNumber;
+	}
+
+	public String getBuyerEmailAddress() {
+		return buyerEmailAddress;
+	}
+
+	public void setBuyerEmailAddress(String buyerEmailAddress) {
+		this.buyerEmailAddress = buyerEmailAddress;
+	}
+
+	public String getBuyerFacsimileNumber() {
+		return buyerFacsimileNumber;
+	}
+
+	public void setBuyerFacsimileNumber(String buyerFacsimileNumber) {
+		this.buyerFacsimileNumber = buyerFacsimileNumber;
+	}
+
+	public String getBuyerName() {
+		return buyerName;
+	}
+
+	public void setBuyerName(String buyerName) {
+		this.buyerName = buyerName;
+	}
+
+	public String getBuyerPersonInCharge() {
+		return buyerPersonInCharge;
+	}
+
+	public void setBuyerPersonInCharge(String buyerPersonInCharge) {
+		this.buyerPersonInCharge = buyerPersonInCharge;
+	}
+
+	public String getBuyerRemark() {
+		return buyerRemark;
+	}
+
+	public void setBuyerRemark(String buyerRemark) {
+		this.buyerRemark = buyerRemark;
+	}
+
+	public String getBuyerRoleRemark() {
+		return buyerRoleRemark;
+	}
+
+	public void setBuyerRoleRemark(String buyerRoleRemark) {
+		this.buyerRoleRemark = buyerRoleRemark;
+	}
+
+	public String getBuyerTelephoneNumber() {
+		return buyerTelephoneNumber;
+	}
+
+	public void setBuyerTelephoneNumber(String buyerTelephoneNumber) {
+		this.buyerTelephoneNumber = buyerTelephoneNumber;
+	}
+
+	public String getCarrierId1() {
+		return carrierId1;
+	}
+
+	public void setCarrierId1(String carrierId1) {
+		this.carrierId1 = carrierId1;
+	}
+
+	public String getCarrierId2() {
+		return carrierId2;
+	}
+
+	public void setCarrierId2(String carrierId2) {
+		this.carrierId2 = carrierId2;
+	}
+
+	public String getCarrierType() {
+		return carrierType;
+	}
+
+	public void setCarrierType(String carrierType) {
+		this.carrierType = carrierType;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getcEmail() {
+		return cEmail;
+	}
+
+	public void setcEmail(String cEmail) {
+		this.cEmail = cEmail;
+	}
+
+	public String getCheckNumber() {
+		return checkNumber;
+	}
+
+	public void setCheckNumber(String checkNumber) {
+		this.checkNumber = checkNumber;
+	}
+
+	public Integer getcInvoiceStatus() {
+		return cInvoiceStatus;
+	}
+
+	public void setcInvoiceStatus(Integer cInvoiceStatus) {
+		this.cInvoiceStatus = cInvoiceStatus;
+	}
+
+	public String getcKey() {
+		return cKey;
+	}
+
+	public void setcKey(String cKey) {
+		this.cKey = cKey;
+	}
+
+	public String getcMemberNumber() {
+		return cMemberNumber;
+	}
+
+	public void setcMemberNumber(String cMemberNumber) {
+		this.cMemberNumber = cMemberNumber;
+	}
+
+	public String getcMemberType() {
+		return cMemberType;
+	}
+
+	public void setcMemberType(String cMemberType) {
+		this.cMemberType = cMemberType;
+	}
+
+	public String getcNaturalPerson() {
+		return cNaturalPerson;
+	}
+
+	public void setcNaturalPerson(String cNaturalPerson) {
+		this.cNaturalPerson = cNaturalPerson;
+	}
+
+	public Integer getConfirmStatus() {
+		return confirmStatus;
+	}
+
+	public void setConfirmStatus(Integer confirmStatus) {
+		this.confirmStatus = confirmStatus;
+	}
+
+	public String getcPhoneCode() {
+		return cPhoneCode;
+	}
+
+	public void setcPhoneCode(String cPhoneCode) {
+		this.cPhoneCode = cPhoneCode;
+	}
+
+	public String getcPosRemark1() {
+		return cPosRemark1;
+	}
+
+	public void setcPosRemark1(String cPosRemark1) {
+		this.cPosRemark1 = cPosRemark1;
+	}
+
+	public String getcPosRemark2() {
+		return cPosRemark2;
+	}
+
+	public void setcPosRemark2(String cPosRemark2) {
+		this.cPosRemark2 = cPosRemark2;
+	}
+
+	public String getcPosRemark3() {
+		return cPosRemark3;
+	}
+
+	public void setcPosRemark3(String cPosRemark3) {
+		this.cPosRemark3 = cPosRemark3;
+	}
+
+	public String getcPosRemark4() {
+		return cPosRemark4;
+	}
+
+	public void setcPosRemark4(String cPosRemark4) {
+		this.cPosRemark4 = cPosRemark4;
+	}
+
+	public Long getcPrinterId() {
+		return cPrinterId;
+	}
+
+	public void setcPrinterId(Long cPrinterId) {
+		this.cPrinterId = cPrinterId;
+	}
+
+	public String getcPrinterNo() {
+		return cPrinterNo;
+	}
+
+	public void setcPrinterNo(String cPrinterNo) {
+		this.cPrinterNo = cPrinterNo;
+	}
+
+	public Timestamp getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Timestamp createDate) {
+		this.createDate = createDate;
+	}
+
+	public Long getCreatorId() {
+		return creatorId;
+	}
+
+	public void setCreatorId(Long creatorId) {
+		this.creatorId = creatorId;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getCustomsClearanceMark() {
+		return customsClearanceMark;
+	}
+
+	public void setCustomsClearanceMark(String customsClearanceMark) {
+		this.customsClearanceMark = customsClearanceMark;
+	}
+
+	public String getcYearMonth() {
+		return cYearMonth;
+	}
+
+	public void setcYearMonth(String cYearMonth) {
+		this.cYearMonth = cYearMonth;
+	}
+
+	public BigDecimal getDiscountAmount() {
+		return discountAmount;
+	}
+
+	public void setDiscountAmount(BigDecimal discountAmount) {
+		this.discountAmount = discountAmount;
+	}
+
+	public String getDonateMark() {
+		return donateMark;
+	}
+
+	public void setDonateMark(String donateMark) {
+		this.donateMark = donateMark;
+	}
+
+	public Float getExchangeRate() {
+		return exchangeRate;
+	}
+
+	public void setExchangeRate(Float exchangeRate) {
+		this.exchangeRate = exchangeRate;
+	}
+
+	public BigDecimal getFreeTaxSalesAmount() {
+		return freeTaxSalesAmount;
+	}
+
+	public void setFreeTaxSalesAmount(BigDecimal freeTaxSalesAmount) {
+		this.freeTaxSalesAmount = freeTaxSalesAmount;
+	}
+
+	public String getGroupMark() {
+		return groupMark;
+	}
+
+	public void setGroupMark(String groupMark) {
+		this.groupMark = groupMark;
+	}
+
+	public String getInvoiceDate() {
+		return invoiceDate;
+	}
+
+	public void setInvoiceDate(String invoiceDate) {
+		this.invoiceDate = invoiceDate;
+	}
+
+	public Long getInvoiceId() {
+		return invoiceId;
+	}
+
+	public void setInvoiceId(Long invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
+	public String getInvoiceTime() {
+		return invoiceTime;
+	}
+
+	public void setInvoiceTime(String invoiceTime) {
+		this.invoiceTime = invoiceTime;
+	}
+
+	public String getInvoiceType() {
+		return invoiceType;
+	}
+
+	public void setInvoiceType(String invoiceType) {
+		this.invoiceType = invoiceType;
+	}
+
+	public String getMainRemark() {
+		return mainRemark;
+	}
+
+	public void setMainRemark(String mainRemark) {
+		this.mainRemark = mainRemark;
+	}
+
+	public String getMigType() {
+		return migType;
+	}
+
+	public void setMigType(String migType) {
+		this.migType = migType;
+	}
+
+	public Long getModifierId() {
+		return modifierId;
+	}
+
+	public void setModifierId(Long modifierId) {
+		this.modifierId = modifierId;
+	}
+
+	public Timestamp getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(Timestamp modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public String getNpoban() {
+		return npoban;
+	}
+
+	public void setNpoban(String npoban) {
+		this.npoban = npoban;
+	}
+
+	public BigDecimal getOriginalCurrencyAmount() {
+		return originalCurrencyAmount;
+	}
+
+	public void setOriginalCurrencyAmount(BigDecimal originalCurrencyAmount) {
+		this.originalCurrencyAmount = originalCurrencyAmount;
+	}
+
+	public String getPrintMark() {
+		return printMark;
+	}
+
+	public void setPrintMark(String printMark) {
+		this.printMark = printMark;
+	}
+
+	public String getRandomNumber() {
+		return randomNumber;
+	}
+
+	public void setRandomNumber(String randomNumber) {
+		this.randomNumber = randomNumber;
+	}
+
+	public String getRelateNumber() {
+		return relateNumber;
+	}
+
+	public void setRelateNumber(String relateNumber) {
+		this.relateNumber = relateNumber;
+	}
+
+	public BigDecimal getSalesAmount() {
+		return salesAmount;
+	}
+
+	public void setSalesAmount(BigDecimal salesAmount) {
+		this.salesAmount = salesAmount;
+	}
+
+	public String getSeller() {
+		return seller;
+	}
+
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+
+	public String getSellerAddress() {
+		return sellerAddress;
+	}
+
+	public void setSellerAddress(String sellerAddress) {
+		this.sellerAddress = sellerAddress;
+	}
+
+	public String getSellerCustomerNumber() {
+		return sellerCustomerNumber;
+	}
+
+	public void setSellerCustomerNumber(String sellerCustomerNumber) {
+		this.sellerCustomerNumber = sellerCustomerNumber;
+	}
+
+	public String getSellerEmailAddress() {
+		return sellerEmailAddress;
+	}
+
+	public void setSellerEmailAddress(String sellerEmailAddress) {
+		this.sellerEmailAddress = sellerEmailAddress;
+	}
+
+	public String getSellerFacsimileNumber() {
+		return sellerFacsimileNumber;
+	}
+
+	public void setSellerFacsimileNumber(String sellerFacsimileNumber) {
+		this.sellerFacsimileNumber = sellerFacsimileNumber;
+	}
+
+	public String getSellerName() {
+		return sellerName;
+	}
+
+	public void setSellerName(String sellerName) {
+		this.sellerName = sellerName;
+	}
+
+	public String getSellerPersonInCharge() {
+		return sellerPersonInCharge;
+	}
+
+	public void setSellerPersonInCharge(String sellerPersonInCharge) {
+		this.sellerPersonInCharge = sellerPersonInCharge;
+	}
+
+	public String getSellerRoleRemark() {
+		return sellerRoleRemark;
+	}
+
+	public void setSellerRoleRemark(String sellerRoleRemark) {
+		this.sellerRoleRemark = sellerRoleRemark;
+	}
+
+	public String getSellerTelephoneNumber() {
+		return sellerTelephoneNumber;
+	}
+
+	public void setSellerTelephoneNumber(String sellerTelephoneNumber) {
+		this.sellerTelephoneNumber = sellerTelephoneNumber;
+	}
+
+	public String getSyncCompanyKey() {
+		return syncCompanyKey;
+	}
+
+	public void setSyncCompanyKey(String syncCompanyKey) {
+		this.syncCompanyKey = syncCompanyKey;
+	}
+
+	public Timestamp getSyncPrintDate() {
+		return syncPrintDate;
+	}
+
+	public void setSyncPrintDate(Timestamp syncPrintDate) {
+		this.syncPrintDate = syncPrintDate;
+	}
+
+	public Boolean getSyncPrintMark() {
+		return syncPrintMark;
+	}
+
+	public void setSyncPrintMark(Boolean syncPrintMark) {
+		this.syncPrintMark = syncPrintMark;
+	}
+
+	public Long getSyncPrintUser() {
+		return syncPrintUser;
+	}
+
+	public void setSyncPrintUser(Long syncPrintUser) {
+		this.syncPrintUser = syncPrintUser;
+	}
+
+	public BigDecimal getTaxAmount() {
+		return taxAmount;
+	}
+
+	public void setTaxAmount(BigDecimal taxAmount) {
+		this.taxAmount = taxAmount;
+	}
+
+	public Float getTaxRate() {
+		return taxRate;
+	}
+
+	public void setTaxRate(Float taxRate) {
+		this.taxRate = taxRate;
+	}
+
+	public String getTaxType() {
+		return taxType;
+	}
+
+	public void setTaxType(String taxType) {
+		this.taxType = taxType;
+	}
+
+	public BigDecimal getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public String getUploadStatus() {
+		return uploadStatus;
+	}
+
+	public void setUploadStatus(String uploadStatus) {
+		this.uploadStatus = uploadStatus;
+	}
+
+	public BigDecimal getZeroTaxSalesAmount() {
+		return zeroTaxSalesAmount;
+	}
+
+	public void setZeroTaxSalesAmount(BigDecimal zeroTaxSalesAmount) {
+		this.zeroTaxSalesAmount = zeroTaxSalesAmount;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		InvoiceMain that = (InvoiceMain) o;
+
+		if (seller != null ? !seller.equals(that.seller) : that.seller != null) return false;
+		if (taxAmount != null ? !taxAmount.equals(that.taxAmount) : that.taxAmount != null) return false;
+		if (discountAmount != null ? !discountAmount.equals(that.discountAmount) : that.discountAmount != null)
+			return false;
+		if (mainRemark != null ? !mainRemark.equals(that.mainRemark) : that.mainRemark != null) return false;
+		if (buyerName != null ? !buyerName.equals(that.buyerName) : that.buyerName != null) return false;
+		if (originalCurrencyAmount != null ? !originalCurrencyAmount.equals(that.originalCurrencyAmount) : that.originalCurrencyAmount != null)
+			return false;
+		if (taxRate != null ? !taxRate.equals(that.taxRate) : that.taxRate != null) return false;
+		if (relateNumber != null ? !relateNumber.equals(that.relateNumber) : that.relateNumber != null) return false;
+		if (carrierId2 != null ? !carrierId2.equals(that.carrierId2) : that.carrierId2 != null) return false;
+		if (carrierId1 != null ? !carrierId1.equals(that.carrierId1) : that.carrierId1 != null) return false;
+		if (npoban != null ? !npoban.equals(that.npoban) : that.npoban != null) return false;
+		if (buyerRoleRemark != null ? !buyerRoleRemark.equals(that.buyerRoleRemark) : that.buyerRoleRemark != null)
+			return false;
+		if (allowanceCount != null ? !allowanceCount.equals(that.allowanceCount) : that.allowanceCount != null)
+			return false;
+		if (checkNumber != null ? !checkNumber.equals(that.checkNumber) : that.checkNumber != null) return false;
+		if (carrierType != null ? !carrierType.equals(that.carrierType) : that.carrierType != null) return false;
+		if (sellerName != null ? !sellerName.equals(that.sellerName) : that.sellerName != null) return false;
+		if (freeTaxSalesAmount != null ? !freeTaxSalesAmount.equals(that.freeTaxSalesAmount) : that.freeTaxSalesAmount != null)
+			return false;
+		if (cPrinterId != null ? !cPrinterId.equals(that.cPrinterId) : that.cPrinterId != null) return false;
+		if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
+		if (sellerFacsimileNumber != null ? !sellerFacsimileNumber.equals(that.sellerFacsimileNumber) : that.sellerFacsimileNumber != null)
+			return false;
+		if (donateMark != null ? !donateMark.equals(that.donateMark) : that.donateMark != null) return false;
+		if (cKey != null ? !cKey.equals(that.cKey) : that.cKey != null) return false;
+		if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
+		if (invoiceNumber != null ? !invoiceNumber.equals(that.invoiceNumber) : that.invoiceNumber != null)
+			return false;
+		if (bondedAreaConfirm != null ? !bondedAreaConfirm.equals(that.bondedAreaConfirm) : that.bondedAreaConfirm != null)
+			return false;
+		if (cMemberNumber != null ? !cMemberNumber.equals(that.cMemberNumber) : that.cMemberNumber != null)
+			return false;
+		if (exchangeRate != null ? !exchangeRate.equals(that.exchangeRate) : that.exchangeRate != null) return false;
+		if (sellerRoleRemark != null ? !sellerRoleRemark.equals(that.sellerRoleRemark) : that.sellerRoleRemark != null)
+			return false;
+		if (buyerEmailAddress != null ? !buyerEmailAddress.equals(that.buyerEmailAddress) : that.buyerEmailAddress != null)
+			return false;
+		if (syncPrintDate != null ? !syncPrintDate.equals(that.syncPrintDate) : that.syncPrintDate != null)
+			return false;
+		if (cEmail != null ? !cEmail.equals(that.cEmail) : that.cEmail != null) return false;
+		if (cPhoneCode != null ? !cPhoneCode.equals(that.cPhoneCode) : that.cPhoneCode != null) return false;
+		if (salesAmount != null ? !salesAmount.equals(that.salesAmount) : that.salesAmount != null) return false;
+		if (cYearMonth != null ? !cYearMonth.equals(that.cYearMonth) : that.cYearMonth != null) return false;
+		if (buyerFacsimileNumber != null ? !buyerFacsimileNumber.equals(that.buyerFacsimileNumber) : that.buyerFacsimileNumber != null)
+			return false;
+		if (migType != null ? !migType.equals(that.migType) : that.migType != null) return false;
+		if (syncCompanyKey != null ? !syncCompanyKey.equals(that.syncCompanyKey) : that.syncCompanyKey != null)
+			return false;
+		if (buyer != null ? !buyer.equals(that.buyer) : that.buyer != null) return false;
+		if (buyerRemark != null ? !buyerRemark.equals(that.buyerRemark) : that.buyerRemark != null) return false;
+		if (cPosRemark2 != null ? !cPosRemark2.equals(that.cPosRemark2) : that.cPosRemark2 != null) return false;
+		if (cPosRemark1 != null ? !cPosRemark1.equals(that.cPosRemark1) : that.cPosRemark1 != null) return false;
+		if (taxType != null ? !taxType.equals(that.taxType) : that.taxType != null) return false;
+		if (totalAmount != null ? !totalAmount.equals(that.totalAmount) : that.totalAmount != null) return false;
+		if (randomNumber != null ? !randomNumber.equals(that.randomNumber) : that.randomNumber != null) return false;
+		if (creatorId != null ? !creatorId.equals(that.creatorId) : that.creatorId != null) return false;
+		if (customsClearanceMark != null ? !customsClearanceMark.equals(that.customsClearanceMark) : that.customsClearanceMark != null)
+			return false;
+		if (sellerEmailAddress != null ? !sellerEmailAddress.equals(that.sellerEmailAddress) : that.sellerEmailAddress != null)
+			return false;
+		if (syncPrintMark != null ? !syncPrintMark.equals(that.syncPrintMark) : that.syncPrintMark != null)
+			return false;
+		if (cNaturalPerson != null ? !cNaturalPerson.equals(that.cNaturalPerson) : that.cNaturalPerson != null)
+			return false;
+		if (buyerPersonInCharge != null ? !buyerPersonInCharge.equals(that.buyerPersonInCharge) : that.buyerPersonInCharge != null)
+			return false;
+		if (cPrinterNo != null ? !cPrinterNo.equals(that.cPrinterNo) : that.cPrinterNo != null) return false;
+		if (invoiceTime != null ? !invoiceTime.equals(that.invoiceTime) : that.invoiceTime != null) return false;
+		if (zeroTaxSalesAmount != null ? !zeroTaxSalesAmount.equals(that.zeroTaxSalesAmount) : that.zeroTaxSalesAmount != null)
+			return false;
+		if (cPosRemark3 != null ? !cPosRemark3.equals(that.cPosRemark3) : that.cPosRemark3 != null) return false;
+		if (syncPrintUser != null ? !syncPrintUser.equals(that.syncPrintUser) : that.syncPrintUser != null)
+			return false;
+		if (buyerTelephoneNumber != null ? !buyerTelephoneNumber.equals(that.buyerTelephoneNumber) : that.buyerTelephoneNumber != null)
+			return false;
+		if (cPosRemark4 != null ? !cPosRemark4.equals(that.cPosRemark4) : that.cPosRemark4 != null) return false;
+		if (buyerCustomerNumber != null ? !buyerCustomerNumber.equals(that.buyerCustomerNumber) : that.buyerCustomerNumber != null)
+			return false;
+		if (invoiceDate != null ? !invoiceDate.equals(that.invoiceDate) : that.invoiceDate != null) return false;
+		if (sellerTelephoneNumber != null ? !sellerTelephoneNumber.equals(that.sellerTelephoneNumber) : that.sellerTelephoneNumber != null)
+			return false;
+		if (invoiceType != null ? !invoiceType.equals(that.invoiceType) : that.invoiceType != null) return false;
+		if (currency != null ? !currency.equals(that.currency) : that.currency != null) return false;
+		if (printMark != null ? !printMark.equals(that.printMark) : that.printMark != null) return false;
+		if (sellerPersonInCharge != null ? !sellerPersonInCharge.equals(that.sellerPersonInCharge) : that.sellerPersonInCharge != null)
+			return false;
+		if (groupMark != null ? !groupMark.equals(that.groupMark) : that.groupMark != null) return false;
+		if (buyerAddress != null ? !buyerAddress.equals(that.buyerAddress) : that.buyerAddress != null) return false;
+		if (assignId != null ? !assignId.equals(that.assignId) : that.assignId != null) return false;
+		if (b2bFlag != null ? !b2bFlag.equals(that.b2bFlag) : that.b2bFlag != null) return false;
+		if (sellerAddress != null ? !sellerAddress.equals(that.sellerAddress) : that.sellerAddress != null)
+			return false;
+		if (confirmStatus != null ? !confirmStatus.equals(that.confirmStatus) : that.confirmStatus != null)
+			return false;
+		if (cInvoiceStatus != null ? !cInvoiceStatus.equals(that.cInvoiceStatus) : that.cInvoiceStatus != null)
+			return false;
+		if (acceptStatus != null ? !acceptStatus.equals(that.acceptStatus) : that.acceptStatus != null) return false;
+		if (cMemberType != null ? !cMemberType.equals(that.cMemberType) : that.cMemberType != null) return false;
+		if (modifierId != null ? !modifierId.equals(that.modifierId) : that.modifierId != null) return false;
+		if (category != null ? !category.equals(that.category) : that.category != null) return false;
+		if (modifyDate != null ? !modifyDate.equals(that.modifyDate) : that.modifyDate != null) return false;
+		if (sellerCustomerNumber != null ? !sellerCustomerNumber.equals(that.sellerCustomerNumber) : that.sellerCustomerNumber != null)
+			return false;
+		return uploadStatus != null ? uploadStatus.equals(that.uploadStatus) : that.uploadStatus == null;
+
+	}
+
 	@Override
 	public int hashCode() {
-		return HashCodeBuilder.reflectionHashCode(this);
+		int result = seller != null ? seller.hashCode() : 0;
+		result = 31 * result + (taxAmount != null ? taxAmount.hashCode() : 0);
+		result = 31 * result + (discountAmount != null ? discountAmount.hashCode() : 0);
+		result = 31 * result + (mainRemark != null ? mainRemark.hashCode() : 0);
+		result = 31 * result + (buyerName != null ? buyerName.hashCode() : 0);
+		result = 31 * result + (originalCurrencyAmount != null ? originalCurrencyAmount.hashCode() : 0);
+		result = 31 * result + (taxRate != null ? taxRate.hashCode() : 0);
+		result = 31 * result + (relateNumber != null ? relateNumber.hashCode() : 0);
+		result = 31 * result + (carrierId2 != null ? carrierId2.hashCode() : 0);
+		result = 31 * result + (carrierId1 != null ? carrierId1.hashCode() : 0);
+		result = 31 * result + (npoban != null ? npoban.hashCode() : 0);
+		result = 31 * result + (buyerRoleRemark != null ? buyerRoleRemark.hashCode() : 0);
+		result = 31 * result + (allowanceCount != null ? allowanceCount.hashCode() : 0);
+		result = 31 * result + (checkNumber != null ? checkNumber.hashCode() : 0);
+		result = 31 * result + (carrierType != null ? carrierType.hashCode() : 0);
+		result = 31 * result + (sellerName != null ? sellerName.hashCode() : 0);
+		result = 31 * result + (freeTaxSalesAmount != null ? freeTaxSalesAmount.hashCode() : 0);
+		result = 31 * result + (cPrinterId != null ? cPrinterId.hashCode() : 0);
+		result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
+		result = 31 * result + (sellerFacsimileNumber != null ? sellerFacsimileNumber.hashCode() : 0);
+		result = 31 * result + (donateMark != null ? donateMark.hashCode() : 0);
+		result = 31 * result + (cKey != null ? cKey.hashCode() : 0);
+		result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+		result = 31 * result + (invoiceNumber != null ? invoiceNumber.hashCode() : 0);
+		result = 31 * result + (bondedAreaConfirm != null ? bondedAreaConfirm.hashCode() : 0);
+		result = 31 * result + (cMemberNumber != null ? cMemberNumber.hashCode() : 0);
+		result = 31 * result + (exchangeRate != null ? exchangeRate.hashCode() : 0);
+		result = 31 * result + (sellerRoleRemark != null ? sellerRoleRemark.hashCode() : 0);
+		result = 31 * result + (buyerEmailAddress != null ? buyerEmailAddress.hashCode() : 0);
+		result = 31 * result + (syncPrintDate != null ? syncPrintDate.hashCode() : 0);
+		result = 31 * result + (cEmail != null ? cEmail.hashCode() : 0);
+		result = 31 * result + (cPhoneCode != null ? cPhoneCode.hashCode() : 0);
+		result = 31 * result + (salesAmount != null ? salesAmount.hashCode() : 0);
+		result = 31 * result + (cYearMonth != null ? cYearMonth.hashCode() : 0);
+		result = 31 * result + (buyerFacsimileNumber != null ? buyerFacsimileNumber.hashCode() : 0);
+		result = 31 * result + (migType != null ? migType.hashCode() : 0);
+		result = 31 * result + (syncCompanyKey != null ? syncCompanyKey.hashCode() : 0);
+		result = 31 * result + (buyer != null ? buyer.hashCode() : 0);
+		result = 31 * result + (buyerRemark != null ? buyerRemark.hashCode() : 0);
+		result = 31 * result + (cPosRemark2 != null ? cPosRemark2.hashCode() : 0);
+		result = 31 * result + (cPosRemark1 != null ? cPosRemark1.hashCode() : 0);
+		result = 31 * result + (taxType != null ? taxType.hashCode() : 0);
+		result = 31 * result + (totalAmount != null ? totalAmount.hashCode() : 0);
+		result = 31 * result + (randomNumber != null ? randomNumber.hashCode() : 0);
+		result = 31 * result + (creatorId != null ? creatorId.hashCode() : 0);
+		result = 31 * result + (customsClearanceMark != null ? customsClearanceMark.hashCode() : 0);
+		result = 31 * result + (sellerEmailAddress != null ? sellerEmailAddress.hashCode() : 0);
+		result = 31 * result + (syncPrintMark != null ? syncPrintMark.hashCode() : 0);
+		result = 31 * result + (cNaturalPerson != null ? cNaturalPerson.hashCode() : 0);
+		result = 31 * result + (buyerPersonInCharge != null ? buyerPersonInCharge.hashCode() : 0);
+		result = 31 * result + (cPrinterNo != null ? cPrinterNo.hashCode() : 0);
+		result = 31 * result + (invoiceTime != null ? invoiceTime.hashCode() : 0);
+		result = 31 * result + (zeroTaxSalesAmount != null ? zeroTaxSalesAmount.hashCode() : 0);
+		result = 31 * result + (cPosRemark3 != null ? cPosRemark3.hashCode() : 0);
+		result = 31 * result + (syncPrintUser != null ? syncPrintUser.hashCode() : 0);
+		result = 31 * result + (buyerTelephoneNumber != null ? buyerTelephoneNumber.hashCode() : 0);
+		result = 31 * result + (cPosRemark4 != null ? cPosRemark4.hashCode() : 0);
+		result = 31 * result + (buyerCustomerNumber != null ? buyerCustomerNumber.hashCode() : 0);
+		result = 31 * result + (invoiceDate != null ? invoiceDate.hashCode() : 0);
+		result = 31 * result + (sellerTelephoneNumber != null ? sellerTelephoneNumber.hashCode() : 0);
+		result = 31 * result + (invoiceType != null ? invoiceType.hashCode() : 0);
+		result = 31 * result + (currency != null ? currency.hashCode() : 0);
+		result = 31 * result + (printMark != null ? printMark.hashCode() : 0);
+		result = 31 * result + (sellerPersonInCharge != null ? sellerPersonInCharge.hashCode() : 0);
+		result = 31 * result + (groupMark != null ? groupMark.hashCode() : 0);
+		result = 31 * result + (buyerAddress != null ? buyerAddress.hashCode() : 0);
+		result = 31 * result + (assignId != null ? assignId.hashCode() : 0);
+		result = 31 * result + (b2bFlag != null ? b2bFlag.hashCode() : 0);
+		result = 31 * result + (sellerAddress != null ? sellerAddress.hashCode() : 0);
+		result = 31 * result + (confirmStatus != null ? confirmStatus.hashCode() : 0);
+		result = 31 * result + (cInvoiceStatus != null ? cInvoiceStatus.hashCode() : 0);
+		result = 31 * result + (acceptStatus != null ? acceptStatus.hashCode() : 0);
+		result = 31 * result + (cMemberType != null ? cMemberType.hashCode() : 0);
+		result = 31 * result + (modifierId != null ? modifierId.hashCode() : 0);
+		result = 31 * result + (category != null ? category.hashCode() : 0);
+		result = 31 * result + (modifyDate != null ? modifyDate.hashCode() : 0);
+		result = 31 * result + (sellerCustomerNumber != null ? sellerCustomerNumber.hashCode() : 0);
+		result = 31 * result + (uploadStatus != null ? uploadStatus.hashCode() : 0);
+		return result;
 	}
 
 	@Override
 	public String toString() {
-		 return ToStringBuilder.reflectionToString(this , ToStringStyle.MULTI_LINE_STYLE);  
-	}	 
+		return "InvoiceMain{" +
+				"acceptStatus=" + acceptStatus +
+				", seller='" + seller + '\'' +
+				", taxAmount=" + taxAmount +
+				", discountAmount=" + discountAmount +
+				", mainRemark='" + mainRemark + '\'' +
+				", buyerName='" + buyerName + '\'' +
+				", originalCurrencyAmount=" + originalCurrencyAmount +
+				", taxRate=" + taxRate +
+				", relateNumber='" + relateNumber + '\'' +
+				", carrierId2='" + carrierId2 + '\'' +
+				", carrierId1='" + carrierId1 + '\'' +
+				", npoban='" + npoban + '\'' +
+				", buyerRoleRemark='" + buyerRoleRemark + '\'' +
+				", allowanceCount=" + allowanceCount +
+				", checkNumber='" + checkNumber + '\'' +
+				", carrierType='" + carrierType + '\'' +
+				", sellerName='" + sellerName + '\'' +
+				", freeTaxSalesAmount=" + freeTaxSalesAmount +
+				", cPrinterId=" + cPrinterId +
+				", invoiceId=" + invoiceId +
+				", sellerFacsimileNumber='" + sellerFacsimileNumber + '\'' +
+				", donateMark='" + donateMark + '\'' +
+				", cKey='" + cKey + '\'' +
+				", createDate=" + createDate +
+				", invoiceNumber='" + invoiceNumber + '\'' +
+				", bondedAreaConfirm='" + bondedAreaConfirm + '\'' +
+				", cMemberNumber='" + cMemberNumber + '\'' +
+				", exchangeRate=" + exchangeRate +
+				", sellerRoleRemark='" + sellerRoleRemark + '\'' +
+				", buyerEmailAddress='" + buyerEmailAddress + '\'' +
+				", syncPrintDate=" + syncPrintDate +
+				", cEmail='" + cEmail + '\'' +
+				", cPhoneCode='" + cPhoneCode + '\'' +
+				", salesAmount=" + salesAmount +
+				", cYearMonth='" + cYearMonth + '\'' +
+				", buyerFacsimileNumber='" + buyerFacsimileNumber + '\'' +
+				", migType='" + migType + '\'' +
+				", syncCompanyKey='" + syncCompanyKey + '\'' +
+				", buyer='" + buyer + '\'' +
+				", buyerRemark='" + buyerRemark + '\'' +
+				", cPosRemark2='" + cPosRemark2 + '\'' +
+				", cPosRemark1='" + cPosRemark1 + '\'' +
+				", taxType='" + taxType + '\'' +
+				", totalAmount=" + totalAmount +
+				", randomNumber='" + randomNumber + '\'' +
+				", creatorId=" + creatorId +
+				", customsClearanceMark='" + customsClearanceMark + '\'' +
+				", sellerEmailAddress='" + sellerEmailAddress + '\'' +
+				", syncPrintMark=" + syncPrintMark +
+				", cNaturalPerson='" + cNaturalPerson + '\'' +
+				", buyerPersonInCharge='" + buyerPersonInCharge + '\'' +
+				", cPrinterNo='" + cPrinterNo + '\'' +
+				", invoiceTime='" + invoiceTime + '\'' +
+				", zeroTaxSalesAmount=" + zeroTaxSalesAmount +
+				", cPosRemark3='" + cPosRemark3 + '\'' +
+				", syncPrintUser=" + syncPrintUser +
+				", buyerTelephoneNumber='" + buyerTelephoneNumber + '\'' +
+				", cPosRemark4='" + cPosRemark4 + '\'' +
+				", buyerCustomerNumber='" + buyerCustomerNumber + '\'' +
+				", invoiceDate='" + invoiceDate + '\'' +
+				", sellerTelephoneNumber='" + sellerTelephoneNumber + '\'' +
+				", invoiceType='" + invoiceType + '\'' +
+				", currency='" + currency + '\'' +
+				", printMark='" + printMark + '\'' +
+				", sellerPersonInCharge='" + sellerPersonInCharge + '\'' +
+				", groupMark='" + groupMark + '\'' +
+				", buyerAddress='" + buyerAddress + '\'' +
+				", assignId=" + assignId +
+				", b2bFlag='" + b2bFlag + '\'' +
+				", sellerAddress='" + sellerAddress + '\'' +
+				", confirmStatus=" + confirmStatus +
+				", cInvoiceStatus=" + cInvoiceStatus +
+				", cMemberType='" + cMemberType + '\'' +
+				", modifierId=" + modifierId +
+				", category='" + category + '\'' +
+				", modifyDate=" + modifyDate +
+				", sellerCustomerNumber='" + sellerCustomerNumber + '\'' +
+				", uploadStatus='" + uploadStatus + '\'' +
+				'}';
+	}
 
-	/*
-    @Override
-	public boolean equals(Object object) {
-		if (object == null || !(object instanceof InvoiceMain))
-			return false;
-		EqualsBuilder builder = new EqualsBuilder();
-		builder.append(this.id, ((InvoiceMain) object).id);
-		return builder.isEquals();
-	}*/
-	
-	/**
-	 * Indicates whether some other object is "equal to" this one.
-	 * @return true is equal, false is not equal
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-
-		if (obj == null || !(obj instanceof InvoiceMain))
-			return false;
-
-		InvoiceMain key = (InvoiceMain) obj;
-		if (this.invoiceId != key.invoiceId ) 
-        	return false;
-
-		return true;
-    }
 
 }
