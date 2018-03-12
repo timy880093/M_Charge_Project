@@ -4,15 +4,11 @@
  * For more information, please contact pkliu@sysfoundry.com
  */
 package com.gateweb.charge.repository; 
-    
-import java.sql.SQLException;
-import java.util.Collection;
-import com.gateweb.charge.*;
+
 import com.gateweb.charge.model.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import java.io.Serializable;
 import java.util.List;
 /**
  * 

@@ -28,4 +28,5 @@ public class CashVO implements Serializable{
     public void setCashMasterEntity(CashMasterEntity cashMasterEntity) {
         this.cashMasterEntity = cashMasterEntity;
     }
+
 }
