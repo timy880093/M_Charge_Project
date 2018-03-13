@@ -21,11 +21,11 @@ public interface CalCycleService extends Service {
 
     public List getUserCompanyList() throws Exception;
 
-    public Integer calBatchOver(String calYM) throws Exception;
+    public Integer calBatchOver(String calYM, Integer modifierId) throws Exception;
 
-    public Integer calOver(String calOverAry) throws Exception;
+    public Integer calOver(String calOverAry, Integer modifierId) throws Exception;
 
-    public boolean calOverToCash(String calYM, Integer companyId, String calOverAry) throws Exception;
+    public boolean calOverToCash(String calYM, Integer companyId, String calOverAry, Integer modifierId) throws Exception;
 //    public List calOver(String calYM, String companyId) throws Exception {
 //        return dao.transactionCalOver(calYM, companyId);
 //    }

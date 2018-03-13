@@ -51,8 +51,10 @@ public class PrepayDeductSearchServlet extends MvcBaseServlet {
 	CalCycleService calCycleService;
 	
 	@RequestMapping(method=RequestMethod.POST)
-    public String defaultPost(Model model, HttpServletRequest request, HttpServletResponse response)  throws Exception {
+    public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap, 
+    		Model model, HttpServletRequest request, HttpServletResponse response)  throws Exception {
         logger.debug("defaultPost model:   "+model);
+        logger.debug("defaultPost paramMap:   "+paramMap);
         UserEntity user = checkLogin(request, response);
     		BaseFormBean formBeanObject = formBeanObject(request);
     		Map requestParameterMap = request.getParameterMap();
@@ -65,9 +67,11 @@ public class PrepayDeductSearchServlet extends MvcBaseServlet {
     }
     
     @RequestMapping(method=RequestMethod.GET)
-    public String defaultGet(Model model, HttpServletRequest request, HttpServletResponse response)
+    public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
+    			, Model model, HttpServletRequest request, HttpServletResponse response)
     	            throws Exception {
     		logger.debug("defaultGet model:   "+model);
+    		logger.debug("defaultGet paramMap:   "+paramMap);
     		UserEntity user = checkLogin(request, response);
     		BaseFormBean formBeanObject = formBeanObject(request);
     		Map requestParameterMap = request.getParameterMap();
@@ -215,7 +219,7 @@ public class PrepayDeductSearchServlet extends MvcBaseServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping(method = RequestMethod.GET, params = "method=createPdm", produces = "application/json;charset=utf-8")
+	@RequestMapping(method = RequestMethod.POST, params = "method=createPdm", produces = "application/json;charset=utf-8")
 	public @ResponseBody String createPdm(@RequestParam MultiValueMap<String, String> paramMap,
 					@RequestHeader HttpHeaders headers, Model model
 					, @RequestParam(value="companyId", required= true) Integer companyId

@@ -32,7 +32,7 @@ public class FirstCompanyPackageDAO extends BaseDAO {
     CompanyChargeDAO companyChargeDAO;
 
     //執行批次建立第一次的用戶綁合約的資料
-    public String executionFirstCmpPkg( List<FirstCompanyPackageBean> excelDataList) throws Exception{
+    public String executionFirstCmpPkg( List<FirstCompanyPackageBean> excelDataList, Integer modifierId) throws Exception{
 
         for(FirstCompanyPackageBean firstBean: excelDataList){
             String businesscode = null ; //統編
@@ -170,7 +170,7 @@ public class FirstCompanyPackageDAO extends BaseDAO {
 
             //6.原本用戶綁合約UI按下確定新增後，作的事情
             try{
-            		companyChargeDAO.transactionInsertCompanyChargeCycle(bean);
+            		companyChargeDAO.transactionInsertCompanyChargeCycle(bean, modifierId);
                 successResult += "<br>" + companyName + " " + businesscode + ",companyId=" + companyId + ",chargeId=" + chargeId +",freeMonth=" + freeMonth +
                         ",giftPrice=" + giftPrice +",realStartDate=" + realStartDate +",realEndDate=" + realEndDate +
                         ",dealerCompanyId=" + dealerCompanyId +",dealerId=" + dealerId + ",broker2CpName=" +

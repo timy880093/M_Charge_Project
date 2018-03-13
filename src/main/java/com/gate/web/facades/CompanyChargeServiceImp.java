@@ -54,8 +54,8 @@ public class CompanyChargeServiceImp implements CompanyChargeService{
         return companyChargeDAO.getChargeGradeList();
     }
 
-    public void insertCompanyChargeCycle(CompanyChargeCycleBean bean) throws Exception {
-        companyChargeDAO.transactionInsertCompanyChargeCycle(bean);
+    public void insertCompanyChargeCycle(CompanyChargeCycleBean bean, Integer modifierId) throws Exception {
+        companyChargeDAO.transactionInsertCompanyChargeCycle(bean, modifierId);
     }
 
     public List<Map> getChargeCycleHisByCompany(Integer companyId) throws Exception {
@@ -74,8 +74,8 @@ public class CompanyChargeServiceImp implements CompanyChargeService{
         return companyChargeDAO.transactionDoSettle(packageId, endDate, realEndDate);
     }
 
-    public Map continuePackage(String almostOut) throws Exception{
-        return companyChargeDAO.transactionContinuePackage(almostOut);
+    public Map continuePackage(String almostOut, Integer modifierId) throws Exception{
+        return companyChargeDAO.transactionContinuePackage(almostOut, modifierId);
     }
 
     public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception {

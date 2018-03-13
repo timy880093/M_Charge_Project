@@ -745,7 +745,7 @@ public class CashDAO extends BaseDAO {
      * @return
      * @throws Exception
      */
-    public CashMasterEntity isHaveCashMaster(String outYm, Integer companyId) throws Exception {
+    public CashMasterEntity isHaveCashMaster(String outYm, Integer companyId, Integer modifierId) throws Exception {
         String sql = " select * from cash_master where out_ym = ? and company_id= ? ";
         List parameterList = new ArrayList();
         parameterList.add(outYm);
@@ -767,6 +767,10 @@ public class CashDAO extends BaseDAO {
             CashMasterEntity cashMaster = new CashMasterEntity();
             cashMaster.setOutYm(outYm);
             cashMaster.setCompanyId(companyId);
+            cashMaster.setModifierId(modifierId);
+            cashMaster.setModifyDate(Timestamp.from(new Date().toInstant()));
+            cashMaster.setCreatorId(modifierId);
+            cashMaster.setCreateDate(Timestamp.from(new Date().toInstant()));
 
             //欲轉換的日期字串
             String dateString = outYm + "01";

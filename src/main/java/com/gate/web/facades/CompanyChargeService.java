@@ -17,7 +17,7 @@ public interface CompanyChargeService extends Service {
 	    public List getChargeMonthList() throws Exception ;
 	    public List getChargeGradeList() throws Exception ;
 
-	    public void insertCompanyChargeCycle(CompanyChargeCycleBean bean) throws Exception ;
+	    public void insertCompanyChargeCycle(CompanyChargeCycleBean bean, Integer modifierId) throws Exception ;
 
 	    public List<Map> getChargeCycleHisByCompany(Integer companyId) throws Exception ;
 
@@ -26,7 +26,7 @@ public interface CompanyChargeService extends Service {
 	    public Map getCycleTryCalSettle(Integer packageId, String endDate) throws Exception;
 
 	    public Map doSettle(Integer packageId, String endDate, String realEndDate) throws Exception;
-	    public Map continuePackage(String almostOut) throws Exception;
+	    public Map continuePackage(String almostOut, Integer modifierId) throws Exception;
 
 	    public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception ;
 

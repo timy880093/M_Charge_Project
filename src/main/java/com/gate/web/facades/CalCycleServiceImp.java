@@ -36,16 +36,16 @@ public class CalCycleServiceImp implements CalCycleService {
         return calCycleDAO.getUserCompanyList();
     }
 
-    public Integer calBatchOver(String calYM) throws Exception {
-        return calCycleDAO.transactionCalBatchOver(calYM);
+    public Integer calBatchOver(String calYM, Integer modifierId) throws Exception {
+        return calCycleDAO.transactionCalBatchOver(calYM, modifierId);
     }
 
-    public Integer calOver(String calOverAry) throws Exception {
-        return calCycleDAO.transactionCalOver(calOverAry);
+    public Integer calOver(String calOverAry, Integer modifierId) throws Exception {
+        return calCycleDAO.transactionCalOver(calOverAry, modifierId);
     }
 
-    public boolean calOverToCash(String calYM, Integer companyId, String calOverAry) throws Exception {
-        return calCycleDAO.transactionCalOverToCash(calYM, companyId, calOverAry);
+    public boolean calOverToCash(String calYM, Integer companyId, String calOverAry, Integer modifierId) throws Exception {
+        return calCycleDAO.transactionCalOverToCash(calYM, companyId, calOverAry, modifierId);
     }
 
 //    public List calOver(String calYM, String companyId) throws Exception {

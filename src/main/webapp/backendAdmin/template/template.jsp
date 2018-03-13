@@ -1,18 +1,8 @@
-<%@ page import="com.gate.web.authority.UserInfoContext" %>
-<%@ page import="com.gate.web.authority.UserInfo" %>
-<%@ page import="com.gate.web.displaybeans.UserVO" %>
-<%@ page import="com.gate.web.facades.UserServiceImp" %>
+
 <!DOCTYPE html>
 <html>
 <%
     String root = request.getContextPath() + "/backendAdmin";
-    UserInfo userInfo = UserInfoContext.getUserInfo();
-    request.setAttribute("login_name", userInfo.getLoginName());
-    request.setAttribute("company_name", userInfo.getCompanyName());
-    /* UserServiceImp serviceImp = new UserServiceImp();
-    UserVO userVO = serviceImp.findUserByUserId(Integer.parseInt(userInfo.getUserId()));
-    request.setAttribute("logoutTime", userInfo.getLogout_time()); */
-    request.setAttribute("logoutTime", 100000);
 %>
 
 

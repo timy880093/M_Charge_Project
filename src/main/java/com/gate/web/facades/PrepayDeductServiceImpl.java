@@ -45,8 +45,8 @@ public class PrepayDeductServiceImpl implements PrepayDeductService{
     }
 
     //新增一筆預繳清單
-    public Integer transactionInsertPrepayDetail(PrepayDetailEntity entity) throws Exception {
-        return prepayDeductDAO.transactionInsertPrepayDetail(entity);
+    public Integer transactionInsertPrepayDetail(PrepayDetailEntity entity, Integer modifierId) throws Exception {
+        return prepayDeductDAO.transactionInsertPrepayDetail(entity, modifierId);
     }
 
     //檢視預繳方案歷史紀錄

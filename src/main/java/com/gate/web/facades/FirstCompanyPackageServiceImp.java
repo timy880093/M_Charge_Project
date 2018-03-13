@@ -20,7 +20,7 @@ public class FirstCompanyPackageServiceImp implements FirstCompanyPackageService
     FirstCompanyPackageDAO firstCompanyPackageDAO;
 
     //執行批次建立第一次的用戶綁合約的資料
-    public String insertFirstCmpPkg(List<FirstCompanyPackageBean> excelDataList) throws Exception{
-        return firstCompanyPackageDAO.executionFirstCmpPkg(excelDataList);
+    public String insertFirstCmpPkg(List<FirstCompanyPackageBean> excelDataList, Integer modifierId) throws Exception{
+        return firstCompanyPackageDAO.executionFirstCmpPkg(excelDataList, modifierId);
     }
 }

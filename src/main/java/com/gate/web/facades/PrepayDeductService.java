@@ -24,7 +24,7 @@ public interface PrepayDeductService extends Service{
     public void updateMasterStatus(Integer masterId, String status) throws Exception;
 
     //新增一筆預繳清單
-    public Integer transactionInsertPrepayDetail(PrepayDetailEntity entity) throws Exception;
+    public Integer transactionInsertPrepayDetail(PrepayDetailEntity entity, Integer modifierId) throws Exception;
     //檢視預繳方案歷史紀錄
     public List<Map> getPrepayDetailHisByCompany(Integer companyId) throws Exception;
     //檢視扣抵歷史紀錄

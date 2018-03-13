@@ -81,7 +81,7 @@ public class CompanyChargeDAO extends BaseDAO {
      * @param bean
      * @throws Exception
      */
-    public void transactionInsertCompanyChargeCycle(CompanyChargeCycleBean bean) throws Exception {
+    public void transactionInsertCompanyChargeCycle(CompanyChargeCycleBean bean, Integer modifierId) throws Exception {
         Integer chargeType = bean.getPackageType(); //收費方式 1.月租 2.級距
 
         //ChargeModeCycleEntity cycleEntity = (ChargeModeCycleEntity) getEntity(ChargeModeCycleEntity.class, bean.getChargeId());
@@ -136,11 +136,11 @@ public class CompanyChargeDAO extends BaseDAO {
         }
 
         if(1 == feePeriod){ //1.年繳
-            genBillCashData(true, 0, -3, cycleEntity, packageModeEntity, bean, addEntity, false, true, chargeType, gradeEntity);
+            genBillCashData(true, 0, -3, cycleEntity, packageModeEntity, bean, addEntity, false, true, chargeType, gradeEntity, modifierId);
         }else if(2 == feePeriod){ //2.季繳
-            genBillCashData(false, 3, -3, cycleEntity, packageModeEntity, bean, addEntity, false, true, chargeType, gradeEntity);
+            genBillCashData(false, 3, -3, cycleEntity, packageModeEntity, bean, addEntity, false, true, chargeType, gradeEntity, modifierId);
         }else if(3 == feePeriod){ //3.月繳
-            genBillCashData(false, 1, -3, cycleEntity, packageModeEntity, bean, addEntity, false, true, chargeType, gradeEntity);
+            genBillCashData(false, 1, -3, cycleEntity, packageModeEntity, bean, addEntity, false, true, chargeType, gradeEntity, modifierId);
         }
 
     }
@@ -161,7 +161,7 @@ public class CompanyChargeDAO extends BaseDAO {
     public void genBillCashData(boolean isFullPay, int seasonUnit, int earlyMonth, ChargeModeCycleEntity cycleEntity,
             PackageModeEntity packageModeEntity, CompanyChargeCycleBean bean,ChargeModeCycleAddEntity addEntity,
                                 boolean isContinuePackage, boolean isFirst, int chargeType,
-                                ChargeModeGradeEntity gradeEntity) throws Exception{
+                                ChargeModeGradeEntity gradeEntity, Integer modifierId) throws Exception{
 
         //1.(方案的每月贈送張數)和(合約的每月贈送張數)目前只有DB的TABLE有此欄位，UI沒有，程式也不處理這類的贈送張數邏輯
 
@@ -219,7 +219,7 @@ public class CompanyChargeDAO extends BaseDAO {
         cashDetailEntity.setCompanyId(bean.getCompanyId()); //公司名稱
         cashDetailEntity.setCalYm(timeUtils.getYearMonth2(timeUtils.addMonth(startCal.getTime(), earlyMonth))); //計算年月 預繳(提早出帳)
         cashDetailEntity.setOutYm(timeUtils.getYearMonth2(timeUtils.addMonth(startCal.getTime(), earlyMonth+1))); //帳單年月 預繳
-        CashMasterEntity cashMasterEntity = cashDAO.isHaveCashMaster(cashDetailEntity.getOutYm(), bean.getCompanyId());
+        CashMasterEntity cashMasterEntity = cashDAO.isHaveCashMaster(cashDetailEntity.getOutYm(), bean.getCompanyId(), modifierId);
         cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
         cashDetailEntity.setCashType(1); //月租
         cashDetailEntity.setBillType(chargeType); //帳單類型　1.月租 2.級距
@@ -241,7 +241,7 @@ public class CompanyChargeDAO extends BaseDAO {
             if(null == cashDetailEntity.getCashDetailId()){
 //                String calYM = cashDetailEntity.getCalYm();
                 String outYm = cashDetailEntity.getOutYm();
-                cashMasterEntity = cashDAO.isHaveCashMaster(outYm, bean.getCompanyId());
+                cashMasterEntity = cashDAO.isHaveCashMaster(outYm, bean.getCompanyId(), modifierId);
                 cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
                 saveEntity(cashDetailEntity);
             }
@@ -614,7 +614,7 @@ public class CompanyChargeDAO extends BaseDAO {
      * @return
      * @throws Exception
      */
-    public Map transactionContinuePackage(String almostOut) throws Exception{
+    public Map transactionContinuePackage(String almostOut, Integer modifierId) throws Exception{
         logger.info("transactionContinuePackage start = " + new java.util.Date());
         Gson gson = new Gson();
         Type collectionType = new TypeToken<List<ContinuePackage>>(){}.getType();
@@ -721,11 +721,11 @@ public class CompanyChargeDAO extends BaseDAO {
                     feePeriod = gradeEntity.getFeePeriod();
                 }
                 if(1 == feePeriod){ //1.年繳
-                    genBillCashData(true, 0, -3, cycleEntity, packageModeEntity, bean, chargeModeCycleAddEntity, true, false, packageType, gradeEntity);
+                    genBillCashData(true, 0, -3, cycleEntity, packageModeEntity, bean, chargeModeCycleAddEntity, true, false, packageType, gradeEntity, modifierId);
                 }else if(2 == feePeriod){ //2.季繳
-                    genBillCashData(false, 3, -3, cycleEntity, packageModeEntity, bean, chargeModeCycleAddEntity, true, false, packageType, gradeEntity);
+                    genBillCashData(false, 3, -3, cycleEntity, packageModeEntity, bean, chargeModeCycleAddEntity, true, false, packageType, gradeEntity, modifierId);
                 }else if(3 == feePeriod){ //3.月繳
-                    genBillCashData(false, 1, -3, cycleEntity, packageModeEntity, bean, chargeModeCycleAddEntity, true, false, packageType, gradeEntity);
+                    genBillCashData(false, 1, -3, cycleEntity, packageModeEntity, bean, chargeModeCycleAddEntity, true, false, packageType, gradeEntity, modifierId);
                 }
 
                 //將上一份合約的超額結清
