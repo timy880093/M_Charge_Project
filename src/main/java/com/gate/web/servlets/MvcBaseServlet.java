@@ -2,7 +2,6 @@ package com.gate.web.servlets;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -27,7 +26,6 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.gate.config.SystemConfig;
 import com.gate.core.bean.BaseFormBean;
 import com.gate.core.db.Dom4jUtils;
 import com.gate.utils.Consts;
@@ -35,14 +33,11 @@ import com.gate.utils.DateDeserializer;
 import com.gate.utils.RequestToMapUtils;
 import com.gate.utils.SqlDateDeserializer;
 import com.gate.utils.TimeStampDeserializer;
-import com.gate.web.authority.UserInfo;
-import com.gate.web.authority.UserInfoContext;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.facades.CompanyService;
 import com.gate.web.facades.UserService;
 import com.gate.web.messages.ErrorMessages;
-import com.gateweb.charge.model.CompanyEntity;
 import com.gateweb.charge.model.UserEntity;
 import com.gateweb.charge.service.ChargeFacade;
 import com.gateweb.einv.exception.EinvSysException;
@@ -163,9 +158,6 @@ public abstract class MvcBaseServlet {
 
         long startTime = Calendar.getInstance().getTimeInMillis();
         UserEntity user = (UserEntity) request.getSession().getAttribute("loginUser");
-        List<CompanyEntity> referenceList = (List<CompanyEntity>) request.getSession().getAttribute("accountReferenceList");
-        CompanyEntity company = (CompanyEntity) request.getSession().getAttribute("company");
-        UserInfo userInfo = (UserInfo) request.getSession().getAttribute("userContext");
 
         try {
             if (user == null) {
@@ -177,14 +169,7 @@ public abstract class MvcBaseServlet {
                     logger.debug("instanceof User:" + user);
                     request.getSession().setAttribute("loginUser", user);
                     userName = user.getUsername();
-                    CompanyEntity c_ = new CompanyEntity();
-                    c_.setParentId(user.getCompanyId().intValue());
-                    referenceList = chargeFacade.searchBy(c_);
-                    if (referenceList != null && referenceList.size() > 0) {
-                        request.getSession().setAttribute("accountReferenceList", referenceList);
-                    } else {
-                        request.getSession().setAttribute("accountReferenceList", new ArrayList<CompanyEntity>());
-                    }
+                    
                 } else if (principal instanceof UserDetails) {
                     logger.debug("instanceof UserDetails:" + ((UserDetails) principal).getUsername());
                     UserEntity user1 = new UserEntity();
@@ -193,24 +178,7 @@ public abstract class MvcBaseServlet {
                     if (usersList != null && usersList.size() > 0) {
                         // logger.debug("usersList.get(0):"+usersList.get(0));
                         user = usersList.get(0);
-                        request.getSession().setAttribute("loginUser", user);
-
-                       
-                        	CompanyEntity c_ = new CompanyEntity();
-                        	c_.setParentId(user.getCompanyId().intValue());
-                        referenceList = chargeFacade.searchBy(c_);
-                        if (referenceList != null && referenceList.size() > 0) {
-                            request.getSession().setAttribute("accountReferenceList", referenceList);
-                        } else {
-                            request.getSession().setAttribute("accountReferenceList",
-                                    new ArrayList<CompanyEntity>());
-                        }
-                        
-                        company = chargeFacade.findCompanyById(user.getCompanyId().intValue());
-                        if (company == null) {
-                            throw new EinvSysException(messageSource.getMessage("Company.notfound", null, null, null));
-                        }
-                        request.getSession().setAttribute("company", company);
+                        request.getSession().setAttribute("loginUser", user);   	
 
                     } else {
                         logger.error("No user");
@@ -224,85 +192,7 @@ public abstract class MvcBaseServlet {
             }
             // from template.jsp to here
             request.setAttribute("login_name", user.getName());
-            if (company != null) {
-                request.setAttribute("company_name", company.getName());
-            }
             request.setAttribute("logoutTime", user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120);
-
-            // logger.debug("user:"+user.getUsername()+",
-            // userInfo:"+UserInfoContext.getUserInfo().getLoginName()+",
-            // userContext:"+userInfo.getEmail());
-            if (user != null && (UserInfoContext.getUserInfo() == null || userInfo == null)) {// 表示有經過授權登入
-                userInfo = new UserInfo();
-                userInfo.setUserId(user.getUserId().toString());
-                userInfo.setRoleId(user.getRoleId().toString());
-                userInfo.setRoleName(Consts.convRoleIdToSecurityId(user.getRoleId().intValue()));
-                userInfo.setCompanyId(user.getCompanyId().toString());
-                userInfo.setAccount(user.getAccount());
-                if (user.getPrinterId() != null) {
-                    userInfo.setAccount(user.getAccount());
-                    userInfo.setPrinterId(user.getPrinterId().toString());
-                }
-                userInfo.setLoginName(user.getName());
-                userInfo.setEmail(user.getEmail());
-                if (company != null) {
-                    userInfo.setCompanyName(company.getName());
-                }
-                StringBuffer sb = new StringBuffer();
-                StringBuffer bnoSb = new StringBuffer();
-                List<String> referenceBusinessNo = new ArrayList<String>();
-
-                if (referenceList != null && referenceList.size() > 0) {
-//                    userInfo.setReferenceCompany(referenceList);
-                    int i = 0;
-                    for (CompanyEntity ref : referenceList) {
-                        if (i++ > 0) {
-                            sb.append(",");
-                            bnoSb.append(",");
-
-                        }
-                        sb.append(ref.getCompanyId().toString());
-                        bnoSb.append(ref.getBusinessNo());
-                        referenceBusinessNo.add(ref.getBusinessNo());
-
-//                        if (CompanyServiceImp.ALL_COMPANY_ID_MAP != null) {
-//                            if (CompanyServiceImp.ALL_COMPANY_ID_MAP.get(ref.getCompanyId()) != null) {
-//                                bnoSb.append(CompanyServiceImp.ALL_COMPANY_ID_MAP.get(ref.getCompanyId()).getBusinessNo());
-//                                referenceBusinessNo.add(CompanyServiceImp.ALL_COMPANY_ID_MAP.get(ref.getCompanyId()).getBusinessNo());
-//                            } else {
-//                                throw new EinvFacadeException("Something wrong!!!");
-//                            }
-//                        } else {
-//                            companyService.setCompanyListAndSetStatic();
-//                        }
-                    }
-                    sb.append(",");
-                    bnoSb.append(",");
-                    sb.append(company.getCompanyId());
-                    bnoSb.append(company.getBusinessNo());
-                    referenceBusinessNo.add(company.getBusinessNo());
-
-                } else {
-                    if (company != null) {
-                        sb.append(company.getCompanyId());
-                        bnoSb.append(company.getBusinessNo());
-                        referenceBusinessNo.add(company.getBusinessNo());
-                    }
-                }
-
-                request.getSession().setAttribute("referenceBusinessNo", referenceBusinessNo);
-                userInfo.setReferenceCompanyId(sb.toString());
-                userInfo.setReferenceCompanyBusinessNo(bnoSb.toString());
-
-                request.getSession().setAttribute("AcceptCompanyIdString", sb.toString());
-                request.getSession().setAttribute("AcceptBusinessNoString", bnoSb.toString());
-
-
-                userInfo.setLogout_time((user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0) ? user.getLogoutTime().intValue() : 120);
-                request.getSession().setAttribute("userContext", userInfo);
-
-                UserInfoContext.setUserInfo(userInfo);
-            }
 
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -330,7 +220,6 @@ public abstract class MvcBaseServlet {
 
         try {
             UserEntity user = (UserEntity) request.getSession().getAttribute("loginUser");
-            CompanyEntity company = (CompanyEntity) request.getSession().getAttribute("company");
 
             //透過validation xml來定義每個servlet進入的form Class...
             String fullClassName = this.getClass().getCanonicalName();
@@ -397,7 +286,6 @@ public abstract class MvcBaseServlet {
 
     public Map otherMap(HttpServletRequest request, HttpServletResponse response, BaseFormBean formBeanObject) {
         UserEntity user = (UserEntity) request.getSession().getAttribute("loginUser");
-        CompanyEntity company = (CompanyEntity) request.getSession().getAttribute("company");
 
         //放置其他資訊
         Map otherMap = new HashMap();
@@ -413,9 +301,6 @@ public abstract class MvcBaseServlet {
             otherMap.put(COMPANY_ID, user.getCompanyId().toString());
             otherMap.put(LOGIN_NAME, user.getName());
             otherMap.put(EMAIL, user.getEmail());
-        }
-        if (company != null) {
-            otherMap.put(COMPANY_NAME, company.getName());
         }
 
         return otherMap;
@@ -704,23 +589,6 @@ public abstract class MvcBaseServlet {
         return isAdmin;
     }
 
-    /*public boolean isAdmin(){
-	    	boolean isAdmin = false;
-	    	try{
-		        if(UserInfoContext.getUserInfo().getRoleId().equals("100")){
-		            isAdmin = true;
-		        }
-	    	} catch(Exception e){
-	    		e.printStackTrace();
-	    	}
-	    	return isAdmin;
-    }*/
 
-    public String getAcceptCompanyIdString(HttpServletRequest request) {
-        return (String) request.getSession().getAttribute("AcceptCompanyIdString");
-    }
-
-    public String getAcceptBusinessNoString(HttpServletRequest request) {
-        return (String) request.getSession().getAttribute("AcceptBusinessNoString");
-    }
+    
 }
