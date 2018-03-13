@@ -87,7 +87,7 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
                 //月租型(packageType=1) //級距型(packageType=2)
                 CompanyChargeCycleBean chargeCycleBean = new CompanyChargeCycleBean();
                 mapToBean(requestParameterMap,chargeCycleBean);
-                companyChargeService.insertCompanyChargeCycle(chargeCycleBean);  //新增月租合約(用戶綁合約)
+                companyChargeService.insertCompanyChargeCycle(chargeCycleBean,10);  //新增月租合約(用戶綁合約)
             }
         } else if(method.equals("settleView")){ //settle(結清畫面)
             if ("1".equals(charge_type) || "2".equals(charge_type)) { //1.月租 2.級距

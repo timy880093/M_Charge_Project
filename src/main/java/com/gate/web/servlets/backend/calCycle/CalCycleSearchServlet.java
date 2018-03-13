@@ -38,7 +38,7 @@ public class CalCycleSearchServlet extends SearchServlet {
             try{
                 //計算超額-批次
                 String calYM  = ((String[]) requestParameterMap.get("calYM"))[0];
-                exeCnt = calCycleService.calBatchOver(calYM);
+                exeCnt = calCycleService.calBatchOver(calYM,10);
                 data += "  total counts: "+exeCnt+"";
             }catch(Exception ex){
                 System.out.println(ex);
@@ -52,7 +52,7 @@ public class CalCycleSearchServlet extends SearchServlet {
             try{
                 //計算超額
                 String calOverAry = ((String[]) requestParameterMap.get("calOverAry"))[0]; //帳單年月
-                exeCnt = calCycleService.calOver(calOverAry);
+                exeCnt = calCycleService.calOver(calOverAry,10);
                 data += "  total counts: "+exeCnt+"";
             }catch(Exception ex){
                 System.out.println(ex);
@@ -68,7 +68,7 @@ public class CalCycleSearchServlet extends SearchServlet {
                 String calYM  = ((String[]) requestParameterMap.get("calYM"))[0];
                 String companyId = ((String[]) requestParameterMap.get("userCompanyId"))[0];
                 String calOverAry = ((String[]) requestParameterMap.get("calOverAry"))[0]; //帳單年月
-                calCycleService.calOverToCash(calYM, Integer.parseInt(companyId), calOverAry);
+                calCycleService.calOverToCash(calYM, Integer.parseInt(companyId), calOverAry,10);
             }catch(Exception ex){
                 System.out.println(ex);
                 data = " fail!!";

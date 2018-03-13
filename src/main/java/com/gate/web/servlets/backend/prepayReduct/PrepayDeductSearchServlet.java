@@ -219,7 +219,7 @@ public class PrepayDeductSearchServlet extends MvcBaseServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@RequestMapping(method = RequestMethod.POST, params = "method=createPdm", produces = "application/json;charset=utf-8")
+	@RequestMapping(method = RequestMethod.GET, params = "method=createPdm", produces = "application/json;charset=utf-8")
 	public @ResponseBody String createPdm(@RequestParam MultiValueMap<String, String> paramMap,
 					@RequestHeader HttpHeaders headers, Model model
 					, @RequestParam(value="companyId", required= true) Integer companyId

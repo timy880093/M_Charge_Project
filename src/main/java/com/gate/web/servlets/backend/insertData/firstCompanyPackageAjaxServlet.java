@@ -230,7 +230,7 @@ public class firstCompanyPackageAjaxServlet extends BaseServlet {
             }
 
             //執行批次建立第一次的用戶綁合約的資料
-            String result = firstCompanyPackageService.insertFirstCmpPkg(sourceList);
+            String result = firstCompanyPackageService.insertFirstCmpPkg(sourceList,10);
             System.out.println(result);
             list.add(result);
 
