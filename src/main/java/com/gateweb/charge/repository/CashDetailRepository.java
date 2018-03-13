@@ -40,6 +40,8 @@ public interface CashDetailRepository extends JpaRepository<CashDetailEntity, In
 		java.lang.Integer cashDetailId 
 	) throws DaoSystemException;
 
+	public List<CashDetailEntity> findByCashMasterId(Integer cashMasterId);
+
 	/*public CashDetailEntity findByCashDetailId(Long cashDetailId);
 	
 	public Page<CashDetailEntity> findByCashDetailId(Long cashDetailId, Pageable pageable);

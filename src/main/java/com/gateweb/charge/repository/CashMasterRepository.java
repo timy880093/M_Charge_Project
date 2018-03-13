@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 
  * @author pkliu
@@ -29,6 +31,8 @@ public interface CashMasterRepository extends JpaRepository<CashMasterEntity, In
 	void deleteByCashMasterId(	
 		java.lang.Integer cashMasterId 
 	) throws DaoSystemException;
+
+	public List<CashMasterEntity> findByOutYm(String yearMonth);
 
 	/*public CashMasterEntity findByCashMasterId(Long cashMasterId);
 	

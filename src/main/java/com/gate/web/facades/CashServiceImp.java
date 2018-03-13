@@ -338,6 +338,22 @@ public class CashServiceImp implements CashService {
         return exeCnt;
     }
 
+    @Override
+    public List<CashVO> findCashVoByOutYm(String yearMonth){
+        List<CashVO> cashVOList = new ArrayList<>();
+        List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.findByOutYm(yearMonth);
+        for(CashMasterEntity cashMasterEntity : cashMasterEntityList){
+            List<CashDetailEntity> cashDetailEntityList
+                    = cashDetailRepository.findByCashMasterId(cashMasterEntity.getCashMasterId());
+            if(cashDetailEntityList!=null && cashDetailEntityList.size()>0){
+                CashVO cashVO = new CashVO();
+                cashVO.setCashMasterEntity(cashMasterEntity);
+                cashVO.setCashDetailEntityList(cashDetailEntityList);
+                cashVOList.add(cashVO);
+            }
+        }
+        return cashVOList;
+    }
 
     /**
      *
@@ -345,7 +361,7 @@ public class CashServiceImp implements CashService {
      * @param cashMasterEntity
      * @return
      */
-    public OrderMainEntity genOrderMainEntityByCashMaster(String migType,Integer sellerCompanyId,CashMasterEntity cashMasterEntity){
+    public OrderMainEntity genOrderMainEntityByCashMaster(String migType, Integer sellerCompanyId, CashMasterEntity cashMasterEntity){
         CompanyEntity buyerCompanyEntity = companyRepository.findByCompanyId(cashMasterEntity.getCompanyId());
         CompanyEntity sellerCompanyEntity = companyRepository.findByCompanyId(sellerCompanyId);
 
@@ -381,4 +397,6 @@ public class CashServiceImp implements CashService {
         }
         return orderMainEntity;
     }
+
+
 }

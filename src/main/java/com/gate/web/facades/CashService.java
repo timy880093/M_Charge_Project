@@ -7,6 +7,7 @@ import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CashDetailVO;
 import com.gate.web.displaybeans.CashMasterVO;
 import com.gateweb.charge.model.BillCycleEntity;
+import com.gateweb.charge.vo.CashVO;
 
 public interface CashService extends Service {
 
@@ -59,4 +60,6 @@ public interface CashService extends Service {
 
     //輸入自行要重寄的Email(帳單明細表)
     Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception;
+
+    List<CashVO> findCashVoByOutYm(String yearMonth);
 }

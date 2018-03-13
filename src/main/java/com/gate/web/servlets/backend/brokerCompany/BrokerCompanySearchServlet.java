@@ -30,7 +30,6 @@ public class BrokerCompanySearchServlet extends SearchServlet {
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
-        
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -118,6 +117,7 @@ public class BrokerCompanySearchServlet extends SearchServlet {
             baseRow++;
         }
         return excel;
-
     }
+
+
 }
