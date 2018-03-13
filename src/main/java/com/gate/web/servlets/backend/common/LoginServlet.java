@@ -1,16 +1,26 @@
 package com.gate.web.servlets.backend.common;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.gate.core.bean.BaseFormBean;
 import com.gate.web.authority.UserInfo;
 import com.gate.web.authority.UserInfoContext;
+import com.gate.web.servlets.MvcBaseServlet;
 //import com.gate.web.displaybeans.CompanyVO;
 //import com.gate.web.facades.CompanyServiceImp;
 //import com.gate.web.facades.InvoiceServiceImp;
-
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.sql.*;
-import java.util.*;
+import com.gateweb.charge.model.UserEntity;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,31 +29,50 @@ import java.util.*;
  * Time: 上午 9:28
  * To change this template use File | Settings | File Templates.
  */
-@WebServlet(urlPatterns = "/backendAdmin/loginServlet")
-public class LoginServlet extends BackendTemplateServlet {
+@RequestMapping("/backendAdmin/loginServlet")
+@Controller
+public class LoginServlet extends MvcBaseServlet {
 
-    @Override
-    public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-//        InvoiceServiceImp serviceImp = new InvoiceServiceImp();
-        UserInfo userInfo = UserInfoContext.getUserInfo();
-//        CompanyServiceImp companyServiceImp = new CompanyServiceImp();
-//        CompanyVO companyVO =  companyServiceImp.findCompanyByCompanyId(Integer.valueOf(userInfo.getCompanyId()));
-//        List<Map> invoiceInfo= serviceImp.getIndexInvoiceWeek(companyVO.getBusinessNo());
-//        Set<Map> invoiceList = new LinkedHashSet<Map>(invoiceInfo);
-//        otherMap.put(REQUEST_SEND_OBJECT,invoiceList);
+	private static final String SESSION_SEARCH_OBJ_NAME= "indexVO";
+	private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/index.jsp";
 
-
-        //2016.10.14 記錄LogOut時的資訊，for debug timeout 時間未到卻被登出
-        HttpServletRequest request = (HttpServletRequest)otherMap.get(REQUEST);
-
-        HttpSession session= request.getSession();
-        //set default session inactive timeout
-        session.setMaxInactiveInterval(userInfo.getLogout_time()*60);
-        logger.info("SessionId : "+session.getId());
-        logger.info("SessionTimeLeft:" + userInfo.getLogout_time());
-
-        otherMap.put(DISPATCH_PAGE,"/backendAdmin/index.jsp");
+	
+	@RequestMapping(method=RequestMethod.POST)
+    public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap, 
+    		Model model, HttpServletRequest request, HttpServletResponse response)  throws Exception {
+        logger.debug("defaultPost model:   "+model);
+        logger.debug("defaultPost paramMap:   "+paramMap);
+        UserEntity user = checkLogin(request, response);
+    		BaseFormBean formBeanObject = formBeanObject(request);
+    		Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap =  otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return TEMPLATE_PAGE;
     }
-
-
+    
+    @RequestMapping(method=RequestMethod.GET)
+    public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
+    			, Model model, HttpServletRequest request, HttpServletResponse response)
+    	            throws Exception {
+    		logger.debug("defaultGet model:   "+model);
+    		logger.debug("defaultGet paramMap:   "+paramMap);
+    		UserEntity user = checkLogin(request, response);
+    		
+    		//request.getSession().setMaxInactiveInterval(user.getLogoutTime().intValue()*60);
+    		//request.setAttribute("logoutTime", user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120);
+    		
+    		BaseFormBean formBeanObject = formBeanObject(request);
+    		Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap =  otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+    		return TEMPLATE_PAGE;
+    }
+	
+   
 }
