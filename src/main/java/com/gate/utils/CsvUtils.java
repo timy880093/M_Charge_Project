@@ -19,48 +19,85 @@ import java.util.List;
  */
 @Component
 public class CsvUtils {
-    public List<String> combineBeanToList(Object mainObject, List<Object> detailObject,String separator){
-        List<String> headerData = getCombineBeanHeaderData(mainObject.getClass(),detailObject.get(0).getClass());
+    public List<String> combineBeanToList(
+            Object mainObject
+            , List<String> excludeMainParameterNameList
+            , List detailObject
+            , List<String> excludeDetailParameterNameList
+            , String separator){
+        List<String> headerData = getCombineBeanHeaderData(
+                    mainObject.getClass()
+                    , excludeMainParameterNameList
+                    , detailObject.get(0).getClass()
+                    , excludeDetailParameterNameList
+        );
         String[] headerDataArray = headerData.toArray(new String[]{});
-        List<String[]> valueDataArray = getCombinedBeanValueData(mainObject,detailObject);
+        List<String[]> valueDataArray = getCombinedBeanValueData(
+                mainObject
+                , excludeMainParameterNameList
+                , detailObject
+                , excludeDetailParameterNameList
+        );
         List<String> resultData = new ArrayList<>();
         resultData.add(StringUtils.join(headerDataArray,separator));
-        resultData.add(StringUtils.join(valueDataArray,separator));
+        for(String[] lineDataList : valueDataArray){
+            resultData.add(StringUtils.join(lineDataList,separator));
+        }
         return resultData;
     }
 
-    public List<String> getCombineBeanHeaderData(Class mainClazz,Class detailClazz) {
+    public List<String> getCombineBeanHeaderData(
+            Class mainClazz
+            , List<String> excludeMainParameterNameList
+            , Class detailClazz
+            , List<String> excludeDetailParameterNameList) {
         List<String> beanHeaderList = new ArrayList<>();
         /**
          * 使用PropertiesDescriptor取得參數
          * 先取得mainClass的欄位名稱
          */
-        try {
-            BeanInfo mainBeanInfo = null;
-            mainBeanInfo = Introspector.getBeanInfo(mainClazz);
-            PropertyDescriptor mainClassDescriptors[] = mainBeanInfo.getPropertyDescriptors();
-            for(PropertyDescriptor propertyDescriptor : mainClassDescriptors){
-                beanHeaderList.add(propertyDescriptor.getName());
-            }
-            /**
-             * 取得details欄位的名稱
-             */
-            BeanInfo detailBeanInfo = Introspector.getBeanInfo(detailClazz);
-            PropertyDescriptor detailClassDescriptors[] = detailBeanInfo.getPropertyDescriptors();
-            for(PropertyDescriptor propertyDescriptor : detailClassDescriptors){
-                beanHeaderList.add(propertyDescriptor.getName());
-            }
-        } catch (IntrospectionException e) {
-            e.printStackTrace();
-        }
+        beanHeaderList.addAll(getBeanHeaderData(mainClazz,excludeMainParameterNameList));
+        /**
+         * 取得details欄位的名稱
+         */
+        beanHeaderList.addAll(getBeanHeaderData(detailClazz,excludeDetailParameterNameList));
         return beanHeaderList;
     }
 
-    public List<String[]> getCombinedBeanValueData(Object mainObject, List<Object> detailObjectList){
+    public List<String> getBeanHeaderData(Class clazz, List<String> excludeParameterNameList){
+        List<String> resultList = new ArrayList<>();
+
+        BeanInfo detailBeanInfo = null;
+        try {
+            detailBeanInfo = Introspector.getBeanInfo(clazz);
+            PropertyDescriptor detailClassDescriptors[] = detailBeanInfo.getPropertyDescriptors();
+            for(PropertyDescriptor propertyDescriptor : detailClassDescriptors){
+                if(excludeParameterNameList.contains(propertyDescriptor.getName())){
+                    continue;
+                }
+                if(propertyDescriptor.getName().equals("class")){
+                    continue;
+                }
+                resultList.add(propertyDescriptor.getName());
+            }
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        } finally {
+            return resultList;
+        }
+    }
+
+    public List<String[]> getCombinedBeanValueData(
+            Object mainObject
+            , List<String> excludeMainParameterName
+            , List<Object> detailObjectList
+            , List<String> excludeDetailParameterName){
         List<String[]> resultList = new ArrayList<>();
-        List<String> mainObjectValueList = objectListToStringList(getBeanValueData(mainObject));
+        List<String> mainObjectValueList
+                = objectListToStringList(getBeanValueData(mainObject,excludeMainParameterName));
         for(Object detailObject : detailObjectList){
-            List<String> detailObjectValueList = objectListToStringList(getBeanValueData(detailObject));
+            List<String> detailObjectValueList
+                    = objectListToStringList(getBeanValueData(detailObject,excludeDetailParameterName));
             List<String> combinedObjectValueList = new ArrayList<>();
             combinedObjectValueList.addAll(mainObjectValueList);
             combinedObjectValueList.addAll(detailObjectValueList);
@@ -69,7 +106,7 @@ public class CsvUtils {
         return resultList;
     }
 
-    public List<Object> getBeanValueData(Object object){
+    public List<Object> getBeanValueData(Object object,List<String> excludeParameterName){
         List<Object> beanValueList = new ArrayList<>();
         /**
          * 使用PropertiesDescriptor取得參數。
@@ -78,8 +115,10 @@ public class CsvUtils {
             BeanInfo beanInfo = Introspector.getBeanInfo(object.getClass());
             PropertyDescriptor descriptors[] = beanInfo.getPropertyDescriptors();
             for(PropertyDescriptor propertyDescriptor : descriptors){
-                Object value = PropertyUtils.getProperty(object,propertyDescriptor.getName());
-                beanValueList.add(value);
+                if(!excludeParameterName.contains(propertyDescriptor.getName())){
+                    Object value = PropertyUtils.getProperty(object,propertyDescriptor.getName());
+                    beanValueList.add(value);
+                }
             }
         } catch (IntrospectionException e) {
             e.printStackTrace();
@@ -106,12 +145,15 @@ public class CsvUtils {
                 //去掉多餘的零
                 BigDecimal decimalValue = (BigDecimal) object;
                 resultList.add(decimalValue.stripTrailingZeros().toPlainString());
-            }
-
-            if(object instanceof String){
+            }else if(object==null){
+                resultList.add("");
+            }else if(object instanceof  Class){
+                //過瀘裡頭包含的Class參數，不加進參數中。
+            }else{
                 resultList.add(object.toString());
             }
         }
         return resultList;
     }
+
 }
