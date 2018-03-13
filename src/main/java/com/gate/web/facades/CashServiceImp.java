@@ -37,6 +37,9 @@ public class CashServiceImp implements CashService {
     CashDAO cashDAO;
 
     @Autowired
+    TimeUtils timeUtils;
+
+    @Autowired
     CashMasterRepository cashMasterRepository;
 
     @Autowired
@@ -366,9 +369,9 @@ public class CashServiceImp implements CashService {
 
             //訂單基本資料
             orderMainEntity.setMigType(migType);
-            orderMainEntity.setYearMonth(TimeUtils.getYearMonth(TimeUtils.getCurrentDateString("yyyyMMdd")));
-            orderMainEntity.setCreateDate(TimeUtils.getCurrentTimestamp());
-            orderMainEntity.setModifyDate(TimeUtils.getCurrentTimestamp());
+            orderMainEntity.setYearMonth(timeUtils.getYearMonth(timeUtils.getCurrentDateString("yyyyMMdd")));
+            orderMainEntity.setCreateDate(timeUtils.getCurrentTimestamp());
+            orderMainEntity.setModifyDate(timeUtils.getCurrentTimestamp());
 
 
 

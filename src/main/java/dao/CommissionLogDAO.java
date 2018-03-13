@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.gate.utils.TimeUtils;
@@ -26,6 +27,9 @@ import com.google.gson.reflect.TypeToken;
  */
 @Repository("commissionLogDAO")
 public class CommissionLogDAO extends BaseDAO {
+
+    @Autowired
+    TimeUtils timeUtils;
 
     public Map getCommissionMasterList(QuerySettingVO querySettingVO) throws Exception {
         List<Object> parameters = new ArrayList<Object>();
@@ -118,9 +122,9 @@ public class CommissionLogDAO extends BaseDAO {
             mainPercent = (BigDecimal)record.get("main_percent"); //佣金比例
 
             comLog.setCommissionCpId(dealerCompanyId); //經銷商id
-            comLog.setCommissionYmd(TimeUtils.getYYYYMMDD(new java.util.Date())); //佣金計算年月日
-            comLog.setInDateStart(new java.sql.Date(TimeUtils.parseDateYYYY_MM_DD(inDateS).getTime())); //入帳時間起
-            comLog.setInDateEnd(new java.sql.Date(TimeUtils.parseDateYYYY_MM_DD(inDateE).getTime())); //入帳時間迄
+            comLog.setCommissionYmd(timeUtils.getYYYYMMDD(new java.util.Date())); //佣金計算年月日
+            comLog.setInDateStart(new java.sql.Date(timeUtils.parseDateYYYY_MM_DD(inDateS).getTime())); //入帳時間起
+            comLog.setInDateEnd(new java.sql.Date(timeUtils.parseDateYYYY_MM_DD(inDateE).getTime())); //入帳時間迄
             comLog.setCommissionType(commissionType);
             comLog.setMainPercent(mainPercent);
             saveEntity(comLog);

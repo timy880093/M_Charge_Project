@@ -99,10 +99,10 @@ public class WarrantyDAO extends BaseDAO {
             entity.setCompanyId(0);
         }
         if (null == entity.getStartDate()) {
-            entity.setStartDate(TimeUtils.parseDateYYYYMMDD("1000101"));
+            entity.setStartDate(timeUtils.parseDateYYYYMMDD("1000101"));
         }
         if (null == entity.getEndDate()) {
-            entity.setEndDate(TimeUtils.parseDateYYYYMMDD("1000101"));
+            entity.setEndDate(timeUtils.parseDateYYYYMMDD("1000101"));
         }
         if (null == entity.getOnlyShip()) {
             entity.setOnlyShip(2);

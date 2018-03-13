@@ -146,13 +146,13 @@ public class FirstCompanyPackageDAO extends BaseDAO {
             Integer contractLimit = chargeModeCycleEntity.getContractLimit(); //綁約幾個月
             Integer chargeFreeMonth = chargeModeCycleEntity.getFreeMonth(); //合約的免費月份  註:freeMonth;<=客製化的免費用份
             //註:realStartDate 起帳日
-            Calendar cal_realStartDate = TimeUtils.string2Calendar("yyyy-MM-dd", realStartDate);
+            Calendar cal_realStartDate = timeUtils.string2Calendar("yyyy-MM-dd", realStartDate);
             Integer allAddMonth = contractLimit + chargeFreeMonth + freeMonth; //從起日到迄日一共幾個月
             cal_realStartDate.add(Calendar.MONTH, allAddMonth);
             cal_realStartDate.add(Calendar.DATE, -1);
 
 //            String realEndDate = TimeUtils.date2String("YYYY-MM-DD", cal_realStartDate,"");
-            String realEndDate = TimeUtils.calendar2String("yyyy-MM-dd", cal_realStartDate);
+            String realEndDate = timeUtils.calendar2String("yyyy-MM-dd", cal_realStartDate);
 
             bean.setCompanyId(companyId); //公司id
             bean.setChargeId(chargeId); //方案合約id
@@ -199,14 +199,14 @@ public class FirstCompanyPackageDAO extends BaseDAO {
                     tmp_warratyStartDate += "-";
                     tmp_warratyStartDate += warratyStartDate.substring(6, 8);
                     warratyStartDate = tmp_warratyStartDate;
-                    Calendar cal_WarrantyStartDate = TimeUtils.string2Calendar("yyyy-MM-dd", warratyStartDate);
+                    Calendar cal_WarrantyStartDate = timeUtils.string2Calendar("yyyy-MM-dd", warratyStartDate);
                     Integer warrantyMonth = 12;
                     if("true".equals(warrantyBean.getExtend())){
                         warrantyMonth = 36;
                     }
                     cal_WarrantyStartDate.add(Calendar.MONTH, warrantyMonth);
                     cal_WarrantyStartDate.add(Calendar.DATE, -1);
-                    String warratyEndDate = TimeUtils.calendar2String("yyyy-MM-dd", cal_WarrantyStartDate);
+                    String warratyEndDate = timeUtils.calendar2String("yyyy-MM-dd", cal_WarrantyStartDate);
                     warrantyBean.setEndDate(warratyEndDate);
                     warrantyBean.setStartDate(tmp_warratyStartDate); //資料格式yyyy-mm-dd 才可存到db
 

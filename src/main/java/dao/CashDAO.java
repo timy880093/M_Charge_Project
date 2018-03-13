@@ -206,7 +206,7 @@ public class CashDAO extends BaseDAO {
         //sumCashMaster
         cashMasterEntity = sumCashMaster(cashMasterEntity);
 
-        Timestamp tmestamp = TimeUtils.getCurrentTimestamp();
+        Timestamp tmestamp = timeUtils.getCurrentTimestamp();
         cashMasterEntity.setOutDate(tmestamp);
         cashMasterEntity.setStatus(3); //1.生效 3.出帳 4.入帳 5.佣金
         saveOrUpdateEntity(cashMasterEntity, cashMasterEntity.getCashMasterId());
@@ -274,7 +274,7 @@ public class CashDAO extends BaseDAO {
             cashMasterEntity.setIsInoutMoneyUnmatch("1"); //cash_master.is_inout_money_unmatch = 1
         }
 
-        Timestamp tmestamp = TimeUtils.stringToTimestamp(inDate, "yyyy-MM-dd");
+        Timestamp tmestamp = timeUtils.stringToTimestamp(inDate, "yyyy-MM-dd");
         //Timestamp tmestamp = TimeUtils.getCurrentTimestamp();
         cashMasterEntity.setInDate(tmestamp);
         saveOrUpdateEntity(cashMasterEntity, cashMasterEntity.getCashMasterId());
@@ -319,7 +319,7 @@ public class CashDAO extends BaseDAO {
 
             cashMasterEntity.setInAmount(cashMasterEntity.getTaxInclusiveAmount());
             //cashMasterEntity.setInNote("");
-            Timestamp tmestamp = TimeUtils.stringToTimestamp(inDate, "yyyy/MM/dd");
+            Timestamp tmestamp = timeUtils.stringToTimestamp(inDate, "yyyy/MM/dd");
             cashMasterEntity.setInDate(tmestamp);
             saveOrUpdateEntity(cashMasterEntity, cashMasterEntity.getCashMasterId());
 
@@ -659,11 +659,11 @@ public class CashDAO extends BaseDAO {
         //把null的number換成0
         for(int i=0; i<billCycleList.size(); i++){
             BillCycleEntity entity = (BillCycleEntity)billCycleList.get(i);
-            entity.setCnt(NullConstants.getNotNull(entity.getCnt()));
-            entity.setCntGift(NullConstants.getNotNull(entity.getCntGift()));
-            entity.setCntOver(NullConstants.getNotNull(entity.getCntOver()));
-            entity.setPriceOver(NullConstants.getNotNull(entity.getPriceOver()));
-            entity.setPayOver(NullConstants.getNotNull(entity.getPayOver()));
+            entity.setCnt(nullConstants.getNotNull(entity.getCnt()));
+            entity.setCntGift(nullConstants.getNotNull(entity.getCntGift()));
+            entity.setCntOver(nullConstants.getNotNull(entity.getCntOver()));
+            entity.setPriceOver(nullConstants.getNotNull(entity.getPriceOver()));
+            entity.setPayOver(nullConstants.getNotNull(entity.getPayOver()));
         }
 
         return billCycleList;
@@ -779,7 +779,7 @@ public class CashDAO extends BaseDAO {
             Calendar bankCal = Calendar.getInstance();
             bankCal.setTime(date);
             bankCal.add(Calendar.MONTH, 1);
-            cashMaster.setBankYm(TimeUtils.getYearMonth2(bankCal.getTime())); //出帳上海銀行的帳單年月
+            cashMaster.setBankYm(timeUtils.getYearMonth2(bankCal.getTime())); //出帳上海銀行的帳單年月
             cashMaster.setStatus(1); //1.生效 2.作廢
 
             saveEntity(cashMaster);

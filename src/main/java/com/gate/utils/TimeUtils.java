@@ -3,6 +3,7 @@ package com.gate.utils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -30,7 +31,9 @@ import java.util.TimeZone;
 * @author Jason 2005-4-11
 * @version 1.0
 */
+@Component
 public class TimeUtils {
+
 	private static final Log log = LogFactory.getLog(TimeUtils.class);
 
 	protected static final String DEFAULT_TIME_FORMAT = "yyyy/MM/dd";
@@ -46,8 +49,12 @@ public class TimeUtils {
 
 	 * @return Calendar
 	 */
-	public static final Timestamp getDefaultTimestamp() {
+	public final Timestamp getDefaultTimestamp() {
 		return new Timestamp(DEFAULT_DATE); // "1800-01-01 00:00:00.0"
+	}
+
+	public final Timestamp getNullTimestamp(){
+		return string2Timestamp("1800/01/01");
 	}
 
 	/**
@@ -56,7 +63,7 @@ public class TimeUtils {
 
 	 * @return Timestamp
 	 */
-	public static String timestamp2String(String format, Timestamp time) {
+	public String timestamp2String(String format, Timestamp time) {
 		if (time == null) {
 			return null;
 		}
@@ -84,7 +91,7 @@ public class TimeUtils {
 	 * @author Ginger 2005-4-21
 	 * @since 1.0
 	 */
-	public static String getCurrentDayWithSpecialPattern() {
+	public String getCurrentDayWithSpecialPattern() {
 		Calendar c = Calendar.getInstance();
 		int hour = c.get(Calendar.HOUR_OF_DAY);
 		String today = "";
@@ -97,7 +104,7 @@ public class TimeUtils {
 		return today;
 	} // end getCurrentDayWithSpecialPattern
 
-	public static String getCurrentDayWithSpecialPattern2() {
+	public String getCurrentDayWithSpecialPattern2() {
 		Calendar c = Calendar.getInstance();
 		int hour = c.get(Calendar.HOUR_OF_DAY);
 		String today = "";
@@ -117,7 +124,7 @@ public class TimeUtils {
 
 	 * @return Timestamp
 	 */
-	public static String calendar2String(String format, Calendar cal) {
+	public String calendar2String(String format, Calendar cal) {
 		if (cal.equals(getDefaultCalendar())) {
 			return "";
 		}
@@ -141,7 +148,7 @@ public class TimeUtils {
 
 	 * @return Calendar
 	 */
-	public static final Calendar getDefaultCalendar() {
+	public final Calendar getDefaultCalendar() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(DEFAULT_DATE); // "1800-01-01 00:00:00.0"
 		return cal;
@@ -158,7 +165,7 @@ public class TimeUtils {
 	 * @author Joe 2004-8-15
 	 * @since 1.0
 	 */
-	public static Timestamp getFutureDate(Timestamp nextPublishDate,
+	public Timestamp getFutureDate(Timestamp nextPublishDate,
 			Timestamp endDate, int frequency) {
 
 		log.info(">>>>>>>>:nextPublishDate " + nextPublishDate);
@@ -172,53 +179,53 @@ public class TimeUtils {
 				nextPublishDate));
 		Calendar cal = string2Calendar("yyyy-MM-dd", timestamp2String(null,
 				nextPublishDate));
-		if (null != endDate && !endDate.equals(NullConstants.TIMESTAMP_NULL)) {
+		if (null != endDate && !endDate.equals(getNullTimestamp())) {
 			endCal = string2Calendar("yyyy-MM-dd", timestamp2String(null,
 					endDate));
 		}
 		if (frequency == 1) {
 			startCal.add(Calendar.MONTH, 2);
 			if ((null != endDate && !endDate
-					.equals(NullConstants.TIMESTAMP_NULL))
+					.equals(getNullTimestamp()))
 					&& endCal.after(startCal)
 					|| (null == endDate || endDate
-							.equals(NullConstants.TIMESTAMP_NULL))) {
+							.equals(getNullTimestamp()))) {
 				cal.add(Calendar.MONTH, 2);
 			}
 		} else if (frequency == 2) {
 			startCal.add(Calendar.MONTH, 1);
 			if ((null != endDate && !endDate
-					.equals(NullConstants.TIMESTAMP_NULL))
+					.equals(getNullTimestamp()))
 					&& endCal.after(startCal)
 					|| (null == endDate || endDate
-							.equals(NullConstants.TIMESTAMP_NULL))) {
+							.equals(getNullTimestamp()))) {
 				cal.add(Calendar.MONTH, 1);
 			}
 		} else if (frequency == 3) {
 			startCal.add(Calendar.WEEK_OF_YEAR, 2);
 			if ((null != endDate && !endDate
-					.equals(NullConstants.TIMESTAMP_NULL))
+					.equals(getNullTimestamp()))
 					&& endCal.after(startCal)
 					|| (null == endDate || endDate
-							.equals(NullConstants.TIMESTAMP_NULL))) {
+							.equals(getNullTimestamp()))) {
 				cal.add(Calendar.WEEK_OF_YEAR, 2);
 			}
 		} else if (frequency == 4) {
 			startCal.add(Calendar.WEEK_OF_YEAR, 1);
 			if ((null != endDate && !endDate
-					.equals(NullConstants.TIMESTAMP_NULL))
+					.equals(getNullTimestamp()))
 					&& endCal.after(startCal)
 					|| (null == endDate || endDate
-							.equals(NullConstants.TIMESTAMP_NULL))) {
+							.equals(getNullTimestamp()))) {
 				cal.add(Calendar.WEEK_OF_YEAR, 1);
 			}
 		} else if (frequency == 5) {
 			startCal.add(Calendar.DAY_OF_YEAR, 1);
 			if ((null != endDate && !endDate
-					.equals(NullConstants.TIMESTAMP_NULL))
+					.equals(getNullTimestamp()))
 					&& endCal.after(startCal)
 					|| (null == endDate || endDate
-							.equals(NullConstants.TIMESTAMP_NULL))) {
+							.equals(getNullTimestamp()))) {
 				cal.add(Calendar.DAY_OF_YEAR, 1);
 			}
 		}
@@ -237,7 +244,7 @@ public class TimeUtils {
 	 * @author Joe 2004-8-15
 	 * @since 1.0
 	 */
-	public static Timestamp getPreviousDate(Timestamp publishDate, int frequency) {
+	public Timestamp getPreviousDate(Timestamp publishDate, int frequency) {
 
 //		log.info(">>>>>>>>:nextPublishDate " + publishDate);
 //		log.info(">>>>>>>>:frequency " + frequency);
@@ -258,7 +265,7 @@ public class TimeUtils {
 		return string2Timestamp(calendar2String(cal));
 	}
 
-	public static final String TimeStamp2String(String format, Timestamp time) {
+	public final String TimeStamp2String(String format, Timestamp time) {
 		if (format == null) {
 			format = DEFAULT_TIME_FORMAT;
 		}
@@ -281,7 +288,7 @@ public class TimeUtils {
 	 * @author Jason 2005-4-8
 	 * @since 1.0
 	 */
-	public static Calendar date2Calendar(Date date) {
+	public Calendar date2Calendar(Date date) {
 		Calendar cal = null;
 		if (date != null) {
 			cal = GregorianCalendar.getInstance();
@@ -297,7 +304,7 @@ public class TimeUtils {
 	 * @author Jason 2004-8-9
 	 * @since 1.0
 	 */
-	public static Calendar getCurrentCalendar() {
+	public Calendar getCurrentCalendar() {
 		return Calendar.getInstance();
 	}
 
@@ -308,7 +315,7 @@ public class TimeUtils {
 	 * @author Morgan 2005-01-13
 	 * @since 1.0
 	 */
-	public static String getCurrentDateString() {
+	public String getCurrentDateString() {
 		return calendar2String(Calendar.getInstance());
 	}
 
@@ -319,7 +326,7 @@ public class TimeUtils {
 	 * @author Morgan 2005-01-13
 	 * @since 1.0
 	 */
-	public static String getCurrentDateString(String format) {
+	public String getCurrentDateString(String format) {
 		return calendar2String(format, Calendar.getInstance(), null);
 	}
 
@@ -330,7 +337,7 @@ public class TimeUtils {
 	 * @author Jason 2004-8-9
 	 * @since 1.0
 	 */
-	public static Timestamp getCurrentTimestamp() {
+	public Timestamp getCurrentTimestamp() {
 		return new Timestamp(System.currentTimeMillis());
 	}
 
@@ -346,7 +353,7 @@ public class TimeUtils {
 	 * @author Jason 2005-4-8
 	 * @since 1.0
 	 */
-	public static Timestamp getCurrentTimestamp(String format) {
+	public Timestamp getCurrentTimestamp(String format) {
 		String today = date2String(format, getCurrentTimestamp(), null);
 		return string2Timestamp(format, today);
 	}
@@ -364,7 +371,7 @@ public class TimeUtils {
 	 * @author Jason 2005-4-11
 	 * @since 1.0
 	 */
-	public static String calendar2String(String format, Calendar cal, String def) {
+	public String calendar2String(String format, Calendar cal, String def) {
 		if (cal == null) {
 			return def;
 		}
@@ -382,7 +389,7 @@ public class TimeUtils {
 	 * @author Morgan 2004-12-22
 	 * @since 1.0
 	 */
-	public static String calendar2String(Calendar cal, String def) {
+	public String calendar2String(Calendar cal, String def) {
 		return calendar2String(null, cal, def);
 	}
 
@@ -392,7 +399,7 @@ public class TimeUtils {
 	 * @author Morgan 2004-12-22
 	 * @since 1.0
 	 */
-	public static String calendar2String(Calendar cal) {
+	public String calendar2String(Calendar cal) {
 		return calendar2String(null, cal, null);
 	}
 
@@ -402,7 +409,7 @@ public class TimeUtils {
 	 * @author Jason 2004-9-29
 	 * @since 1.0
 	 */
-	public static String date2String(String format, Date date,
+	public String date2String(String format, Date date,
 			String def) {
 		if (date == null) {
 			return def;
@@ -421,7 +428,7 @@ public class TimeUtils {
 	 * @author Jason 2004-9-29
 	 * @since 1.0
 	 */
-	public static String date2String(String format, Date date) {
+	public String date2String(String format, Date date) {
 		return date2String(format, date, null);
 	}
 
@@ -431,7 +438,7 @@ public class TimeUtils {
 	 * @author Morgan 2004-12-22
 	 * @since 1.0
 	 */
-	public static String date2String(Date date, String def) {
+	public String date2String(Date date, String def) {
 		return date2String(null, date, def);
 	}
 
@@ -441,7 +448,7 @@ public class TimeUtils {
 	 * @author Morgan 2004-12-22
 	 * @since 1.0
 	 */
-	public static String date2String(Date date) {
+	public String date2String(Date date) {
 		return date2String(null, date, null);
 	}
 
@@ -451,7 +458,7 @@ public class TimeUtils {
 	 * @author Jason 2004-8-9
 	 * @since 1.0
 	 */
-	public static final Timestamp string2Timestamp(String format, String time) {
+	public final Timestamp string2Timestamp(String format, String time) {
 		if (format == null) {
 			format = DEFAULT_TIME_FORMAT;
 		}
@@ -484,7 +491,7 @@ public class TimeUtils {
 	 * @author Morgan 2004-12-22
 	 * @since 1.0
 	 */
-	public static final Timestamp string2Timestamp(String time) {
+	public final Timestamp string2Timestamp(String time) {
 		return string2Timestamp(null, time);
 	}
 
@@ -494,7 +501,7 @@ public class TimeUtils {
 	 * @author Jason 2004-8-9
 	 * @since 1.0
 	 */
-	public static final Calendar string2Calendar(String format, String cal) {
+	public final Calendar string2Calendar(String format, String cal) {
 		if (format == null) {
 			format = DEFAULT_TIME_FORMAT;
 		}
@@ -519,7 +526,7 @@ public class TimeUtils {
 	 * @author Morgan 2004-12-22
 	 * @since 1.0
 	 */
-	public static final Calendar string2Calendar(String cal) {
+	public final Calendar string2Calendar(String cal) {
 		return string2Calendar(null, cal);
 	}
 
@@ -534,7 +541,7 @@ public class TimeUtils {
 	 * @author Jason 2004-8-9
 	 * @since 1.0
 	 */
-	public static final int getMonthDays(int year, int month) {
+	public final int getMonthDays(int year, int month) {
 		if (month < 1 || month > 12) {
 			throw new IllegalArgumentException("月份值輸入不正確");
 		}
@@ -587,7 +594,7 @@ public class TimeUtils {
 	 * @author Jason 2004-8-9
 	 * @since 1.0
 	 */
-	public static int getDaysDiff(String sdate1, String sdate2, String format,
+	public int getDaysDiff(String sdate1, String sdate2, String format,
 			TimeZone tz) {
 		Date date1 = string2Timestamp(format, sdate1);
 		Date date2 = string2Timestamp(format, sdate2);
@@ -641,7 +648,7 @@ public class TimeUtils {
 	 * @author Joe 2004-8-15
 	 * @since 1.0
 	 */
-	public static Timestamp date2Timestamp(Date date) {
+	public Timestamp date2Timestamp(Date date) {
 		if (date instanceof Timestamp) {
 			return (Timestamp) date;
 		}
@@ -660,7 +667,7 @@ public class TimeUtils {
 	 * @author Joe 2004-8-15
 	 * @since 1.0
 	 */
-	public static Timestamp getNextDayTimestamp(Date date) {
+	public Timestamp getNextDayTimestamp(Date date) {
 		Calendar cal = null;
 
 		if (date != null) {
@@ -689,7 +696,7 @@ public class TimeUtils {
 	 * @author Joe 2004-8-15
 	 * @since 1.0
 	 */
-	public static Timestamp getNextDayTimestamp(Date date,int days) {
+	public Timestamp getNextDayTimestamp(Date date,int days) {
 		Calendar cal = null;
 
 		if (date != null) {
@@ -706,7 +713,7 @@ public class TimeUtils {
 		return new Timestamp(cal.getTimeInMillis());
 	}
 
-	public static Timestamp getNextMonthTimestamp(Date date) {
+	public Timestamp getNextMonthTimestamp(Date date) {
 		Calendar cal = null;
 
 		if (date != null) {
@@ -723,7 +730,7 @@ public class TimeUtils {
 		return new Timestamp(cal.getTimeInMillis());
 	}
 
-	public static Timestamp getNextMonthTimestamp(Date date,int mons) {
+	public Timestamp getNextMonthTimestamp(Date date,int mons) {
 		Calendar cal = null;
 
 		if (date != null) {
@@ -750,16 +757,16 @@ public class TimeUtils {
 	 * @author Jason 2005-4-8
 	 * @since 1.0
 	 */
-	public static Timestamp getNextDayTimestamp() {
+	public Timestamp getNextDayTimestamp() {
 		return getNextDayTimestamp(getCurrentTimestamp());
 	}
 
-	public static int compareYears(Timestamp startDate, Timestamp endDate) {
+	public int compareYears(Timestamp startDate, Timestamp endDate) {
 		if (startDate == null || endDate == null) {
 			return 0;
 		}
-		String startYear = TimeUtils.date2String(startDate).substring(0, 4);
-		String endYear = TimeUtils.date2String(endDate).substring(0, 4);
+		String startYear = date2String(startDate).substring(0, 4);
+		String endYear = date2String(endDate).substring(0, 4);
 		if (StringUtils.isNotEmpty(startYear)
 				&& StringUtils.isNumeric(startYear)
 				&& StringUtils.isNotEmpty(endYear)
@@ -770,22 +777,22 @@ public class TimeUtils {
 		return 0;
 	}
 
-	public static String getTanwanYear(Timestamp date) {
+	public String getTanwanYear(Timestamp date) {
 		if (date == null) {
 			return "";
 		}
-		String year = TimeUtils.date2String(date).substring(0, 4);
+		String year = date2String(date).substring(0, 4);
 		if (StringUtils.isNotEmpty(year) && StringUtils.isNumeric(year)) {
 			return Integer.toString(Integer.valueOf(year).intValue() - 1911);
 		}
 		return "";
 	}
 
-	public static int getTanwanSeason(Timestamp date) {
+	public int getTanwanSeason(Timestamp date) {
 		if (date == null) {
 			return 0;
 		}
-		String year = TimeUtils.date2String(date).substring(0, 4);
+		String year = date2String(date).substring(0, 4);
 		Timestamp startDate = string2Timestamp(year + "/01/15");
 		Timestamp endDate = string2Timestamp(year + "/03/16");
 		if (date.after(startDate) && date.before(endDate)) {
@@ -810,15 +817,15 @@ public class TimeUtils {
      * @param currentTimestamp
      * @return
      */
-    public static String getYearMonth(Timestamp currentTimestamp) {
-        String taiwanYear = TimeUtils.getTanwanYear(currentTimestamp);
-        String month = TimeUtils.timestamp2String("MM", currentTimestamp);
+    public String getYearMonth(Timestamp currentTimestamp) {
+        String taiwanYear = getTanwanYear(currentTimestamp);
+        String month = timestamp2String("MM", currentTimestamp);
         month = String.format("%2s", Integer.valueOf(month) + (Integer.valueOf(month) % 2)).replace(' ', '0');
         return taiwanYear + month;
     }
 
 
-    public static String getYearMonth(String invoiceDate){
+    public String getYearMonth(String invoiceDate){
 		String taiwanYear = "";
 		String year = invoiceDate.substring(0, 4);
 		if (StringUtils.isNotEmpty(year) && StringUtils.isNumeric(year)) {
@@ -834,7 +841,7 @@ public class TimeUtils {
      * @param format
      * @return
      */
-    public static Date stringToDate(String dateString,String format){
+    public Date stringToDate(String dateString,String format){
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         Date date = null;
         try {
@@ -850,7 +857,7 @@ public class TimeUtils {
      * @param date
      * @return
      */
-    public static Date getMonthOneDay(Date date){
+    public Date getMonthOneDay(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.DATE,1);
@@ -862,22 +869,22 @@ public class TimeUtils {
      * @param date
      * @return
      */
-    public static Date getMonthLastDay(Date date){
+    public Date getMonthLastDay(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.DATE,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return cal.getTime();
     }
 
-    public static Date getLastDay(Date date){
+    public Date getLastDay(Date date){
         Calendar cal = date2Calendar(date);
         cal.add(Calendar.DATE, -1);
         return cal.getTime();
     }
 
-	public static boolean isDateLine(){
+	public boolean isDateLine(){
 		boolean dateLine = false;
-		String today = TimeUtils.getCurrentDateString("MMdd");
+		String today = getCurrentDateString("MMdd");
 		if(Integer.parseInt(today.substring(0,2))%2==1){
 			if(Integer.parseInt(today.substring(2))<=5){
 				dateLine = true;
@@ -891,7 +898,7 @@ public class TimeUtils {
 	 * @param date
 	 * @return
 	 */
-	public static String getMonthOneDay(Timestamp date){
+	public String getMonthOneDay(Timestamp date){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.set(Calendar.DATE,1);
@@ -904,7 +911,7 @@ public class TimeUtils {
 	 * @param date
 	 * @return
 	 */
-	public static String getMonthLastDay(Timestamp date){
+	public String getMonthLastDay(Timestamp date){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.set(Calendar.DATE,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -912,7 +919,7 @@ public class TimeUtils {
 	}
 
 
-	public static Timestamp getDefaultDatebyTaiwanDate(String format,String date) throws ParseException {
+	public Timestamp getDefaultDatebyTaiwanDate(String format,String date) throws ParseException {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
 		Date date1 = simpleDateFormat.parse(date);
@@ -921,7 +928,7 @@ public class TimeUtils {
 		return new Timestamp(cal.getTime().getTime());
 	}
 
-	public static String getYearMonth2(Date date){
+	public String getYearMonth2(Date date){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		int year = cal.get(Calendar.YEAR);
@@ -936,7 +943,7 @@ public class TimeUtils {
 		return year+""+month;
 	}
 
-	public static String getYYYYMMDD(Date date){
+	public String getYYYYMMDD(Date date){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		int year = cal.get(Calendar.YEAR);
@@ -957,7 +964,7 @@ public class TimeUtils {
 		return ""+year+strMonth+strDay;
 	}
 
-	public static String getYYYYMM(Date date){
+	public String getYYYYMM(Date date){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		int year = cal.get(Calendar.YEAR);
@@ -972,7 +979,7 @@ public class TimeUtils {
 		return year+""+month;
 	}
 
-	public static Date parseDate(String yyyymm){
+	public Date parseDate(String yyyymm){
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(yyyymm.substring(0,4)));
 		cal.set(Calendar.MONTH, Integer.parseInt(yyyymm.substring(4,6))-1);
@@ -981,21 +988,21 @@ public class TimeUtils {
 		return cal.getTime();
 	}
 
-	public static Date addMonth(Date date, int n){
+	public Date addMonth(Date date, int n){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.MONTH, n);
 		return cal.getTime();
 	}
 
-	public static Date getYearMonth2(String outYm){
+	public Date getYearMonth2(String outYm){
 		Date date = new Date();
 		date.setYear(Integer.parseInt(outYm.substring(0,4)));
 		date.setMonth(Integer.parseInt(outYm.substring(4,6)));
 		return date;
 	}
 
-	public static Date parseDateYYYY_MM_DD(String val){
+	public Date parseDateYYYY_MM_DD(String val){
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, Integer.parseInt(val.substring(0,4)));
 		cal.set(Calendar.MONTH, Integer.parseInt(val.substring(5,7))-1);
@@ -1003,7 +1010,7 @@ public class TimeUtils {
 		return cal.getTime();
 	}
 
-	public static java.sql.Date parseDateYYYYMMDD(String str){
+	public java.sql.Date parseDateYYYYMMDD(String str){
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		Date parsed = null;
 		try {
@@ -1015,7 +1022,7 @@ public class TimeUtils {
 		return sql;
 	}
 
-	public static Timestamp stringToTimestamp(String str_date, String formate){
+	public Timestamp stringToTimestamp(String str_date, String formate){
 
 		DateFormat formatter;
 		//formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -1036,7 +1043,7 @@ public class TimeUtils {
 	}
 
 
-    public static void main(String[] args) {
+    public void main(String[] args) {
 
         System.out.println(isDateLine());
     }

@@ -4,6 +4,7 @@ import com.gate.utils.TimeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,10 @@ import java.util.Date;
 public class SyncInvoiceDataFacadeImplTest {
 
     @Autowired
+    TimeUtils timeUtils;
+
+    @Autowired
+    @Qualifier("syncInvoiceDataFacade")
     SyncInvoiceDataFacade syncInvoiceDataFacade;
 
     @Test
@@ -30,7 +35,7 @@ public class SyncInvoiceDataFacadeImplTest {
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE,-1);
 
-        syncInvoiceDataFacade.syncInvoiceMainDataFromEinvDatabase(TimeUtils.date2Timestamp(calendar.getTime()));
+        syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabase(timeUtils.date2Timestamp(calendar.getTime()));
     }
 
 }

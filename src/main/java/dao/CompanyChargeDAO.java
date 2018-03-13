@@ -97,18 +97,18 @@ public class CompanyChargeDAO extends BaseDAO {
 
         //新增charge_mode_cycle_add
         ChargeModeCycleAddEntity addEntity = beanConverterUtils.companyChargeCycleBeanToChargeModeCycleEntity(bean);
-        java.sql.Date sqlStartDate = new java.sql.Date(TimeUtils.getMonthOneDay(addEntity.getRealStartDate()).getTime()); //實際計算日起的當月的第一日，就是計算日起的日期
+        java.sql.Date sqlStartDate = new java.sql.Date(timeUtils.getMonthOneDay(addEntity.getRealStartDate()).getTime()); //實際計算日起的當月的第一日，就是計算日起的日期
 
         java.util.Date sqlEndDate = addEntity.getRealEndDate();
         Calendar calEndDate = Calendar.getInstance();
         calEndDate.setTime(sqlEndDate);
-        Date monthLastDay = TimeUtils.getMonthLastDay(calEndDate.getTime());
+        Date monthLastDay = timeUtils.getMonthLastDay(calEndDate.getTime());
         Integer realEndDateMaxDay = monthLastDay.getDate();
         if(calEndDate.get(Calendar.DATE) != realEndDateMaxDay){ //如果(實際計算日迄)的當月最後一天不等於(實際計算日迄)日期，那麼(計算日迄日期)應該是(實際計算日迄)的上個月的最後一天
             calEndDate.add(Calendar.MONTH, -1);
         }
         calEndDate.getTime();
-        java.sql.Date endDate = new java.sql.Date(TimeUtils.getMonthLastDay(calEndDate.getTime()).getTime());
+        java.sql.Date endDate = new java.sql.Date(timeUtils.getMonthLastDay(calEndDate.getTime()).getTime());
 
         addEntity.setStartDate(sqlStartDate); //計算日起(某月的第一日)
         addEntity.setEndDate(endDate); //計算日迄(某月的最後一日)
@@ -217,8 +217,8 @@ public class CompanyChargeDAO extends BaseDAO {
 
         CashDetailEntity cashDetailEntity = new CashDetailEntity();
         cashDetailEntity.setCompanyId(bean.getCompanyId()); //公司名稱
-        cashDetailEntity.setCalYm(TimeUtils.getYearMonth2(TimeUtils.addMonth(startCal.getTime(), earlyMonth))); //計算年月 預繳(提早出帳)
-        cashDetailEntity.setOutYm(TimeUtils.getYearMonth2(TimeUtils.addMonth(startCal.getTime(), earlyMonth+1))); //帳單年月 預繳
+        cashDetailEntity.setCalYm(timeUtils.getYearMonth2(timeUtils.addMonth(startCal.getTime(), earlyMonth))); //計算年月 預繳(提早出帳)
+        cashDetailEntity.setOutYm(timeUtils.getYearMonth2(timeUtils.addMonth(startCal.getTime(), earlyMonth+1))); //帳單年月 預繳
         CashMasterEntity cashMasterEntity = cashDAO.isHaveCashMaster(cashDetailEntity.getOutYm(), bean.getCompanyId());
         cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
         cashDetailEntity.setCashType(1); //月租
@@ -254,7 +254,7 @@ public class CompanyChargeDAO extends BaseDAO {
             BillCycleEntity billCycleEntity = new BillCycleEntity();
             billCycleEntity.setPackageId(packageModeEntity.getPackageId());
             billCycleEntity.setStatus(String.valueOf(1)); //1.生效 2.作廢
-            billCycleEntity.setYearMonth(TimeUtils.getYearMonth2(account_month));
+            billCycleEntity.setYearMonth(timeUtils.getYearMonth2(account_month));
             billCycleEntity.setBillType(chargeType);  //合約類型 1.月租 2.級距
             billCycleEntity.setCompanyId(bean.getCompanyId());
             double salesPrice = 0; //月租金額
@@ -307,12 +307,12 @@ public class CompanyChargeDAO extends BaseDAO {
                 //出帳上海銀行的帳單年月=出帳年月的下個月
                 Calendar cashFlowMonth = Calendar.getInstance();
                 cashFlowMonth.setTime(startCal.getTime());
-                String calYM = TimeUtils.getYearMonth2(cashFlowMonth.getTime()); //出帳帳單年月
+                String calYM = timeUtils.getYearMonth2(cashFlowMonth.getTime()); //出帳帳單年月
 
                 cashDetailEntity = new CashDetailEntity();
                 cashDetailEntity.setCompanyId(bean.getCompanyId()); //公司名稱
-                cashDetailEntity.setCalYm(TimeUtils.getYearMonth2(TimeUtils.addMonth(TimeUtils.parseDate(calYM), earlyMonth))); //計算年月 預繳
-                cashDetailEntity.setOutYm(TimeUtils.getYearMonth2(TimeUtils.addMonth(TimeUtils.parseDate(calYM), earlyMonth+1))); //帳單年月 預繳
+                cashDetailEntity.setCalYm(timeUtils.getYearMonth2(timeUtils.addMonth(timeUtils.parseDate(calYM), earlyMonth))); //計算年月 預繳
+                cashDetailEntity.setOutYm(timeUtils.getYearMonth2(timeUtils.addMonth(timeUtils.parseDate(calYM), earlyMonth+1))); //帳單年月 預繳
                 cashDetailEntity.setCashType(1); //月租
                 cashDetailEntity.setBillType(chargeType); //帳單類型　1.月租 2.級距
                 cashDetailEntity.setPackageId(packageModeEntity.getPackageId());
@@ -331,7 +331,7 @@ public class CompanyChargeDAO extends BaseDAO {
      * @throws Exception
      */
     public List<Map> getChargeCycleHisByCompany(Integer companyId) throws Exception {
-        Timestamp evlS = TimeUtils.getCurrentTimestamp();
+        Timestamp evlS = timeUtils.getCurrentTimestamp();
 
         String sql = " select pm.company_id,pm.package_id ," +
                 "  CASE WHEN cmc.package_name IS NULL THEN cmg.package_name ELSE cmc.package_name END," +
@@ -346,7 +346,7 @@ public class CompanyChargeDAO extends BaseDAO {
         parameterList.add(companyId);
         Query query = createQuery(sql, parameterList, null);
 
-        Timestamp evlE = TimeUtils.getCurrentTimestamp();
+        Timestamp evlE = timeUtils.getCurrentTimestamp();
         long difference= evlE.getTime() - evlS.getTime();
         logger.info("CompanyChargeDAO getChargeCycleHisByCompany 撈用戶方案歷史紀錄sql  difference="+difference+"ms");
 
@@ -670,14 +670,14 @@ public class CompanyChargeDAO extends BaseDAO {
                 newCal.add(Calendar.DATE, 1);
                 Integer firstDay = newCal.get(Calendar.DAY_OF_MONTH);
                 chargeModeCycleAddEntity.setRealStartDate(new java.sql.Date(newCal.getTimeInMillis())); //實際開始時間
-                chargeModeCycleAddEntity.setStartDate(new java.sql.Date(TimeUtils.getMonthOneDay(newCal.getTime()).getTime())); //計算開始時間
+                chargeModeCycleAddEntity.setStartDate(new java.sql.Date(timeUtils.getMonthOneDay(newCal.getTime()).getTime())); //計算開始時間
                 newCal.setTime(_RealEndDate);
                 newCal.add(Calendar.MONTH, 12);
                 chargeModeCycleAddEntity.setRealEndDate(new java.sql.Date(newCal.getTimeInMillis())); //實際結束時間
                 if(firstDay != 1){
                     newCal.add(Calendar.MONTH, -1);
                 }
-                chargeModeCycleAddEntity.setEndDate(new java.sql.Date(TimeUtils.getMonthLastDay(newCal.getTime()).getTime())); //計算結束時間
+                chargeModeCycleAddEntity.setEndDate(new java.sql.Date(timeUtils.getMonthLastDay(newCal.getTime()).getTime())); //計算結束時間
                 chargeModeCycleAddEntity.setAdditionId(0);
                 chargeModeCycleAddEntity.setFreeMonth(0);
                 chargeModeCycleAddEntity.setGiftPrice(new BigDecimal(0));
@@ -733,7 +733,7 @@ public class CompanyChargeDAO extends BaseDAO {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(endDate);
                 calendar.add(Calendar.MONTH, -2);
-                String calYM = TimeUtils.getYearMonth2(calendar.getTime());
+                String calYM = timeUtils.getYearMonth2(calendar.getTime());
 //                new CalCycleDAO().CalOverIsEnd(companyId, calYM);
 
                 break; //續約最後一筆的合約就好<==這行可以拿掉了

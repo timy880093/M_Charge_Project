@@ -17,6 +17,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,6 +33,9 @@ import dao.LogParameterDAO;
  * Created by Good688 on 2014/8/26.
  */
 public class LogDataFilter implements Filter {
+    @Autowired
+    TimeUtils timeUtils;
+
     public void destroy() {
     }
 
@@ -86,7 +90,7 @@ public class LogDataFilter implements Filter {
                         logDataEntity.setParameterId(parameterId);
                         logDataEntity.setLogUrl(logURL);
                         logDataEntity.setUserName(userName);
-                        logDataEntity.setAccessTime(TimeUtils.getCurrentTimestamp());
+                        logDataEntity.setAccessTime(timeUtils.getCurrentTimestamp());
                         logDataEntity.setRequestObj(reqObject);
                         logDataEntity.setSessionObj(sesObject);
                         logDataDAO.saveEntity(logDataEntity);

@@ -1,7 +1,9 @@
 package com.gateweb.charge.service.impl;
 
+import com.gate.utils.TimeUtils;
 import com.gateweb.charge.model.InvoiceMainEntity;
 import com.gateweb.charge.repository.InvoiceMainRepository;
+
 import com.gateweb.charge.service.SyncInvoiceDataFacade;
 import com.gateweb.einv.model.InvoiceMain;
 import com.gateweb.einv.repository.EinvInvoiceMainRepository;
@@ -13,14 +15,19 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Eason on 3/12/2018.
  */
-@Service
+@Service("syncInvoiceDataFacade")
 public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
     protected static final Logger logger = LogManager.getLogger(SyncInvoiceDataFacadeImpl.class);
+
+    @Autowired
+    TimeUtils timeUtils;
 
     @Autowired
     InvoiceMainRepository invoiceMainRepository;
@@ -28,12 +35,9 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
     @Autowired
     EinvInvoiceMainRepository einvInvoiceMainRepository;
 
-    @Autowired
-
-
     @Override
     //應該根據修改日期才可以得到完全正確的資料，因為發票資料包括折讓及註銷的部份。
-    public void syncInvoiceMainDataFromEinvDatabase(Timestamp previousTime) throws InvocationTargetException, IllegalAccessException {
+    public void syncInvoiceDataFromEinvDatabase(Timestamp previousTime) throws InvocationTargetException, IllegalAccessException {
         List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByModifyDateIsGreaterThan(previousTime);
         for(InvoiceMain einvInvoiceMain: einvInvoiceMainEntityList){
             InvoiceMainEntity existsInvoiceMainEntity
@@ -60,4 +64,14 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
         logger.info("Insert new invoice data");
         invoiceMainRepository.save(newInvoiceMainEntity);
     }
+
+    @Override
+    public void syncYesterdaysInvoiceDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE,-1);
+        syncInvoiceDataFromEinvDatabase(timeUtils.date2Timestamp(calendar.getTime()));
+    }
+
+
 }

@@ -31,7 +31,6 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
 	@Autowired
     CommissionService commissionService;
 
-	
     @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
@@ -64,7 +63,7 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
             outList.add(companyMap);    //公司基本資料 0
             String dispatch_page = "";
             if ("1".equals(charge_type) || "2".equals(charge_type)) {
-                Timestamp evlS = TimeUtils.getCurrentTimestamp();
+                Timestamp evlS = timeUtils.getCurrentTimestamp();
 
                 outList.add(companyChargeService.getChargeMonthList());  //1
                 outList.add(companyChargeService.getChargeGradeList()); //2
@@ -74,7 +73,7 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
                 List<DealerCompanyEntity> dealerCompanyEntities = commissionService.getDealerCompanyListForDropBox();
                 outList.add(dealerCompanyEntities); //4 //3
 
-                Timestamp evlE = TimeUtils.getCurrentTimestamp();
+                Timestamp evlE = timeUtils.getCurrentTimestamp();
                 long difference= evlE.getTime() - evlS.getTime();
                 logger.info("CompanyChargeEditServlet 撈「設定公司收費方式 月租型」頁面資料  difference="+difference+"ms");
 

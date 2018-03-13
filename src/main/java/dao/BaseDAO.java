@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.gate.utils.NullConstants;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -35,11 +36,18 @@ import com.gate.core.utils.CustomBeanUtilsBean;
 import com.gate.utils.TimeUtils;
 import com.gate.web.authority.UserInfo;
 import com.gate.web.authority.UserInfoContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by simon on 2014/6/26.
  */
 public class BaseDAO {
+
+    @Autowired
+    NullConstants nullConstants;
+
+    @Autowired
+    TimeUtils timeUtils;
 
     protected static Logger logger = null;
     //把flush size的大小，改成參數型態。
@@ -145,9 +153,9 @@ public class BaseDAO {
                 }
                 if (isSet == false) {
                     Method createDate = c.getMethod("setCreateDate", timestamp);
-                    createDate.invoke(entity, new Object[]{TimeUtils.getCurrentTimestamp()});
+                    createDate.invoke(entity, new Object[]{timeUtils.getCurrentTimestamp()});
                     Method modifyDate = c.getMethod("setModifyDate", timestamp);
-                    modifyDate.invoke(entity, new Object[]{TimeUtils.getCurrentTimestamp()});
+                    modifyDate.invoke(entity, new Object[]{timeUtils.getCurrentTimestamp()});
                 }
             }
         }
@@ -203,7 +211,7 @@ public class BaseDAO {
                 Method modifierId = c.getMethod("setModifierId", integer);
                 modifierId.invoke(obj, new Object[]{Integer.parseInt(userId)});
                 Method modifyDate = c.getMethod("setModifyDate", timestamp);
-                modifyDate.invoke(obj, new Object[]{TimeUtils.getCurrentTimestamp()});
+                modifyDate.invoke(obj, new Object[]{timeUtils.getCurrentTimestamp()});
             }
         }
 

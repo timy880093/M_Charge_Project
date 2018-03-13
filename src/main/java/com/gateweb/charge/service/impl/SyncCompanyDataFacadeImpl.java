@@ -15,12 +15,10 @@ import com.gateweb.charge.service.SyncCompanyDataFacade;
 import com.gateweb.einv.model.Company;
 import com.gateweb.einv.repository.EinvCompanyRepository;
 
-import static com.gateweb.einv.model.QCompany.company;
-
 /**
  * Created by Eason on 3/9/2018.
  */
-@Service
+@Service("syncCompanyDataFacade")
 public class SyncCompanyDataFacadeImpl implements SyncCompanyDataFacade {
     protected static final Logger logger = LogManager.getLogger(InvoiceAmountSummaryReportFacadeImpl.class);
 

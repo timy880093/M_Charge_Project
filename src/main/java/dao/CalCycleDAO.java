@@ -35,12 +35,15 @@ import com.google.gson.reflect.TypeToken;
 
 @Repository("calCycleDAO")
 public class CalCycleDAO extends BaseDAO {
+
+    @Autowired
+    NullConstants nullConstants;
 	
 	@Autowired
     CashDAO cashDAO;
 
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
-        Timestamp evlS = TimeUtils.getCurrentTimestamp();
+        Timestamp evlS = timeUtils.getCurrentTimestamp();
 
         List<Object> parameters = new ArrayList<Object>();
         StringBuffer dataSb = new StringBuffer();
@@ -78,7 +81,7 @@ public class CalCycleDAO extends BaseDAO {
         int end = querySettingVO.getRows();
         Map returnMap = queryForPageData(countSb.toString(), dataSb.toString(), parameters, first, end, -1, null);
 
-        Timestamp evlE = TimeUtils.getCurrentTimestamp();
+        Timestamp evlE = timeUtils.getCurrentTimestamp();
         long difference = evlE.getTime() - evlS.getTime();
         logger.info("calCycleDAO getBillCycleList 撈月租超額計算畫面清單sql difference="+difference+"ms");
 
@@ -269,7 +272,7 @@ public class CalCycleDAO extends BaseDAO {
                 //1.找出所有用戶的當月張數：計算當期發票開立A0401/C0401張數
                 List parameterList = new ArrayList();
                 //取得發票期別(民國年+雙數月)
-                String cYearMonth = TimeUtils.getYearMonth(calYM+"01");
+                String cYearMonth = timeUtils.getYearMonth(calYM+"01");
                 parameterList.add(cYearMonth);
                 String tempWhereSql = "";
                 if(null != company_id ){
@@ -409,9 +412,9 @@ public class CalCycleDAO extends BaseDAO {
         //insert 一筆新的cash_detail'、cash_master
         CashDetailEntity cashDetailEntity = new CashDetailEntity();
         cashDetailEntity.setCompanyId(cpId); //公司名稱
-        cashDetailEntity.setCalYm(TimeUtils.getYYYYMM(TimeUtils.parseDate(calYM))); //計算年月
-        cashDetailEntity.setOutYm(TimeUtils.getYYYYMM(TimeUtils.addMonth(TimeUtils.parseDate(calYM), 1))); //帳單年月
-        CashMasterEntity  cashMasterEntity = cashDAO.isHaveCashMaster(TimeUtils.getYYYYMM(TimeUtils.addMonth(TimeUtils.parseDate(calYM), 1)), cpId);
+        cashDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
+        cashDetailEntity.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
+        CashMasterEntity  cashMasterEntity = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), cpId);
         cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
         cashDetailEntity.setCashType(2); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值
         cashDetailEntity.setBillType(chargeType); //帳單類型　1.月租 2.級距
@@ -455,9 +458,9 @@ public class CalCycleDAO extends BaseDAO {
 
                 CashDetailEntity cashDetailEntity_forDeduct = new CashDetailEntity();
                 cashDetailEntity_forDeduct.setCompanyId(cpId); //公司名稱
-                cashDetailEntity_forDeduct.setCalYm(TimeUtils.getYYYYMM(TimeUtils.parseDate(calYM))); //計算年月
-                cashDetailEntity_forDeduct.setOutYm(TimeUtils.getYYYYMM(TimeUtils.addMonth(TimeUtils.parseDate(calYM), 1))); //帳單年月
-                CashMasterEntity  cashMasterEntity_forDeduct = cashDAO.isHaveCashMaster(TimeUtils.getYYYYMM(TimeUtils.addMonth(TimeUtils.parseDate(calYM), 1)), cpId);
+                cashDetailEntity_forDeduct.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
+                cashDetailEntity_forDeduct.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
+                CashMasterEntity  cashMasterEntity_forDeduct = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), cpId);
                 cashDetailEntity_forDeduct.setCashMasterId(cashMasterEntity_forDeduct.getCashMasterId()); //cash_master_id
                 cashDetailEntity_forDeduct.setCashType(7); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值 6.預繳 7.扣抵
                 cashDetailEntity_forDeduct.setBillType(chargeType); //帳單類型　1.月租 2.級距
@@ -476,7 +479,7 @@ public class CalCycleDAO extends BaseDAO {
                     deductDetailEntity.setPrepayDeductMasterId(master.getPrepayDeductMasterId());
                     deductDetailEntity.setCashDetailId(cashDetailId);
                     deductDetailEntity.setCompanyId(cpId);
-                    deductDetailEntity.setCalYm(TimeUtils.getYYYYMM(TimeUtils.parseDate(calYM)));
+                    deductDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM)));
                     deductDetailEntity.setDeductType(2); //1.月租 2.超額(由此可知到抵扣抵了哪類金額(可搭prepay_deduct_master的is_enable_over、is_enable_cycle使用))
                     deductDetailEntity.setMoney(-amount);
                     saveEntity(deductDetailEntity);
@@ -497,7 +500,7 @@ public class CalCycleDAO extends BaseDAO {
                     deductDetailEntity.setCashDetailId(cashDetailId);
                     deductDetailEntity.setCompanyId(cpId);
 
-                    deductDetailEntity.setCalYm(TimeUtils.getYYYYMM(TimeUtils.parseDate(calYM)));
+                    deductDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM)));
                     deductDetailEntity.setDeductType(2); //1.月租 2.超額(由此可知到抵扣抵了哪類金額(可搭prepay_deduct_master的is_enable_over、is_enable_cycle使用))
                     deductDetailEntity.setMoney(-sumOver);
                     saveEntity(deductDetailEntity);
@@ -528,7 +531,7 @@ public class CalCycleDAO extends BaseDAO {
         BigDecimal sumOfPayOver = new BigDecimal(0);
         for(int i=0; i<resultList.size(); i++){
             BillCycleEntity bc =(BillCycleEntity)resultList.get(i);
-            BigDecimal payover = NullConstants.getNotNull(bc.getPayOver());
+            BigDecimal payover = nullConstants.getNotNull(bc.getPayOver());
             sumOfPayOver = sumOfPayOver.add(payover);
         }
         logger.info("getSumOfPayOver end = " + new java.util.Date());
@@ -548,7 +551,7 @@ public class CalCycleDAO extends BaseDAO {
         BigDecimal sumOfPayOver = new BigDecimal(0);
         for(int i=0; i<overList.size(); i++){
             BillCycleEntity bc =(BillCycleEntity)overList.get(i);
-            BigDecimal payover = NullConstants.getNotNull(bc.getPayOver());
+            BigDecimal payover = nullConstants.getNotNull(bc.getPayOver());
             sumOfPayOver = sumOfPayOver.add(payover);
         }
         return sumOfPayOver;

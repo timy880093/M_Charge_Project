@@ -40,7 +40,7 @@ public class CompanyDAO extends BaseDAO {
     }
 
     public Map getCompanyList(QuerySettingVO querySettingVO) throws Exception {
-        Timestamp evlS = TimeUtils.getCurrentTimestamp();
+        Timestamp evlS = timeUtils.getCurrentTimestamp();
 
         List<Object> parameters = new ArrayList<Object>();
         StringBuffer dataSb = new StringBuffer();
@@ -98,7 +98,7 @@ public class CompanyDAO extends BaseDAO {
         int end = querySettingVO.getRows();
         Map returnMap = queryForPageData(countSb.toString(), dataSb.toString(), parameters, first, end, -1, null);
 
-        Timestamp evlE = TimeUtils.getCurrentTimestamp();
+        Timestamp evlE = timeUtils.getCurrentTimestamp();
         long difference= evlE.getTime() - evlS.getTime();
         logger.info("CompanyDAO getCompanyList 撈用戶費率管理畫面清單sql difference="+difference+"ms");
 

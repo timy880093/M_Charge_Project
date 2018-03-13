@@ -3,6 +3,7 @@ package com.gateweb.utils;
 import com.gate.utils.TimeUtils;
 import com.gate.web.formbeans.CompanyChargeCycleBean;
 import com.gateweb.charge.model.ChargeModeCycleAddEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,12 +13,15 @@ import java.math.BigDecimal;
  */
 @Component("beanConverterUtils")
 public class BeanConverterUtils {
+    @Autowired
+    TimeUtils timeUtils;
+
     public ChargeModeCycleAddEntity companyChargeCycleBeanToChargeModeCycleEntity(CompanyChargeCycleBean companyChargeCycleBean){
         ChargeModeCycleAddEntity addEntity = new ChargeModeCycleAddEntity();
-        addEntity.setCreateDate(TimeUtils.getCurrentTimestamp());
-        addEntity.setModifyDate(TimeUtils.getCurrentTimestamp());
-        addEntity.setRealEndDate(TimeUtils.stringToDate(companyChargeCycleBean.getRealEndDate(),"yyyy-MM-dd"));
-        addEntity.setRealStartDate(TimeUtils.stringToDate(companyChargeCycleBean.getRealStartDate(),"yyyy-MM-dd"));
+        addEntity.setCreateDate(timeUtils.getCurrentTimestamp());
+        addEntity.setModifyDate(timeUtils.getCurrentTimestamp());
+        addEntity.setRealEndDate(timeUtils.stringToDate(companyChargeCycleBean.getRealEndDate(),"yyyy-MM-dd"));
+        addEntity.setRealStartDate(timeUtils.stringToDate(companyChargeCycleBean.getRealStartDate(),"yyyy-MM-dd"));
         addEntity.setFreeMonth(companyChargeCycleBean.getFreeMonth());
         addEntity.setGiftPrice(new BigDecimal(companyChargeCycleBean.getGiftPrice()));
         return addEntity;

@@ -23,6 +23,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.gate.utils.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,10 +34,6 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.gate.core.bean.BaseFormBean;
 import com.gate.core.db.Dom4jUtils;
-import com.gate.utils.DateDeserializer;
-import com.gate.utils.RequestToMapUtils;
-import com.gate.utils.SqlDateDeserializer;
-import com.gate.utils.TimeStampDeserializer;
 import com.gate.web.authority.UserInfo;
 import com.gate.web.authority.UserInfoContext;
 import com.gate.web.exceptions.FormValidationException;
@@ -53,7 +50,6 @@ import com.google.gson.GsonBuilder;
  */
 
 public abstract class BaseServlet extends HttpServlet {
-
 
     protected static final Logger logger = LogManager.getLogger(BaseServlet.class);
     protected static final String REQUEST = "REQUEST";
@@ -79,6 +75,9 @@ public abstract class BaseServlet extends HttpServlet {
     protected static final String TEMPLATE_PAGE = "/backendAdmin/template/template.jsp";
     protected static final String POP_TEMPLATE_PAGE = "/backendAdmin/template/pop_template.jsp";
     protected static final String IMPORT_TEMPLATE_PAGE = "/backendAdmin/template/import_template.jsp";
+
+    @Autowired
+    public TimeUtils timeUtils;
 
 	@Autowired
 	ChargeFacade chargeFacade;
