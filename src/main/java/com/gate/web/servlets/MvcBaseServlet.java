@@ -193,7 +193,7 @@ public abstract class MvcBaseServlet {
             // from template.jsp to here
             request.setAttribute("login_name", user.getName());
             request.setAttribute("logoutTime", user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120);
-            request.getSession().setMaxInactiveInterval(user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120);
+            request.getSession().setMaxInactiveInterval(user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120*60);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new EinvSysException(messageSource.getMessage("User.loginFail", null, null));
