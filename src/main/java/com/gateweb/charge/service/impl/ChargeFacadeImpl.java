@@ -3006,10 +3006,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<UserEntity> searchBy(UserEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith User   before dao searchWith : bean "+bean);	
+		//log.debug("ChargeFacadeImpl searchWith User   before dao searchWith bean: "+bean);	
 		List<UserEntity> results = null;
 		results = userRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithUser   successfully. ");	
+		log.debug("ChargeFacadeImpl searchBy successfully. ");	
 		return results;
     }
 

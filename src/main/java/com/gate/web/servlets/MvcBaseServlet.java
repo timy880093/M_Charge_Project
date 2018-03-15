@@ -292,8 +292,7 @@ public abstract class MvcBaseServlet {
         otherMap.put(REQUEST, request);
         otherMap.put(RESPONSE, response);
         otherMap.put(FORM_BEAN, formBeanObject);
-        otherMap.put("AcceptCompanyIdString", request.getSession().getAttribute("AcceptCompanyIdString"));
-        otherMap.put("AcceptBusinessNoString", request.getSession().getAttribute("AcceptBusinessNoString"));
+        
         if (user != null) {
             otherMap.put(USER_ID, user.getUserId().toString());
             otherMap.put(ROLE_ID, user.getRoleId().toString());
@@ -369,10 +368,10 @@ public abstract class MvcBaseServlet {
         Object sessionObj = otherMap.get(SESSION_SEND_OBJECT);
         Object requestObj = otherMap.get(REQUEST_SEND_OBJECT);
         Object dispatch = otherMap.get(DISPATCH_PAGE);
-//        Gson gson = new Gson();
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-        Gson gson = gsonBuilder.create();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(java.sql.Date.class, new SqlDateDeserializer())
+                .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                .registerTypeAdapter(java.sql.Timestamp.class, new TimeStampDeserializer()).create();
         HttpSession session = request.getSession();
         if (sessionObj instanceof List) {
             List sessionList = (List) sessionObj;
@@ -410,9 +409,10 @@ public abstract class MvcBaseServlet {
         Object jsonObj = otherMap.get(AJAX_JSON_OBJECT);
         if (jsonObj != null) {
             String jsonString = "";
-            GsonBuilder gsonBuilder = new GsonBuilder();
-            gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-            Gson gson = gsonBuilder.create();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(java.sql.Date.class, new SqlDateDeserializer())
+                    .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                    .registerTypeAdapter(java.sql.Timestamp.class, new TimeStampDeserializer()).create();
             //Gson gson = new GsonBuilder().create();
             if (gson != null) {
                 try {
@@ -435,7 +435,11 @@ public abstract class MvcBaseServlet {
         Object jsonObj = otherMap.get(AJAX_JSON_OBJECT);
         if (jsonObj != null) {
             String jsonString = "";
-            Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/dd HH:mm:ss").create();
+            //Gson gson = new GsonBuilder().setDateFormat("yyyy/MM/dd HH:mm:ss").create();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(java.sql.Date.class, new SqlDateDeserializer())
+                    .registerTypeAdapter(java.util.Date.class, new DateDeserializer())
+                    .registerTypeAdapter(java.sql.Timestamp.class, new TimeStampDeserializer()).create();
             //Gson gson = new GsonBuilder().create();
             if (gson != null) {
                 try {

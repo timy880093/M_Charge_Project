@@ -126,7 +126,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<UserEntity> searchWithVo(UserEntity vo, Pageable pageable) {
-		log.debug("UserRepositoryImpl searchWithVo vo: " + vo);
+		//log.debug("UserRepositoryImpl searchWithVo vo: " + vo);
+		log.debug("UserRepositoryImpl searchWithVo vo");
 		BooleanBuilder builder = new BooleanBuilder();
 		QUserEntity userEntity = QUserEntity.userEntity;
 

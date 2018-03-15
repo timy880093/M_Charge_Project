@@ -2,8 +2,9 @@ package com.gateweb.charge.service.impl;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -25,11 +26,11 @@ public class UserFacadeImpl implements UserFacade {
 	@Autowired
 	ChargeFacade chargeFacade;
 	
-	protected Log log = LogFactory.getLog(this.getClass());
+	protected Logger logger = LogManager.getLogger(UserFacadeImpl.class);
 	
 	@Override
 	public UserEntity getUserByLogin(String account) {
-		System.out.println("getUserByLogin account:"+account);
+		logger.debug("getUserByLogin account:"+account);
 		if (null == account) {
 			throw new IllegalArgumentException("Login is mandatory. Null value is forbidden.");
 		}
@@ -42,10 +43,10 @@ public class UserFacadeImpl implements UserFacade {
 			BeanUtils.copyProperties(usersList.get(0), user);
 			user.setGrantedAuthorities( user.getAuthorities().toArray(new GrantedAuthority[] {}));
 		}else{
-			System.out.println("No user");
+			logger.error("No user");
 			user = null;
 		}
-		System.out.println("user:"+user);
+		//logger.debug("user:"+user);
 		return user;
 		
 	}
@@ -60,13 +61,13 @@ public class UserFacadeImpl implements UserFacade {
 	@Override
 	public UserDetails loadUserByUsername(String account)
 			throws UsernameNotFoundException, DataAccessException {
-		System.out.println("loadUserByUsername account:"+account);
+		logger.debug("loadUserByUsername account:"+account);
 		UserEntity user = null;		
 		try {
 			user = getUserByLogin(account);
 			if (null == user) {
-				log.error("User with login: " + account+ " not found in database.");
-				log.error("Authentication failed for user " + account);
+				logger.error("User with login: " + account+ " not found in database.");
+				logger.error("Authentication failed for user " + account);
 				throw new UsernameNotFoundException("Username not found");
 			}
 		} catch (IllegalArgumentException e) {
