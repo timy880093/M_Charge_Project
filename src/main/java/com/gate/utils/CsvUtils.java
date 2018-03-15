@@ -56,16 +56,19 @@ public class CsvUtils {
          * 使用PropertiesDescriptor取得參數
          * 先取得mainClass的欄位名稱
          */
-        beanHeaderList.addAll(getBeanHeaderData(mainClazz,excludeMainParameterNameList));
+        beanHeaderList.addAll(genBeanHeaderData(mainClazz,excludeMainParameterNameList));
         /**
          * 取得details欄位的名稱
          */
-        beanHeaderList.addAll(getBeanHeaderData(detailClazz,excludeDetailParameterNameList));
+        beanHeaderList.addAll(genBeanHeaderData(detailClazz,excludeDetailParameterNameList));
         return beanHeaderList;
     }
 
-    public List<String> getBeanHeaderData(Class clazz, List<String> excludeParameterNameList){
+    public List<String> genBeanHeaderData(Class clazz, List<String> excludeParameterNameList){
         List<String> resultList = new ArrayList<>();
+        if(excludeParameterNameList==null){
+            excludeParameterNameList = new ArrayList<>();
+        }
 
         BeanInfo detailBeanInfo = null;
         try {
@@ -94,10 +97,10 @@ public class CsvUtils {
             , List<String> excludeDetailParameterName){
         List<String[]> resultList = new ArrayList<>();
         List<String> mainObjectValueList
-                = objectListToStringList(getBeanValueData(mainObject,excludeMainParameterName));
+                = objectListToStringList(genBeanValueData(mainObject,excludeMainParameterName));
         for(Object detailObject : detailObjectList){
             List<String> detailObjectValueList
-                    = objectListToStringList(getBeanValueData(detailObject,excludeDetailParameterName));
+                    = objectListToStringList(genBeanValueData(detailObject,excludeDetailParameterName));
             List<String> combinedObjectValueList = new ArrayList<>();
             combinedObjectValueList.addAll(mainObjectValueList);
             combinedObjectValueList.addAll(detailObjectValueList);
@@ -106,7 +109,7 @@ public class CsvUtils {
         return resultList;
     }
 
-    public List<Object> getBeanValueData(Object object,List<String> excludeParameterName){
+    public List<Object> genBeanValueData(Object object,List<String> excludeParameterName){
         List<Object> beanValueList = new ArrayList<>();
         /**
          * 使用PropertiesDescriptor取得參數。
@@ -156,4 +159,13 @@ public class CsvUtils {
         return resultList;
     }
 
+    /**
+     * 將dataList轉換成為一行csv資料
+     * @param valueList
+     * @param separator
+     * @return
+     */
+    public String dataListToCsvLineData(List<String> valueList,String separator){
+        return StringUtils.join(valueList.toArray(new String[]{}),separator);
+    }
 }

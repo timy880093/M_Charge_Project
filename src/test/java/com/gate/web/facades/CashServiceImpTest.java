@@ -3,6 +3,7 @@ package com.gate.web.facades;
 import com.gate.utils.CsvUtils;
 import com.gate.utils.FileUtils;
 import com.gateweb.charge.vo.CashVO;
+import com.gateweb.einv.model.OrderCsv;
 import com.gateweb.einv.vo.OrderVO;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
@@ -46,28 +47,35 @@ public class CashServiceImpTest {
     @Test
     public void CashVoToOrderVoTest(){
         List<CashVO> cashVoList = cashService.findCashVoByOutYm("201712");
-        List<OrderVO> orderVOList = new ArrayList<>();
+        List<OrderCsv> orderCsvList = new ArrayList<>();
         for(CashVO cashVo : cashVoList){
-            orderVOList.add(cashService.genOrderByCashRecord(new Long(2),cashVo));
+            orderCsvList.addAll(cashService.genOrderCsvListByCashVO(new Long(2),cashVo));
         }
     }
 
     @Test
-    public void CashVoToOrderVoTextTest() throws IOException {
+    public void CashVoToSingleOrderCsvTest() throws IOException {
+        //一筆一筆處理
         List<CashVO> cashVoList = cashService.findCashVoByOutYm("201712");
-
         for(CashVO cashVo : cashVoList){
-            OrderVO orderVO = cashService.genOrderByCashRecord(new Long(2),cashVo);
-            if(orderVO !=null){
-                List<String> lineDataList = csvUtils.combineBeanToList(
-                        orderVO.getOrderMainEntity()
-                        , ignoreColumnFromOrderMain()
-                        , orderVO.getOrderDetailsEntityList()
-                        , ignoreColumnFromOrderDetail()
-                        , ","
-                );
+            List<OrderCsv> orderCsvList = cashService.genOrderCsvListByCashVO(new Long(2),cashVo);
+            //第一行欄位資料
+            List<String> headerValueList = csvUtils.genBeanHeaderData(OrderCsv.class,new ArrayList<>());
+            String headerStringData = csvUtils.dataListToCsvLineData(headerValueList,",");
+            List<String> detailStringDataList = new ArrayList<>();
+            //後續明細資料
+            for(OrderCsv orderCsv: orderCsvList){
+                List<Object> beanDataObjectList = csvUtils.genBeanValueData(orderCsv,new ArrayList<>());
+                List<String> beanDataArrayList = csvUtils.objectListToStringList(beanDataObjectList);
+                String detailStringData = csvUtils.dataListToCsvLineData(beanDataArrayList,",");
+                detailStringDataList.add(detailStringData);
+            }
+            List<String> summaryStringDataList = new ArrayList<>();
+            summaryStringDataList.add(headerStringData);
+            summaryStringDataList.addAll(detailStringDataList);
+            if(orderCsvList.size()>0){
                 File csvFile = new File("C:/Users/Eason/Desktop/20180307Problem/"+cashVo.getCashMasterEntity().getCashMasterId()+".csv");
-                fileUtils.writeTextFile(csvFile,lineDataList);
+                fileUtils.writeTextFile(csvFile,summaryStringDataList);
             }
         }
     }

@@ -11,9 +11,7 @@ import com.gate.web.beans.InvoiceExcelBean;
 import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.*;
 import com.gateweb.charge.vo.CashVO;
-import com.gateweb.einv.model.OrderDetailsEntity;
-import com.gateweb.einv.model.OrderMainEntity;
-import com.gateweb.einv.vo.OrderVO;
+import com.gateweb.einv.model.OrderCsv;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.logging.Log;
@@ -143,10 +141,10 @@ public class CashServiceImp implements CashService {
 
     //使用CashVO的資料建立訂單。
     @Override
-    public OrderVO genOrderByCashRecord(Long sellerCompanyId, CashVO cashVO){
+    public List<OrderCsv> genOrderCsvListByCashVO(Long sellerCompanyId, CashVO cashVO){
         CompanyEntity sellerCompany = companyRepository.findByCompanyId(sellerCompanyId.intValue());
         CompanyEntity buyerCompany = companyRepository.findByCompanyId(cashVO.getCashMasterEntity().getCompanyId());
-        return genOrder(sellerCompany,buyerCompany,cashVO);
+        return genOrderCsvList(sellerCompany,buyerCompany,cashVO);
     }
 
     //匯出發票Excel的資料-批次(by年月)
@@ -282,22 +280,16 @@ public class CashServiceImp implements CashService {
         return taxInclusivePrice;
     }
 
-    public OrderVO genOrder(
+    public List<OrderCsv> genOrderCsvList(
             CompanyEntity sellerCompany
             , CompanyEntity buyerCompany
             , CashVO cashVO){
-        if(exportCashMasterBusinessLogicContinueFilter(cashVO.getCashMasterEntity())){
-            return null;
+        List<OrderCsv> orderCsvList = new ArrayList<>();
+        if(!exportCashMasterBusinessLogicContinueFilter(cashVO.getCashMasterEntity())){
+            //取得相關資料
+            orderCsvList = genOrderCsvEntityByCashMaster(sellerCompany,buyerCompany,cashVO);
         }
-
-        //取得相關資料
-        OrderVO orderVO = new OrderVO();
-        OrderMainEntity orderMainEntity
-                = genOrderMainEntityByCashMaster(sellerCompany,buyerCompany,cashVO.getCashMasterEntity());
-        List<OrderDetailsEntity> orderDetailsEntityList = genOrderDetailsEntityByCashDetail(cashVO);
-        orderVO.setOrderMainEntity(orderMainEntity);
-        orderVO.setOrderDetailsEntityList(orderDetailsEntityList);
-        return orderVO;
+        return orderCsvList;
     }
 
     //匯出發票Excel的資料
@@ -421,70 +413,62 @@ public class CashServiceImp implements CashService {
      *
      * @param sellerCompany
      * @param buyerCompany
-     * @param cashMasterEntity
+     * @param cashVO
      * @return
      */
-    public OrderMainEntity genOrderMainEntityByCashMaster(
+    public List<OrderCsv> genOrderCsvEntityByCashMaster(
             CompanyEntity sellerCompany
             , CompanyEntity buyerCompany
-            , CashMasterEntity cashMasterEntity){
-
-        OrderMainEntity orderMainEntity = new OrderMainEntity();
-        orderMainEntity.setOrderNumber(cashMasterEntity.getCashMasterId().toString());
-
-        //seller
-        orderMainEntity.setBuyer(buyerCompany.getBusinessNo());
-        orderMainEntity.setBuyerAddress(buyerCompany.getCompanyAddress());
-        orderMainEntity.setBuyerEmailAddress(buyerCompany.getEmail1());
-        orderMainEntity.setBuyerName(buyerCompany.getName());
-        orderMainEntity.setBuyerPersonInCharge(buyerCompany.getContact1());
-
-        //buyer
-        orderMainEntity.setSeller(sellerCompany.getBusinessNo());
-        orderMainEntity.setSellerName(sellerCompany.getName());
-        orderMainEntity.setSellerAddress(sellerCompany.getCompanyAddress());
-        orderMainEntity.setSellerEmailAddress(sellerCompany.getEmail1());
-        orderMainEntity.setSellerPersonInCharge(sellerCompany.getContact1());
-
-        //預設資料
-        orderMainEntity.setTaxType("1");
-        orderMainEntity.setTaxRate(new Float(0.05));
-
-        //訂單基本資料
-        orderMainEntity.setYearMonth(timeUtils.getYearMonth(timeUtils.getCurrentDateString("yyyyMMdd")));
-        orderMainEntity.setCreateDate(timeUtils.getCurrentTimestamp());
-        orderMainEntity.setModifyDate(timeUtils.getCurrentTimestamp());
-
-        return orderMainEntity;
-    }
-
-    public List<OrderDetailsEntity> genOrderDetailsEntityByCashDetail(CashVO cashVO){
-        List<OrderDetailsEntity> orderDetailsEntityList = new ArrayList<>();
-
+            , CashVO cashVO){
+        List<OrderCsv> orderCsvList = new ArrayList<>();
+        //產生明細項目的部份。
         for(int i = 0; i<cashVO.getCashDetailEntityList().size();i++){
-            OrderDetailsEntity orderDetailsEntity = new OrderDetailsEntity();
+            if(exportCashDetailBusinessLogicContinueFilter(cashVO.getCashDetailEntityList().get(i))){
+                continue;
+            }
+
+            OrderCsv orderCsv = new OrderCsv();
+            orderCsv.setOrderNumber(cashVO.getCashMasterEntity().getCashMasterId().toString());
+
+            //seller
+            orderCsv.setBuyerIdentifier(buyerCompany.getBusinessNo());
+            orderCsv.setBuyerAddress(buyerCompany.getCompanyAddress());
+            orderCsv.setBuyerEmailAddress(buyerCompany.getEmail1());
+            orderCsv.setBuyerName(buyerCompany.getName());
+            orderCsv.setBuyerPersonInCharge(buyerCompany.getContact1());
+
+            //buyer
+            orderCsv.setSellerIdentifier(sellerCompany.getBusinessNo());
+            orderCsv.setSellerName(sellerCompany.getName());
+            orderCsv.setSellerAddress(sellerCompany.getCompanyAddress());
+            orderCsv.setSellerEmailAddress(sellerCompany.getEmail1());
+            orderCsv.setSellerPersonInCharge(sellerCompany.getContact1());
+
+            //預設資料
+            orderCsv.setTaxType("1");
+            orderCsv.setTaxRate(new Float(0.05));
+
+            //訂單基本資料
+            orderCsv.setYearMonth(timeUtils.getYearMonth(timeUtils.getCurrentDateString("yyyyMMdd")));
+
             String description = getPackageDescriptionByCashType(cashVO.getCashDetailEntityList().get(i));
-            orderDetailsEntity.setDescription(description);
+            orderCsv.setDetailDescription(description);
             BigDecimal taxInclusivePrice = getTaxInclusivePrice(cashVO.getCashDetailEntityList().get(i));
-            orderDetailsEntity.setUnitPrice(taxInclusivePrice);
+            orderCsv.setDetailUnitPrice(taxInclusivePrice);
 
             //基本設定
-            orderDetailsEntity.setSequenceNumber(i+1);
-            orderDetailsEntity.setQuantity(new BigDecimal(1));
-            orderDetailsEntity.setTaxType("1");
-            orderDetailsEntity.setTaxRate(new Float(0.05));
-            orderDetailsEntity.setAmount(
-                    orderDetailsEntity.getQuantity().multiply(taxInclusivePrice)
+            orderCsv.setDetailSequenceNumber(i+1);
+            orderCsv.setDetailQuantity(new BigDecimal(1));
+            orderCsv.setTaxRate(new Float(0.05));
+            orderCsv.setDetailAmount(
+                    orderCsv.getDetailQuantity().multiply(taxInclusivePrice)
             );
 
             //明細基本資料
-            orderDetailsEntity.setYearMonth(timeUtils.getYearMonth(timeUtils.getCurrentDateString("yyyyMMdd")));
-            orderDetailsEntity.setCreateDate(timeUtils.getCurrentTimestamp());
-            orderDetailsEntity.setModifyDate(timeUtils.getCurrentTimestamp());
-            orderDetailsEntityList.add(orderDetailsEntity);
+            orderCsv.setYearMonth(timeUtils.getYearMonth(timeUtils.getCurrentDateString("yyyyMMdd")));
+            orderCsvList.add(orderCsv);
         }
-        return orderDetailsEntityList;
+        return orderCsvList;
     }
-
 
 }
