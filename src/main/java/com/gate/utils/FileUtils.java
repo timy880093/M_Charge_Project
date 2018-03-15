@@ -4,8 +4,10 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
  * @author Jason 2004-8-11
  * @version 1.0
  */
+@Component
 public class FileUtils {
 
 	/**
@@ -346,4 +349,17 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
+
+	public void writeTextFile(File outputFile,List<String> textList) throws IOException {
+		if(textList.size()>0){
+			FileOutputStream fos = new FileOutputStream(outputFile);
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+			for(String text : textList){
+				bw.write(text);
+				bw.newLine();
+			}
+			bw.close();
+			fos.close();
+		}
+	}
 }

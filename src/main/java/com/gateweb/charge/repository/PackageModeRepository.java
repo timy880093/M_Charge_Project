@@ -40,8 +40,9 @@ public interface PackageModeRepository extends JpaRepository<PackageModeEntity, 
 		java.lang.Integer packageId 
 	) throws DaoSystemException;
 
-	/*public PackageModeEntity findByPackageId(Long packageId);
-	
+	public PackageModeEntity findByPackageId(Integer packageId);
+
+	/*
 	public Page<PackageModeEntity> findByPackageId(Long packageId, Pageable pageable);
 	
 	public boolean exists(Long packageId);

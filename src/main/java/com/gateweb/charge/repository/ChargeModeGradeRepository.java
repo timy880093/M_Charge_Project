@@ -40,7 +40,9 @@ public interface ChargeModeGradeRepository extends JpaRepository<ChargeModeGrade
 		java.lang.Integer chargeId 
 	) throws DaoSystemException;
 
-	/*public ChargeModeGradeEntity findByChargeId(Long chargeId);
+	public ChargeModeGradeEntity findByChargeId(Integer chargeId);
+
+	/*
 	
 	public Page<ChargeModeGradeEntity> findByChargeId(Long chargeId, Pageable pageable);
 	

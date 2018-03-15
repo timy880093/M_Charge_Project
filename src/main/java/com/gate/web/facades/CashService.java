@@ -8,6 +8,7 @@ import com.gate.web.displaybeans.CashDetailVO;
 import com.gate.web.displaybeans.CashMasterVO;
 import com.gateweb.charge.model.BillCycleEntity;
 import com.gateweb.charge.vo.CashVO;
+import com.gateweb.einv.vo.OrderVO;
 
 public interface CashService extends Service {
 
@@ -44,6 +45,9 @@ public interface CashService extends Service {
     public Integer sendBillMailYM(String outYM) throws Exception;
 
     public Integer sendBillMail(String masterIdAry) throws Exception;
+
+    //使用CashVO的資料建立訂單。
+    OrderVO genOrderByCashRecord(Long sellerCompanyId, CashVO cashVO);
 
     public List getInvoiceItem(String ym) throws Exception;
 

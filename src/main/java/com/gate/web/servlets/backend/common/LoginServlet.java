@@ -63,9 +63,9 @@ public class LoginServlet extends MvcBaseServlet {
     		
     		//request.getSession().setMaxInactiveInterval(user.getLogoutTime().intValue()*60);
     		//request.setAttribute("logoutTime", user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120);
-    		
-    		BaseFormBean formBeanObject = formBeanObject(request);
-    		Map requestParameterMap = request.getParameterMap();
+
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
         Map requestAttMap = requestAttMap(request);
         Map sessionAttMap = sessionAttMap(request);
         Map otherMap =  otherMap(request, response, formBeanObject);
@@ -73,6 +73,4 @@ public class LoginServlet extends MvcBaseServlet {
         sendObjToViewer(request, otherMap);
     		return TEMPLATE_PAGE;
     }
-	
-   
 }
