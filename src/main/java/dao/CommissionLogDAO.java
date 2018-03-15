@@ -212,18 +212,16 @@ public class CommissionLogDAO extends BaseDAO {
     }
 
     //匯出excel的資料
-    public List<Map> exportCom(String commissionLog)throws Exception {
+    public List<Map> exportCom(Integer[] comLogList)throws Exception {
         List<Map> exportCommissionLogList = new ArrayList<Map>();
 
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CommissionLog>>() {
-        }.getType();
-        List<CommissionLog> comLogList = gson.fromJson(commissionLog, collectionType);
-
-
+        if(comLogList == null || comLogList.length ==0) {
+        		throw new NullPointerException("String[] comLogList is null");
+        }
         //找出所有要付款的commission_log, 並付款
-        for (int i = 0; i < comLogList.size(); i++) {
-                        CommissionLog bean = (CommissionLog) comLogList.get(i);
+        for (int i = 0; i < comLogList.length; i++) {
+                CommissionLog bean = new CommissionLog();
+                bean.setCommissionLogId(comLogList[i]);
                 Integer commissionLogId = bean.getCommissionLogId();
                 CommissionLogEntity entity = (CommissionLogEntity) getEntity(CommissionLogEntity.class, commissionLogId);
                 BeanUtils.copyProperties(bean, entity);

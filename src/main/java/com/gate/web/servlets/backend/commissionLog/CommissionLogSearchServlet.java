@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gate.utils.ExcelPoiWrapper;
 import com.gate.web.beans.CommissionLog;
@@ -76,7 +77,9 @@ public class CommissionLogSearchServlet extends SearchServlet {
         }else if(method.equals("exportCom")){ //匯出佣金資料
             String data="success!! ";
             try{
-                String commissionLog = ((String[]) requestParameterMap.get("commissionLog"))[0]; //commission_log_id
+            		// , @RequestParam(value="commissionLog", required=true) List<Long> commissionLog
+            	
+                Integer[] commissionLog = ((Integer[]) requestParameterMap.get("commissionLog")); //commission_log_id
                 List<Map> commissionLogList = commissionLogService.exportCom(commissionLog);
                 String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/commission_temp.xls";
                 ExcelPoiWrapper excel= genCommissionLogToExcel(commissionLogList, filePath);

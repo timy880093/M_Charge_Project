@@ -19,6 +19,6 @@ public interface CommissionLogService extends Service {
 
     public boolean payCommission(String commissionLog)throws Exception;
 
-    public List<Map> exportCom(String commissionLog)throws Exception;
+    public List<Map> exportCom(Integer[] commissionLog)throws Exception;
     public boolean delCommissionLog(Integer commissionLogId)throws Exception;
 }

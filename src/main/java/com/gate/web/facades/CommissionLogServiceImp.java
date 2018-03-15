@@ -40,7 +40,7 @@ public class CommissionLogServiceImp implements CommissionLogService {
         return commissionLogDAO.updatePayCommission(commissionLog);
     }
 
-    public List<Map> exportCom(String commissionLog)throws Exception{
+    public List<Map> exportCom(Integer[] commissionLog)throws Exception{
         return commissionLogDAO.exportCom(commissionLog);
             }
     public boolean delCommissionLog(Integer commissionLogId)throws Exception{

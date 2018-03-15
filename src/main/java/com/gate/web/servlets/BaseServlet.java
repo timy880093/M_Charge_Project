@@ -246,7 +246,7 @@ public abstract class BaseServlet extends HttpServlet {
         	}
         	request.setAttribute("login_name", user.getName());
         request.setAttribute("logoutTime", user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120);
-        request.getSession().setMaxInactiveInterval(user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120*60);
+        request.getSession().setMaxInactiveInterval(user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue()*60 : 120*60);
         	System.out.println("user:"+user+",  userInfo:"+UserInfoContext.getUserInfo()+", userContext:"+userInfo);
             if (user != null && (UserInfoContext.getUserInfo() == null || userInfo == null)) {//表示有經過授權登入
                 userInfo = new UserInfo();
