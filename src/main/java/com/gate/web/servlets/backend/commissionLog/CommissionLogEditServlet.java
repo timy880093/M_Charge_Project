@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * Created by emily on 2016/1/11.
  */
-@RequestMapping("/backendAdmin/CommissionLogEditServlet")
+@RequestMapping("/backendAdmin/commissionLogEditServlet")
 @Controller
 public class CommissionLogEditServlet extends MvcBaseServlet {
     private static final String DEFAULT_EDIT_DISPATCH_PAGE = "/backendAdmin/commissionLog/commissionLog_edit.jsp";
