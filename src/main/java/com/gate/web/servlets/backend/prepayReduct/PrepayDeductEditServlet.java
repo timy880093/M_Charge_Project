@@ -132,7 +132,7 @@ public class PrepayDeductEditServlet extends MvcBaseServlet {
 		return POP_TEMPLATE_PAGE;	
 		
 	}
-    @RequestMapping(method = RequestMethod.POST, params = "method=insertPrepay", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.GET, params = "method=insertPrepay", produces = "application/json;charset=utf-8")
 	public @ResponseBody String insertPrepay(@RequestParam("method") String method, Model model
 					, @RequestParam(value="prepayDeductMasterId", required=true) Integer prepayDeductMasterId
 					, @RequestParam(value="companyId", required=true) Integer companyId
