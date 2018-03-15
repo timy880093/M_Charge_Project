@@ -16,11 +16,11 @@ import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 @WebServlet(urlPatterns = "/backendAdmin/calCycleEditServlet")
 public class CalCycleEditServlet extends BackendPopTemplateServlet {
 
-	@Autowired
-	CalCycleService calCycleService;
+    @Autowired
+    CalCycleService calCycleService;
     @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        
+
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
@@ -50,7 +50,7 @@ public class CalCycleEditServlet extends BackendPopTemplateServlet {
             }
 
             if (billId != null) {
-            	calCycleService.updateCntGiftByBillId(billId, cntGift);
+                calCycleService.updateCntGiftByBillId(billId, cntGift);
             }
             otherMap.put(AJAX_JSON_OBJECT, "ok");
         }

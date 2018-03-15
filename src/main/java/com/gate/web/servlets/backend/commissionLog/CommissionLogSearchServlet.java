@@ -1,16 +1,30 @@
 package com.gate.web.servlets.backend.commissionLog;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gate.core.bean.BaseFormBean;
+import com.gate.web.exceptions.FormValidationException;
+import com.gate.web.exceptions.ReturnPathException;
+import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.UserEntity;
+import com.gateweb.einv.exception.EinvSysException;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 
 import com.gate.utils.ExcelPoiWrapper;
 import com.gate.web.beans.CommissionLog;
@@ -19,110 +33,200 @@ import com.gate.web.facades.CommissionLogService;
 import com.gate.web.servlets.SearchServlet;
 
 
-@WebServlet(urlPatterns = "/backendAdmin/commissionLogSearchServlet")
-public class CommissionLogSearchServlet extends SearchServlet {
-    private static final String DOWNLOAD_FILE_NAME_COMMISSION ="commission_temp";
+@RequestMapping("/backendAdmin/commissionLogSearchServlet")
+@Controller
+
+public class CommissionLogSearchServlet extends MvcBaseServlet {
+    private static final String SESSION_SEARCH_OBJ_NAME = "commissionLogListSearchVO";
+    private static final String DOWNLOAD_FILE_NAME = "commission_temp";
+    private static String TEMPLATE_Commission_EXCEL_LOCATION = "tempFile/commission_temp.xls";
+    private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/commissionLog/commissionLog_list.jsp";
+    private static String TEMPLATE_Commission_EXCEL_DOWNLOAD;
+
     //private static final String TEMPLATE_EXCEL_DOWNLOAD_COMMISSION = SystemConfig.getInstance().getParameter("uploadTempPath") + "//tempFile"+"//commission_temp.xls";
 
     @Autowired
     CommissionLogService commissionLogService;
 
 
-    @Override
-    public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-       
-        Object methodObj = requestParameterMap.get("method");
-        String method = "";
-        List<Object> outList = new ArrayList<Object>();
-        if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
-        if (method.equals("search")) {
-            QuerySettingVO querySettingVO = new QuerySettingVO();
-            Map pageMap = getData(requestParameterMap, querySettingVO, otherMap,"commissionLogListSearchVO");
-            otherMap.put(AJAX_JSON_OBJECT, pageMap);
-            return null;
-        } else if(method.equals("calCommission")){ //計算佣金
-            String data="calculate success!! ";
-            try{
-                String dealerCompany = null;
-                String inDateS = null;
-                String inDateE = null;
-                if(null != requestParameterMap.get("dealerCompany")){
-                    dealerCompany = ((String[]) requestParameterMap.get("dealerCompany"))[0];
-                }
-                if(null != requestParameterMap.get("inDateS")){
-                    inDateS = ((String[]) requestParameterMap.get("inDateS"))[0];
-                }
-                if(null != requestParameterMap.get("inDateE")){
-                    inDateE = ((String[]) requestParameterMap.get("inDateE"))[0];
-                }
-                System.out.println("dealerCompany:   "+dealerCompany+",inDateS:   "+inDateS+", inDateE:    "+inDateE);
-                commissionLogService.calCommission(dealerCompany, inDateS, inDateE);
-            } catch (Exception e) {
-                e.printStackTrace();
-                data = "calculate error";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        } else if(method.equals("payCommission")){ //佣金付款
-            String data="success!! ";
-            try{
-                String commissionLog = ((String[]) requestParameterMap.get("commissionLog"))[0]; //commission_log_id
-                commissionLogService.payCommission(commissionLog);
-            } catch (Exception e) {
-                e.printStackTrace();
-                data = "error";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        }else if(method.equals("exportCom")){ //匯出佣金資料
-            String data="success!! ";
-            try{
-            		// , @RequestParam(value="commissionLog", required=true) List<Long> commissionLog
-            	
-                Integer[] commissionLog = ((Integer[]) requestParameterMap.get("commissionLog")); //commission_log_id
-                List<Map> commissionLogList = commissionLogService.exportCom(commissionLog);
-                String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/commission_temp.xls";
-                ExcelPoiWrapper excel= genCommissionLogToExcel(commissionLogList, filePath);
-                HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
-                responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_COMMISSION);
-            } catch (Exception e) {
-                e.printStackTrace();
-                data = "error";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        }else{
-            List dealerCpList = commissionLogService.getDealerCompanyList();
-            outList.add(dealerCpList);
+    @RequestMapping(method = RequestMethod.POST)
+    public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
+                              Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("defaultPost model:   " + model);
+        logger.debug("defaultPost paramMap:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return TEMPLATE_PAGE;
+    }
 
+    @RequestMapping(method = RequestMethod.GET)
+    public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
+            , Model model, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        logger.debug("defaultGet model:   " + model);
+        logger.debug("defaultGet paramMap:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return TEMPLATE_PAGE;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
+    public String mainList(@RequestParam("sessionClean") String sessionClean, Model model, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.debug("mainList sessionClean:   " + sessionClean);
+        logger.debug("mainList model:   " + model);
+        //String returnPage =BOOTSTRAP_TEMPLATE_PAGE
+        String returnPage = TEMPLATE_PAGE;
+        Gson gson = new Gson();
+        String errorMessage = null;
+
+        //commonService(request, response);
+        //common service裡面需要4個物件，然後傳給serviceBU，產生jsp 和物件
+        //所以這裡要先取出這4個物件然後再做事情
+        try {
+            UserEntity user = checkLogin(request, response);
+            BaseFormBean formBeanObject = formBeanObject(request);
+            Map requestParameterMap = request.getParameterMap();
+            Map requestAttMap = requestAttMap(request);
+            Map sessionAttMap = sessionAttMap(request);
+            Map otherMap = otherMap(request, response, formBeanObject);
+
+            //ServiceBU
+            List<Object> outList = new ArrayList<Object>();
+            List DealerCompanyList = commissionLogService.getDealerCompanyList();
+            outList.add(DealerCompanyList); //1.用戶下拉選單
             otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE,getDispatch_page());
-            String[] returnList = {FORWARD_TYPE_F, TEMPLATE_PAGE};
-            return returnList;
+            otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+            sendObjToViewer(request, otherMap);
+
+        } catch (EinvSysException ese) {
+            logger.error(ese.getMessage(), ese);
+            errorMessage = gson.toJson("錯誤:" + ese.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("IO動作失敗:" + ex.getMessage());
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
+            returnPage = ERROR_PAGE;
+        } catch (ServletException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("伺服器內部錯誤:" + ex.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (FormValidationException ex) {
+            errorMessage = gson.toJson("表單驗證失敗:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (ReturnPathException ex) {
+            errorMessage = gson.toJson("回傳路徑有問題:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("錯誤:" + ex.getMessage());
+            return ERROR_PAGE;
+        }
+        if (errorMessage != null) {
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
         }
 
+        return returnPage;
     }
 
-    public String getDispatch_page() {
-        return "/backendAdmin/commissionLog/commissionLog_list.jsp";
+    @RequestMapping(method = RequestMethod.GET, params = "method=calCommission", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    boolean calCommission(@RequestParam MultiValueMap<String, String> paramMap,
+                          @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "companyId", required = true) boolean calCommission
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("calCommission model:   " + model);
+        logger.debug("calCommission companyId:   " + calCommission);
+        logger.debug("calCommission paramMap:   " + paramMap);
+
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+
+        sendObjToViewer(request, otherMap);
+
+        //Search list
+        //remove function
+        String data = "calculate success!! ";
+        Integer exeCnt = 0;
+        try {
+            String dealerCompany = null;
+            String inDateS = null;
+            String inDateE = null;
+            if (null != requestParameterMap.get("dealerCompany")) {
+                dealerCompany = ((String[]) requestParameterMap.get("dealerCompany"))[0];
+            }
+            if (null != requestParameterMap.get("inDateS")) {
+                inDateS = ((String[]) requestParameterMap.get("inDateS"))[0];
+            }
+            if (null != requestParameterMap.get("inDateE")) {
+                inDateE = ((String[]) requestParameterMap.get("inDateE"))[0];
+            }
+            System.out.println("dealerCompany:   " + dealerCompany + ",inDateS:   " + inDateS + ", inDateE:    " + inDateE);
+            commissionLogService.calCommission(dealerCompany, inDateS, inDateE);
+        } catch (Exception ex) {
+            System.out.println(ex);
+            data = " calculate error!!";
+        }
+
+        // otherMap.put(AJAX_JSON_OBJECT, pageMap);
+        Gson gson = new Gson();
+        return Boolean.parseBoolean(gson.toJson(data));
+
     }
 
-    /**
-     * AJAX 資料來源
-     *
-     * @param querySettingVO
-     * @return
-     * @throws Exception
-     */
-    public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        
-        Map commissionList = commissionLogService.getCommissionMasterList(querySettingVO);
-        return commissionList;
-    }
 
-    @Override
-    public Map doSearchDownloadData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @RequestMapping(method=RequestMethod.GET, params="method=exportCom", produces="text/plain;charset=utf-8")
+    public void downloadFile(@RequestParam("method") String method, Model model
+            , HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+
+
+
+
+        String classPath = this.getClass().getResource("/").getPath();
+        CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_LOCATION = classPath + CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_LOCATION;
+        logger.debug("downloadFile model:   " + model);
+        logger.debug("downloadFile method:   " + method);
+        logger.debug("downloadFile classPath:   " + classPath);
+        logger.debug("downloadFile CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD:   "+CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD);
+
+
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+
+        sendObjToViewer(request, otherMap);
+        QuerySettingVO querySettingVO = (QuerySettingVO) request.getSession().getAttribute(SESSION_SEARCH_OBJ_NAME);
+
+        // AJAX 資料來源
+        List<Map> excelList = commissionLogService.getDownloadcommissionLogList(querySettingVO);
+        ExcelPoiWrapper excel = genCommissionLogToExcel(excelList, TEMPLATE_Commission_EXCEL_DOWNLOAD);
+        response.setHeader("Content-Disposition", "attachment;filename=" + DOWNLOAD_FILE_NAME + ".xls");
+        excel.getWorkBook().write(response.getOutputStream());
+        response.getOutputStream().close();
+
     }
 
     private void responseExcelFileToClient(ExcelPoiWrapper excel, HttpServletResponse response,String fileName)
@@ -136,7 +240,6 @@ public class CommissionLogSearchServlet extends SearchServlet {
 
     //匯出發票資料Excel
     private ExcelPoiWrapper genCommissionLogToExcel(List<Map> excelList, String tempPath) throws Exception {
-    	System.out.println("genCommissionLogToExcel tempPath :  "+tempPath);
         ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
         HashMap packageMap = new HashMap();
         excel.setWorkSheet(1);
@@ -235,3 +338,4 @@ public class CommissionLogSearchServlet extends SearchServlet {
     }
 
 }
+

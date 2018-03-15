@@ -23,7 +23,7 @@ public class CommissionLogServiceImp implements CommissionLogService {
     public List getDealerCompanyList() throws Exception {
         return commissionLogDAO.getDealerCompanyList();
     }
-
+    
     public boolean calCommission(String dealerCompany, String inDateS, String inDateE)throws Exception{
         return commissionLogDAO.transactionCalCommission(dealerCompany, inDateS, inDateE);
     }

@@ -154,7 +154,7 @@ public class CommissionLogEditServlet extends MvcBaseServlet {
         //Search list
         //remove function
         String data = "success!!";
-       Integer commissionLogId = 0;
+        Integer commissionLogId = 0;
         try {
 
 

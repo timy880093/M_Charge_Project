@@ -22,10 +22,10 @@ import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 @WebServlet(urlPatterns = "/backendAdmin/chargeEditServlet")
 public class ChargeEditServlet extends BackendPopTemplateServlet {
 
-	@Autowired
-	ChargeService chargeService;
-	
-	@Override
+    @Autowired
+    ChargeService chargeService;
+
+    @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
         Object methodObj = requestParameterMap.get("method");
@@ -95,6 +95,7 @@ public class ChargeEditServlet extends BackendPopTemplateServlet {
 //                    bean.setStatus(1);
 //                    chargeService.transactionInsertChargeModeGrade(bean);
 //                }
+
             }
         }
     }
