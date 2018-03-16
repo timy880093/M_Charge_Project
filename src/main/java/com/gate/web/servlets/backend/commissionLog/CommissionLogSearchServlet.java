@@ -143,8 +143,63 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
 
         return returnPage;
     }
+    @RequestMapping(method = RequestMethod.GET, params = "method=search", produces = "application/json;charset=utf-8")
+    public @ResponseBody String search(@RequestParam MultiValueMap<String, String> paramMap,
+                                       @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value="searchField[]", required = false) List<String> searchField
+            , @RequestParam(value="searchString[]", required = false) List<String> searchString
+            , @RequestParam(value="sidx", required= true) String sidx
+            , @RequestParam(value="sord", required= true) String sord
+            , @RequestParam(value="rows", required= true) Integer rows
+            , @RequestParam(value="page", required= true) Integer page
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("search model:   "+model);
+        logger.debug("search paramMap:   "+paramMap);
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=calCommission", produces = "application/json;charset=utf-8")
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+
+        sendObjToViewer(request, otherMap);
+
+        QuerySettingVO querySettingVO = new QuerySettingVO();
+        Map searchMap = new HashMap();
+        if (searchField != null && searchString != null && searchField.size() == searchString.size()) {
+            for (int i = 0; i < searchField.size(); i++) {
+                searchMap.put(searchField.get(i), java.net.URLDecoder.decode(searchString.get(i), "UTF-8"));
+            }
+        } else {
+            logger.debug("No searchField");
+        }
+        querySettingVO.setSearchMap(searchMap);
+        querySettingVO.setSidx(sidx);
+        querySettingVO.setSord(sord);
+        querySettingVO.setPage(page);
+        querySettingVO.setRows(rows);
+
+        request.getSession().setAttribute(SESSION_SEARCH_OBJ_NAME, querySettingVO);
+        logger.debug("setQuerySettingVO: " + querySettingVO);
+
+        //Search list
+        //remove function
+        //getData()
+        Map data = commissionLogService.getCommissionMasterList(querySettingVO);
+        Map gridData = setGrid(querySettingVO, data);
+
+        // otherMap.put(AJAX_JSON_OBJECT, pageMap);
+        String jsonString = convertAjaxToJson(gridData);
+        return jsonString;
+
+    }
+
+
+
+
+
+        @RequestMapping(method = RequestMethod.GET, params = "method=calCommission", produces = "application/json;charset=utf-8")
     public @ResponseBody
     boolean calCommission(@RequestParam MultiValueMap<String, String> paramMap,
                           @RequestHeader HttpHeaders headers, Model model
