@@ -2,10 +2,7 @@ package com.gate.web.servlets.backend.commissionLog;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +15,7 @@ import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
 import com.gateweb.charge.model.UserEntity;
 import com.gateweb.einv.exception.EinvSysException;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -81,6 +79,8 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         sendObjToViewer(request, otherMap);
         return TEMPLATE_PAGE;
     }
+
+
 
     @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
     public String mainList(@RequestParam("sessionClean") String sessionClean, Model model, HttpServletRequest request, HttpServletResponse response)
@@ -195,11 +195,7 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
 
     }
 
-
-
-
-
-        @RequestMapping(method = RequestMethod.GET, params = "method=calCommission", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.GET, params = "method=calCommission", produces = "application/json;charset=utf-8")
     public @ResponseBody
     boolean calCommission(@RequestParam MultiValueMap<String, String> paramMap,
                           @RequestHeader HttpHeaders headers, Model model
@@ -249,13 +245,19 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
     }
 
 
-    @RequestMapping(method=RequestMethod.GET, params="method=exportCom", produces="text/plain;charset=utf-8")
-    public void downloadFile(@RequestParam("method") String method, Model model
+    @RequestMapping(method=RequestMethod.POST, params="method=exportCom", produces="application/json;charset=utf-8")
+    public void downloadFile(
+            @RequestParam("method") String method
+            , @RequestParam("commissionLog") String commissionLogIdArrayString
+            , Model model
             , HttpServletRequest request, HttpServletResponse response)
             throws Exception {
 
-
-
+        String[] commissionLogIdArray = commissionLogIdArrayString.split(",");
+        List<Integer> commissionLogIdList = new ArrayList<>();
+        for(String commissionLogId: commissionLogIdArray){
+            commissionLogIdList.add(Integer.parseInt(commissionLogId));
+        }
 
         String classPath = this.getClass().getResource("/").getPath();
         CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_LOCATION = classPath + CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_LOCATION;
@@ -263,7 +265,6 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         logger.debug("downloadFile method:   " + method);
         logger.debug("downloadFile classPath:   " + classPath);
         logger.debug("downloadFile CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD:   "+CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD);
-
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -276,8 +277,8 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         QuerySettingVO querySettingVO = (QuerySettingVO) request.getSession().getAttribute(SESSION_SEARCH_OBJ_NAME);
 
         // AJAX 資料來源
-        List<Map> excelList = commissionLogService.getDownloadcommissionLogList(querySettingVO);
-        ExcelPoiWrapper excel = genCommissionLogToExcel(excelList, TEMPLATE_Commission_EXCEL_DOWNLOAD);
+        List<Map> excelList = commissionLogService.exportCom(commissionLogIdList.toArray(new Integer[]{}));
+        ExcelPoiWrapper excel = genCommissionLogToExcel(excelList, TEMPLATE_Commission_EXCEL_LOCATION);
         response.setHeader("Content-Disposition", "attachment;filename=" + DOWNLOAD_FILE_NAME + ".xls");
         excel.getWorkBook().write(response.getOutputStream());
         response.getOutputStream().close();

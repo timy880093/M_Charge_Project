@@ -42,9 +42,20 @@ public class CommissionLogServiceImp implements CommissionLogService {
 
     public List<Map> exportCom(Integer[] commissionLog)throws Exception{
         return commissionLogDAO.exportCom(commissionLog);
-            }
+    }
+
     public boolean delCommissionLog(Integer commissionLogId)throws Exception{
         return commissionLogDAO.delCommissionLog(commissionLogId);
+    }
+
+    @Override
+    public Map getcommissionLogList(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
+        return commissionLogDAO.getCommissionMasterList(querySettingVO);
+    }
+
+    @Override
+    public List getDownloadcommissionLogList(QuerySettingVO querySettingVO) throws Exception {
+        return null;
     }
 
 }

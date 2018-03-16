@@ -278,19 +278,19 @@ public class CommissionLogDAO extends BaseDAO {
 
 
 
-        public boolean delCommissionLog(Integer commissionLogId)throws Exception{
-            //先檢查帳單裡是否沒有任何明細
-            boolean isCommissionLogEmpty = isCommissionLogEmpty(commissionLogId);
+    public boolean delCommissionLog(Integer commissionLogId)throws Exception{
+        //先檢查帳單裡是否沒有任何明細
+        boolean isCommissionLogEmpty = isCommissionLogEmpty(commissionLogId);
 
-            if(isCommissionLogEmpty){
-                //刪除帳單
-                CommissionLogEntity commissionLogEntity = (CommissionLogEntity) getEntity(CommissionLogEntity.class, commissionLogId);
-                deleteEntity(commissionLogEntity);
-                return true;
-            }else{
-                return false;
-            }
+        if(isCommissionLogEmpty){
+            //刪除帳單
+            CommissionLogEntity commissionLogEntity = (CommissionLogEntity) getEntity(CommissionLogEntity.class, commissionLogId);
+            deleteEntity(commissionLogEntity);
+            return true;
+        }else{
+            return false;
         }
+    }
 
 
     public boolean isCommissionLogEmpty(Integer commissionLogId)throws Exception{

@@ -323,14 +323,14 @@
         if (_aIDs.length > 0) {
         		var ids = [];
             for (var i = 0; i < _aIDs.length; i++) {
-            		ids.push($("#jqgrid").jqGrid('getRowData', _aIDs[i]).commission_log_id);
+                ids.push($("#jqgrid").jqGrid('getRowData', _aIDs[i]).commission_log_id);
             }
             
             $.ajax({
                 url: '<%=request.getContextPath()%>/backendAdmin/commissionLogSearchServlet?method=exportCom',
                 data: {commissionLog: ids.join(',')},
                 type: "POST",
-                //dataType: 'json',
+                dataType: 'json',
                 beforeSend: function () {
 					console.log('準備中...'+ids);
                 },
@@ -355,9 +355,7 @@
 	                	console.log('error...'+message);
                 }
             });
-            
-            
-            
+
         } else {
             alert("請先勾選資料列。");
         }
