@@ -21,6 +21,7 @@ import com.gateweb.charge.model.CommissionLogEntity;
 import com.gateweb.charge.model.DealerCompanyEntity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.gate.web.beans.QuerySettingVO;
 
 /**
  * Created by emily on 2016/1/11.
