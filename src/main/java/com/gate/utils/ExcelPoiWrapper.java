@@ -56,7 +56,9 @@ public class ExcelPoiWrapper {
 			throw e;
 
 		} finally {
-			fs = null;
+			if(fs!=null){
+				fs.close();
+			}
 			if (is != null) {
 				is.close();
 			}
@@ -305,6 +307,24 @@ public class ExcelPoiWrapper {
 		this.wb.setSheetName(this.wb.getNumberOfSheets() - 1, copySheetName);
 		this.sheet = wb.getSheetAt(this.wb.getNumberOfSheets() - 1);
 	}
+
+	/**
+	 * 複製一個工作表
+	 *
+	 * @param tempSheetName
+	 * @param copySheetName
+	 * @throws Exception
+	 */
+	public void copySheet(String tempSheetName, String copySheetName, int index)
+			throws Exception {
+
+		int sheetNo = this.wb.getSheetIndex(tempSheetName);
+		this.wb.cloneSheet(sheetNo);
+		this.wb.setSheetName(this.wb.getNumberOfSheets() - 1, copySheetName);
+		this.sheet = wb.getSheetAt(this.wb.getNumberOfSheets() - index);
+	}
+
+
 
 	/**
 	 * 设置 当前 操作 工作簿

@@ -1,21 +1,23 @@
 package com.gate.web.servlets.backend.commissionLog;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gate.core.bean.BaseFormBean;
+import com.gate.utils.JxlsUtils;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
 import com.gateweb.charge.model.UserEntity;
 import com.gateweb.einv.exception.EinvSysException;
-import com.google.common.collect.Lists;
+import com.gateweb.reportModel.CommissionRecord;
+import com.gateweb.utils.CommissionLogReportUtils;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +30,6 @@ import com.gate.utils.ExcelPoiWrapper;
 import com.gate.web.beans.CommissionLog;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.facades.CommissionLogService;
-import com.gate.web.servlets.SearchServlet;
 
 
 @RequestMapping("/backendAdmin/commissionLogSearchServlet")
@@ -38,6 +39,8 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
     private static final String SESSION_SEARCH_OBJ_NAME = "commissionLogListSearchVO";
     private static final String DOWNLOAD_FILE_NAME = "commission_temp";
     private static String TEMPLATE_Commission_EXCEL_LOCATION = "tempFile/commission_temp.xls";
+    private static String JXLS_COMMISSION_EXCEL_TEMPLATE = "tempFile/commission_jxls_template.xls";
+    private static String JXLS_COMMISSION_EXCEL_OUTPUT = "tempFile/commission_jxls_output.xls";
     private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/commissionLog/commissionLog_list.jsp";
     private static String TEMPLATE_Commission_EXCEL_DOWNLOAD;
 
@@ -46,6 +49,11 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
     @Autowired
     CommissionLogService commissionLogService;
 
+    @Autowired
+    CommissionLogReportUtils commissionLogReportUtils;
+
+    @Autowired
+    JxlsUtils jxlsUtils;
 
     @RequestMapping(method = RequestMethod.POST)
     public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
@@ -245,10 +253,10 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
     }
 
 
-    @RequestMapping(method=RequestMethod.POST, params="method=exportCom", produces="application/json;charset=utf-8")
+    @RequestMapping(method=RequestMethod.GET, params="method=exportCom", produces="text/plain;charset=utf-8")
     public void downloadFile(
             @RequestParam("method") String method
-            , @RequestParam("commissionLog") String commissionLogIdArrayString
+            , @RequestParam("commissionLogIdArray") String commissionLogIdArrayString
             , Model model
             , HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -260,11 +268,10 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         }
 
         String classPath = this.getClass().getResource("/").getPath();
-        CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_LOCATION = classPath + CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_LOCATION;
         logger.debug("downloadFile model:   " + model);
         logger.debug("downloadFile method:   " + method);
         logger.debug("downloadFile classPath:   " + classPath);
-        logger.debug("downloadFile CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD:   "+CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD);
+        logger.debug("downloadFile CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD:   "+TEMPLATE_Commission_EXCEL_LOCATION);
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -278,11 +285,18 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
 
         // AJAX 資料來源
         List<Map> excelList = commissionLogService.exportCom(commissionLogIdList.toArray(new Integer[]{}));
-        ExcelPoiWrapper excel = genCommissionLogToExcel(excelList, TEMPLATE_Commission_EXCEL_LOCATION);
-        response.setHeader("Content-Disposition", "attachment;filename=" + DOWNLOAD_FILE_NAME + ".xls");
-        excel.getWorkBook().write(response.getOutputStream());
-        response.getOutputStream().close();
+//        ExcelPoiWrapper excel = genCommissionLogToExcel(excelList, this.getClass().getResource("/").getPath()+ TEMPLATE_Commission_EXCEL_LOCATION);
+//        responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME);
 
+        //使用jxls實作
+        List<CommissionRecord> commissionRecordList = genCommissionRecordList(excelList);
+        Map<String,Object> parameterMap = new HashMap<>();
+        parameterMap.put("commissionRecordList",commissionRecordList);
+        response.setContentType("text/plain");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename=" + JXLS_COMMISSION_EXCEL_OUTPUT);
+        FileInputStream fileInputStream = new FileInputStream(this.getClass().getResource("/").getPath()+JXLS_COMMISSION_EXCEL_TEMPLATE);
+        jxlsUtils.processTemplate(parameterMap,fileInputStream,response.getOutputStream());
     }
 
     private void responseExcelFileToClient(ExcelPoiWrapper excel, HttpServletResponse response,String fileName)
@@ -291,8 +305,56 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName+".xls");
         excel.getWorkBook().write(response.getOutputStream());
+        excel.getWorkBook().close();
         response.getOutputStream().close();
     }
+
+    //取得匯出發票資料的物件
+    public List<CommissionRecord> genCommissionRecordList(List<Map> dataMapList){
+        List<CommissionRecord> commissionRecordList = new ArrayList<>();
+        for(Map dataMap : dataMapList){
+            CommissionLog master = (CommissionLog) dataMap.get("master");
+            List details = (List)dataMap.get("detail");
+            for(int i=0; i<details.size(); i++){
+
+                Map detailMap = (Map)details.get(i);
+                CommissionRecord  commissionRecord = new CommissionRecord();
+                commissionRecord.setDealerCompanyName(master.getDealerCompanyName());
+                commissionRecord.setInDateStart(master.getInDateStart());
+                commissionRecord.setInDateEnd(master.getInDateEnd());
+                commissionRecord.setCommissionType(
+                        commissionLogReportUtils.parseCommissionType(master.getCommissionType())
+                );
+                commissionRecord.setCommissionPercentage(master.getMainPercent().stripTrailingZeros().toPlainString()+"%");
+                commissionRecord.setIsPaid(
+                        commissionLogReportUtils.parseIsPaid(master.getIsPaid())
+                );
+                commissionRecord.setCustomName(detailMap.get("name").toString());
+                commissionRecord.setIsFirst(
+                        commissionLogReportUtils.parseIsFirst(String.valueOf(detailMap.get("is_first")))
+                );
+                commissionRecord.setBusinessNo(detailMap.get("business_no").toString());
+                commissionRecord.setCashType(
+                    commissionLogReportUtils.formatCashType(
+                            Integer.parseInt(detailMap.get("cash_type").toString())
+                    )
+                );
+                commissionRecord.setPackageName(detailMap.get("package_name").toString());
+                commissionRecord.setCalculateYearMonth(detailMap.get("cal_ym").toString());
+                commissionRecord.setInDate(detailMap.get("in_date").toString());
+                commissionRecord.setTaxInclusivePrice(new BigDecimal(detailMap.get("tax_inclusive_price").toString()));
+                commissionRecord.setIsInoutMoneyUnmatch(
+                        commissionLogReportUtils.parseIsInoutMoneyUnmatch(
+                                String.valueOf(detailMap.get("is_inout_money_unmatch"))
+                        )
+                );
+                commissionRecord.setCommissionAmount(new BigDecimal(detailMap.get("commission_amount").toString()));
+                commissionRecordList.add(commissionRecord);
+            }
+        }
+        return commissionRecordList;
+    }
+
 
     //匯出發票資料Excel
     private ExcelPoiWrapper genCommissionLogToExcel(List<Map> excelList, String tempPath) throws Exception {
@@ -343,13 +405,21 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
                 excel.setValue(baseRow, index + 7, detailMap.get("name")); //用戶名稱
                 excel.setValue(baseRow, index + 8, detailMap.get("is_first")); //是否為首次申請
                 excel.setValue(baseRow, index + 9, detailMap.get("business_no")); //統編
-                excel.setValue(baseRow, index + 10, formatCashType((Integer)detailMap.get("cash_type"))); //繳費類型
+                excel.setValue(
+                        baseRow
+                        , index + 10
+                        , commissionLogReportUtils.formatCashType((Integer)detailMap.get("cash_type"))
+                ); //繳費類型
                 excel.setValue(baseRow, index + 11, detailMap.get("package_name")); //方案名稱
                 excel.setValue(baseRow, index + 12, detailMap.get("cal_ym")); //計算年月
                 excel.setValue(baseRow, index + 13, detailMap.get("out_ym")); //出帳年月
                 excel.setValue(baseRow, index + 14, detailMap.get("in_date")); //入帳時間
                 excel.setValue(baseRow, index + 15, ((BigDecimal)detailMap.get("tax_inclusive_price")).doubleValue()); //入帳金額(含稅)
-                excel.setValue(baseRow, index + 16, isInoutMoneyUnmatch((String) detailMap.get("is_inout_money_unmatch"))); //cash_master的出入帳金額是否相同
+                excel.setValue(
+                        baseRow
+                        , index + 16
+                        , commissionLogReportUtils.isInoutMoneyUnmatch((String) detailMap.get("is_inout_money_unmatch"))
+                ); //cash_master的出入帳金額是否相同
                 excel.setValue(baseRow, index + 17, ((BigDecimal)detailMap.get("commission_amount")).doubleValue());//佣金金額
                 baseRow++;
             }
@@ -362,35 +432,6 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         }
 
         return excel;
-    }
-
-    //cash_master的出入帳金額是否相同
-    private String isInoutMoneyUnmatch(String value){
-        String result = "相同";
-        if("1".equals(value)){
-            result = "不相同";
-        }
-        return result;
-    }
-
-    //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值
-    private String  formatCashType(Integer cashType){
-        String result = "";
-        switch (cashType) {
-            case 1:
-                result = "月租預繳";
-                break;
-            case 2:
-                result = "超額";
-                break;
-            case 3:
-                result = "代印代計";
-                break;
-            case 4:
-                result = "加值型服務";
-                break;
-        }
-        return result;
     }
 
 }

@@ -11,7 +11,7 @@ import com.gate.web.beans.InvoiceExcelBean;
 import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.*;
 import com.gateweb.charge.vo.CashVO;
-import com.gateweb.einv.model.OrderCsv;
+import com.gateweb.reportModel.OrderCsv;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.logging.Log;

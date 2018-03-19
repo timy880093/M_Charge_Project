@@ -121,9 +121,6 @@
 
         });
 
-
-
-
         $("#inDateS").datepicker({
             dateFormat: 'yy-mm-dd',
             changeMonth: true,
@@ -160,7 +157,6 @@
 
         })
     }
-
 
     function formatType(cellvalue, options, rowObject) {
        
@@ -319,43 +315,16 @@
 
 
     $("#exportCom").click(function(){
+        //取出被選擇的列
         var _aIDs = $("#jqgrid").jqGrid('getGridParam','selarrrow');
-        if (_aIDs.length > 0) {
-        		var ids = [];
-            for (var i = 0; i < _aIDs.length; i++) {
-                ids.push($("#jqgrid").jqGrid('getRowData', _aIDs[i]).commission_log_id);
-            }
-            
-            $.ajax({
-                url: '<%=request.getContextPath()%>/backendAdmin/commissionLogSearchServlet?method=exportCom',
-                data: {commissionLog: ids.join(',')},
-                type: "POST",
-                dataType: 'json',
-                beforeSend: function () {
-					console.log('準備中...'+ids);
-                },
-                complete: function () {
-					console.log('complete...');
-                },
-                success: function (data) {
-					console.log('requeue success...');
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-	                	var message = '錯誤';
-	                	switch(xhr.status) {
-	                    case 403:
-	                    		message = '無此權限';
-	                        break;
-	                    case 500:
-	                    		message = '伺服器有問題';
-	                        break;
-	                    default:
-	                    		message = xhr.responseText;
-	                }
-	                	console.log('error...'+message);
-                }
-            });
+        var ids = [];
+        for (var i = 0; i < _aIDs.length; i++) {
+            ids.push($("#jqgrid").jqGrid('getRowData', _aIDs[i]).commission_log_id);
+        }
 
+        if (_aIDs.length > 0) {
+            var url = path + "/backendAdmin/commissionLogSearchServlet?method=exportCom&commissionLogIdArray="+_aIDs;
+            location.href = url;
         } else {
             alert("請先勾選資料列。");
         }

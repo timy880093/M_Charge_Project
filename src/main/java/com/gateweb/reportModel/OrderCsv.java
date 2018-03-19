@@ -1,4 +1,4 @@
-package com.gateweb.einv.model;
+package com.gateweb.reportModel;
 
 import java.math.BigDecimal;
 

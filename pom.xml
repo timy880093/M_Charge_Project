@@ -29,7 +29,6 @@
 						<enabled>true</enabled>
 					</snapshots>
 				</repository>
-
 				<repository>
 					<id>nexus_third</id>
 					<name>local third party</name>
@@ -95,7 +94,12 @@
         <freemarker.version>2.3.26-incubating</freemarker.version>
         <jackson.version>2.9.2</jackson.version>
         <com.sun.jersey.version>1.19.4</com.sun.jersey.version>
-		
+
+       <!--excel library-->
+       <jxls.version>2.4.3</jxls.version>
+       <!--照官網建議的1.0.14一直有問題，所以改用1.0.10-->
+       <jxls.poi.version>1.0.10</jxls.poi.version>
+       <jxls.jexcel.version>1.0.6</jxls.jexcel.version>
         <!-- not used -->
         <cors-filter.version>2.5</cors-filter.version>
         <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
@@ -518,7 +522,22 @@
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls</artifactId>
+            <version>${jxls.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jxls/jxls-poi -->
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls-poi</artifactId>
+            <version>${jxls.poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls-jexcel</artifactId>
+            <version>${jxls.jexcel.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -541,6 +560,12 @@
                     <exclude>**/*.java</exclude>
                 </excludes>
             </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>tempFile/*.xlsx</exclude>
+                </excludes>
+            </resource>
         </resources>
         <testResources>
             <testResource>
@@ -550,7 +575,6 @@
                 </excludes>
             </testResource>
         </testResources>
-
 
         <plugins>
         <!-- https://mvnrepository.com/artifact/org.apache.tomcat.maven/tomcat8-maven-plugin -->

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.utils.CommissionLogReportUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
@@ -31,6 +32,9 @@ public class CommissionLogDAO extends BaseDAO {
 
     @Autowired
     TimeUtils timeUtils;
+
+    @Autowired
+    CommissionLogReportUtils commissionLogReportUtils;
 
     public Map getCommissionMasterList(QuerySettingVO querySettingVO) throws Exception {
         List<Object> parameters = new ArrayList<Object>();
@@ -233,8 +237,8 @@ public class CommissionLogDAO extends BaseDAO {
                 String dealerCpName = dealerCompanyEntity.getDealerCompanyName();
                 bean.setDealerCompanyName(dealerCpName);
 
-                bean.setStrCommissionType(parseCommissionType(bean.getCommissionType())); //佣金類型說明
-                bean.setStrIsPaid(parseIsPaid(bean.getIsPaid())); //是否付款說明
+                bean.setStrCommissionType(commissionLogReportUtils.parseCommissionType(bean.getCommissionType())); //佣金類型說明
+                bean.setStrIsPaid(commissionLogReportUtils.parseIsPaid(bean.getIsPaid())); //是否付款說明
                 bean.setStrMainPercent(((BigDecimal) bean.getMainPercent()).doubleValue() + "%");
 
                 Map commissionLogMap = new HashMap();
@@ -250,32 +254,6 @@ public class CommissionLogDAO extends BaseDAO {
             return exportCommissionLogList;
         }
 
-
-    //佣金類型0 固定金額, 1 固定比例, 2 經銷商
-    public String parseCommissionType(String commissionType){
-        String strCommissionType = "";
-
-        if("0".equals(commissionType)){
-            strCommissionType = "固定金額";
-        }else if("1".equals(commissionType)){
-            strCommissionType = "固定比例";
-        }else if("2".equals(commissionType)){
-            strCommissionType = "經銷商";
-        }
-
-        return strCommissionType;
-    }
-
-    //佣金付款狀態 1:付款
-    public String parseIsPaid(String isPaid){
-        String strIsPaid = "未付款";
-
-        if("1".equals(isPaid)){
-            strIsPaid = "已付款";
-        }
-
-        return strIsPaid;
-    }
 
 
 
@@ -306,10 +284,7 @@ public class CommissionLogDAO extends BaseDAO {
             return false; //有明細
         }
     }
-
-
-
-    }
+}
 
 
 
