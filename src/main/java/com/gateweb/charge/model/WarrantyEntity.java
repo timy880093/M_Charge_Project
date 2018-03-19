@@ -6,28 +6,16 @@
 package com.gateweb.charge.model;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import static javax.persistence.GenerationType.IDENTITY;
-import static javax.persistence.GenerationType.AUTO;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 
 
 /**
@@ -45,7 +33,7 @@ public class WarrantyEntity implements Serializable {
 	 * end_date
 	 */
 	@Column(name = "end_date")
-	protected java.util.Date endDate;
+	protected java.sql.Date endDate;
 	
 	/**
 	 * note
@@ -125,7 +113,7 @@ public class WarrantyEntity implements Serializable {
 	 * start_date
 	 */
 	@Column(name = "start_date")
-	protected java.util.Date startDate;
+	protected java.sql.Date startDate;
 	
 	/**
 	 * status
@@ -139,16 +127,16 @@ public class WarrantyEntity implements Serializable {
     
 	/**
 	 * 002
-	 * @return java.util.Date endDate
+	 * @return java.sql.Date endDate
 	 */
-	public java.util.Date getEndDate() {
+	public java.sql.Date getEndDate() {
 		return this.endDate;
 	}
 	
 	/** 0001
 	 * @param data Set the endDate
 	 */	
-	public void setEndDate(java.util.Date data) {
+	public void setEndDate(java.sql.Date data) {
 		this.endDate = data;
 	}	
 	/**
@@ -321,16 +309,16 @@ public class WarrantyEntity implements Serializable {
 	}	
 	/**
 	 * 002
-	 * @return java.util.Date startDate
+	 * @return java.sql.Date startDate
 	 */
-	public java.util.Date getStartDate() {
+	public java.sql.Date getStartDate() {
 		return this.startDate;
 	}
 	
 	/** 0001
 	 * @param data Set the startDate
 	 */	
-	public void setStartDate(java.util.Date data) {
+	public void setStartDate(java.sql.Date data) {
 		this.startDate = data;
 	}	
 	/**
@@ -375,7 +363,7 @@ public class WarrantyEntity implements Serializable {
 	 * @param status 
 	 */
 	public WarrantyEntity (
-		 java.util.Date endDate 
+		 java.sql.Date endDate
 		, java.lang.String note 
 		, java.lang.Integer dealerCompanyId 
 		, java.lang.Integer companyId 
@@ -388,7 +376,7 @@ public class WarrantyEntity implements Serializable {
 		, java.lang.String model 
 		, java.sql.Timestamp createDate 
 		, java.sql.Timestamp modifyDate 
-		, java.util.Date startDate 
+		, java.sql.Date startDate
 		, java.lang.Integer status 
         ) {
 		this.setEndDate(endDate);

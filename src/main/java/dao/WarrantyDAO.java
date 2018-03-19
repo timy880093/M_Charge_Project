@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import com.gate.utils.TimeUtils;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.formbeans.WarrantyBean;
 import com.gateweb.charge.model.WarrantyEntity;

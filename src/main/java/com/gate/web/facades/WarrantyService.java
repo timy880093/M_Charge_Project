@@ -15,10 +15,6 @@ public interface WarrantyService extends Service {
 
     public WarrantyVO findWarrantyByWarrantyId(Integer warrantyId) throws Exception;
 
-
-
-
-
 //    public List<Map> exportWar(String warranty)throws Exception{
 //        return dao.exportWar(warranty);
 //    }
