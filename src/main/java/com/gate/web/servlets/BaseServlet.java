@@ -192,7 +192,7 @@ public abstract class BaseServlet extends HttpServlet {
             	}
             }
             
-        	UserEntity user = (UserEntity)request.getSession().getAttribute("loginUserEntity");
+        	UserEntity user = (UserEntity) request.getSession().getAttribute("loginUser");
         	//List<AccountReference> referenceList = (List<AccountReference>)request.getSession().getAttribute("accountReferenceList");
         	CompanyEntity company = (CompanyEntity)request.getSession().getAttribute("company");
         	UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userContext");

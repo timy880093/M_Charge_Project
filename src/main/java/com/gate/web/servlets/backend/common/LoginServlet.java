@@ -4,8 +4,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -14,13 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.gate.core.bean.BaseFormBean;
-import com.gate.web.authority.UserInfo;
-import com.gate.web.authority.UserInfoContext;
 import com.gate.web.servlets.MvcBaseServlet;
-//import com.gate.web.displaybeans.CompanyVO;
-//import com.gate.web.facades.CompanyServiceImp;
-//import com.gate.web.facades.InvoiceServiceImp;
 import com.gateweb.charge.model.UserEntity;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,8 +37,8 @@ public class LoginServlet extends MvcBaseServlet {
         logger.debug("defaultPost model:   "+model);
         logger.debug("defaultPost paramMap:   "+paramMap);
         UserEntity user = checkLogin(request, response);
-    		BaseFormBean formBeanObject = formBeanObject(request);
-    		Map requestParameterMap = request.getParameterMap();
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
         Map requestAttMap = requestAttMap(request);
         Map sessionAttMap = sessionAttMap(request);
         Map otherMap =  otherMap(request, response, formBeanObject);
@@ -57,9 +51,9 @@ public class LoginServlet extends MvcBaseServlet {
     public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
     			, Model model, HttpServletRequest request, HttpServletResponse response)
     	            throws Exception {
-    		logger.debug("defaultGet model:   "+model);
-    		logger.debug("defaultGet paramMap:   "+paramMap);
-    		UserEntity user = checkLogin(request, response);
+        logger.debug("defaultGet model:   "+model);
+        logger.debug("defaultGet paramMap:   "+paramMap);
+        UserEntity user = checkLogin(request, response);
     		
     		//request.getSession().setMaxInactiveInterval(user.getLogoutTime().intValue()*60);
     		//request.setAttribute("logoutTime", user.getLogoutTime() != null && user.getLogoutTime().intValue() > 0 ? user.getLogoutTime().intValue() : 120);
