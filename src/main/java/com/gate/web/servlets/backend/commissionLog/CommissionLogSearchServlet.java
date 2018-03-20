@@ -88,8 +88,6 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         return TEMPLATE_PAGE;
     }
 
-
-
     @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
     public String mainList(@RequestParam("sessionClean") String sessionClean, Model model, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -151,6 +149,7 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
 
         return returnPage;
     }
+
     @RequestMapping(method = RequestMethod.GET, params = "method=search", produces = "application/json;charset=utf-8")
     public @ResponseBody String search(@RequestParam MultiValueMap<String, String> paramMap,
                                        @RequestHeader HttpHeaders headers, Model model

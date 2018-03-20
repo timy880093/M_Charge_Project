@@ -490,10 +490,23 @@
             var destJson = JSON.stringify(objAry);
             //alert(calOverJson);
             var url = path + "/backendAdmin/cashSearchServlet?method="+methodName+"&destJson=" + destJson;
-            $.getJSON(url, {destJson: destJson}, function (data) {
-                alert(data);
-                $("#search").click();
-            })
+            $.ajax(
+                    {
+                        url : url,
+                        type: "GET",
+                        data : destJson,
+                        success:function(data, textStatus, jqXHR)
+                        {
+                            //data: return data from server
+                            alert(data);
+                            $("#search").click();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown)
+                        {
+                            //if fails
+                        }
+                    }
+            );
         } else {
             alert("請先勾選資料列。");
         }

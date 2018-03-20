@@ -161,8 +161,6 @@
 
 <script>
 
-
-
     $(document).ready(function (){
         $("#marquee1").marquee();
     });

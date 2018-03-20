@@ -56,4 +56,5 @@
 	<!--<task:scheduled-tasks>-->
 		<!--<task:scheduled ref="syncInvoiceDataScheduler" method="syncYesterdaysInvoiceDataFromEinvDatabase" initial-delay="1440000"  fixed-delay="1440000"/>-->
 	<!--</task:scheduled-tasks>-->
+
 </beans>

@@ -1,5 +1,6 @@
 package com.gate.web.servlets.backend.cash;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,9 +10,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gate.core.bean.BaseFormBean;
+import com.gate.web.exceptions.FormValidationException;
+import com.gate.web.exceptions.ReturnPathException;
+import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.UserEntity;
+import com.gateweb.einv.exception.EinvSysException;
+import com.google.gson.Gson;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,13 +35,20 @@ import com.gate.web.beans.InvoiceExcelBean;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.facades.CalCycleService;
 import com.gate.web.facades.CashService;
-import com.gate.web.facades.CashServiceImp;
-import com.gate.web.servlets.SearchServlet;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 
-@WebServlet(urlPatterns = "/backendAdmin/cashSearchServlet")
-public class CashSearchServlet extends SearchServlet {
+@RequestMapping("/backendAdmin/cashSearchServlet")
+@Controller
+public class CashSearchServlet extends MvcBaseServlet {
     private static final String DOWNLOAD_FILE_NAME_OUT ="out_data";
     private static final String DOWNLOAD_FILE_NAME_INVOICE ="invoice_data";
+    private final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/cash/cash_list.jsp";
+    private static final String SESSION_SEARCH_OBJ_NAME = "cashSearchVO";
+    private static final String SESSION_SEARCH_DETAIL_OBJ_NAME = "cashFlowDetailSearchVO";
     //private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/out_temp.xls";
     //private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/invoice_temp.xls";
     
@@ -41,173 +58,533 @@ public class CashSearchServlet extends SearchServlet {
     @Autowired
     CalCycleService calCycleService;
 
-    @Override
-    public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
+    @RequestMapping(method = RequestMethod.POST)
+    public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
+                              Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("defaultPost model:   " + model);
+        logger.debug("defaultPost paramMap:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return TEMPLATE_PAGE;
+    }
 
+    @RequestMapping(method = RequestMethod.GET)
+    public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
+            , Model model, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        logger.debug("defaultGet model:   " + model);
+        logger.debug("defaultGet paramMap:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return TEMPLATE_PAGE;
+    }
 
-        Object methodObj = requestParameterMap.get("method");
-        String method = "";
-        if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
-        List<Object> outList = new ArrayList<Object>();
-        if (method.equals("search")) {
-            QuerySettingVO querySettingVO = new QuerySettingVO();
-            Map pageMap = getData(requestParameterMap, querySettingVO, otherMap, "cashSearchVO");
-            otherMap.put(AJAX_JSON_OBJECT, pageMap);
-            return null;
-        } else if(method.equals("out")) { //出帳-多筆
-            String data = "success!!";
-            Integer exeCnt = 0;
-            try{
-                String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                exeCnt = cashService.out(destJson);
-                data += "  total counts: "+exeCnt+"";
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
+    /**
+     * 一般查詢
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param searchField
+     * @param searchString
+     * @param sidx
+     * @param sord
+     * @param rows
+     * @param page
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=search", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String search(@RequestParam MultiValueMap<String, String> paramMap,
+                  @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value="searchField[]", required = false) List<String> searchField
+            , @RequestParam(value="searchString[]", required = false) List<String> searchString
+            , @RequestParam(value="sidx", required= true) String sidx
+            , @RequestParam(value="sord", required= true) String sord
+            , @RequestParam(value="rows", required= true) Integer rows
+            , @RequestParam(value="page", required= true) Integer page
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("search model:   "+model);
+        logger.debug("search paramMap:   "+paramMap);
+
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+
+        sendObjToViewer(request, otherMap);
+
+        QuerySettingVO querySettingVO = new QuerySettingVO();
+        Map searchMap = new HashMap();
+        if (searchField != null && searchString != null && searchField.size() == searchString.size()) {
+            for (int i = 0; i < searchField.size(); i++) {
+                searchMap.put(searchField.get(i), java.net.URLDecoder.decode(searchString.get(i), "UTF-8"));
             }
+        } else {
+            logger.debug("No searchField");
+        }
+        querySettingVO.setSearchMap(searchMap);
+        querySettingVO.setSidx(sidx);
+        querySettingVO.setSord(sord);
+        querySettingVO.setPage(page);
+        querySettingVO.setRows(rows);
 
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        } else if(method.equals("outYM")) { //出帳-批次
-            String data = "success!!";
-            Integer exeCnt = 0;
-            try{
-                String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
-                Object userCompanyIdObj = ((String[]) requestParameterMap.get("userCompanyId"))[0];
-                Integer userCompanyId = 0 ;
-                if(null != userCompanyIdObj){
-                    if( !userCompanyIdObj.equals("")){
-                        userCompanyId = Integer.parseInt(((String[]) requestParameterMap.get("userCompanyId"))[0]); //用戶id
-                    }
-                }
-                exeCnt = cashService.outYM(outYM, userCompanyId);
-                data += "  total counts: "+exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
+        request.getSession().setAttribute(SESSION_SEARCH_OBJ_NAME, querySettingVO);
+        logger.debug("setQuerySettingVO: " + querySettingVO);
+
+        //Search list
+        //remove function
+        //getData()
+        Map data = cashService.getCashMaster(querySettingVO);
+        Map gridData = setGrid(querySettingVO, data);
+
+        // otherMap.put(AJAX_JSON_OBJECT, pageMap);
+        String jsonString = convertAjaxToJson(gridData);
+        return jsonString;
+    }
+
+    /**
+     * 檢視帳單明細
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param searchField
+     * @param searchString
+     * @param sidx
+     * @param sord
+     * @param rows
+     * @param page
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=searchDetail", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String searchDetail(@RequestParam MultiValueMap<String, String> paramMap,
+                  @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value="searchField[]", required = false) List<String> searchField
+            , @RequestParam(value="searchString[]", required = false) List<String> searchString
+            , @RequestParam(value="sidx", required= true) String sidx
+            , @RequestParam(value="sord", required= true) String sord
+            , @RequestParam(value="rows", required= true) Integer rows
+            , @RequestParam(value="page", required= true) Integer page
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("search model:   "+model);
+        logger.debug("search paramMap:   "+paramMap);
+
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+
+        sendObjToViewer(request, otherMap);
+
+        QuerySettingVO querySettingVO = new QuerySettingVO();
+        Map searchMap = new HashMap();
+        if (searchField != null && searchString != null && searchField.size() == searchString.size()) {
+            for (int i = 0; i < searchField.size(); i++) {
+                searchMap.put(searchField.get(i), java.net.URLDecoder.decode(searchString.get(i), "UTF-8"));
             }
+        } else {
+            logger.debug("No searchField");
+        }
+        querySettingVO.setSearchMap(searchMap);
+        querySettingVO.setSidx(sidx);
+        querySettingVO.setSord(sord);
+        querySettingVO.setPage(page);
+        querySettingVO.setRows(rows);
 
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        } else if(method.equals("searchDetail")){ //檢視帳單明細
-            QuerySettingVO querySettingVO = new QuerySettingVO();
-            Map pageMap = getData(requestParameterMap, querySettingVO, otherMap, "cashFlowDetailSearchVO");
-            otherMap.put(AJAX_JSON_OBJECT, pageMap);
-            return null;
-        } else if(method.equals("outExcelym")){ //匯出Excel帳單-批次(請選擇出帳單年月)
-            String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
+        request.getSession().setAttribute(SESSION_SEARCH_DETAIL_OBJ_NAME, querySettingVO);
+        logger.debug("setQuerySettingVO: " + querySettingVO);
+
+        //Search list
+        //remove function
+        //getData()
+        Map data = cashService.getCashMaster(querySettingVO);
+        Map gridData = setGrid(querySettingVO, data);
+
+        // otherMap.put(AJAX_JSON_OBJECT, pageMap);
+        String jsonString = convertAjaxToJson(gridData);
+        return jsonString;
+    }
+
+    /**
+     * 出帳-多筆
+     * @param paramMap
+     * @param model
+     * @param destJson
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=out", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String out(@RequestParam MultiValueMap<String, String> paramMap
+            , Model model
+            , @RequestParam(value = "destJson", required = true) String destJson
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("out model:   " + model);
+        logger.debug("out destJson:   " + destJson);//帳單年月
+        logger.debug("out paramMap:   " + paramMap);
+
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+
+        sendObjToViewer(request, otherMap);
+
+        //Search list
+        //remove function
+        Integer exeCnt = 0;
+        String responseMessage = "";
+        try {
+            exeCnt = cashService.out(destJson);
+            responseMessage += "  total counts: "+exeCnt+"";
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        Gson gson = new Gson();
+        return gson.toJson(responseMessage);
+    }
+
+    /**
+     * 出帳-批次
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param outYM
+     * @param userCompanyId
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=outYM", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String outYM(@RequestParam MultiValueMap<String, String> paramMap,
+               @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "outYM", required = true) String outYM
+            , @RequestParam(value = "userCompanyId", required = true) Integer userCompanyId
+            , HttpServletRequest request, HttpServletResponse response) throws Exception{
+        logger.debug("outYM model:   " + model);
+        logger.debug("outYM outYM:   " + outYM);
+        logger.debug("outYM userCompanyId:   " + userCompanyId);
+        logger.debug("outYM paramMap:   " + paramMap);
+
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        Integer exeCnt = 0;
+        String responseMessage = "";
+        try {
+            exeCnt = cashService.outYM(outYM, userCompanyId);
+            responseMessage += "  total counts: " + exeCnt;
+        }catch(Exception ex){
+                System.out.println(ex);
+            responseMessage = " fail!!";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(responseMessage);
+    }
+
+    /**
+     * 匯出Excel帳單-批次(請選擇出帳單年月)
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param outYM
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=outExcelym", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    void outExcelym(@RequestParam MultiValueMap<String, String> paramMap,
+                 @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "outYM", required = true) String outYM
+            , HttpServletRequest request, HttpServletResponse response) throws Exception{
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        try {
             List cashMasterList =  cashService.getCashMasterDetail(outYM);
             String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
             ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
-            HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
             responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_OUT+"_"+outYM);
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
+    }
 
-            return null;
-        }else if(method.equals("outExcel")){ //匯出Excel帳單-多筆(請勾選欲執行的資料)
-            String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
-            String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //多筆的選擇
-            List cashMasterList =  cashService.getCashMasterDetail(outYM, destJson);
-            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
-            ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
-            HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
-            responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_OUT+"_"+outYM);
+    /**
+     * 匯出Excel帳單-多筆(請勾選欲執行的資料)
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param destJson
+     * @param outYM
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=outExcel", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    void outExcel(@RequestParam MultiValueMap<String, String> paramMap,
+                    @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "destJson", required = true) String destJson //多筆的選擇
+            , @RequestParam(value = "outYM", required = true) String outYM //帳單年月
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        List cashMasterList =  cashService.getCashMasterDetail(outYM, destJson);
+        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
+        ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
+        response = (HttpServletResponse) otherMap.get(RESPONSE);
+        responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_OUT+"_"+outYM);
+    }
 
-            return null;
-        } else if(method.equals("cancelOutYM")){ //批次取消出帳
-            String data = "success!!";
-            try{
-                String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
-                int exeCnt = cashService.cancelOutYM(outYM);
-                data += " total counts: " + exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        } else if(method.equals("cancelOut")){ //多筆取消出帳
-            String data = "success!!";
-            try{
-                String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                int exeCnt = cashService.cancelOut(destJson);
-                data += " total counts: " + exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
-            }
+    /**
+     * 批次取消出帳
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param outYM
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=cancelOutYM", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String cancelOutYM(@RequestParam MultiValueMap<String, String> paramMap,
+                  @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "outYM", required = true) String outYM //帳單年月
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        Integer exeCnt = 0;
+        String responseMessage = "";
+        try{
+            exeCnt = cashService.cancelOutYM(outYM);
+            responseMessage += " total counts: " + exeCnt;
+        }catch(Exception ex){
+            System.out.println(ex);
+            responseMessage = " fail!!";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(responseMessage);
+    }
 
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        } else if (method.equals("emailYM")){  //批次-寄email
-            String data = "success!!";
-            try{
-                String calYM  = ((String[]) requestParameterMap.get("outYM"))[0];
-                int exeCnt = cashService.sendBillMailYM(calYM);
-                data += " total counts: " + exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
+    /**
+     * 多筆取消出帳
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param destJson
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=cancelOut", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String cancelOut(@RequestParam MultiValueMap<String, String> paramMap,
+                       @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "destJson", required = true) String destJson //帳單年月
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        Integer exeCnt = 0;
+        String responseMessage = "";
+        try{
+            exeCnt = cashService.cancelOut(destJson);
+            responseMessage += " total counts: " + exeCnt;
+        }catch(Exception ex){
+            System.out.println(ex);
+            responseMessage = " fail!!";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(responseMessage);
+    }
 
-        } else if(method.equals("email")){  //多筆-寄email
-            String data = "success!!";
-            try{
-                String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                int exeCnt = cashService.sendBillMail(destJson);
-                data += " total counts: " + exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
+    /**
+     * 批次-寄email
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param calYM
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=emailYM", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String emailYM(@RequestParam MultiValueMap<String, String> paramMap,
+                     @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "outYM", required = true) String calYM
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        Integer exeCnt = 0;
+        String responseMessage = "";
+        try{
+            exeCnt = cashService.sendBillMailYM(calYM);
+            responseMessage += " total counts: " + exeCnt;
+        }catch(Exception ex){
+            System.out.println(ex);
+            responseMessage = " fail!!";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(responseMessage);
+    }
 
-        } else if(method.equals("email1")){  //多筆-未繳費客戶通知
-            String data = "success!!";
-            try{
-                String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //帳單年月
-                int exeCnt = cashService.transactionSendBillMail1(destJson);
-                data += " total counts: " + exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
+    /**
+     * 多筆-寄email
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param destJson
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=email", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String email(@RequestParam MultiValueMap<String, String> paramMap,
+                   @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "destJson", required = true) String destJson //帳單年月
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        Integer exeCnt = 0;
+        String responseMessage = "";
+        try{
+            exeCnt = cashService.sendBillMail(destJson);
+            responseMessage += " total counts: " + exeCnt;
+        }catch(Exception ex){
+            System.out.println(ex);
+            responseMessage = " fail!!";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(responseMessage);
+    }
 
-        } else if (method.equals("emailUnrecorded")){  //批次-寄email
-            String data = "success!!";
-            try{
-                String calYM  = ((String[]) requestParameterMap.get("outYM"))[0];
-                int exeCnt = cashService.sendBillMailYM(calYM);
-                data += " total counts: " + exeCnt;
-            }catch(Exception ex){
-                System.out.println(ex);
-                data = " fail!!";
-            }
-            otherMap.put(AJAX_JSON_OBJECT, data);
-            return null;
-        } else if(method.equals("invoiceExcelYM")){ //匯出發票資料-by 年月
-            String outYM = ((String[]) requestParameterMap.get("outYM"))[0]; //帳單年月
-            List invoiceItemList =  cashService.getInvoiceItem(outYM);
-            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
-            ExcelPoiWrapper excel= genInvoiceItemToExcel(invoiceItemList, filePath);
-            HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
-            responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE+"_"+outYM);
+    /**
+     * 多筆-未繳費客戶通知
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param destJson
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=email1", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String email1(@RequestParam MultiValueMap<String, String> paramMap,
+                 @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "destJson", required = true) String destJson
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        Integer exeCnt = 0;
+        String responseMessage = "";
+        try{
+            exeCnt = cashService.transactionSendBillMail1(destJson);
+            responseMessage += " total counts: " + exeCnt;
+        }catch(Exception ex){
+            System.out.println(ex);
+            responseMessage = " fail!!";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(responseMessage);
+    }
 
-            return null;
-        } else if(method.equals("invoiceExcel")){ //匯出發票資料-by 多筆
-            String destJson = ((String[]) requestParameterMap.get("destJson"))[0]; //多筆的選擇
-            List cashMasterList =  cashService.getInvoiceItem(null, destJson);
-            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
-            ExcelPoiWrapper excel= genInvoiceItemToExcel(cashMasterList, filePath);
-            HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
-            responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE);
+    /**
+     * 匯出發票資料-by 年月
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param outYM
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=invoiceExcelYM", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    void invoiceExcelYM(@RequestParam MultiValueMap<String, String> paramMap,
+                    @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "destJson", required = true) String outYM
+            , HttpServletRequest request, HttpServletResponse response) throws Exception{
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        List invoiceItemList =  cashService.getInvoiceItem(outYM);
+        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
+        ExcelPoiWrapper excel= genInvoiceItemToExcel(invoiceItemList, filePath);
+        response = (HttpServletResponse) otherMap.get(RESPONSE);
+        responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE+"_"+outYM);
+    }
 
-            return null;
-        } else {
+    /**
+     * 匯出發票資料-by 多筆
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param destJson
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=invoiceExcel", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    void invoiceExcel(@RequestParam MultiValueMap<String, String> paramMap,
+                        @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "destJson", required = true) String destJson //多筆的選擇
+            , HttpServletRequest request, HttpServletResponse response) throws Exception{
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        List cashMasterList =  cashService.getInvoiceItem(null, destJson);
+        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
+        ExcelPoiWrapper excel= genInvoiceItemToExcel(cashMasterList, filePath);
+        response = (HttpServletResponse) otherMap.get(RESPONSE);
+        responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
+    public String mainList(@RequestParam("sessionClean") String sessionClean, Model model, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String returnPage = TEMPLATE_PAGE;
+        Gson gson = new Gson();
+        String errorMessage = null;
+        try{
+            //寫入template的時間。
+            UserEntity user = checkLogin(request, response);
+            BaseFormBean formBeanObject = formBeanObject(request);
+            Map otherMap = otherMap(request, response, formBeanObject);
+            List<Object> outList = new ArrayList<Object>();
+
             List ymList = cashService.getYM();
             outList.add(ymList); //0.
             List userCompanyList = calCycleService.getUserCompanyList();
@@ -229,37 +606,40 @@ public class CashSearchServlet extends SearchServlet {
             outList.add(year + month);
 
             otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE, getDispatch_page());
-            String[] returnList = {FORWARD_TYPE_F, TEMPLATE_PAGE};
-            return returnList;
+            otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+
+            sendObjToViewer(request, otherMap);
+        } catch (EinvSysException ese) {
+            logger.error(ese.getMessage(), ese);
+            errorMessage = gson.toJson("錯誤:" + ese.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("IO動作失敗:" + ex.getMessage());
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
+            returnPage = ERROR_PAGE;
+        } catch (ServletException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("伺服器內部錯誤:" + ex.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (FormValidationException ex) {
+            errorMessage = gson.toJson("表單驗證失敗:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (ReturnPathException ex) {
+            errorMessage = gson.toJson("回傳路徑有問題:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("錯誤:" + ex.getMessage());
+            return ERROR_PAGE;
         }
+        if (errorMessage != null) {
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
+        }
+        return returnPage;
     }
-
-    public String getDispatch_page() {
-        return "/backendAdmin/cash/cash_list.jsp";
-    }
-
-
-    /**
-     * AJAX 資料來源
-     *
-     * @param querySettingVO
-     * @return
-     * @throws Exception
-     */
-    public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        Map cashList = cashService.getCashMaster(querySettingVO);
-        return cashList;
-    }
-
-    @Override
-    public Map doSearchDownloadData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        Map map = new HashMap();
-        List cashMasterList =  cashService.getCashMasterDetail("201601");
-        map.put("cashMasterList",cashMasterList);
-        return map;
-    }
-
 
     private void responseExcelFileToClient(ExcelPoiWrapper excel, HttpServletResponse response,String fileName)
             throws Exception {
@@ -268,7 +648,6 @@ public class CashSearchServlet extends SearchServlet {
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName+".xls");
         excel.getWorkBook().write(response.getOutputStream());
         response.getOutputStream().close();
-
     }
 
     /**
@@ -308,7 +687,6 @@ public class CashSearchServlet extends SearchServlet {
                 }else{
                     taxInclusivePrice = taxInclusivePrice_.setScale(0,BigDecimal.ROUND_HALF_UP).intValue();
                 }
-
 
                 if(null == packageMap.get(chargeId+","+cashType+","+billType)){
                     packageMap.put(chargeId+","+cashType+","+billType, packageIndex);
