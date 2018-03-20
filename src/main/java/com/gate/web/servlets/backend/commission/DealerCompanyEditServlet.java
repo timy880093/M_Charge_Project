@@ -18,13 +18,13 @@ import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 
 @WebServlet(urlPatterns = "/backendAdmin/dealerCompanyEditServlet")
 public class DealerCompanyEditServlet extends BackendPopTemplateServlet {
-	
+
 	@Autowired
 	CommissionService commissionService;
     @Override
     public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
 
-       
+
         Object methodObj = requestParameterMap.get("method");
         String method = "";
         if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
