@@ -37,7 +37,7 @@
                                 <option value="3">退回</option>
                             </select>
                             <a href="#" id="send" title="執行" class="butbox"><span>查詢</span></a>
-                             <a href="#" id="exportWar" title="匯出" class="butbox"><span>匯出資料</span></a>
+
                             <a href="#" id="create" title="新增" class="butbox"><span>新&nbsp;&nbsp;增</span></a></span></td>
                         </form>
                     </span>

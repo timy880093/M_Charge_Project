@@ -1,13 +1,24 @@
 package com.gate.web.servlets.backend.warranty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.gate.core.bean.BaseFormBean;
+import com.gate.utils.JxlsUtils;
+import com.gate.web.exceptions.FormValidationException;
+import com.gate.web.exceptions.ReturnPathException;
+import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.UserEntity;
+import com.gateweb.einv.exception.EinvSysException;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gate.utils.ExcelPoiWrapper;
@@ -15,13 +26,28 @@ import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.facades.CalCycleService;
 import com.gate.web.facades.WarrantyService;
 import com.gate.web.servlets.SearchServlet;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by emily on 2016/6/13.
  */
-@WebServlet(urlPatterns = "/backendAdmin/warrantySearchServlet")
-public class WarrantySearchServlet extends SearchServlet {
+@RequestMapping("/backendAdmin/warrantySearchServlet")
+@Controller
+
+public class WarrantySearchServlet extends MvcBaseServlet {
     private static final String DOWNLOAD_FILE_NAME_WARRANTY ="warranty_temp";
+    private static final String SESSION_SEARCH_OBJ_NAME = "warrantySearchVO";
+    private static final String DOWNLOAD_FILE_NAME = "commission_temp";
+    private static String TEMPLATE_Warranty_EXCEL_LOCATION = "tempFile/warranty_temp.xls";
+    private static String JXLS_Warranty_EXCEL_TEMPLATE = "tempFile/warranty_jxls_template.xls";
+    private static String JXLS_Warranty_EXCEL_OUTPUT = "tempFile/warranty_jxls_output.xls";
+    private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/warranty/warranty_list.jsp";
+    private static String TEMPLATE_Commission_EXCEL_DOWNLOAD;
+
 
     @Autowired
     WarrantyService warrantyService;
@@ -29,36 +55,67 @@ public class WarrantySearchServlet extends SearchServlet {
     @Autowired
     CalCycleService calCycleService;
 
+    @Autowired
+    JxlsUtils jxlsUtils;
 
-    @Override
-    public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-
-        Object methodObj = requestParameterMap.get("method");
-        String method = "";
-        if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
-        List<Object> outList = new ArrayList<Object>();
-        if (method.equals("search")) {
-            QuerySettingVO querySettingVO = new QuerySettingVO();
-            Map pageMap = getData(requestParameterMap, querySettingVO, otherMap, "warrantySearchVO");
-            otherMap.put(AJAX_JSON_OBJECT, pageMap);
-            return null;
+    @RequestMapping(method = RequestMethod.POST)
+    public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
+                              Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("defaultPost model:   " + model);
+        logger.debug("defaultPost paramMap:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return TEMPLATE_PAGE;
     }
-// else if(method.equals("exportWar")) { //匯出佣金資料
-//            String data = "success!! ";
-//            try {
-//                String warranty = ((String[]) requestParameterMap.get("warranty"))[0]; //commission_log_id
-//                List<Map> WarrantyList = warrantyService.exportWar(warranty);
-//                String filePath = this.getClass().getResource("/").getPath() + "/tempFile" + "/warranty_temp.xls";
-//                ExcelPoiWrapper excel = genWarrantyToExcel(WarrantyList, filePath);
-//                HttpServletResponse response = (HttpServletResponse) otherMap.get(RESPONSE);
-//                responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_WARRANTY);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                data = "error";
-//            }
-//            otherMap.put(AJAX_JSON_OBJECT, data);
-//            return null;
-        else{
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
+            , Model model, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        logger.debug("defaultGet model:   " + model);
+        logger.debug("defaultGet paramMap:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return TEMPLATE_PAGE;
+    }
+
+
+
+    @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
+    public String mainList(@RequestParam("sessionClean") String sessionClean, Model model, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        logger.debug("mainList sessionClean:   " + sessionClean);
+        logger.debug("mainList model:   " + model);
+        //String returnPage =BOOTSTRAP_TEMPLATE_PAGE
+        String returnPage = TEMPLATE_PAGE;
+        Gson gson = new Gson();
+        String errorMessage = null;
+
+        //commonService(request, response);
+        //common service裡面需要4個物件，然後傳給serviceBU，產生jsp 和物件
+        //所以這裡要先取出這4個物件然後再做事情
+        try {
+            UserEntity user = checkLogin(request, response);
+            BaseFormBean formBeanObject = formBeanObject(request);
+            Map requestParameterMap = request.getParameterMap();
+            Map requestAttMap = requestAttMap(request);
+            Map sessionAttMap = sessionAttMap(request);
+            Map otherMap = otherMap(request, response, formBeanObject);
+
+            //ServiceBU
+            List<Object> outList = new ArrayList<Object>();
             List userCompanyList = calCycleService.getUserCompanyList();
             outList.add(userCompanyList); //0.用戶清單
 
@@ -66,93 +123,94 @@ public class WarrantySearchServlet extends SearchServlet {
             outList.add(userDealerCompanyList); //1.經銷商清單
 
             otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE, getDispatch_page());
-            String[] returnList = {FORWARD_TYPE_F, TEMPLATE_PAGE};
-            return returnList;
+            otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
+            sendObjToViewer(request, otherMap);
+
+        } catch (EinvSysException ese) {
+            logger.error(ese.getMessage(), ese);
+            errorMessage = gson.toJson("錯誤:" + ese.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("IO動作失敗:" + ex.getMessage());
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
+            returnPage = ERROR_PAGE;
+        } catch (ServletException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("伺服器內部錯誤:" + ex.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (FormValidationException ex) {
+            errorMessage = gson.toJson("表單驗證失敗:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (ReturnPathException ex) {
+            errorMessage = gson.toJson("回傳路徑有問題:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("錯誤:" + ex.getMessage());
+            return ERROR_PAGE;
         }
-    }
-
-    public String getDispatch_page() {
-        return "/backendAdmin/warranty/warranty_list.jsp";
-    }
-
-
-    @Override
-    public Map doSearchData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        Map warrantyList = warrantyService.getWarrantyList(querySettingVO);
-        return warrantyList;
-    }
-
-    @Override
-    public Map doSearchDownloadData(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        return null;
-    }
-    private void responseExcelFileToClient(ExcelPoiWrapper excel, HttpServletResponse response,String fileName)
-            throws Exception {
-        response.setContentType("text/plain");
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment;filename=" + fileName+".xls");
-        excel.getWorkBook().write(response.getOutputStream());
-        response.getOutputStream().close();
-    }
-
-
-
-    //匯出發票資料Excel
-    private ExcelPoiWrapper genWarrantyToExcel(List<Map> excelList, String tempPath) throws Exception {
-        System.out.println("genWarrantyToExcel tempPath :  "+tempPath);
-        ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
-        HashMap packageMap = new HashMap();
-        excel.setWorkSheet(1);
-        int baseRow=2;
-        int index = 0;
-        for(int j=0; j<excelList.size(); j++){
-
-            Map map = excelList.get(j);
-
-                      List details = (List)map.get("detail");
-
-            if(j != 0){
-                excel.copyRows(1, 10, 1, baseRow);
-                excel.setValue(baseRow, index + 1, "發票機序號");
-                excel.setValue(baseRow, index + 2, "用戶名稱");
-                excel.setValue(baseRow, index + 3, "經銷商名稱");
-                excel.setValue(baseRow, index + 4, "出貨狀態");
-                excel.setValue(baseRow, index + 5, "保固起日");
-                excel.setValue(baseRow, index + 6, "保固迄日");
-                excel.setValue(baseRow, index + 7, "是否延長保固");
-                excel.setValue(baseRow, index + 8, "型號");
-                excel.setValue(baseRow, index + 9, "備註");
-                excel.setValue(baseRow, index + 10, "狀態");
-                        baseRow++;
-            }
-
-            for(int i=0; i<details.size(); i++){
-                Map detailMap = (Map)details.get(i);
-
-                excel.copyRows(2, 10, 1, baseRow);
-                excel.setValue(baseRow, index + 1, detailMap.get("WarrantyNo")); //所屬經銷商
-                excel.setValue(baseRow, index + 2, detailMap.get("dealer_company_name")); //入帳時間起
-                excel.setValue(baseRow, index + 3, detailMap.get("dealer_company_id")); //入帳時間迄
-                excel.setValue(baseRow, index + 4, detailMap.get("only_ship"));//佣金類型
-                excel.setValue(baseRow, index + 5, detailMap.get("start_date"));//佣金比例
-                excel.setValue(baseRow, index + 6, detailMap.get("end_date"));//佣金付款狀態
-                excel.setValue(baseRow, index + 7, detailMap.get("extend")); //用戶名稱
-                excel.setValue(baseRow, index + 8, detailMap.get("model")); //是否為首次申請
-                excel.setValue(baseRow, index + 9, detailMap.get("note")); //統編
-                excel.setValue(baseRow, index + 10, detailMap.get("status")); //繳費類型
-                baseRow++;
-            }
-
-//            excel.copyRows(2, 17, 1, baseRow);
-//            excel.setValue(baseRow, index + 15, master.getInAmount()); //入帳總金額(含稅)
-//            excel.setValue(baseRow, index + 17, master.getCommissionAmount());//佣金總金額
-//            baseRow++;
-
+        if (errorMessage != null) {
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
         }
 
-        return excel;
+        return returnPage;
     }
+    @RequestMapping(method = RequestMethod.GET, params = "method=search", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String search(@RequestParam MultiValueMap<String, String> paramMap,
+                  @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value="searchField[]", required = false) List<String> searchField
+            , @RequestParam(value="searchString[]", required = false) List<String> searchString
+            , @RequestParam(value="sidx", required= true) String sidx
+            , @RequestParam(value="sord", required= true) String sord
+            , @RequestParam(value="rows", required= true) Integer rows
+            , @RequestParam(value="page", required= true) Integer page
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("search model:   "+model);
+        logger.debug("search paramMap:   "+paramMap);
+
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+
+        sendObjToViewer(request, otherMap);
+
+        QuerySettingVO querySettingVO = new QuerySettingVO();
+        Map searchMap = new HashMap();
+        if (searchField != null && searchString != null && searchField.size() == searchString.size()) {
+            for (int i = 0; i < searchField.size(); i++) {
+                searchMap.put(searchField.get(i), java.net.URLDecoder.decode(searchString.get(i), "UTF-8"));
+            }
+        } else {
+            logger.debug("No searchField");
+        }
+        querySettingVO.setSearchMap(searchMap);
+        querySettingVO.setSidx(sidx);
+        querySettingVO.setSord(sord);
+        querySettingVO.setPage(page);
+        querySettingVO.setRows(rows);
+
+        request.getSession().setAttribute(SESSION_SEARCH_OBJ_NAME, querySettingVO);
+        logger.debug("setQuerySettingVO: " + querySettingVO);
+
+        //Search list
+        //remove function
+        //getData()
+        Map data = warrantyService.getWarrantyList(querySettingVO);
+        Map gridData = setGrid(querySettingVO, data);
+
+        // otherMap.put(AJAX_JSON_OBJECT, pageMap);
+        String jsonString = convertAjaxToJson(gridData);
+        return jsonString;
+
+    }
+
 
 
 

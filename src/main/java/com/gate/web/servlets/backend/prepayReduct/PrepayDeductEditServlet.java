@@ -34,52 +34,52 @@ import com.google.gson.Gson;
 @RequestMapping("/backendAdmin/prepayDeductEditServlet")
 @Controller
 public class PrepayDeductEditServlet extends MvcBaseServlet {
-	
+
 	private static final String DEFAULT_EDIT_DISPATCH_PAGE = "/backendAdmin/prepayDeduct/edit_prepay.jsp";
 	private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/prepayDeduct/prepayDeductCompany_list.jsp";
 	//private static final String DEFAULT_CREATE_DISPATCH_PAGE = "/backendAdmin/prepayDeduct/item_create.jsp";
 	private static final String DEFAULT_EDIT_DISPATCH_PAGE_2 = "/backendAdmin/prepayDeduct/edit_deduct.jsp";
-	
+
 	@Autowired
-    PrepayDeductService prepayDeductService;
-	
+	PrepayDeductService prepayDeductService;
+
 	@RequestMapping(method=RequestMethod.POST)
-    public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap, Model model
-    				, HttpServletRequest request, HttpServletResponse response)  throws Exception {
-        System.out.println("defaultPost model:   "+model);
-        System.out.println("defaultPost model:   "+paramMap);
-	    	UserEntity user = checkLogin(request, response);
-	    	BaseFormBean formBeanObject = formBeanObject(request);
-	    	Map requestParameterMap = request.getParameterMap();
-	        Map requestAttMap = requestAttMap(request);
-	        Map sessionAttMap = sessionAttMap(request);
-	        Map otherMap =  otherMap(request, response, formBeanObject);
-	        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
-	        sendObjToViewer(request, otherMap);
-	    	return POP_TEMPLATE_PAGE;
-    }
-    
-    @RequestMapping(method=RequestMethod.GET)
-    public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
-    		, Model model, HttpServletRequest request, HttpServletResponse response)
-    	            throws Exception {
-    		System.out.println("defaultGet model:   "+model);
-    		System.out.println("defaultGet paramMap:   "+paramMap);
-	    	UserEntity user = checkLogin(request, response);
-	    	BaseFormBean formBeanObject = formBeanObject(request);
-	    	Map requestParameterMap = request.getParameterMap();
-        Map requestAttMap = requestAttMap(request);
-        Map sessionAttMap = sessionAttMap(request);
-        Map otherMap =  otherMap(request, response, formBeanObject);
-        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
-        sendObjToViewer(request, otherMap);
-        return POP_TEMPLATE_PAGE;
-    }
-    
-    @RequestMapping(method = RequestMethod.GET, params = "method=editPrepay", produces = "application/json;charset=utf-8")
+	public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap, Model model
+			, HttpServletRequest request, HttpServletResponse response)  throws Exception {
+		System.out.println("defaultPost model:   "+model);
+		System.out.println("defaultPost model:   "+paramMap);
+		UserEntity user = checkLogin(request, response);
+		BaseFormBean formBeanObject = formBeanObject(request);
+		Map requestParameterMap = request.getParameterMap();
+		Map requestAttMap = requestAttMap(request);
+		Map sessionAttMap = sessionAttMap(request);
+		Map otherMap =  otherMap(request, response, formBeanObject);
+		otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+		sendObjToViewer(request, otherMap);
+		return POP_TEMPLATE_PAGE;
+	}
+
+	@RequestMapping(method=RequestMethod.GET)
+	public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
+			, Model model, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		System.out.println("defaultGet model:   "+model);
+		System.out.println("defaultGet paramMap:   "+paramMap);
+		UserEntity user = checkLogin(request, response);
+		BaseFormBean formBeanObject = formBeanObject(request);
+		Map requestParameterMap = request.getParameterMap();
+		Map requestAttMap = requestAttMap(request);
+		Map sessionAttMap = sessionAttMap(request);
+		Map otherMap =  otherMap(request, response, formBeanObject);
+		otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+		sendObjToViewer(request, otherMap);
+		return POP_TEMPLATE_PAGE;
+	}
+
+	@RequestMapping(method = RequestMethod.GET, params = "method=editPrepay", produces = "application/json;charset=utf-8")
 	public String editPrepay(@RequestParam("method") String method, Model model
-					, @RequestParam(value="masterId", required=true) Integer masterId
-					, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			, @RequestParam(value="masterId", required=true) Integer masterId
+			, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("editPrepay model:   " + model);
 		System.out.println("editPrepay method:   " + method);
 		System.out.println("editPrepay masterId:   " + masterId);
@@ -87,27 +87,27 @@ public class PrepayDeductEditServlet extends MvcBaseServlet {
 		UserEntity user = checkLogin(request, response);
 		BaseFormBean formBeanObject = formBeanObject(request);
 		Map requestParameterMap = request.getParameterMap();
-        Map requestAttMap = requestAttMap(request);
-        Map sessionAttMap = sessionAttMap(request);
-        Map otherMap =  otherMap(request, response, formBeanObject);
-        
-        List<Object> outList = new ArrayList<Object>();
-        PrepayDeductMasterEntity master = prepayDeductService.getPrepayDeductMaster(masterId);
-        outList.add(master);
-        List<Map> histMap = prepayDeductService.getPrepayDetailHisByCompany(master.getCompanyId());
-        outList.add(histMap);
-        	otherMap.put(REQUEST_SEND_OBJECT, outList);
+		Map requestAttMap = requestAttMap(request);
+		Map sessionAttMap = sessionAttMap(request);
+		Map otherMap =  otherMap(request, response, formBeanObject);
+
+		List<Object> outList = new ArrayList<Object>();
+		PrepayDeductMasterEntity master = prepayDeductService.getPrepayDeductMaster(masterId);
+		outList.add(master);
+		List<Map> histMap = prepayDeductService.getPrepayDetailHisByCompany(master.getCompanyId());
+		outList.add(histMap);
+		otherMap.put(REQUEST_SEND_OBJECT, outList);
 		otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
 		sendObjToViewer(request, otherMap);
 
-		return POP_TEMPLATE_PAGE;	
-		
+		return POP_TEMPLATE_PAGE;
+
 	}
-    
-    @RequestMapping(method = RequestMethod.GET, params = "method=viewDeduct", produces = "application/json;charset=utf-8")
+
+	@RequestMapping(method = RequestMethod.GET, params = "method=viewDeduct", produces = "application/json;charset=utf-8")
 	public String viewDeduct(@RequestParam("method") String method, Model model
-					, @RequestParam(value="masterId", required=true) Integer masterId
-					, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			, @RequestParam(value="masterId", required=true) Integer masterId
+			, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("editPrepay model:   " + model);
 		System.out.println("editPrepay method:   " + method);
 		System.out.println("editPrepay masterId:   " + masterId);
@@ -115,30 +115,30 @@ public class PrepayDeductEditServlet extends MvcBaseServlet {
 		UserEntity user = checkLogin(request, response);
 		BaseFormBean formBeanObject = formBeanObject(request);
 		Map requestParameterMap = request.getParameterMap();
-        Map requestAttMap = requestAttMap(request);
-        Map sessionAttMap = sessionAttMap(request);
-        Map otherMap =  otherMap(request, response, formBeanObject);
-        
-        List<Object> outList = new ArrayList<Object>();
-        PrepayDeductMasterEntity master = prepayDeductService.getPrepayDeductMaster(masterId);
-        outList.add(master);
-        List<Map> histMap = prepayDeductService.getDeductDetailHisByCompany(master.getCompanyId());
-        outList.add(histMap);
-        
-        	otherMap.put(REQUEST_SEND_OBJECT, outList);
+		Map requestAttMap = requestAttMap(request);
+		Map sessionAttMap = sessionAttMap(request);
+		Map otherMap =  otherMap(request, response, formBeanObject);
+
+		List<Object> outList = new ArrayList<Object>();
+		PrepayDeductMasterEntity master = prepayDeductService.getPrepayDeductMaster(masterId);
+		outList.add(master);
+		List<Map> histMap = prepayDeductService.getDeductDetailHisByCompany(master.getCompanyId());
+		outList.add(histMap);
+
+		otherMap.put(REQUEST_SEND_OBJECT, outList);
 		otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE_2);
 		sendObjToViewer(request, otherMap);
 
-		return POP_TEMPLATE_PAGE;	
-		
+		return POP_TEMPLATE_PAGE;
+
 	}
-    @RequestMapping(method = RequestMethod.GET, params = "method=insertPrepay", produces = "application/json;charset=utf-8")
+	@RequestMapping(method = RequestMethod.POST, params = "method=insertPrepay", produces = "application/json;charset=utf-8")
 	public @ResponseBody String insertPrepay(@RequestParam("method") String method, Model model
-					, @RequestParam(value="prepayDeductMasterId", required=true) Integer prepayDeductMasterId
-					, @RequestParam(value="companyId", required=true) Integer companyId
-					, @RequestParam(value="money", required=true) Integer money
-					, @RequestParam(value="calYm", required=true) String calYm
-					, HttpServletRequest request, HttpServletResponse response) throws Exception {
+			, @RequestParam(value="prepayDeductMasterId", required=true) Integer prepayDeductMasterId
+			, @RequestParam(value="companyId", required=true) Integer companyId
+			, @RequestParam(value="money", required=true) Integer money
+			, @RequestParam(value="calYm", required=true) String calYm
+			, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("insertPrepay model:   " + model);
 		System.out.println("insertPrepay method:   " + method);
 		System.out.println("insertPrepay prepayDeductMasterId:   " + prepayDeductMasterId);
@@ -146,22 +146,22 @@ public class PrepayDeductEditServlet extends MvcBaseServlet {
 		System.out.println("insertPrepay calYm:   " + calYm);
 		String data = "OK";
 		UserEntity user = checkLogin(request, response);
-        
-        PrepayDetailEntity entity = new PrepayDetailEntity();
-        entity.setCalYm(calYm);
-        entity.setMoney(money);
-        entity.setCompanyId(companyId);
-        entity.setPrepayDeductMasterId(prepayDeductMasterId);
-        entity.setModifierId(user.getUserId().intValue());
-        entity.setModifyDate(Timestamp.from(new Date().toInstant()));
-        entity.setCreatorId(user.getUserId().intValue());
-        entity.setCreateDate(Timestamp.from(new Date().toInstant()));
-        
-        	prepayDeductService.transactionInsertPrepayDetail(entity, user.getUserId().intValue());
-        
-        Gson gson = new Gson();
+
+		PrepayDetailEntity entity = new PrepayDetailEntity();
+		entity.setCalYm(calYm);
+		entity.setMoney(money);
+		entity.setCompanyId(companyId);
+		entity.setPrepayDeductMasterId(prepayDeductMasterId);
+		entity.setModifierId(user.getUserId().intValue());
+		entity.setModifyDate(Timestamp.from(new Date().toInstant()));
+		entity.setCreatorId(user.getUserId().intValue());
+		entity.setCreateDate(Timestamp.from(new Date().toInstant()));
+
+		prepayDeductService.transactionInsertPrepayDetail(entity, user.getUserId().intValue());
+
+		Gson gson = new Gson();
 		return gson.toJson(data);
-		
+
 	}
 
 }
