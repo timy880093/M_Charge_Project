@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 public class CalCycleSearchServlet extends MvcBaseServlet {
 
-    private final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/cash/cash_list.jsp";
+    private final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE ="/backendAdmin/calCycle/calCycle_list.jsp";
     private static final String SESSION_SEARCH_OBJ_NAME = "calCycleSearchVO";
 
     @Autowired
