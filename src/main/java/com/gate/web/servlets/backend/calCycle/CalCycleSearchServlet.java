@@ -178,12 +178,12 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
     String calOverToCash(@RequestParam MultiValueMap<String, String> paramMap,
                          @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "calYM", required = true) String calYM //帳單年月
-            , @RequestParam(value = "companyId", required = true) String companyId //帳單年月
+            , @RequestParam(value = "userCompanyId", required = true) String userCompanyId //帳單年月
             , @RequestParam(value = "calOverAry", required = true) String calOverAry //帳單年月
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("calOver model:   " + model);
         logger.debug("calOver calYM:   " + calYM);
-        logger.debug("calOver companyId:   " + companyId);
+        logger.debug("calOver companyId:   " + userCompanyId);
         logger.debug("calOver calOverAry:   " + calOverAry);
         logger.debug("calOver paramMap:   " + paramMap);
 

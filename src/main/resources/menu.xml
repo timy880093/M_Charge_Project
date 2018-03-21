@@ -3,7 +3,7 @@
     <role id="100" name="帳務管理者">
         <menu name="收費方案列表" url="/backendAdmin/chargeSearchServlet?sessionClean=Y" enable="true" pop="true"/>
         <menu name="經銷商方案列表" url="/backendAdmin/dealerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="設定用戶收費列表" url="/backendAdmin/companySearchPackageServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu name="設定用戶收費列表" url="/backendAdmin/companySearchServlet?sessionClean=Y" enable="true" pop="true"/>
         <!--<menu name="贈送張數列表" url="/backendAdmin/giftSearchServlet?sessionClean=Y" enable="true" pop="true"/>-->
         <menu name="月租超額計算" url="/backendAdmin/calCycleSearchServlet?sessionClean=Y" enable="true" pop="true"/>
         <menu name="出/入帳管理" url="/backendAdmin/cashSearchServlet?sessionClean=Y" enable="true" pop="true"/>
@@ -16,7 +16,7 @@
     <role id="600" name="帳務管理者">
         <menu name="收費方案列表" url="/backendAdmin/chargeSearchServlet?sessionClean=Y" enable="true" pop="true"/>
         <menu name="經銷商方案列表" url="/backendAdmin/dealerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="設定用戶收費列表" url="/backendAdmin/companySearchPackageServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu name="設定用戶收費列表" url="/backendAdmin/companySearchServlet?sessionClean=Y" enable="true" pop="true"/>
         <!--<menu name="贈送張數列表" url="/backendAdmin/giftSearchServlet?sessionClean=Y" enable="true" pop="true"/>-->
         <menu name="月租超額計算" url="/backendAdmin/calCycleSearchServlet?sessionClean=Y" enable="true" pop="true"/>
         <menu name="出/入帳管理" url="/backendAdmin/cashSearchServlet?sessionClean=Y" enable="true" pop="true"/>
