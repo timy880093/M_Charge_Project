@@ -432,13 +432,13 @@ public class CashServiceImp implements CashService {
         List<List<Object>> dataList = new ArrayList<>();
 
         //寫死固定欄位
-        headerList.add("customNumber");
-        headerList.add("reserve1");
-        headerList.add("reserve2");
-        headerList.add("reserve3");
-        headerList.add("reserve4");
-        headerList.add("companyName");
-        headerList.add("businessNo");
+        headerList.add("*編號");
+        headerList.add("");
+        headerList.add("");
+        headerList.add("");
+        headerList.add("");
+        headerList.add("姓名");
+        headerList.add("客戶辨識碼");
 
         //加入動態欄位
         //divide and conquer
@@ -463,7 +463,7 @@ public class CashServiceImp implements CashService {
         for(CashMasterBean cashMasterBean : cashMasterBeanList){
             List<Object> detailValueList = new ArrayList<>();
             detailValueList.add(cashMasterBean.getBusinessNo());
-            detailValueList.add("");
+            detailValueList.add(cashMasterBean.getInAmount());
             detailValueList.add("");
             detailValueList.add("");
             detailValueList.add("");
