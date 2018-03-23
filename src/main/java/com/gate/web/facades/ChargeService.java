@@ -21,15 +21,15 @@ public interface ChargeService extends Service {
 
 	public Map getChargeList(QuerySettingVO querySettingVO) throws Exception ;
 
+    Integer insertChargeModeCycle(ChargeModeCycleBean bean, Long userId) throws Exception;
 
-
-    public Integer insertChargeModeCycle(ChargeModeCycleBean bean) throws Exception ;
-    public void updateChargeModeCycle(ChargeModeCycleBean bean) throws Exception ;
+    void updateChargeModeCycle(ChargeModeCycleBean bean, Long userId) throws Exception;
 
     public ChargeModeCycleVO findChargeModeCycleByChargeId(Integer chargeId) throws Exception ;
 
     //新增或修改經銷商和經銷商業務員資訊
-    public Integer transactionInsertChargeModeGrade(ChargeModeGradeBean bean) throws Exception ;
+    Integer transactionInsertChargeModeGrade(ChargeModeGradeBean bean, Long userId) throws Exception;
+
     //找到級距型方案的資料
     public ChargeModeGradeVO findChargeModeGradeByChargeId(Integer chargeId) throws Exception ;
     //取得某級距方案的級距清單

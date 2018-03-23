@@ -31,19 +31,21 @@ public class ChargeServiceImp implements ChargeService{
     }
 
 
-
-    public Integer insertChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
+    @Override
+    public Integer insertChargeModeCycle(ChargeModeCycleBean bean, Long userId) throws Exception {
         ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
         BeanUtils.copyProperties(entity, bean);
+        entity.setCreatorId(userId.intValue());
         chargeDAO.saveEntity(entity);
         return null;
     }
-
-    public void updateChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
+    @Override
+    public void updateChargeModeCycle(ChargeModeCycleBean bean, Long userId) throws Exception {
         ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
         DateConverter dateConverter = new DateConverter();
         dateConverter.setPattern("yyyy/MM/dd");
         BeanUtils.copyProperties(entity,bean);
+        entity.setCreatorId(userId.intValue());
         chargeDAO.updateEntity(entity, entity.getChargeId());
     }
 
@@ -58,8 +60,9 @@ public class ChargeServiceImp implements ChargeService{
     }
 
     //新增或修改經銷商和經銷商業務員資訊
-    public Integer transactionInsertChargeModeGrade(ChargeModeGradeBean bean) throws Exception {
-        return chargeDAO.insertChargeModeGrade(bean);
+    @Override
+    public Integer transactionInsertChargeModeGrade(ChargeModeGradeBean bean,Long userId) throws Exception {
+        return chargeDAO.insertChargeModeGrade(bean,userId);
     }
 
     //找到級距型方案的資料

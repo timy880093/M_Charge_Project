@@ -159,11 +159,12 @@ public class ChargeDAO extends BaseDAO {
 
 
     //新增或修改級距型方案
-    public Integer insertChargeModeGrade(ChargeModeGradeBean bean) throws Exception {
+    public Integer insertChargeModeGrade(ChargeModeGradeBean bean,Long userId) throws Exception {
         ChargeModeGradeEntity entity = new ChargeModeGradeEntity();
         BeanUtils.copyProperties(entity,bean);
 
         Integer chargeModeGradeId = entity.getChargeId();
+        entity.setCreatorId(userId.intValue());
 
         //新增或修改 經銷商資訊(dealer_company)
         if(null == chargeModeGradeId){
@@ -202,6 +203,7 @@ public class ChargeDAO extends BaseDAO {
                 gradeEntity.setCntStart(cntStart);
                 gradeEntity.setCntEnd(cntEnd);
                 gradeEntity.setPrice(price);
+                gradeEntity.setCreatorId(userId.intValue());
                 saveEntity(gradeEntity);
 
             }else{
@@ -216,6 +218,7 @@ public class ChargeDAO extends BaseDAO {
                 gradeEntity.setCntStart(cntStart);
                 gradeEntity.setCntEnd(cntEnd);
                 gradeEntity.setPrice(price);
+                gradeEntity.setCreatorId(userId.intValue());
                 saveOrUpdateEntity(gradeEntity, gradeEntity.getGradeId());
             }
         }

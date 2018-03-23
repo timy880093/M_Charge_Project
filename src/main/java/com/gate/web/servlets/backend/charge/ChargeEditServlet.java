@@ -126,7 +126,7 @@ public class ChargeEditServlet extends MvcBaseServlet {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=insert", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.POST, params = "method=insert", produces = "application/json;charset=utf-8")
     public String insert(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type
 
@@ -147,22 +147,22 @@ public class ChargeEditServlet extends MvcBaseServlet {
             ChargeModeCycleBean bean = new ChargeModeCycleBean();
             MapBeanConverterUtils.mapToBean(requestParameterMap, bean);
             if (StringUtils.isNotEmpty(bean.getChargeId())) {
-                chargeService.updateChargeModeCycle(bean);
+                chargeService.updateChargeModeCycle(bean,user.getUserId());
             } else {
                 bean.setStatus(String.valueOf(1));
-                chargeService.insertChargeModeCycle(bean);
+                chargeService.insertChargeModeCycle(bean,user.getUserId());
             }
 
         } else if ("2".equals(charge_type)) { //級距型
             ChargeModeGradeBean bean = new ChargeModeGradeBean();
             MapBeanConverterUtils.mapToBean(requestParameterMap, bean);
 
-            chargeService.transactionInsertChargeModeGrade(bean);
+            chargeService.transactionInsertChargeModeGrade(bean,user.getUserId());
         }
         Gson gson = new Gson();
         return gson.toJson(data);
 
     }
-    }
+}
 
 
