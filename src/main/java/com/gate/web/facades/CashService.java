@@ -3,6 +3,7 @@ package com.gate.web.facades;
 import java.util.List;
 import java.util.Map;
 
+import com.gate.web.beans.CashMasterBean;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CashDetailVO;
 import com.gate.web.displaybeans.CashMasterVO;
@@ -66,4 +67,6 @@ public interface CashService extends Service {
     Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception;
 
     List<CashVO> findCashVoByOutYm(String yearMonth);
+
+    Map<String,Object> genCashDataExcelDataMap(List<CashMasterBean> cashMasterBeanList);
 }

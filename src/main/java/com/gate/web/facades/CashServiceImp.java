@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.gate.utils.TimeUtils;
+import com.gate.web.beans.CashDetailBean;
 import com.gate.web.beans.CashMasterBean;
 import com.gate.web.beans.InvoiceExcelBean;
 import com.gateweb.charge.model.*;
@@ -171,6 +172,21 @@ public class CashServiceImp implements CashService {
             resultList.add(cashVO);
         }
         return resultList;
+    }
+
+    //取得CashMasterEntityListById
+    public CashVO getCashMasterEntityList(Long cashMasterId) throws Exception{
+        CashVO cashVO = new CashVO();
+        CashMasterEntity cashMasterEntity = cashMasterRepository.findByCashMasterId(cashMasterId);
+        List<CashDetailEntity> cashDetailEntityList
+                = cashDetailRepository.findByCashMasterId(cashMasterId.intValue());
+        if(cashMasterEntity!=null){
+            cashVO.setCashMasterEntity(cashMasterEntity);
+        }
+        if(cashDetailEntityList.size()!=0){
+            cashVO.setCashDetailEntityList(cashDetailEntityList);
+        }
+        return cashVO;
     }
 
     //匯出發票Excel的資料-多筆
@@ -407,6 +423,83 @@ public class CashServiceImp implements CashService {
             }
         }
         return cashVOList;
+    }
+
+    @Override
+    public Map<String,Object> genCashDataExcelDataMap(List<CashMasterBean> cashMasterBeanList){
+        Map<String,Object> resultMap = new HashMap<>();
+        List<String> headerList = new ArrayList<>();
+        List<List<Object>> dataList = new ArrayList<>();
+
+        //寫死固定欄位
+        headerList.add("customNumber");
+        headerList.add("reserve1");
+        headerList.add("reserve2");
+        headerList.add("reserve3");
+        headerList.add("reserve4");
+        headerList.add("companyName");
+        headerList.add("businessNo");
+
+        //加入動態欄位
+        //divide and conquer
+        //先跑header的部份
+        List<String> packageList = new ArrayList<>();
+        for(CashMasterBean cashMasterBean : cashMasterBeanList){
+            for(CashDetailBean cashDetailBean: cashMasterBean.getCashDetailList()){
+                Integer chargeId = cashDetailBean.getChargeId();
+                Integer cashType = cashDetailBean.getCashType(); //1.月租 2.超額 3.代印代寄 4.加值型 5.儲值 6.預繳
+                Integer billType = cashDetailBean.getBillType(); //1.月租 2.級距
+
+                //分兩次，先加入欄位的map
+                String packageName = getPackageName(cashType,cashDetailBean.getPackageName());
+                if(!packageList.contains(packageName)){
+                    packageList.add(packageName);
+                    //寫入header
+                    headerList.add(packageName);
+                }
+            }
+        }
+
+        for(CashMasterBean cashMasterBean : cashMasterBeanList){
+            List<Object> detailValueList = new ArrayList<>();
+            detailValueList.add(cashMasterBean.getBusinessNo());
+            detailValueList.add("");
+            detailValueList.add("");
+            detailValueList.add("");
+            detailValueList.add("");
+            detailValueList.add(cashMasterBean.getCompanyName());
+            detailValueList.add(cashMasterBean.getBusinessNo());
+            //寫value
+            //就以前的情況，一定只會有一個。
+            CashDetailBean cashDetailBean = cashMasterBean.getCashDetailList().get(0);
+            for(String packageName: packageList){
+                if(cashDetailBean.getPackageName().equals(packageName)){
+                    detailValueList.add(cashDetailBean.getTaxInclusivePrice());
+                }else{
+                    detailValueList.add(0);
+                }
+            }
+            dataList.add(detailValueList);
+        }
+        resultMap.put("header",headerList);
+        resultMap.put("data",dataList);
+        return resultMap;
+    }
+
+    public String getPackageName(
+            Integer cashType
+            , String originalPackageName){
+        String packageName = "";
+        if(cashType == 1){ //月租
+            packageName = originalPackageName;
+        }else if(cashType == 2){ //超額
+            packageName = originalPackageName+"(超額)";
+        }else  if(cashType == 6){ //預繳
+            packageName = originalPackageName+"預繳";
+        }else if(cashType == 7){ //7.扣抵
+            packageName = originalPackageName + "扣抵";
+        }
+        return packageName;
     }
 
     /**

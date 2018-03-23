@@ -1,5 +1,6 @@
 package com.gate.web.servlets.backend.cash;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -19,9 +20,14 @@ import com.gate.core.bean.BaseFormBean;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
-import com.gateweb.charge.model.UserEntity;
+import com.gateweb.charge.model.*;
+import com.gateweb.charge.repository.CompanyRepository;
+import com.gateweb.charge.repository.PackageModeRepository;
+import com.gateweb.charge.vo.CashVO;
 import com.gateweb.einv.exception.EinvSysException;
 import com.google.gson.Gson;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
@@ -57,6 +63,12 @@ public class CashSearchServlet extends MvcBaseServlet {
     
     @Autowired
     CalCycleService calCycleService;
+
+    @Autowired
+    CompanyRepository companyRepository;
+
+    @Autowired
+    PackageModeRepository packageModeRepository;
 
     @RequestMapping(method = RequestMethod.POST)
     public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,

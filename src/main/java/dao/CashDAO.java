@@ -823,6 +823,7 @@ public class CashDAO extends BaseDAO {
         return getCashMasterDetailList(outYm, selectOutList);
     }
 
+    //Todo:將會移至CashServiceImp，轉為使用CashMasterIdList做為傳入參數，並且返回設定好的bean，如果是動態，就返回map。
     public List getCashMasterDetailList(String outYm, List selectOutList) throws Exception{
         List list = new ArrayList();
 

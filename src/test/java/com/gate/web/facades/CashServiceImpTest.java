@@ -2,19 +2,26 @@ package com.gate.web.facades;
 
 import com.gate.utils.CsvUtils;
 import com.gate.utils.FileUtils;
+import com.gate.utils.JxlsUtils;
 import com.gateweb.charge.vo.CashVO;
 import com.gateweb.reportModel.OrderCsv;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.jxls.area.Area;
+import org.jxls.builder.AreaBuilder;
+import org.jxls.builder.xml.XmlAreaBuilder;
+import org.jxls.common.CellRef;
+import org.jxls.common.Context;
+import org.jxls.transform.Transformer;
+import org.jxls.transform.poi.PoiTransformer;
+import org.jxls.util.TransformerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * Created by Eason on 3/13/2018.
@@ -32,6 +39,9 @@ public class CashServiceImpTest {
 
     @Autowired
     FileUtils fileUtils;
+
+    @Autowired
+    JxlsUtils jxlsUtils;
 
     //測試抓取CashVO
     @Test

@@ -34,8 +34,10 @@ public interface CashMasterRepository extends JpaRepository<CashMasterEntity, In
 
 	public List<CashMasterEntity> findByOutYm(String yearMonth);
 
-	/*public CashMasterEntity findByCashMasterId(Long cashMasterId);
-	
+	public CashMasterEntity findByCashMasterId(Long cashMasterId);
+
+	/*
+
 	public Page<CashMasterEntity> findByCashMasterId(Long cashMasterId, Pageable pageable);
 	
 	public boolean exists(Long cashMasterId);
@@ -44,7 +46,9 @@ public interface CashMasterRepository extends JpaRepository<CashMasterEntity, In
 	
 	public List<CashMasterEntity> findTop100ByCashMasterId(Long cashMasterId);
 	
-	public long count();*/
+	public long count();
+
+	*/
 
 			
 }

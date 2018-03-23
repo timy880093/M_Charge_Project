@@ -1,8 +1,13 @@
 package com.gate.web.facades;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.gate.web.beans.CommissionLog;
+import com.gateweb.reportModel.CommissionRecord;
+import com.gateweb.utils.CommissionLogReportUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +25,9 @@ public class CommissionServiceImp implements CommissionService{
 	
 	@Autowired
     CommissionDAO commissionDAO;
+
+    @Autowired
+    CommissionLogReportUtils commissionLogReportUtils;
 
     public Map getDealerCompanyList(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = commissionDAO.getDealerCompanyList(querySettingVO);

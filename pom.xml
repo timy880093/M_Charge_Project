@@ -103,6 +103,7 @@
         <!-- not used -->
         <cors-filter.version>2.5</cors-filter.version>
         <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+       <apache.http.client.version>4.5.5</apache.http.client.version>
 
     </properties>
     <dependencies>
@@ -544,6 +545,13 @@
             <version>${spring.version}</version>
             <optional>true</optional>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <!--<version>4.5.5</version>-->
+            <version>${apache.http.client.version}</version>
         </dependency>
 
     </dependencies>
