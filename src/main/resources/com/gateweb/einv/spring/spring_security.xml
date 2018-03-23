@@ -115,7 +115,6 @@
 		<security:intercept-url pattern="/**/index.jsp" access="permitAll" />
 		<security:intercept-url pattern="/**/test*.jsp" access="permitAll" />
 		<security:intercept-url pattern="/**/xeon*.jsp" access="permitAll" />
-		<security:intercept-url pattern="/rest/**" access="permitAll" />
 		<security:intercept-url pattern="/pages/**.*" access="permitAll" />
 		<security:intercept-url pattern="/**/**.jsp" access="permitAll" />
 		<security:intercept-url pattern="/backendAdmin/dist/**" access="permitAll" />
