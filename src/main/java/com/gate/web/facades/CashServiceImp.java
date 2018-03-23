@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.gate.utils.ExcelPoiWrapper;
+import com.gate.utils.FieldUtils;
 import com.gate.utils.TimeUtils;
 import com.gate.web.beans.CashDetailBean;
 import com.gate.web.beans.CashMasterBean;
@@ -12,11 +14,15 @@ import com.gate.web.beans.InvoiceExcelBean;
 import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.*;
 import com.gateweb.charge.vo.CashVO;
+import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.gateweb.reportModel.OrderCsv;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +42,9 @@ public class CashServiceImp implements CashService {
 
     @Autowired
     TimeUtils timeUtils;
+
+    @Autowired
+    FieldUtils fieldUtils;
 
     @Autowired
     CashMasterRepository cashMasterRepository;
@@ -213,7 +222,8 @@ public class CashServiceImp implements CashService {
         }
 
         //如果用戶該月要繳的錢為0元，就不匯出到excel了。
-        if(cashMasterEntity.getTaxInclusiveAmount().compareTo(new BigDecimal(0)) == 0){
+        if(cashMasterEntity.getTaxInclusiveAmount()==null
+                || cashMasterEntity.getTaxInclusiveAmount().compareTo(BigDecimal.ZERO)==0){
             result = true;
         }
 
@@ -500,6 +510,130 @@ public class CashServiceImp implements CashService {
             packageName = originalPackageName + "扣抵";
         }
         return packageName;
+    }
+
+    /**
+     *  產生查詢下載的Excel報表
+     * @param cashMasterList
+     * @param tempPath
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public ExcelPoiWrapper genCashDataToExcel(List<CashMasterBean> cashMasterList, String tempPath) throws Exception {
+        ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
+
+        HashMap packageMap = new HashMap();
+        excel.setWorkSheet(1);
+        int baseRow=2;
+        int index = 0;
+        int packageIndex = 8;
+        for(CashMasterBean masterBean:cashMasterList){
+            excel.copyRows(2, 21, 1, baseRow);
+
+            excel.setValue(baseRow, index + 1, masterBean.getBusinessNo());
+            excel.setValue(baseRow, index + 2, masterBean.getInAmount());
+            excel.setValue(baseRow, index + 6, masterBean.getCompanyName());
+            excel.setValue(baseRow, index + 7, masterBean.getBusinessNo());
+
+            List<CashDetailBean> cashDetailList = masterBean.getCashDetailList();
+            for(CashDetailBean detail: cashDetailList){
+                Integer chargeId = detail.getChargeId();
+                Integer cashType = detail.getCashType(); //1.月租 2.超額 3.代印代寄 4.加值型 5.儲值 6.預繳
+                Integer billType = detail.getBillType(); //1.月租 2.級距
+
+                //要繳的金額(月租預繳和超額分開)
+                BigDecimal taxInclusivePrice_ = detail.getTaxInclusivePrice();
+                Integer taxInclusivePrice = 0;
+                if(taxInclusivePrice_.intValue() == 0){
+                    taxInclusivePrice = 0; //不然excel顯示的數字會0E-9
+                }else{
+                    taxInclusivePrice = taxInclusivePrice_.setScale(0,BigDecimal.ROUND_HALF_UP).intValue();
+                }
+
+                if(null == packageMap.get(chargeId+","+cashType+","+billType)){
+                    packageMap.put(chargeId+","+cashType+","+billType, packageIndex);
+                    excel.setValue(baseRow, index + packageIndex, taxInclusivePrice);
+                    if(cashType == 1){ //月租
+                        excel.setValue(1, index + packageIndex, detail.getPackageName());
+                    }else if(cashType == 2){ //超額
+                        excel.setValue(1, index + packageIndex, detail.getPackageName()+"(超額)");
+                    }else  if(cashType == 6){ //預繳
+                        excel.setValue(1, index + packageIndex, "預繳");
+                    }else if(cashType == 7){ //7.扣抵
+                        excel.setValue(1, index + packageIndex, "扣抵");
+                    }
+                    packageIndex++;
+                }else{
+                    Integer packageIndexOld = (Integer)packageMap.get(chargeId + ","+cashType+","+billType);
+                    excel.setValue(baseRow, index + packageIndexOld, taxInclusivePrice);
+                }
+            }
+            baseRow++;
+        }
+
+        //把沒有packagename的cell填0
+        HSSFSheet sheet = excel.getSheet();
+        for(int i=2; i<baseRow; i++){
+            Row row =sheet.getRow(i-1);
+            for(int j=8; j<packageIndex; j++){
+                Cell cell = row.getCell(j-1);
+                if(!fieldUtils.isNotEmptyCell(cell)){
+                    excel.setValue(i, j, 0);
+                }
+            }
+        }
+
+        return excel;
+
+    }
+
+    //匯出發票資料Excel
+    @Override
+    public ExcelPoiWrapper genInvoiceItemToExcel(List<InvoiceExcelBean> InvoiceExcelList, String tempPath) throws Exception {
+        ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
+        HashMap packageMap = new HashMap();
+        excel.setWorkSheet(1);
+        int baseRow=3;
+        int index = 0;
+        int packageIndex = 8;
+        for(InvoiceExcelBean bean:InvoiceExcelList){
+            excel.copyRows(3, 21, 1, baseRow);
+
+            excel.setValue(baseRow, index + 1, bean.getInvoiceIndex()); //發票張數
+            excel.setValue(baseRow, index + 2, bean.getInvoiceDate()); //發票日期
+            excel.setValue(baseRow, index + 3, bean.getItemIndex()); //品名序號
+            excel.setValue(baseRow, index + 4, bean.getItemName()); //發票品名
+            excel.setValue(baseRow, index + 5, bean.getItemCnt()); //數量
+            excel.setValue(baseRow, index + 6, bean.getUnitPrice()); //單價
+            excel.setValue(baseRow, index + 7, bean.getTaxType()); //課稅別
+            excel.setValue(baseRow, index + 8, bean.getTax()); //稅率
+            excel.setValue(baseRow, index + 10, bean.getBusinessNo()); //買方統編
+            excel.setValue(baseRow, index + 11, 2); //1.列印 2.列印+email
+
+            baseRow++;
+        }
+        return excel;
+    }
+
+    @Override
+    public List<InvoiceBatchRecord> genInvoiceBatchRecordList(List<InvoiceExcelBean> invoiceExcelBeanList){
+        List<InvoiceBatchRecord> resultList = new ArrayList<>();
+        for(InvoiceExcelBean invoiceExcelBean:invoiceExcelBeanList){
+            InvoiceBatchRecord invoiceBatchRecord = new InvoiceBatchRecord();
+            invoiceBatchRecord.setInvoiceSequence(invoiceExcelBean.getInvoiceIndex());
+            invoiceBatchRecord.setInvoiceDate(invoiceExcelBean.getInvoiceDate());
+            invoiceBatchRecord.setProductItemSequence(invoiceExcelBean.getItemIndex());
+            invoiceBatchRecord.setProductItemDescription(invoiceExcelBean.getItemName());
+            invoiceBatchRecord.setProductItemQuantity(invoiceExcelBean.getItemCnt());
+            invoiceBatchRecord.setProductItemUnitPrice(invoiceExcelBean.getUnitPrice());
+            invoiceBatchRecord.setTaxType(invoiceExcelBean.getTaxType());
+            invoiceBatchRecord.setTaxRate(invoiceExcelBean.getTax());
+            invoiceBatchRecord.setBuyerIdentifier(invoiceExcelBean.getBusinessNo());
+            invoiceBatchRecord.setPrintOrEmailRemark(2);
+            resultList.add(invoiceBatchRecord);
+        }
+        return resultList;
     }
 
     /**

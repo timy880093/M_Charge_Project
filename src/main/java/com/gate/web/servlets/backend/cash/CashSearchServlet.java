@@ -1,6 +1,5 @@
 package com.gate.web.servlets.backend.cash;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,11 +23,10 @@ import com.gate.web.servlets.MvcBaseServlet;
 import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.CompanyRepository;
 import com.gateweb.charge.repository.PackageModeRepository;
-import com.gateweb.charge.vo.CashVO;
 import com.gateweb.einv.exception.EinvSysException;
+import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.google.gson.Gson;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
+import org.apache.commons.collections.ArrayStack;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
@@ -60,7 +57,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     private static final String SESSION_SEARCH_DETAIL_OBJ_NAME = "cashFlowDetailSearchVO";
     private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = "tempFile/out_jxls_template.xls";
     private static final String JXLS_TEMPLATE_CONFIGURATION = "tempFile/out_jxls_template_configuration.xml";
-    private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = "tempFile/invoice_temp.xls";
+    private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = "tempFile/invoice_jxls_template.xls";
     
     @Autowired
     CashService cashService;
@@ -570,16 +567,22 @@ public class CashSearchServlet extends MvcBaseServlet {
     public @ResponseBody
     void invoiceExcelYM(@RequestParam MultiValueMap<String, String> paramMap,
                     @RequestHeader HttpHeaders headers, Model model
-            , @RequestParam(value = "destJson", required = true) String outYM
+            , @RequestParam(value = "outYM", required = true) String outYM
             , HttpServletRequest request, HttpServletResponse response) throws Exception{
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
         List invoiceItemList =  cashService.getInvoiceItem(outYM);
-        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
-        ExcelPoiWrapper excel= genInvoiceItemToExcel(invoiceItemList, filePath);
-        response = (HttpServletResponse) otherMap.get(RESPONSE);
-        responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE+"_"+outYM);
+//        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
+//        ExcelPoiWrapper excel= cashService.genInvoiceItemToExcel(invoiceItemList, filePath);
+        List<InvoiceBatchRecord> invoiceBatchRecordList = cashService.genInvoiceBatchRecordList(invoiceItemList);
+        Map<String,Object> parameterMap = new HashMap<>();
+        parameterMap.put("invoiceBatchRecordList",invoiceBatchRecordList);
+        response.setContentType("text/plain");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename=" + DOWNLOAD_FILE_NAME_INVOICE+"_"+outYM+".xls");
+        FileInputStream templateFileInputStream = new FileInputStream(this.getClass().getResource("/").getPath()+TEMPLATE_EXCEL_DOWNLOAD_INVOICE);
+        jxlsUtils.processTemplate(parameterMap,templateFileInputStream,response.getOutputStream());
     }
 
     /**
@@ -603,7 +606,7 @@ public class CashSearchServlet extends MvcBaseServlet {
         sendObjToViewer(request, otherMap);
         List cashMasterList =  cashService.getInvoiceItem(null, destJson);
         String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
-        ExcelPoiWrapper excel= genInvoiceItemToExcel(cashMasterList, filePath);
+        ExcelPoiWrapper excel= cashService.genInvoiceItemToExcel(cashMasterList, filePath);
         response = (HttpServletResponse) otherMap.get(RESPONSE);
         responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE);
     }
@@ -686,164 +689,6 @@ public class CashSearchServlet extends MvcBaseServlet {
         response.getOutputStream().close();
     }
 
-    /**
-     *  產生查詢下載的Excel報表
-     * @param cashMasterList
-     * @param tempPath
-     * @return
-     * @throws Exception
-     */
-    private ExcelPoiWrapper genCashDataToExcel(List<CashMasterBean> cashMasterList, String tempPath) throws Exception {
-        ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
-
-        HashMap packageMap = new HashMap();
-        excel.setWorkSheet(1);
-        int baseRow=2;
-        int index = 0;
-        int packageIndex = 8;
-        for(CashMasterBean masterBean:cashMasterList){
-            excel.copyRows(2, 21, 1, baseRow);
-
-            excel.setValue(baseRow, index + 1, masterBean.getBusinessNo());
-            excel.setValue(baseRow, index + 2, masterBean.getInAmount());
-            excel.setValue(baseRow, index + 6, masterBean.getCompanyName());
-            excel.setValue(baseRow, index + 7, masterBean.getBusinessNo());
-
-            List<CashDetailBean> cashDetailList = masterBean.getCashDetailList();
-            for(CashDetailBean detail: cashDetailList){
-                Integer chargeId = detail.getChargeId();
-                Integer cashType = detail.getCashType(); //1.月租 2.超額 3.代印代寄 4.加值型 5.儲值 6.預繳
-                Integer billType = detail.getBillType(); //1.月租 2.級距
-
-                //要繳的金額(月租預繳和超額分開)
-                BigDecimal taxInclusivePrice_ = detail.getTaxInclusivePrice();
-                Integer taxInclusivePrice = 0;
-                if(taxInclusivePrice_.intValue() == 0){
-                    taxInclusivePrice = 0; //不然excel顯示的數字會0E-9
-                }else{
-                    taxInclusivePrice = taxInclusivePrice_.setScale(0,BigDecimal.ROUND_HALF_UP).intValue();
-                }
-
-                if(null == packageMap.get(chargeId+","+cashType+","+billType)){
-                    packageMap.put(chargeId+","+cashType+","+billType, packageIndex);
-                    excel.setValue(baseRow, index + packageIndex, taxInclusivePrice);
-                    if(cashType == 1){ //月租
-                        excel.setValue(1, index + packageIndex, detail.getPackageName());
-                    }else if(cashType == 2){ //超額
-                        excel.setValue(1, index + packageIndex, detail.getPackageName()+"(超額)");
-                    }else  if(cashType == 6){ //預繳
-                        excel.setValue(1, index + packageIndex, "預繳");
-                    }else if(cashType == 7){ //7.扣抵
-                        excel.setValue(1, index + packageIndex, "扣抵");
-                    }
-                    packageIndex++;
-                }else{
-                    Integer packageIndexOld = (Integer)packageMap.get(chargeId + ","+cashType+","+billType);
-                    excel.setValue(baseRow, index + packageIndexOld, taxInclusivePrice);
-                }
-            }
-            baseRow++;
-        }
-
-        //把沒有packagename的cell填0
-        HSSFSheet sheet = excel.getSheet();
-        for(int i=2; i<baseRow; i++){
-            Row row =sheet.getRow(i-1);
-            for(int j=8; j<packageIndex; j++){
-                Cell cell = row.getCell(j-1);
-                if(!isNotEmptyCell(cell)){
-                    excel.setValue(i, j, 0);
-                }
-            }
-        }
-
-        return excel;
-
-    }
-
-    //匯出發票資料Excel
-    private ExcelPoiWrapper genInvoiceItemToExcel(List<InvoiceExcelBean> InvoiceExcelList, String tempPath) throws Exception {
-        ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
-        HashMap packageMap = new HashMap();
-        excel.setWorkSheet(1);
-        int baseRow=3;
-        int index = 0;
-        int packageIndex = 8;
-        for(InvoiceExcelBean bean:InvoiceExcelList){
-            excel.copyRows(3, 21, 1, baseRow);
-
-            excel.setValue(baseRow, index + 1, bean.getInvoiceIndex()); //發票張數
-            excel.setValue(baseRow, index + 2, bean.getInvoiceDate()); //發票日期
-            excel.setValue(baseRow, index + 3, bean.getItemIndex()); //品名序號
-            excel.setValue(baseRow, index + 4, bean.getItemName()); //發票品名
-            excel.setValue(baseRow, index + 5, bean.getItemCnt()); //數量
-            excel.setValue(baseRow, index + 6, bean.getUnitPrice()); //單價
-            excel.setValue(baseRow, index + 7, bean.getTaxType()); //課稅別
-            excel.setValue(baseRow, index + 8, bean.getTax()); //稅率
-            excel.setValue(baseRow, index + 10, bean.getBusinessNo()); //買方統編
-            excel.setValue(baseRow, index + 11, 2); //1.列印 2.列印+email
-
-            baseRow++;
-        }
-        return excel;
-
-    }
-
-    /**
-     * 過瀘不允許的欄位值。
-     * @param cell
-     * @return
-     */
-    private boolean isNotEmptyCell(Cell cell){
-        boolean result = true;
-        //parameters
-        if(cell!=null){
-            if(getCellValue(cell)!=null){
-                Object cellValue = getCellValue(cell);
-                if(cellValue==null){
-                    result = false;
-                }
-                if(String.valueOf(getCellValue(cell)).trim().length()==0){
-                    result = false;
-                }
-                if(cellValue.equals("null")){
-                    result = false;
-                }
-            }else{
-                result = false;
-            }
-        }else{
-            result = false;
-        }
-        return result;
-    }
-
-    private Object getCellValue(Cell cell) {
-        Object value = new Object();
-        switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_BOOLEAN:
-                value = cell.getBooleanCellValue();
-                break;
-            case Cell.CELL_TYPE_NUMERIC:
-                if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                    Date date = cell.getDateCellValue();
-                    if (date != null) {
-                        value = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                    } else {
-                        value = "";
-                    }
-                } else {
-                    value = cell.getNumericCellValue();
-                }
-                break;
-            case Cell.CELL_TYPE_STRING:
-                value = cell.getStringCellValue();
-                break;
-            default:
-                value = null;
-        }
-        return value;
-    }
 
 
 }

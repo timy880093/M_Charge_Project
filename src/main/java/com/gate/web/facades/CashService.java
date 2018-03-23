@@ -3,12 +3,15 @@ package com.gate.web.facades;
 import java.util.List;
 import java.util.Map;
 
+import com.gate.utils.ExcelPoiWrapper;
 import com.gate.web.beans.CashMasterBean;
+import com.gate.web.beans.InvoiceExcelBean;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CashDetailVO;
 import com.gate.web.displaybeans.CashMasterVO;
 import com.gateweb.charge.model.BillCycleEntity;
 import com.gateweb.charge.vo.CashVO;
+import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.gateweb.reportModel.OrderCsv;
 
 public interface CashService extends Service {
@@ -69,4 +72,11 @@ public interface CashService extends Service {
     List<CashVO> findCashVoByOutYm(String yearMonth);
 
     Map<String,Object> genCashDataExcelDataMap(List<CashMasterBean> cashMasterBeanList);
+
+    ExcelPoiWrapper genCashDataToExcel(List<CashMasterBean> cashMasterList, String tempPath) throws Exception;
+
+    //匯出發票資料Excel
+    ExcelPoiWrapper genInvoiceItemToExcel(List<InvoiceExcelBean> InvoiceExcelList, String tempPath) throws Exception;
+
+    List<InvoiceBatchRecord> genInvoiceBatchRecordList(List<InvoiceExcelBean> invoiceExcelBeanList);
 }

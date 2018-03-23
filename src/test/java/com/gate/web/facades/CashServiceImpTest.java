@@ -6,6 +6,9 @@ import com.gate.utils.JxlsUtils;
 import com.gateweb.charge.vo.CashVO;
 import com.gateweb.reportModel.OrderCsv;
 import com.google.gson.Gson;
+import org.apache.commons.codec.binary.*;
+import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.http.client.methods.HttpPost;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.jxls.area.Area;
@@ -17,10 +20,21 @@ import org.jxls.transform.Transformer;
 import org.jxls.transform.poi.PoiTransformer;
 import org.jxls.util.TransformerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -58,6 +72,36 @@ public class CashServiceImpTest {
         List<OrderCsv> orderCsvList = new ArrayList<>();
         for(CashVO cashVo : cashVoList){
             orderCsvList.addAll(cashService.genOrderCsvListByCashVO(new Long(2),cashVo));
+        }
+    }
+
+    @Test
+    public void postMessageToEinvTest(){
+        String uploadFilePath = "orderCsv/2899.csv";
+        org.springframework.util.MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
+        parameters.add("file", new FileSystemResource(this.getClass().getResource("/").getPath()+uploadFilePath));
+        String uri = "http://localhost:8080/backendAdmin/batchcsv/invoiceCsvUpload?method=uploadInvoiceTxt";
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        String auth = "pkliu" + ":" + "!QAZ2wsx";
+        byte[] encodedAuth = org.apache.commons.codec.binary.Base64.encodeBase64(auth.getBytes(Charset.forName("ISO-8859-1")));
+        String authHeader = "Basic " + new String(encodedAuth);
+        // set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "multipart/form-data");
+        //headers.set("Accept", "text/plain");
+        headers.set(HttpHeaders.AUTHORIZATION, authHeader);
+        HttpEntity<org.springframework.util.MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parameters, headers);
+
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, String.class);
+        } catch (ResourceAccessException rae) {
+            System.out.println(rae.getMessage());
+        } catch (HttpClientErrorException hee) {
+            System.out.println(hee.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

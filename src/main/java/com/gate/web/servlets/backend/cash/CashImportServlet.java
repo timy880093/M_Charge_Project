@@ -1,6 +1,7 @@
 package com.gate.web.servlets.backend.cash;
 
 import com.gate.config.SystemConfig;
+import com.gate.utils.FieldUtils;
 import com.gate.web.facades.CashService;
 import com.gate.web.facades.CashServiceImp;
 import com.gate.web.servlets.BaseServlet;
@@ -28,6 +29,9 @@ public class CashImportServlet extends BaseServlet {
 
 	@Autowired
 	CashService cashService;
+
+    @Autowired
+    FieldUtils fieldUtils;
 
     @Override
     public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
@@ -112,13 +116,13 @@ public class CashImportServlet extends BaseServlet {
                 //取得項目資料
                 //統編
                 Cell cell_1 = row.getCell(1);
-                if(isNotEmptyCell(cell_1)){
-                    businesscode = "" + (String)getCellValue(cell_1);
+                if(fieldUtils.isNotEmptyCell(cell_1)){
+                    businesscode = "" + (String)fieldUtils.getCellValue(cell_1);
 
                     //繳費日期 例:2015-06-25
                     Cell cell_9 = row.getCell(9);
-                    if(isNotEmptyCell(cell_9)){
-                        inDate = (String)getCellValue(cell_9);
+                    if(fieldUtils.isNotEmptyCell(cell_9)){
+                        inDate = (String)fieldUtils.getCellValue(cell_9);
                         if(inDate.indexOf("-")!=-1){
                             inDate = inDate.replace("-", "/");
                         }
@@ -126,14 +130,14 @@ public class CashImportServlet extends BaseServlet {
 
                     //帳單月份 例:201505
                     Cell cell_10 = row.getCell(10);
-                    if(isNotEmptyCell(cell_10)){
-                        bankYM = (String)getCellValue(cell_10);
+                    if(fieldUtils.isNotEmptyCell(cell_10)){
+                        bankYM = (String)fieldUtils.getCellValue(cell_10);
                     }
 
                     //實繳金額
                     Cell cell_13 = row.getCell(13);
-                    if(isNotEmptyCell(cell_13)){
-                        inMoney = (Double)getCellValue(cell_13);
+                    if(fieldUtils.isNotEmptyCell(cell_13)){
+                        inMoney = (Double)fieldUtils.getCellValue(cell_13);
                     }
 
                 } else {
@@ -155,59 +159,4 @@ public class CashImportServlet extends BaseServlet {
         return list;
     }
 
-    /**
-     * 過瀘不允許的欄位值。
-     * @param cell
-     * @return
-     */
-    private boolean isNotEmptyCell(Cell cell){
-        boolean result = true;
-        //parameters
-        if(cell!=null){
-            if(getCellValue(cell)!=null){
-                Object cellValue = getCellValue(cell);
-                if(cellValue==null){
-                    result = false;
-                }
-                if(String.valueOf(getCellValue(cell)).trim().length()==0){
-                    result = false;
-                }
-                if(cellValue.equals("null")){
-                    result = false;
-                }
-            }else{
-                result = false;
-            }
-        }else{
-            result = false;
-        }
-        return result;
-    }
-
-    private Object getCellValue(Cell cell) {
-        Object value = new Object();
-        switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_BOOLEAN:
-                value = cell.getBooleanCellValue();
-                break;
-            case Cell.CELL_TYPE_NUMERIC:
-                if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                    Date date = cell.getDateCellValue();
-                    if (date != null) {
-                        value = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                    } else {
-                        value = "";
-                    }
-                } else {
-                    value = cell.getNumericCellValue();
-                }
-                break;
-            case Cell.CELL_TYPE_STRING:
-                value = cell.getStringCellValue();
-                break;
-            default:
-                value = null;
-        }
-        return value;
-    }
 }
