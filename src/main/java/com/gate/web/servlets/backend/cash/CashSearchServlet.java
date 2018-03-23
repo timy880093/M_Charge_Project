@@ -1,6 +1,7 @@
 package com.gate.web.servlets.backend.cash;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gate.core.bean.BaseFormBean;
+import com.gate.utils.JxlsUtils;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
@@ -32,6 +34,7 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.jxls.common.CellRef;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gate.utils.ExcelPoiWrapper;
@@ -55,8 +58,9 @@ public class CashSearchServlet extends MvcBaseServlet {
     private final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/cash/cash_list.jsp";
     private static final String SESSION_SEARCH_OBJ_NAME = "cashSearchVO";
     private static final String SESSION_SEARCH_DETAIL_OBJ_NAME = "cashFlowDetailSearchVO";
-    //private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/out_temp.xls";
-    //private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = SystemConfig.getInstance().getParameter("uploadTempPath") + "/tempFile"+"/invoice_temp.xls";
+    private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = "tempFile/out_jxls_template.xls";
+    private static final String JXLS_TEMPLATE_CONFIGURATION = "tempFile/out_jxls_template_configuration.xml";
+    private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = "tempFile/invoice_temp.xls";
     
     @Autowired
     CashService cashService;
@@ -69,6 +73,9 @@ public class CashSearchServlet extends MvcBaseServlet {
 
     @Autowired
     PackageModeRepository packageModeRepository;
+
+    @Autowired
+    JxlsUtils jxlsUtils;
 
     @RequestMapping(method = RequestMethod.POST)
     public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
@@ -326,14 +333,21 @@ public class CashSearchServlet extends MvcBaseServlet {
                  @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "outYM", required = true) String outYM
             , HttpServletRequest request, HttpServletResponse response) throws Exception{
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
         try {
+            FileInputStream templateInputStream = new FileInputStream(this.getClass().getResource("/").getPath()+TEMPLATE_EXCEL_DOWNLOAD_OUT);
+            FileInputStream configurationXmlInputStream = new FileInputStream(this.getClass().getResource("/").getPath()+ JXLS_TEMPLATE_CONFIGURATION);
+            BaseFormBean formBeanObject = formBeanObject(request);
+            Map otherMap = otherMap(request, response, formBeanObject);
+            sendObjToViewer(request, otherMap);
             List cashMasterList =  cashService.getCashMasterDetail(outYM);
-            String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
-            ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
-            responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_OUT+"_"+outYM);
+            Map<String,Object> dataMap = cashService.genCashDataExcelDataMap(cashMasterList);
+            Map<String,Object> contextMap = new HashMap<>();
+            contextMap.put("headers",dataMap.get("header"));
+            contextMap.put("rows", dataMap.get("data"));
+            response.setContentType("text/plain");
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment;filename=" + "outExcel"+outYM+".xls");
+            jxlsUtils.processTemplate(contextMap,templateInputStream,response.getOutputStream(),configurationXmlInputStream,new CellRef("Template!A1"));
         }catch(Exception ex){
             System.out.println(ex);
         }
@@ -356,15 +370,25 @@ public class CashSearchServlet extends MvcBaseServlet {
                     @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson //多筆的選擇
             , @RequestParam(value = "outYM", required = true) String outYM //帳單年月
-            , HttpServletRequest request, HttpServletResponse response) throws Exception {
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
-        List cashMasterList =  cashService.getCashMasterDetail(outYM, destJson);
-        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/out_temp.xls";
-        ExcelPoiWrapper excel= genCashDataToExcel(cashMasterList, filePath);
-        response = (HttpServletResponse) otherMap.get(RESPONSE);
-        responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_OUT+"_"+outYM);
+            , HttpServletRequest request, HttpServletResponse response) {
+        try{
+            FileInputStream templateInputStream = new FileInputStream(this.getClass().getResource("/").getPath()+TEMPLATE_EXCEL_DOWNLOAD_OUT);
+            FileInputStream configurationXmlInputStream = new FileInputStream(this.getClass().getResource("/").getPath()+ JXLS_TEMPLATE_CONFIGURATION);
+            BaseFormBean formBeanObject = formBeanObject(request);
+            Map otherMap = otherMap(request, response, formBeanObject);
+            sendObjToViewer(request, otherMap);
+            List cashMasterList =  cashService.getCashMasterDetail(outYM, destJson);
+            Map<String,Object> dataMap = cashService.genCashDataExcelDataMap(cashMasterList);
+            Map<String,Object> contextMap = new HashMap<>();
+            contextMap.put("headers",dataMap.get("header"));
+            contextMap.put("rows", dataMap.get("data"));
+            response.setContentType("text/plain");
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment;filename=" + "outExcel"+outYM+".xls");
+            jxlsUtils.processTemplate(contextMap,templateInputStream,response.getOutputStream(),configurationXmlInputStream,new CellRef("Template!A1"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
