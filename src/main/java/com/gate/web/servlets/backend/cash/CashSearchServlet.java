@@ -573,8 +573,6 @@ public class CashSearchServlet extends MvcBaseServlet {
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
         List invoiceItemList =  cashService.getInvoiceItem(outYM);
-//        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
-//        ExcelPoiWrapper excel= cashService.genInvoiceItemToExcel(invoiceItemList, filePath);
         List<InvoiceBatchRecord> invoiceBatchRecordList = cashService.genInvoiceBatchRecordList(invoiceItemList);
         Map<String,Object> parameterMap = new HashMap<>();
         parameterMap.put("invoiceBatchRecordList",invoiceBatchRecordList);
@@ -604,11 +602,15 @@ public class CashSearchServlet extends MvcBaseServlet {
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
-        List cashMasterList =  cashService.getInvoiceItem(null, destJson);
-        String filePath = this.getClass().getResource("/").getPath()+"/tempFile"+"/invoice_temp.xls";
-        ExcelPoiWrapper excel= cashService.genInvoiceItemToExcel(cashMasterList, filePath);
-        response = (HttpServletResponse) otherMap.get(RESPONSE);
-        responseExcelFileToClient(excel, response, DOWNLOAD_FILE_NAME_INVOICE);
+        List invoiceItemList =  cashService.getInvoiceItem(null, destJson);
+        List<InvoiceBatchRecord> invoiceBatchRecordList = cashService.genInvoiceBatchRecordList(invoiceItemList);
+        Map<String,Object> parameterMap = new HashMap<>();
+        parameterMap.put("invoiceBatchRecordList",invoiceBatchRecordList);
+        response.setContentType("text/plain");
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename=" + DOWNLOAD_FILE_NAME_INVOICE+".xls");
+        FileInputStream templateFileInputStream = new FileInputStream(this.getClass().getResource("/").getPath()+TEMPLATE_EXCEL_DOWNLOAD_INVOICE);
+        jxlsUtils.processTemplate(parameterMap,templateFileInputStream,response.getOutputStream());
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
