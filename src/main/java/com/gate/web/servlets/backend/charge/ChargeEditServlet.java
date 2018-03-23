@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import com.gate.core.bean.BaseFormBean;
 import com.gate.web.exceptions.FormValidationException;
@@ -17,6 +18,7 @@ import com.gate.web.servlets.MvcBaseServlet;
 import com.gateweb.charge.model.ChargeModeGradeEntity;
 import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.gateweb.charge.model.UserEntity;
+import com.gateweb.einv.exception.EinvAjaxException;
 import com.gateweb.einv.exception.EinvSysException;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
@@ -33,10 +35,8 @@ import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 
 @RequestMapping("/backendAdmin/chargeEditServlet")
@@ -127,6 +127,8 @@ public class ChargeEditServlet extends MvcBaseServlet {
 
 
     @RequestMapping(method = RequestMethod.POST, params = "method=insert", produces = "application/json;charset=utf-8")
+
+    @ResponseBody
     public String insert(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type
 
