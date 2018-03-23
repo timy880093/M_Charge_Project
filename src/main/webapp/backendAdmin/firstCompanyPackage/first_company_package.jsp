@@ -117,7 +117,7 @@
 
         $.ajax({
             url: '<%=request.getContextPath()%>/backendAdmin/firstCompanyPackageAjaxServlet',
-            data: {method:'import',fileName:fileName,oriFilename:oriFilename},
+            data: {method:'import1',fileName:fileName,oriFilename:oriFilename},
             type:"POST",
             dataType:'json',
 

@@ -2,15 +2,23 @@ package com.gate.web.servlets.backend.insertData;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.gate.core.bean.BaseFormBean;
+import com.gate.web.exceptions.FormValidationException;
+import com.gate.web.exceptions.ReturnPathException;
+import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.PrepayDeductMasterEntity;
+import com.gateweb.charge.model.UserEntity;
+import com.gateweb.einv.exception.EinvSysException;
+import com.google.gson.Gson;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -22,52 +30,117 @@ import com.gate.config.SystemConfig;
 import com.gate.web.beans.FirstCompanyPackageBean;
 import com.gate.web.facades.FirstCompanyPackageService;
 import com.gate.web.servlets.BaseServlet;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@RequestMapping("/backendAdmin/firstCompanyPackageAjaxServlet")
+@Controller
 
 
-@WebServlet(urlPatterns = "/backendAdmin/firstCompanyPackageAjaxServlet")
-public class firstCompanyPackageAjaxServlet extends BaseServlet {
+public class firstCompanyPackageAjaxServlet extends MvcBaseServlet {
 
 	@Autowired
     FirstCompanyPackageService firstCompanyPackageService;
 
-    @Override
-    public String[] serviceBU(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        Object methodObj = requestParameterMap.get("method");
-        String method = "";
-        if(methodObj!=null) method = ((String[])requestParameterMap.get("method"))[0];
-        if(method.equals("import") ){ //匯入入帳資料-入帳批次
-            String fileName = ((String[])requestParameterMap.get("fileName"))[0];
-            String oriFilename = ((String[])requestParameterMap.get("oriFilename"))[0];
-            String oriFilenames[] = oriFilename.split(",");
-            String fileNames[] = fileName.split(",");
-            List<List<String>> importLists = new ArrayList<>(); //記錄入帳過程，show在網頁上
 
-            for(int i = 0;i<fileNames.length;i++){
-                String file = fileNames[i];
-                String filePath = SystemConfig.getInstance().getParameter("uploadTempPath") + File.separator +file;
 
-                try {
-                    List<String> fileTmpList = new ArrayList<>();
-                    fileTmpList.add("------------------------------------------------------------------------------------------------------------------<br>");
-                    fileTmpList.add(oriFilenames[i]+"<br>");
-                    importLists.add(fileTmpList);
 
-                    List<String> result = parserInExcelToList(filePath);
-                    importLists.add(result);
-                } catch (Exception e) {
-                    List<String> error = new ArrayList();
-                    error.add("檔名"+oriFilenames[i]+"有誤<br>");
-                    importLists.add(error);
-                }
-            }
 
-            Map outMap = new HashMap();
-            outMap.put("importList",importLists);
 
-            otherMap.put(AJAX_JSON_OBJECT,outMap);
-            return null;
+    @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
+    public String mainList(@RequestParam("sessionClean") String sessionClean, Model model, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String returnPage = TEMPLATE_PAGE;
+        Gson gson = new Gson();
+        String errorMessage = null;
+        try{
+            //寫入template的時間。
+            UserEntity user = checkLogin(request, response);
+            BaseFormBean formBeanObject = formBeanObject(request);
+            Map otherMap = otherMap(request, response, formBeanObject);
+
+
+            sendObjToViewer(request, otherMap);
+        } catch (EinvSysException ese) {
+            logger.error(ese.getMessage(), ese);
+            errorMessage = gson.toJson("錯誤:" + ese.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("IO動作失敗:" + ex.getMessage());
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
+            returnPage = ERROR_PAGE;
+        } catch (ServletException ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("伺服器內部錯誤:" + ex.getMessage());
+            returnPage = ERROR_PAGE;
+        } catch (FormValidationException ex) {
+            errorMessage = gson.toJson("表單驗證失敗:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (ReturnPathException ex) {
+            errorMessage = gson.toJson("回傳路徑有問題:" + ex.getMessage());
+            logger.error(ex.getMessage(), ex);
+            returnPage = ERROR_PAGE;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            errorMessage = gson.toJson("錯誤:" + ex.getMessage());
+            return ERROR_PAGE;
         }
-        return new String[0];
+        if (errorMessage != null) {
+            request.setAttribute(ERROR_MESSAGE, errorMessage);
+        }
+        return returnPage;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = "method=import1", produces = "application/json;charset=utf-8")
+    public String import1(@RequestParam("method") String method, Model model
+            , @RequestParam(value="fileName", required=true) String fileName
+            , @RequestParam(value="oriFilename", required=true)  String oriFilename
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("editPrepay model:   " + model);
+        System.out.println("editPrepay method:   " + method);
+        System.out.println("editPrepay masterId:   " + fileName);
+        System.out.println("editPrepay masterId:   " + oriFilename);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap =  otherMap(request, response, formBeanObject);
+
+        String data="ok";
+        String oriFilenames[] = oriFilename.split(",");
+        String fileNames[] = fileName.split(",");
+        List<List<String>> importLists = new ArrayList<>(); //記錄入帳過程，show在網頁上
+
+        for(int i = 0;i<fileNames.length;i++){
+            String file = fileNames[i];
+            String filePath = SystemConfig.getInstance().getParameter("uploadTempPath") + File.separator +file;
+
+            try {
+                List<String> fileTmpList = new ArrayList<>();
+                fileTmpList.add("------------------------------------------------------------------------------------------------------------------<br>");
+                fileTmpList.add(oriFilenames[i]+"<br>");
+                importLists.add(fileTmpList);
+
+                List<String> result = parserInExcelToList(filePath);
+                importLists.add(result);
+            } catch (Exception e) {
+                List<String> error = new ArrayList();
+                error.add("檔名"+oriFilenames[i]+"有誤<br>");
+                importLists.add(error);
+            }
+        }
+        Map outMap = new HashMap();
+        outMap.put("importList",importLists);
+
+        Gson gson = new Gson();
+        return gson.toJson(data);
+
     }
 
 
