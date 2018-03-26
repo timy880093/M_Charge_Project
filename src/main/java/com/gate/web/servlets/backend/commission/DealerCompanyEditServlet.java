@@ -101,7 +101,7 @@ public class DealerCompanyEditServlet extends MvcBaseServlet {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=insert", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.POST, params = "method=insert", produces = "application/json;charset=utf-8")
     public String insert(@RequestParam("method") String method, Model model
             , @RequestParam(value = "exist", required = true) String update
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -124,8 +124,8 @@ public class DealerCompanyEditServlet extends MvcBaseServlet {
         sendObjToViewer(request, otherMap);
 
         DealerCompanyBean bean = new DealerCompanyBean();
-//        MapBeanConverterUtils.mapToBean(requestParameterMap, bean);
-        commissionService.insertDealerCompany(bean);
+        MapBeanConverterUtils.mapToBean(requestParameterMap, bean);
+        commissionService.insertDealerCompany(bean,user.getUserId());
 
         sendObjToViewer(request, otherMap);
 

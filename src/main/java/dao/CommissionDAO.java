@@ -99,10 +99,11 @@ public class CommissionDAO extends BaseDAO {
     }
 
     //新增或修改經銷商和經銷商業務員資訊
-    public boolean transactionInsertDealerCompany(DealerCompanyBean bean)throws Exception{
+    public boolean transactionInsertDealerCompany(DealerCompanyBean bean,Long userId)throws Exception{
         DealerCompanyEntity entity = new DealerCompanyEntity();
         BeanUtils.copyProperties(entity, bean);
         Integer dealerCompanyId = entity.getDealerCompanyId();
+        entity.setCreatorId(userId.intValue());
 
         //新增或修改 經銷商資訊(dealer_company)
         if(null == entity.getDealerCompanyId()){
@@ -128,6 +129,7 @@ public class CommissionDAO extends BaseDAO {
                 dealerEntity.setDealerName(dealerName);
                 dealerEntity.setDealerPhone(dealerPhone);
                 dealerEntity.setDealerEmail(dealerEmail);
+                dealerEntity.setCreatorId(userId.intValue());
                 saveEntity(dealerEntity);
             }else{
                 DealerEntity dealerEntity = (DealerEntity)getEntity(DealerEntity.class, dealerId);

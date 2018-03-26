@@ -13,7 +13,7 @@ public interface CommissionService extends Service {
 
 	public Map getDealerCompanyList(QuerySettingVO querySettingVO) throws Exception ;
 
-    public void insertDealerCompany(DealerCompanyBean bean) throws Exception ;
+    public boolean insertDealerCompany(DealerCompanyBean bean , Long userId) throws Exception ;
 
     public DealerCompanyVO getDealerCompanyByDealerCompanyId(Integer dealerCompanyId) throws Exception ;
 
