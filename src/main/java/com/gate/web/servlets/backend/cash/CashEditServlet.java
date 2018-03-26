@@ -5,7 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.gate.core.bean.BaseFormBean;
+import com.gate.web.displaybeans.GiftVO;
+import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.UserEntity;
+import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,150 +21,315 @@ import com.gate.web.displaybeans.CashMasterVO;
 import com.gate.web.facades.CashService;
 import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 import com.gateweb.charge.model.BillCycleEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@RequestMapping("/backendAdmin/cashEditServlet")
+@Controller
 
 
-@WebServlet(urlPatterns = "/backendAdmin/cashEditServlet")
-public class CashEditServlet extends BackendPopTemplateServlet {
+public class CashEditServlet extends MvcBaseServlet {
+    private static final String DEFAULT_EDIT_DISPATCH_PAGE = "/backendAdmin/cash/cash_editCashDetail.jsp";
+    private static final String DEFAULT_EDIT_DISPATCH_PAGE_OverListpage = "/backendAdmin/cash/cash_overList.jsp";
+    private static final String DEFAULT_EDIT_DISPATCH_PAGE_OverGradeListpage = "/backendAdmin/cash/cash_overGradeList.jsp";
+    
+    @Autowired
+    CashService cashService;
 
-	@Autowired
-	CashService cashService;
-	
-    @Override
-    public void doSomething(Map requestParameterMap, Map requestAttMap, Map sessionMap, Map otherMap) throws Exception {
-        
-        Object methodObj = requestParameterMap.get("method");
-        String method = "";
-        if (methodObj != null) method = ((String[]) requestParameterMap.get("method"))[0];
-        List<Object> outList = new ArrayList<Object>();
-        if(method.equals("viewCashDetail")){ //檢視帳單明細
-            Integer cashMasterId = null;
-            if (requestParameterMap.get("cashMasterId") != null) {
-                cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
-            }
-            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
-            outList.add(cashDetailList);
 
-            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
-            outList.add(cashMasterVO);
+    @RequestMapping(method = RequestMethod.POST)
+    public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap, Model model
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("defaultPost model:   " + model);
+        System.out.println("defaultPost model:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return POP_TEMPLATE_PAGE;
+    }
 
-            String dispatch_page = getEditDispatch_page();
-            otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE, dispatch_page);
-        } else if(method.equals("updateCashDetail")){ //更新帳單明細
-            Integer cashDetailId = null;
-            if (requestParameterMap.get("updateCashDetailId") != null) {
-                if(!StringUtils.isEmpty(((String[]) requestParameterMap.get("updateCashDetailId"))[0])){
-                    cashDetailId = Integer.parseInt(((String[]) requestParameterMap.get("updateCashDetailId"))[0]);
-                }
-            }
-            Double diffPrice = 0d;
-            if (requestParameterMap.get("updateDiffPrice") != null) {
-                if(!StringUtils.isEmpty(((String[]) requestParameterMap.get("updateDiffPrice"))[0])){
-                    diffPrice = Double.parseDouble(((String[]) requestParameterMap.get("updateDiffPrice"))[0]);
-                }
-            }
-            String diffPriceNote = null;
-            if (requestParameterMap.get("updateDiffPriceNote") != null) {
-                diffPriceNote = ((String[]) requestParameterMap.get("updateDiffPriceNote"))[0];
-            }
-            Integer cashMasterId = null;
-            if (requestParameterMap.get("cashMasterId") != null) {
-                if(!StringUtils.isEmpty(((String[]) requestParameterMap.get("cashMasterId"))[0])){
-                    cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
-                }
-            }
+    @RequestMapping(method = RequestMethod.GET)
+    public String defaultGet(@RequestParam MultiValueMap<String, String> paramMap
+            , Model model, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        System.out.println("defaultGet model:   " + model);
+        System.out.println("defaultGet paramMap:   " + paramMap);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+        return POP_TEMPLATE_PAGE;
+    }
 
-            boolean isOK = cashService.updateCashDetail(cashDetailId, diffPrice, diffPriceNote);
+    @RequestMapping(method = RequestMethod.GET, params = "method=viewCashDetail", produces = "application/json;charset=utf-8")
+    public String viewCashDetail(@RequestParam("method") String method, Model model
+            , @RequestParam(value = "cashMasterId", required = true) Integer cashMasterId
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("editPrepay model:   " + model);
+        System.out.println("editPrepay method:   " + method);
+        System.out.println("editPrepay masterId:   " + cashMasterId);
 
-            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
-            outList.add(cashDetailList);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
 
-            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
-            outList.add(cashMasterVO);
+        List<Object> outList = new ArrayList<>();
 
-            String dispatch_page = getEditDispatch_page();
-            otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE, dispatch_page);
-        } else if(method.equals("viewOrverList")){ //檢視超額明細
-            Integer cashDetailId = null;
-            if (requestParameterMap.get("cashDetailId") != null) {
-                cashDetailId = Integer.parseInt(((String[]) requestParameterMap.get("cashDetailId"))[0]);
-            }
-            Integer billType = null;
-            if (requestParameterMap.get("billType") != null) {
-                billType = Integer.parseInt(((String[]) requestParameterMap.get("billType"))[0]);
-            }
-            List<BillCycleEntity> billCycleList=cashService.getOverListByDetailId(cashDetailId);
-            outList.add(billCycleList);
+        if (requestParameterMap.get("cashMasterId") != null) {
+            cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
+        }
+        List<CashDetailVO> cashDetailList = cashService.getCashDetailListByMasterId(cashMasterId);
+        outList.add(cashDetailList);
 
-            String dispatch_page = getEditDispatch_OverListpage();
-            if(2 == billType){
-                dispatch_page = getEditDispatch_OverGradeListpage(); //級距型
-            }
-            otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE, dispatch_page);
-        } else if(method.equals("cancelOver")){ //取消超額計算
-            Integer cashDetailId = null;
-            if (requestParameterMap.get("cashDetailId") != null) {
-                cashDetailId = Integer.parseInt(((String[]) requestParameterMap.get("cashDetailId"))[0]);
-            }
+        CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
+        outList.add(cashMasterVO);
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
 
-            boolean isOK = cashService.cancelOver(cashDetailId);
+        return POP_TEMPLATE_PAGE;
 
-            Integer cashMasterId = null;
-            if (requestParameterMap.get("cashMasterId") != null) {
-                cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
-            }
-            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
-            outList.add(cashDetailList);
+    }
 
-            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
-            outList.add(cashMasterVO);
+    @RequestMapping(method = RequestMethod.POST, params = "method=updateCashDetail", produces = "application/json;charset=utf-8")
+    public String updateCashDetail(@RequestParam("method") String method, Model model
+            , @RequestParam(value = "cashMasterId", required = true) Integer cashMasterId
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("updateCashDetail model:   " + model);
+        System.out.println("updateCashDetail method:   " + method);
+        System.out.println("updateCashDetail cashMasterId:   " + cashMasterId);
 
-            String dispatch_page = getEditDispatch_page();
-            otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE, dispatch_page);
-        } else if(method.equals("cancelPrepay")) { //取消預繳
-            Integer cashDetailId = null;
-            if (requestParameterMap.get("cashDetailId") != null) {
-                cashDetailId = Integer.parseInt(((String[]) requestParameterMap.get("cashDetailId"))[0]);
-            }
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
 
-            boolean isOK = cashService.cancelPrepay(cashDetailId);
+        List<Object> outList = new ArrayList<>();
 
-            Integer cashMasterId = null;
-            if (requestParameterMap.get("cashMasterId") != null) {
-                cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
-            }
-            List<CashDetailVO> cashDetailList=cashService.getCashDetailListByMasterId(cashMasterId);
-            outList.add(cashDetailList);
-
-            CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
-            outList.add(cashMasterVO);
-
-            String dispatch_page = getEditDispatch_page();
-            otherMap.put(REQUEST_SEND_OBJECT, outList);
-            otherMap.put(DISPATCH_PAGE, dispatch_page);
-        } else if(method.equals("delCashMaster")){ //刪除帳單(帳單裡沒有任何明細，則可刪除)
-            Integer cashMasterId = null;
-            if (requestParameterMap.get("cashMasterId") != null) {
-                cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
-                cashService.delCashMaster(cashMasterId);
-                otherMap.put(AJAX_JSON_OBJECT, "success");
-            } else {
-                throw new Exception();
+        Integer cashDetailId = null;
+        if (requestParameterMap.get("updateCashDetailId") != null) {
+            if (!StringUtils.isEmpty(((String[]) requestParameterMap.get("updateCashDetailId"))[0])) {
+                cashDetailId = Integer.parseInt(((String[]) requestParameterMap.get("updateCashDetailId"))[0]);
             }
         }
+        Double diffPrice = 0d;
+        if (requestParameterMap.get("updateDiffPrice") != null) {
+            if (!StringUtils.isEmpty(((String[]) requestParameterMap.get("updateDiffPrice"))[0])) {
+                diffPrice = Double.parseDouble(((String[]) requestParameterMap.get("updateDiffPrice"))[0]);
+            }
+        }
+        String diffPriceNote = null;
+        if (requestParameterMap.get("updateDiffPriceNote") != null) {
+            diffPriceNote = ((String[]) requestParameterMap.get("updateDiffPriceNote"))[0];
+        }
+        if (requestParameterMap.get("cashMasterId") != null) {
+            if (!StringUtils.isEmpty(((String[]) requestParameterMap.get("cashMasterId"))[0])) {
+                cashMasterId = Integer.parseInt(((String[]) requestParameterMap.get("cashMasterId"))[0]);
+            }
+        }
+
+        boolean isOK = cashService.updateCashDetail(cashDetailId, diffPrice, diffPriceNote);
+
+        List<CashDetailVO> cashDetailList = cashService.getCashDetailListByMasterId(cashMasterId);
+        outList.add(cashDetailList);
+
+        CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
+        outList.add(cashMasterVO);
+
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+
+        return POP_TEMPLATE_PAGE;
+
     }
 
-    public String getEditDispatch_page() {
-        return "/backendAdmin/cash/cash_editCashDetail.jsp";
-    }
-    public String getEditDispatch_OverListpage() {
-        return "/backendAdmin/cash/cash_overList.jsp";
-    }
-    public String getEditDispatch_OverGradeListpage() {
-        return "/backendAdmin/cash/cash_overGradeList.jsp";
+    @RequestMapping(method = RequestMethod.GET, params = "method=viewOrverList", produces = "application/json;charset=utf-8")
+    public String viewOrverList(@RequestParam("method") String method, Model model
+            , @RequestParam(value = "cashDetailId", required = true) Integer cashDetailId
+            , @RequestParam(value = "billType", required = true) Integer billType
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("viewOrverList model:   " + model);
+        System.out.println("viewOrverList method:   " + method);
+        System.out.println("viewOrverList cashDetailId:   " + cashDetailId);
+
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+
+        List<Object> outList = new ArrayList<>();
+
+
+        List<BillCycleEntity> billCycleList = cashService.getOverListByDetailId(cashDetailId);
+        outList.add(billCycleList);
+
+        String dispatch_page = DEFAULT_EDIT_DISPATCH_PAGE_OverListpage;
+        if (2 == billType) {
+            dispatch_page = DEFAULT_EDIT_DISPATCH_PAGE_OverGradeListpage; //級距型
+        }
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        otherMap.put(DISPATCH_PAGE, dispatch_page);
+
+        sendObjToViewer(request, otherMap);
+
+        return POP_TEMPLATE_PAGE;
+
     }
 
+
+    @RequestMapping(method = RequestMethod.GET, params = "method=cancelOver", produces = "application/json;charset=utf-8")
+    public String cancelOver(@RequestParam("method") String method, Model model
+            , @RequestParam(value = "cashDetailId", required = true) Integer cashDetailId
+            , @RequestParam(value = "cashMasterId", required = true) Integer cashMasterId
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("cancelOver model:   " + model);
+        System.out.println("cancelOver method:   " + method);
+        System.out.println("cancelOver masterId:   " + cashDetailId);
+
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+
+        List<Object> outList = new ArrayList<>();
+
+
+        boolean isOK = cashService.cancelOver(cashDetailId);
+
+
+        List<CashDetailVO> cashDetailList = cashService.getCashDetailListByMasterId(cashMasterId);
+        outList.add(cashDetailList);
+
+        CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
+        outList.add(cashMasterVO);
+
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+
+        return POP_TEMPLATE_PAGE;
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "method=cancelPrepay", produces = "application/json;charset=utf-8")
+    public String cancelPrepay(@RequestParam("method") String method, Model model
+            , @RequestParam(value = "cashDetailId", required = true) Integer cashDetailId
+            , @RequestParam(value = "cashMasterId", required = true) Integer cashMasterId
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("cancelPrepay model:   " + model);
+        System.out.println("cancelPrepay method:   " + method);
+        System.out.println("cancelPrepay cashDetailId:   " + cashDetailId);
+
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+
+        List<Object> outList = new ArrayList<>();
+
+
+        boolean isOK = cashService.cancelPrepay(cashDetailId);
+
+
+        List<CashDetailVO> cashDetailList = cashService.getCashDetailListByMasterId(cashMasterId);
+        outList.add(cashDetailList);
+
+        CashMasterVO cashMasterVO = cashService.getCashMasterByMasterId(cashMasterId);
+        outList.add(cashMasterVO);
+
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+        sendObjToViewer(request, otherMap);
+
+        return POP_TEMPLATE_PAGE;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "method=delCashMaster", produces = "application/json;charset=utf-8")
+
+    public  @ResponseBody
+    String delCashMaster(@RequestParam("method") String method, Model model
+            , @RequestParam(value = "cashMasterId", required = true) Integer cashMasterId
+            , @RequestParam(value = "cashMaster", required = true) Integer cashMaster
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("delCashMaster model:   " + model);
+        System.out.println("delCashMaster method:   " + method);
+        System.out.println("delCashMaster cashMasterId:   " + cashMasterId);
+        System.out.println("delCashMastery cashMaster:   " + cashMaster);
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+
+
+        String data = "success!!";
+        cashMasterId = 0;
+        try {
+
+            cashService.delCashMaster(cashMasterId);
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+            data = " fail!!";
+        }
+
+        // otherMap.put(AJAX_JSON_OBJECT, pageMap);
+        Gson gson = new Gson();
+        return gson.toJson(data);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
