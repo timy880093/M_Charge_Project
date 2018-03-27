@@ -118,6 +118,7 @@
         $.ajax({
             url: '<%=request.getContextPath()%>/backendAdmin/cashImportServlet',
             data: {method:'import',fileName:fileName,oriFilename:oriFilename},
+
             type:"POST",
             dataType:'json',
 

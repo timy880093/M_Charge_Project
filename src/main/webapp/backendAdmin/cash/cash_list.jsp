@@ -43,7 +43,7 @@
                             <option value="email1">未繳費客戶email通知-多筆(請勾選欲執行的資料)</option>
                             <option value="cancelOut">取消出帳-多筆(請勾選欲執行的資料)</option>
                             <option value="cancelOutYM">取消出帳-批次(請選擇出帳單年月)</option>
-                            <option value="inExcel">入帳-匯入入帳資料(Excel)</option>
+                            <option value="import">入帳-匯入入帳資料(Excel)</option>
                             <option value="invoice">匯出發票資料-多筆(請勾選欲執行的資料)</option>
                             <option value="invoiceYM">匯出發票資料-批次(請選擇出帳單年月)</option>
                         </select>
@@ -378,8 +378,8 @@
             case "outYM": //出帳-批次(請選擇出帳單年月)
                 runMethod("outYM");
                 break;
-            case "inExcel": //入帳-匯入入帳資料(Excel)
-                var url = path + '/backendAdmin/cashImportServlet?method=inExcel';
+            case "import": //入帳-匯入入帳資料(Excel)
+                var url = path + '/backendAdmin/cashImportServlet?method=import';
                 openNewPage(url);
                 break;
             case "outExcelym": //匯出Excel帳單-批次(請選擇出帳單年月)

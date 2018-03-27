@@ -37,7 +37,7 @@ public class CashEditServlet extends MvcBaseServlet {
     private static final String DEFAULT_EDIT_DISPATCH_PAGE = "/backendAdmin/cash/cash_editCashDetail.jsp";
     private static final String DEFAULT_EDIT_DISPATCH_PAGE_OverListpage = "/backendAdmin/cash/cash_overList.jsp";
     private static final String DEFAULT_EDIT_DISPATCH_PAGE_OverGradeListpage = "/backendAdmin/cash/cash_overGradeList.jsp";
-    
+
     @Autowired
     CashService cashService;
 

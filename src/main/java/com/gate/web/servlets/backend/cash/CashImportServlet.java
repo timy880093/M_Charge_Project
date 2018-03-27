@@ -38,8 +38,8 @@ import com.gateweb.charge.model.UserEntity;
 @Controller
 public class CashImportServlet extends MvcBaseServlet {
 
-	@Autowired
-	CashService cashService;
+    @Autowired
+    CashService cashService;
 
 	@Autowired
 	FieldUtils fieldUtils;
@@ -59,7 +59,7 @@ public class CashImportServlet extends MvcBaseServlet {
 		Map otherMap = otherMap(request, response, formBeanObject);
 		otherMap.put(DISPATCH_PAGE, DEFAULT_IMPORT_DISPATCH_PAGE);
 		sendObjToViewer(request, otherMap);
-		return IMPORT_TEMPLATE_PAGE;
+		return DEFAULT_IMPORT_DISPATCH_PAGE;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -75,7 +75,7 @@ public class CashImportServlet extends MvcBaseServlet {
 		Map otherMap = otherMap(request, response, formBeanObject);
 		otherMap.put(DISPATCH_PAGE, DEFAULT_IMPORT_DISPATCH_PAGE);
 		sendObjToViewer(request, otherMap);
-		return IMPORT_TEMPLATE_PAGE;
+		return DEFAULT_IMPORT_DISPATCH_PAGE;
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
@@ -93,7 +93,7 @@ public class CashImportServlet extends MvcBaseServlet {
         Map otherMap =  otherMap(request, response, formBeanObject);
         otherMap.put(DISPATCH_PAGE, DEFAULT_IMPORT_DISPATCH_PAGE);
         sendObjToViewer(request, otherMap);
-    	return IMPORT_TEMPLATE_PAGE;
+    	return DEFAULT_IMPORT_DISPATCH_PAGE;
     }
 	
 	@RequestMapping(method = RequestMethod.GET, params = "method=submit", produces = "application/json;charset=utf-8")
@@ -112,7 +112,7 @@ public class CashImportServlet extends MvcBaseServlet {
         Map sessionAttMap = sessionAttMap(request);
         Map otherMap =  otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
-    	return IMPORT_TEMPLATE_PAGE;
+    	return DEFAULT_IMPORT_DISPATCH_PAGE;
 
     }
 	
@@ -141,13 +141,13 @@ public class CashImportServlet extends MvcBaseServlet {
 					, @RequestParam("oriFilename") String oriFilename
 					, @RequestParam MultiValueMap<String, String> paramMap, Model model, HttpServletRequest request,
 					HttpServletResponse response) throws Exception {
-		
+
 		logger.debug("fileImport companyId:   " + companyId);
 		logger.debug("fileImport fileName:   " + fileName);
 		logger.debug("fileImport method:   " + method);
 		logger.debug("fileImport model:   "+model);
 		logger.debug("fileImport paramMap:   "+paramMap);
-		
+
     	UserEntity user = checkLogin(request, response);
     	BaseFormBean formBeanObject = formBeanObject(request);
     	Map requestParameterMap = request.getParameterMap();
@@ -160,7 +160,7 @@ public class CashImportServlet extends MvcBaseServlet {
         String filePath = SystemConfig.getInstance().getParameter("uploadTempPath");
         filePath = filePath+"/"+_fileName;
         //filePath = this.getClass().getResource("/").getPath()+ filePath+"/"+ _fileName;
-        
+
         String _companyId = null;
         String[] values = (String[]) requestParameterMap.get("companyId");
         _companyId = values[0];
@@ -179,8 +179,8 @@ public class CashImportServlet extends MvcBaseServlet {
             error.add("檔名 "+oriFilename+" 有誤<br>");
             importLists.add(error);
         }
-        
-        
+
+
         //otherMap.put(AJAX_JSON_OBJECT, errorMap);
         outMap.put("importList", importLists);
         otherMap.put(AJAX_JSON_OBJECT,outMap);
