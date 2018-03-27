@@ -80,6 +80,7 @@ public class DealerCompanyEditServlet extends MvcBaseServlet {
         System.out.println("editPrepay method:   " + method);
         System.out.println("editPrepay masterId:   " + dealerCompanyId);
 
+
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
         Map requestParameterMap = request.getParameterMap();
@@ -95,6 +96,12 @@ public class DealerCompanyEditServlet extends MvcBaseServlet {
         List<DealerVO> dealerList = commissionService.getDealerByDealerCompanyId(Integer.parseInt(dealerCompanyId));
         outList.add(dealerList);
 
+        if(method.equals("edit")){
+            outList.add("edit");
+        }
+
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
         sendObjToViewer(request, otherMap);
 
         return POP_TEMPLATE_PAGE;
