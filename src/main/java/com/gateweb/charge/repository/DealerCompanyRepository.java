@@ -52,7 +52,9 @@ public interface DealerCompanyRepository extends JpaRepository<DealerCompanyEnti
 //	
 //	public long count();
 
-			
+	//取得經銷商清單(下拉選單顯示經銷商列表)
+	public List<DealerCompanyEntity> findByStatus(Integer status);
+
 }
 
 	

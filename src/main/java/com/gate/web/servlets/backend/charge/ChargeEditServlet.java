@@ -127,7 +127,6 @@ public class ChargeEditServlet extends MvcBaseServlet {
 
 
     @RequestMapping(method = RequestMethod.POST, params = "method=insert", produces = "application/json;charset=utf-8")
-
     @ResponseBody
     public String insert(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type

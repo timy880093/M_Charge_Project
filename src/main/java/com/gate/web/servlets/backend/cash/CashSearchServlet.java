@@ -26,18 +26,10 @@ import com.gateweb.charge.repository.PackageModeRepository;
 import com.gateweb.einv.exception.EinvSysException;
 import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.google.gson.Gson;
-import org.apache.commons.collections.ArrayStack;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.jxls.common.CellRef;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gate.utils.ExcelPoiWrapper;
-import com.gate.web.beans.CashDetailBean;
-import com.gate.web.beans.CashMasterBean;
-import com.gate.web.beans.InvoiceExcelBean;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.facades.CalCycleService;
 import com.gate.web.facades.CashService;
@@ -690,7 +682,5 @@ public class CashSearchServlet extends MvcBaseServlet {
         excel.getWorkBook().write(response.getOutputStream());
         response.getOutputStream().close();
     }
-
-
 
 }

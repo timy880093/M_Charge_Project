@@ -675,7 +675,6 @@ public class CashDAO extends BaseDAO {
         CashMasterVO cashMasterVO = new CashMasterVO();
         BeanUtils.copyProperties(cashMasterVO, cashMasterEntity);
 
-
         Map map = getCreatorAndModifier(cashMasterVO.getCreatorId(), cashMasterVO.getModifierId());
         cashMasterVO.setCreator((String) map.get("creator"));
         cashMasterVO.setModifier((String) map.get("modifier"));

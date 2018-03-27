@@ -32,6 +32,7 @@ public interface ChargeService extends Service {
 
     //找到級距型方案的資料
     public ChargeModeGradeVO findChargeModeGradeByChargeId(Integer chargeId) throws Exception ;
+
     //取得某級距方案的級距清單
     public List<GradeEntity> getGradeList(Integer chargeId) throws Exception ;
     public void changeChargeModeStatus(String type, Integer chargeId, Integer status) throws Exception ;

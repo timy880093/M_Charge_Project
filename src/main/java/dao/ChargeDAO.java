@@ -144,8 +144,6 @@ public class ChargeDAO extends BaseDAO {
         return null;
     }
 
-
-
 //    //修改月租型方案
     public void updateChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
         ChargeModeCycleEntity entity = new ChargeModeCycleEntity();

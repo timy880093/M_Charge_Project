@@ -89,14 +89,14 @@ public class CommissionDAO extends BaseDAO {
         return list;
     }
 
-    //取得經銷商清單(下拉選單顯示經銷商列表)
-    public List<DealerCompanyEntity> getDealerCompanyListForDropBox() throws Exception {
-        List parameters = new ArrayList();
-        StringBuffer sql = new StringBuffer();
-        sql.append("SELECT * FROM dealer_company dcp where status=1  ");
-//        getRoleCompany(sql,parameters,"cp.");
-        return createQueryForList(sql.toString(),parameters,DealerCompanyEntity.class);
-    }
+//    //取得經銷商清單(下拉選單顯示經銷商列表)
+//    public List<DealerCompanyEntity> getDealerCompanyListForDropBox() throws Exception {
+//        List parameters = new ArrayList();
+//        StringBuffer sql = new StringBuffer();
+//        sql.append("SELECT * FROM dealer_company dcp where status=1  ");
+////        getRoleCompany(sql,parameters,"cp.");
+//        return createQueryForList(sql.toString(),parameters,DealerCompanyEntity.class);
+//    }
 
     //新增或修改經銷商和經銷商業務員資訊
     public boolean transactionInsertDealerCompany(DealerCompanyBean bean,Long userId)throws Exception{
