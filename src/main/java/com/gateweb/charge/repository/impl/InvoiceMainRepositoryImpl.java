@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -63,7 +63,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainEntity> searchWithVo(InvoiceMainEntity vo) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainEntity invoiceMainEntity = QInvoiceMainEntity.invoiceMainEntity;
 
@@ -301,13 +301,13 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getUploadStatus() != null && !"".equals(vo.getUploadStatus())) {
 			builder.and(invoiceMainEntity.uploadStatus.equalsIgnoreCase(vo.getUploadStatus())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainEntity> searchWithVo(InvoiceMainEntity vo, Pageable pageable) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainEntity invoiceMainEntity = QInvoiceMainEntity.invoiceMainEntity;
 
@@ -545,7 +545,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getUploadStatus() != null && !"".equals(vo.getUploadStatus())) {
 			builder.and(invoiceMainEntity.uploadStatus.equalsIgnoreCase(vo.getUploadStatus())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -557,7 +557,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainEntity> searchLikeVo(InvoiceMainEntity vo) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainEntity invoiceMainEntity = QInvoiceMainEntity.invoiceMainEntity;
 
@@ -795,7 +795,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getUploadStatus() != null && !"".equals(vo.getUploadStatus())) {
 			builder.and(invoiceMainEntity.uploadStatus.containsIgnoreCase(vo.getUploadStatus())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainRepository.findAll(builder.getValue()));
 	}		
 	
@@ -803,7 +803,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainEntity> searchLikeVo(InvoiceMainEntity vo, Pageable pageable) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainEntity invoiceMainEntity = QInvoiceMainEntity.invoiceMainEntity;
 
@@ -1041,7 +1041,7 @@ public class InvoiceMainRepositoryImpl implements InvoiceMainRepositoryCustom {
 		if ( vo.getUploadStatus() != null && !"".equals(vo.getUploadStatus())) {
 			builder.and(invoiceMainEntity.uploadStatus.containsIgnoreCase(vo.getUploadStatus())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainRepository.findAll(builder.getValue(), pageable));
 	}	
 	

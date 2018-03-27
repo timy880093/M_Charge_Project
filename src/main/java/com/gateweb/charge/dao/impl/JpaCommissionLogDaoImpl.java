@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaCommissionLogDaoImpl extends JpaGenericDaoImpl<CommissionLogEnti
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaCommissionLogDaoImpl extends JpaGenericDaoImpl<CommissionLogEnti
 	public void delete(
 														 java.lang.Integer commissionLogId 
 																									) {
-		log.debug("JpaCommissionLogDaoImpl delete  begin "
+		logger.debug("JpaCommissionLogDaoImpl delete  begin "
 			+"id="+commissionLogId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaCommissionLogDaoImpl extends JpaGenericDaoImpl<CommissionLogEnti
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from CommissionLogEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaCommissionLogDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaCommissionLogDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -197,7 +197,7 @@ public class JpaCommissionLogDaoImpl extends JpaGenericDaoImpl<CommissionLogEnti
 		Query q;
 		List<CommissionLogEntity> results;
 		try {
-			log.debug("JpaCommissionLogDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaCommissionLogDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -338,7 +338,7 @@ public class JpaCommissionLogDaoImpl extends JpaGenericDaoImpl<CommissionLogEnti
 		Query q;
 		List<CommissionLogEntity> results;
 		try {
-			log.debug("JpaCommissionLogDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaCommissionLogDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

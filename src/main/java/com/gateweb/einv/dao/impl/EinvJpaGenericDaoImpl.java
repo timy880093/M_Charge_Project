@@ -1,8 +1,8 @@
 package com.gateweb.einv.dao.impl;
 
 import com.gateweb.jpa.dao.JpaGenericDao;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -29,7 +29,7 @@ public abstract class EinvJpaGenericDaoImpl<T extends Serializable, PrimaryKey e
 	 * Log variable for all child classes. Uses LogFactory.getLog(getClass())
 	 * from Commons Logging
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
 	/**
      *
@@ -102,7 +102,7 @@ public abstract class EinvJpaGenericDaoImpl<T extends Serializable, PrimaryKey e
 		T entity = get(id);
 
 		if (entity == null) {
-			log.warn("JpaGenericDaoImpl findById Uh oh, '"
+			logger.warn("JpaGenericDaoImpl findById Uh oh, '"
 					+ this.persistentClass + "' object with id '" + id
 					+ "' not found...");
 			throw new EntityNotFoundException("JPA10003-"

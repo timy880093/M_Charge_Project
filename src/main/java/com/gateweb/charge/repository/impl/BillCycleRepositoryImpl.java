@@ -7,8 +7,8 @@ package com.gateweb.charge.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<BillCycleEntity> searchWithVo(BillCycleEntity vo) {
-		log.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QBillCycleEntity billCycleEntity = QBillCycleEntity.billCycleEntity;
 
@@ -132,13 +132,13 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 		if ( vo.getStatus() != null && !"".equals(vo.getStatus())) {
 			builder.and(billCycleEntity.status.equalsIgnoreCase(vo.getStatus())); //java.lang.String
 		}
-		log.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(billCycleRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<BillCycleEntity> searchWithVo(BillCycleEntity vo, Pageable pageable) {
-		log.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QBillCycleEntity billCycleEntity = QBillCycleEntity.billCycleEntity;
 
@@ -217,7 +217,7 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 		if ( vo.getStatus() != null && !"".equals(vo.getStatus())) {
 			builder.and(billCycleEntity.status.equalsIgnoreCase(vo.getStatus())); //java.lang.String
 		}
-		log.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(billCycleRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -229,7 +229,7 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<BillCycleEntity> searchLikeVo(BillCycleEntity vo) {
-		log.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QBillCycleEntity billCycleEntity = QBillCycleEntity.billCycleEntity;
 
@@ -308,7 +308,7 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 		if ( vo.getStatus() != null && !"".equals(vo.getStatus())) {
 			builder.and(billCycleEntity.status.containsIgnoreCase(vo.getStatus())); //java.lang.String
 		}
-		log.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(billCycleRepository.findAll(builder.getValue()));
 	}		
 	
@@ -316,7 +316,7 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<BillCycleEntity> searchLikeVo(BillCycleEntity vo, Pageable pageable) {
-		log.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("BillCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QBillCycleEntity billCycleEntity = QBillCycleEntity.billCycleEntity;
 
@@ -395,7 +395,7 @@ public class BillCycleRepositoryImpl implements BillCycleRepositoryCustom {
 		if ( vo.getStatus() != null && !"".equals(vo.getStatus())) {
 			builder.and(billCycleEntity.status.containsIgnoreCase(vo.getStatus())); //java.lang.String
 		}
-		log.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("BillCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(billCycleRepository.findAll(builder.getValue(), pageable));
 	}	
 	

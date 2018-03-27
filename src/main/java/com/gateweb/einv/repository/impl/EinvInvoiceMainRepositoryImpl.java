@@ -7,8 +7,8 @@ package com.gateweb.einv.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMain> searchWithVo(InvoiceMain vo) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMain invoiceMain = QInvoiceMain.invoiceMain;
 
@@ -276,13 +276,13 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 		if ( vo.getSellerCustomerNumber() != null && !"".equals(vo.getSellerCustomerNumber())) {
 			builder.and(invoiceMain.sellerCustomerNumber.equalsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue()));
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMain> searchWithVo(InvoiceMain vo, Pageable pageable) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMain invoiceMain = QInvoiceMain.invoiceMain;
 
@@ -505,7 +505,7 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 		if ( vo.getSellerCustomerNumber() != null && !"".equals(vo.getSellerCustomerNumber())) {
 			builder.and(invoiceMain.sellerCustomerNumber.equalsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue(), pageable));
 	}
 
@@ -517,7 +517,7 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMain> searchLikeVo(InvoiceMain vo) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMain invoiceMain = QInvoiceMain.invoiceMain;
 
@@ -740,7 +740,7 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 		if ( vo.getSellerCustomerNumber() != null && !"".equals(vo.getSellerCustomerNumber())) {
 			builder.and(invoiceMain.sellerCustomerNumber.containsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue()));
 	}
 
@@ -748,7 +748,7 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMain> searchLikeVo(InvoiceMain vo, Pageable pageable) {
-		log.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMain invoiceMain = QInvoiceMain.invoiceMain;
 
@@ -971,7 +971,7 @@ public class EinvInvoiceMainRepositoryImpl implements EinvInvoiceMainRepositoryC
 		if ( vo.getSellerCustomerNumber() != null && !"".equals(vo.getSellerCustomerNumber())) {
 			builder.and(invoiceMain.sellerCustomerNumber.containsIgnoreCase(vo.getSellerCustomerNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceMainRepository.findAll(builder.getValue(), pageable));
 	}	
 	

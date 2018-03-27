@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaGradeDaoImpl extends JpaGenericDaoImpl<GradeEntity,   java.lang.
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaGradeDaoImpl extends JpaGenericDaoImpl<GradeEntity,   java.lang.
 	public void delete(
 		 java.lang.Integer gradeId 
 																	) {
-		log.debug("JpaGradeDaoImpl delete  begin "
+		logger.debug("JpaGradeDaoImpl delete  begin "
 			+"id="+gradeId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaGradeDaoImpl extends JpaGenericDaoImpl<GradeEntity,   java.lang.
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from GradeEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaGradeDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaGradeDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -167,7 +167,7 @@ public class JpaGradeDaoImpl extends JpaGenericDaoImpl<GradeEntity,   java.lang.
 		Query q;
 		List<GradeEntity> results;
 		try {
-			log.debug("JpaGradeDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaGradeDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -248,7 +248,7 @@ public class JpaGradeDaoImpl extends JpaGenericDaoImpl<GradeEntity,   java.lang.
 		Query q;
 		List<GradeEntity> results;
 		try {
-			log.debug("JpaGradeDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaGradeDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

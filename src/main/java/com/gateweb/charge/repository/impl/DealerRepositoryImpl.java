@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<DealerEntity> searchWithVo(DealerEntity vo) {
-		log.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDealerEntity dealerEntity = QDealerEntity.dealerEntity;
 
@@ -93,13 +93,13 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 		if ( vo.getDealerId() != null ) {
 			builder.and(dealerEntity.dealerId.eq(vo.getDealerId())); //java.lang.Integer
 		}	
-		log.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(dealerRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<DealerEntity> searchWithVo(DealerEntity vo, Pageable pageable) {
-		log.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDealerEntity dealerEntity = QDealerEntity.dealerEntity;
 
@@ -130,7 +130,7 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 		if ( vo.getDealerId() != null ) {
 			builder.and(dealerEntity.dealerId.eq(vo.getDealerId())); //java.lang.Integer
 		}	
-		log.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(dealerRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -142,7 +142,7 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<DealerEntity> searchLikeVo(DealerEntity vo) {
-		log.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDealerEntity dealerEntity = QDealerEntity.dealerEntity;
 
@@ -173,7 +173,7 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 		if ( vo.getDealerId() != null ) {
 			builder.and(dealerEntity.dealerId.eq(vo.getDealerId())); //java.lang.Integer
 		}	
-		log.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(dealerRepository.findAll(builder.getValue()));
 	}		
 	
@@ -181,7 +181,7 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<DealerEntity> searchLikeVo(DealerEntity vo, Pageable pageable) {
-		log.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DealerRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDealerEntity dealerEntity = QDealerEntity.dealerEntity;
 
@@ -212,7 +212,7 @@ public class DealerRepositoryImpl implements DealerRepositoryCustom {
 		if ( vo.getDealerId() != null ) {
 			builder.and(dealerEntity.dealerId.eq(vo.getDealerId())); //java.lang.Integer
 		}	
-		log.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DealerRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(dealerRepository.findAll(builder.getValue(), pageable));
 	}	
 	

@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 
 	@SuppressWarnings("unchecked")
 	public List<PrepayDeductMasterEntity> searchWithVo(PrepayDeductMasterEntity vo) {
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDeductMasterEntity prepayDeductMasterEntity = QPrepayDeductMasterEntity.prepayDeductMasterEntity;
 
@@ -90,13 +90,13 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDeductMasterEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDeductMasterRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<PrepayDeductMasterEntity> searchWithVo(PrepayDeductMasterEntity vo, Pageable pageable) {
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDeductMasterEntity prepayDeductMasterEntity = QPrepayDeductMasterEntity.prepayDeductMasterEntity;
 
@@ -124,7 +124,7 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDeductMasterEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDeductMasterRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -136,7 +136,7 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 	
 	@SuppressWarnings("unchecked")
 	public List<PrepayDeductMasterEntity> searchLikeVo(PrepayDeductMasterEntity vo) {
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDeductMasterEntity prepayDeductMasterEntity = QPrepayDeductMasterEntity.prepayDeductMasterEntity;
 
@@ -164,7 +164,7 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDeductMasterEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDeductMasterRepository.findAll(builder.getValue()));
 	}		
 	
@@ -172,7 +172,7 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 
 	@SuppressWarnings("unchecked")
 	public List<PrepayDeductMasterEntity> searchLikeVo(PrepayDeductMasterEntity vo, Pageable pageable) {
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDeductMasterEntity prepayDeductMasterEntity = QPrepayDeductMasterEntity.prepayDeductMasterEntity;
 
@@ -200,7 +200,7 @@ public class PrepayDeductMasterRepositoryImpl implements PrepayDeductMasterRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDeductMasterEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDeductMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDeductMasterRepository.findAll(builder.getValue(), pageable));
 	}	
 	

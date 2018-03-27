@@ -18,8 +18,8 @@ import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.gateweb.reportModel.OrderCsv;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,7 +35,7 @@ import dao.CashDAO;
 @Service("cashService")
 public class CashServiceImp implements CashService {
 
-    private Log logger = LogFactory.getLog(this.getClass().getName());
+    private Logger logger = LogManager.getLogger(this.getClass().getName());
 
 	@Autowired
     CashDAO cashDAO;

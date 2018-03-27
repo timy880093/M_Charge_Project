@@ -73,7 +73,7 @@
         <dom4j.version>1.6.1</dom4j.version>
         <jta.version>1.1</jta.version>
         <jersey-common.version>2.25.1</jersey-common.version>
-        <slf4.relation.version>1.7.25</slf4.relation.version>
+        <!-- <slf4.relation.version>1.7.25</slf4.relation.version> -->
         <google-collections.version>1.0</google-collections.version>
         <!--setup test environment library.-->
         <junit.version>4.12</junit.version>
@@ -459,12 +459,12 @@
             <artifactId>jersey-common</artifactId>
             <version>${jersey-common.version}</version>
         </dependency> -->
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4.relation.version}</version>
-        </dependency>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>

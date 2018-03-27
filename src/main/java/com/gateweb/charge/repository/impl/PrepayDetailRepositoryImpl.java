@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 
 	@SuppressWarnings("unchecked")
 	public List<PrepayDetailEntity> searchWithVo(PrepayDetailEntity vo) {
-		log.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDetailEntity prepayDetailEntity = QPrepayDetailEntity.prepayDetailEntity;
 
@@ -96,13 +96,13 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDetailRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<PrepayDetailEntity> searchWithVo(PrepayDetailEntity vo, Pageable pageable) {
-		log.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDetailEntity prepayDetailEntity = QPrepayDetailEntity.prepayDetailEntity;
 
@@ -136,7 +136,7 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDetailRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -148,7 +148,7 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 	
 	@SuppressWarnings("unchecked")
 	public List<PrepayDetailEntity> searchLikeVo(PrepayDetailEntity vo) {
-		log.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDetailEntity prepayDetailEntity = QPrepayDetailEntity.prepayDetailEntity;
 
@@ -182,7 +182,7 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDetailRepository.findAll(builder.getValue()));
 	}		
 	
@@ -190,7 +190,7 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 
 	@SuppressWarnings("unchecked")
 	public List<PrepayDetailEntity> searchLikeVo(PrepayDetailEntity vo, Pageable pageable) {
-		log.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrepayDetailEntity prepayDetailEntity = QPrepayDetailEntity.prepayDetailEntity;
 
@@ -224,7 +224,7 @@ public class PrepayDetailRepositoryImpl implements PrepayDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(prepayDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrepayDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(prepayDetailRepository.findAll(builder.getValue(), pageable));
 	}	
 	

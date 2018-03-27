@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaBillCycleDaoImpl extends JpaGenericDaoImpl<BillCycleEntity,     
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaBillCycleDaoImpl extends JpaGenericDaoImpl<BillCycleEntity,     
 	public void delete(
 																								 java.lang.Integer billId 
 																											) {
-		log.debug("JpaBillCycleDaoImpl delete  begin "
+		logger.debug("JpaBillCycleDaoImpl delete  begin "
 			+"id="+billId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaBillCycleDaoImpl extends JpaGenericDaoImpl<BillCycleEntity,     
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from BillCycleEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaBillCycleDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaBillCycleDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -215,7 +215,7 @@ public class JpaBillCycleDaoImpl extends JpaGenericDaoImpl<BillCycleEntity,     
 		Query q;
 		List<BillCycleEntity> results;
 		try {
-			log.debug("JpaBillCycleDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaBillCycleDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -392,7 +392,7 @@ public class JpaBillCycleDaoImpl extends JpaGenericDaoImpl<BillCycleEntity,     
 		Query q;
 		List<BillCycleEntity> results;
 		try {
-			log.debug("JpaBillCycleDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaBillCycleDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

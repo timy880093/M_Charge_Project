@@ -1,6 +1,7 @@
 package com.gate.config;
 
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -17,7 +18,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class SystemConfigLoader {
-	private static final org.apache.commons.logging.Log log = LogFactory.getLog(SystemConfigLoader.class);
+	private static final Logger logger = LogManager.getLogger(SystemConfigLoader.class);
 
 	private String fileName = "SystemConfig.xml";
 
@@ -65,7 +66,7 @@ public class SystemConfigLoader {
 				} else if ("parameter".equals(nodeName)) {
 					isParameter = true;
 				} else {
-					log.warn("not process config \n");
+					logger.warn("not process config \n");
 					continue;
 				}
 			} else {
@@ -76,7 +77,7 @@ public class SystemConfigLoader {
 				String[] par = getParameter(node);
 				
 				if (par == null) {
-					log.warn("not process config\n");
+					logger.warn("not process config\n");
 				} else {
 					sysConfig.setParameter(par[0], par[1]);
 				}
@@ -144,7 +145,7 @@ public class SystemConfigLoader {
 				}
 
 			} else {
-				log.warn("not process attr " + name + " in " + node.getName());
+				logger.warn("not process attr " + name + " in " + node.getName());
 			}
 
 		}

@@ -4,8 +4,8 @@ import com.gate.config.SystemConfigLoader;
 import com.gate.core.db.HibernateCoreUtils;
 import com.gate.core.utils.CustomBeanUtilsBean;
 import com.gate.utils.MenuBuildUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.dom4j.DocumentException;
 
 import javax.servlet.ServletConfig;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @WebServlet(name="InitServlet",urlPatterns={"/backendadmin/index.jsp"},loadOnStartup=1)
 public class InitServlet extends HttpServlet {
-    private static Log log = LogFactory.getLog(InitServlet.class);
+    private static Logger logger = LogManager.getLogger(InitServlet.class);
     public static Map menuMap = null;
 
     @Override
@@ -49,7 +49,7 @@ public class InitServlet extends HttpServlet {
         } catch (IllegalAccessException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        log.info("init menuMap!!!!");
+        logger.info("init menuMap!!!!");
 
 //        try {
 //            System.loadLibrary("chilkat");

@@ -13,8 +13,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -33,7 +33,7 @@ public abstract class JpaGenericDaoImpl<T extends Serializable, PrimaryKey exten
 	 * Log variable for all child classes. Uses LogFactory.getLog(getClass())
 	 * from Commons Logging
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
 	/**
      *
@@ -106,7 +106,7 @@ public abstract class JpaGenericDaoImpl<T extends Serializable, PrimaryKey exten
 		T entity = get(id);
 
 		if (entity == null) {
-			log.warn("JpaGenericDaoImpl findById Uh oh, '"
+			logger.warn("JpaGenericDaoImpl findById Uh oh, '"
 					+ this.persistentClass + "' object with id '" + id
 					+ "' not found...");
 			throw new EntityNotFoundException("JPA10003-"

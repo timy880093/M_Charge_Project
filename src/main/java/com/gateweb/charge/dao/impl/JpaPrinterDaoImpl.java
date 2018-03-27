@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaPrinterDaoImpl extends JpaGenericDaoImpl<PrinterEntity,         
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaPrinterDaoImpl extends JpaGenericDaoImpl<PrinterEntity,         
 	public void delete(
 																		 java.lang.Integer printerId 
 											) {
-		log.debug("JpaPrinterDaoImpl delete  begin "
+		logger.debug("JpaPrinterDaoImpl delete  begin "
 			+"id="+printerId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaPrinterDaoImpl extends JpaGenericDaoImpl<PrinterEntity,         
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from PrinterEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaPrinterDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaPrinterDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -182,7 +182,7 @@ public class JpaPrinterDaoImpl extends JpaGenericDaoImpl<PrinterEntity,         
 		Query q;
 		List<PrinterEntity> results;
 		try {
-			log.debug("JpaPrinterDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaPrinterDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -293,7 +293,7 @@ public class JpaPrinterDaoImpl extends JpaGenericDaoImpl<PrinterEntity,         
 		Query q;
 		List<PrinterEntity> results;
 		try {
-			log.debug("JpaPrinterDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaPrinterDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

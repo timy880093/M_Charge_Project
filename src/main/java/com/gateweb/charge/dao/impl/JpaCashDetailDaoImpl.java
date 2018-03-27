@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaCashDetailDaoImpl extends JpaGenericDaoImpl<CashDetailEntity,   
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaCashDetailDaoImpl extends JpaGenericDaoImpl<CashDetailEntity,   
 	public void delete(
 																																										 java.lang.Integer cashDetailId 
 									) {
-		log.debug("JpaCashDetailDaoImpl delete  begin "
+		logger.debug("JpaCashDetailDaoImpl delete  begin "
 			+"id="+cashDetailId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaCashDetailDaoImpl extends JpaGenericDaoImpl<CashDetailEntity,   
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from CashDetailEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaCashDetailDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaCashDetailDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -215,7 +215,7 @@ public class JpaCashDetailDaoImpl extends JpaGenericDaoImpl<CashDetailEntity,   
 		Query q;
 		List<CashDetailEntity> results;
 		try {
-			log.debug("JpaCashDetailDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaCashDetailDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -392,7 +392,7 @@ public class JpaCashDetailDaoImpl extends JpaGenericDaoImpl<CashDetailEntity,   
 		Query q;
 		List<CashDetailEntity> results;
 		try {
-			log.debug("JpaCashDetailDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaCashDetailDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

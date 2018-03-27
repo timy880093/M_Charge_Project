@@ -8,8 +8,8 @@ package com.gateweb.charge.dao.impl;
 import com.gateweb.db.dao.exception.DaoSystemException;
 import com.gateweb.charge.dao.AllowanceAmountSummaryReportDao;
 import com.gateweb.charge.model.AllowanceAmountSummaryReportEntity;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -35,7 +35,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoI
 	/**
 	 *
 	 */
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -44,7 +44,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoI
 	public void delete(
 												 Long id
 											) {
-		log.debug("JpaAllowanceAmountSummaryReportDaoImpl delete  begin "
+		logger.debug("JpaAllowanceAmountSummaryReportDaoImpl delete  begin "
 			+"id="+id
 		);	
 		try {
@@ -102,7 +102,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoI
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from AllowanceAmountSummaryReportEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaAllowanceAmountSummaryReportDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaAllowanceAmountSummaryReportDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -172,7 +172,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoI
 		Query q;
 		List<AllowanceAmountSummaryReportEntity> results;
 		try {
-			log.debug("JpaAllowanceAmountSummaryReportDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaAllowanceAmountSummaryReportDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -265,7 +265,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoI
 		Query q;
 		List<AllowanceAmountSummaryReportEntity> results;
 		try {
-			log.debug("JpaAllowanceAmountSummaryReportDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaAllowanceAmountSummaryReportDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

@@ -7,8 +7,8 @@ package com.gateweb.charge.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceSyncRelationEntity> searchWithVo(InvoiceSyncRelationEntity vo) {
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceSyncRelationEntity invoiceSyncRelationEntity = QInvoiceSyncRelationEntity.invoiceSyncRelationEntity;
 
@@ -75,13 +75,13 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceSyncRelationEntity.id.invoiceNumber.equalsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceSyncRelationRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceSyncRelationEntity> searchWithVo(InvoiceSyncRelationEntity vo, Pageable pageable) {
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceSyncRelationEntity invoiceSyncRelationEntity = QInvoiceSyncRelationEntity.invoiceSyncRelationEntity;
 
@@ -103,7 +103,7 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceSyncRelationEntity.id.invoiceNumber.equalsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceSyncRelationRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -115,7 +115,7 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceSyncRelationEntity> searchLikeVo(InvoiceSyncRelationEntity vo) {
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceSyncRelationEntity invoiceSyncRelationEntity = QInvoiceSyncRelationEntity.invoiceSyncRelationEntity;
 
@@ -137,7 +137,7 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceSyncRelationEntity.id.invoiceNumber.containsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceSyncRelationRepository.findAll(builder.getValue()));
 	}		
 	
@@ -145,7 +145,7 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceSyncRelationEntity> searchLikeVo(InvoiceSyncRelationEntity vo, Pageable pageable) {
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceSyncRelationEntity invoiceSyncRelationEntity = QInvoiceSyncRelationEntity.invoiceSyncRelationEntity;
 
@@ -167,7 +167,7 @@ public class InvoiceSyncRelationRepositoryImpl implements InvoiceSyncRelationRep
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceSyncRelationEntity.id.invoiceNumber.containsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceSyncRelationRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceSyncRelationRepository.findAll(builder.getValue(), pageable));
 	}	
 	

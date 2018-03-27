@@ -7,8 +7,8 @@ package com.gateweb.einv.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<User> searchWithVo(User vo) {
-		log.debug("User2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("User2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QUser user = QUser.user;
 
@@ -111,13 +111,13 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(user.email.equalsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<User> searchWithVo(User vo, Pageable pageable) {
-		log.debug("User2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("User2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QUser user = QUser.user;
 
@@ -175,7 +175,7 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(user.email.equalsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue(), pageable));
 	}
 	
@@ -187,7 +187,7 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<User> searchLikeVo(User vo) {
-		log.debug("User2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("User2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QUser user = QUser.user;
 
@@ -245,7 +245,7 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(user.email.containsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue()));
 	}		
 	
@@ -253,7 +253,7 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<User> searchLikeVo(User vo, Pageable pageable) {
-		log.debug("User2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("User2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QUser user = QUser.user;
 
@@ -311,7 +311,7 @@ public class EinvUserRepositoryImpl implements EinvUserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(user.email.containsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("User2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvUserRepository.findAll(builder.getValue(), pageable));
 	}	
 	

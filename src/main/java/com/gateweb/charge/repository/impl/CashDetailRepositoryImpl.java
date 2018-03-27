@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<CashDetailEntity> searchWithVo(CashDetailEntity vo) {
-		log.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashDetailEntity cashDetailEntity = QCashDetailEntity.cashDetailEntity;
 
@@ -141,13 +141,13 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashDetailEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashDetailRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<CashDetailEntity> searchWithVo(CashDetailEntity vo, Pageable pageable) {
-		log.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashDetailEntity cashDetailEntity = QCashDetailEntity.cashDetailEntity;
 
@@ -226,7 +226,7 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashDetailEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashDetailRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -238,7 +238,7 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<CashDetailEntity> searchLikeVo(CashDetailEntity vo) {
-		log.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashDetailEntity cashDetailEntity = QCashDetailEntity.cashDetailEntity;
 
@@ -317,7 +317,7 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashDetailEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashDetailRepository.findAll(builder.getValue()));
 	}		
 	
@@ -325,7 +325,7 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<CashDetailEntity> searchLikeVo(CashDetailEntity vo, Pageable pageable) {
-		log.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashDetailEntity cashDetailEntity = QCashDetailEntity.cashDetailEntity;
 
@@ -404,7 +404,7 @@ public class CashDetailRepositoryImpl implements CashDetailRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashDetailEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashDetailRepository.findAll(builder.getValue(), pageable));
 	}	
 	

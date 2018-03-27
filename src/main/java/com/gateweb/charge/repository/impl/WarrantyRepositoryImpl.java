@@ -7,8 +7,8 @@ package com.gateweb.charge.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<WarrantyEntity> searchWithVo(WarrantyEntity vo) {
-		log.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QWarrantyEntity warrantyEntity = QWarrantyEntity.warrantyEntity;
 
@@ -102,13 +102,13 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(warrantyEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(warrantyRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<WarrantyEntity> searchWithVo(WarrantyEntity vo, Pageable pageable) {
-		log.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QWarrantyEntity warrantyEntity = QWarrantyEntity.warrantyEntity;
 
@@ -157,7 +157,7 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(warrantyEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(warrantyRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -169,7 +169,7 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<WarrantyEntity> searchLikeVo(WarrantyEntity vo) {
-		log.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QWarrantyEntity warrantyEntity = QWarrantyEntity.warrantyEntity;
 
@@ -218,7 +218,7 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(warrantyEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(warrantyRepository.findAll(builder.getValue()));
 	}		
 	
@@ -226,7 +226,7 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<WarrantyEntity> searchLikeVo(WarrantyEntity vo, Pageable pageable) {
-		log.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("WarrantyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QWarrantyEntity warrantyEntity = QWarrantyEntity.warrantyEntity;
 
@@ -275,7 +275,7 @@ public class WarrantyRepositoryImpl implements WarrantyRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(warrantyEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("WarrantyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(warrantyRepository.findAll(builder.getValue(), pageable));
 	}	
 	

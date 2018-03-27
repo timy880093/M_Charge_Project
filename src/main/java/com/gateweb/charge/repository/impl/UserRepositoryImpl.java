@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<UserEntity> searchWithVo(UserEntity vo) {
-		log.debug("UserRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("UserRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QUserEntity userEntity = QUserEntity.userEntity;
 
@@ -120,14 +120,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(userEntity.email.equalsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(userRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<UserEntity> searchWithVo(UserEntity vo, Pageable pageable) {
 		//log.debug("UserRepositoryImpl searchWithVo vo: " + vo);
-		log.debug("UserRepositoryImpl searchWithVo vo");
+		logger.debug("UserRepositoryImpl searchWithVo vo");
 		BooleanBuilder builder = new BooleanBuilder();
 		QUserEntity userEntity = QUserEntity.userEntity;
 
@@ -185,7 +185,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(userEntity.email.equalsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(userRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -197,7 +197,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<UserEntity> searchLikeVo(UserEntity vo) {
-		log.debug("UserRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("UserRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QUserEntity userEntity = QUserEntity.userEntity;
 
@@ -255,7 +255,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(userEntity.email.containsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(userRepository.findAll(builder.getValue()));
 	}		
 	
@@ -263,7 +263,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<UserEntity> searchLikeVo(UserEntity vo, Pageable pageable) {
-		log.debug("UserRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("UserRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QUserEntity userEntity = QUserEntity.userEntity;
 
@@ -321,7 +321,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		if ( vo.getEmail() != null && !"".equals(vo.getEmail())) {
 			builder.and(userEntity.email.containsIgnoreCase(vo.getEmail())); //java.lang.String
 		}
-		log.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("UserRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(userRepository.findAll(builder.getValue(), pageable));
 	}	
 	

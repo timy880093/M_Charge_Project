@@ -7,8 +7,8 @@ package com.gateweb.einv.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class EinvFacadeImpl implements EinvFacade {
 	/**
 	* <p><code>Log</code> instance for this application. </p>
 	*/
-	private Log log = LogFactory.getLog(this.getClass().getName());
+	private Logger logger = LogManager.getLogger(this.getClass().getName());
 	
 	
 	/**
@@ -130,7 +130,7 @@ public class EinvFacadeImpl implements EinvFacade {
      */
 	public InvoiceMain save(InvoiceMain bean) {
 
-		log.debug("EinvFacadeImpl create InvoiceMain  before dao save InvoiceMain :  "+bean);	
+		logger.debug("EinvFacadeImpl create InvoiceMain  before dao save InvoiceMain :  "+bean);	
 		return invoiceMain2Repository.save(bean); 
 		//log.debug("EinvFacadeImpl create InvoiceMain   successfully.");		
 	}
@@ -143,7 +143,7 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long invoiceId 
 	) {
 		Optional<InvoiceMain> data = null;
-		log.debug("EinvFacadeImpl findInvoiceMainById begin :" 
+		logger.debug("EinvFacadeImpl findInvoiceMainById begin :" 
 			+"invoiceId = "+ invoiceId
 		);	
 		try {
@@ -156,7 +156,7 @@ public class EinvFacadeImpl implements EinvFacade {
 			return null;
 		}
 		
-		log.debug("EinvFacadeImpl findInvoiceMainById successfully.");	
+		logger.debug("EinvFacadeImpl findInvoiceMainById successfully.");	
 		return null;
 	}
 
@@ -165,11 +165,11 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception       EinvSysException if something is wrong.
      */
     public List<InvoiceMain> findInvoiceMainAll() {
-		log.debug("EinvFacadeImpl searchInvoiceMainAll  before dao get all ");	
+		logger.debug("EinvFacadeImpl searchInvoiceMainAll  before dao get all ");	
 
 		List<InvoiceMain> results = null;
 		results = invoiceMain2Repository.findAll();
-		log.debug("EinvFacadeImpl searchInvoiceMainAll   successfully.");	
+		logger.debug("EinvFacadeImpl searchInvoiceMainAll   successfully.");	
 		return results;
     }
 
@@ -179,7 +179,7 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception    EinvSysException if something is wrong.
      */
     public InvoiceMain update(InvoiceMain bean) {
-		log.debug("EinvFacadeImpl update InvoiceMain   before dao update : bean "+bean);	
+		logger.debug("EinvFacadeImpl update InvoiceMain   before dao update : bean "+bean);	
 		return invoiceMain2Repository.save(bean);
 		//log.debug("EinvFacadeImpl update InvoiceMain    successfully.");	
 
@@ -192,14 +192,14 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long invoiceId 
 	) {
 
-			log.debug("EinvFacadeImpl deleteInvoiceMain   delete :" 
+			logger.debug("EinvFacadeImpl deleteInvoiceMain   delete :" 
 				+"invoiceId = "+ invoiceId
 			);			
 			invoiceMain2Repository.deleteById(
 				invoiceId 
 			);
 			 
-		log.debug("EinvFacadeImpl deleteInvoiceMain   successfully. ");	
+		logger.debug("EinvFacadeImpl deleteInvoiceMain   successfully. ");	
 	} 
 
     /**
@@ -207,10 +207,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceMain> searchBy(InvoiceMain bean) {
-		log.debug("EinvFacadeImpl searchWith InvoiceMain   before dao searchWith : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchWith InvoiceMain   before dao searchWith : bean "+bean);	
 		List<InvoiceMain> results = null;
 		results = invoiceMain2Repository.searchWithVo(bean);	
-		log.debug("EinvFacadeImpl searchWithInvoiceMain   successfully. ");	
+		logger.debug("EinvFacadeImpl searchWithInvoiceMain   successfully. ");	
 		return results;
     }
 
@@ -219,10 +219,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceMain> searchLike(InvoiceMain bean) {
-		log.debug("EinvFacadeImpl searchLike InvoiceMain   before dao searchLike : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchLike InvoiceMain   before dao searchLike : bean "+bean);	
 		List<InvoiceMain> results = null;
 		results = invoiceMain2Repository.searchLikeVo(bean);
-		log.debug("EinvFacadeImpl searchLikeInvoiceMain   successfully. ");	
+		logger.debug("EinvFacadeImpl searchLikeInvoiceMain   successfully. ");	
 		return results;
     }
     /**
@@ -231,7 +231,7 @@ public class EinvFacadeImpl implements EinvFacade {
      */
 	public Company save(Company bean) {
 
-		log.debug("EinvFacadeImpl create Company  before dao save Company :  "+bean);	
+		logger.debug("EinvFacadeImpl create Company  before dao save Company :  "+bean);	
 		return company2Repository.save(bean); 
 		//log.debug("EinvFacadeImpl create Company   successfully.");		
 	}
@@ -244,7 +244,7 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long companyId 
 	) {
 		Optional<Company> data = null;
-		log.debug("EinvFacadeImpl findCompanyById begin :" 
+		logger.debug("EinvFacadeImpl findCompanyById begin :" 
 			+"companyId = "+ companyId
 		);	
 		try {
@@ -257,7 +257,7 @@ public class EinvFacadeImpl implements EinvFacade {
 			return null;
 		}
 		
-		log.debug("EinvFacadeImpl findCompanyById successfully.");	
+		logger.debug("EinvFacadeImpl findCompanyById successfully.");	
 		return null;
 	}
 
@@ -266,11 +266,11 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception       EinvSysException if something is wrong.
      */
     public List<Company> findCompanyAll() {
-		log.debug("EinvFacadeImpl searchCompanyAll  before dao get all ");	
+		logger.debug("EinvFacadeImpl searchCompanyAll  before dao get all ");	
 
 		List<Company> results = null;
 		results = company2Repository.findAll();
-		log.debug("EinvFacadeImpl searchCompanyAll   successfully.");	
+		logger.debug("EinvFacadeImpl searchCompanyAll   successfully.");	
 		return results;
     }
 
@@ -280,7 +280,7 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception    EinvSysException if something is wrong.
      */
     public Company update(Company bean) {
-		log.debug("EinvFacadeImpl update Company   before dao update : bean "+bean);	
+		logger.debug("EinvFacadeImpl update Company   before dao update : bean "+bean);	
 		return company2Repository.save(bean);
 		//log.debug("EinvFacadeImpl update Company    successfully.");	
 
@@ -293,14 +293,14 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long companyId 
 	) {
 
-			log.debug("EinvFacadeImpl deleteCompany   delete :" 
+			logger.debug("EinvFacadeImpl deleteCompany   delete :" 
 				+"companyId = "+ companyId
 			);			
 			company2Repository.deleteById(
 				companyId 
 			);
 			 
-		log.debug("EinvFacadeImpl deleteCompany   successfully. ");	
+		logger.debug("EinvFacadeImpl deleteCompany   successfully. ");	
 	} 
 
     /**
@@ -308,10 +308,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<Company> searchBy(Company bean) {
-		log.debug("EinvFacadeImpl searchWith Company   before dao searchWith : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchWith Company   before dao searchWith : bean "+bean);	
 		List<Company> results = null;
 		results = company2Repository.searchWithVo(bean);	
-		log.debug("EinvFacadeImpl searchWithCompany   successfully. ");	
+		logger.debug("EinvFacadeImpl searchWithCompany   successfully. ");	
 		return results;
     }
 
@@ -320,10 +320,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<Company> searchLike(Company bean) {
-		log.debug("EinvFacadeImpl searchLike Company   before dao searchLike : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchLike Company   before dao searchLike : bean "+bean);	
 		List<Company> results = null;
 		results = company2Repository.searchLikeVo(bean);
-		log.debug("EinvFacadeImpl searchLikeCompany   successfully. ");	
+		logger.debug("EinvFacadeImpl searchLikeCompany   successfully. ");	
 		return results;
     }
     /**
@@ -332,7 +332,7 @@ public class EinvFacadeImpl implements EinvFacade {
      */
 	public User save(User bean) {
 
-		log.debug("EinvFacadeImpl create User  before dao save User :  "+bean);	
+		logger.debug("EinvFacadeImpl create User  before dao save User :  "+bean);	
 		return user2Repository.save(bean); 
 		//log.debug("EinvFacadeImpl create User   successfully.");		
 	}
@@ -345,7 +345,7 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long userId 
 	) {
 		Optional<User> data = null;
-		log.debug("EinvFacadeImpl findUserById begin :" 
+		logger.debug("EinvFacadeImpl findUserById begin :" 
 			+"userId = "+ userId
 		);	
 		try {
@@ -358,7 +358,7 @@ public class EinvFacadeImpl implements EinvFacade {
 			return null;
 		}
 		
-		log.debug("EinvFacadeImpl findUserById successfully.");	
+		logger.debug("EinvFacadeImpl findUserById successfully.");	
 		return null;
 	}
 
@@ -367,11 +367,11 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception       EinvSysException if something is wrong.
      */
     public List<User> findUserAll() {
-		log.debug("EinvFacadeImpl searchUserAll  before dao get all ");	
+		logger.debug("EinvFacadeImpl searchUserAll  before dao get all ");	
 
 		List<User> results = null;
 		results = user2Repository.findAll();
-		log.debug("EinvFacadeImpl searchUserAll   successfully.");	
+		logger.debug("EinvFacadeImpl searchUserAll   successfully.");	
 		return results;
     }
 
@@ -381,7 +381,7 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception    EinvSysException if something is wrong.
      */
     public User update(User bean) {
-		log.debug("EinvFacadeImpl update User   before dao update : bean "+bean);	
+		logger.debug("EinvFacadeImpl update User   before dao update : bean "+bean);	
 		return user2Repository.save(bean);
 		//log.debug("EinvFacadeImpl update User    successfully.");	
 
@@ -394,14 +394,14 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long userId 
 	) {
 
-			log.debug("EinvFacadeImpl deleteUser   delete :" 
+			logger.debug("EinvFacadeImpl deleteUser   delete :" 
 				+"userId = "+ userId
 			);			
 			user2Repository.deleteById(
 				userId 
 			);
 			 
-		log.debug("EinvFacadeImpl deleteUser   successfully. ");	
+		logger.debug("EinvFacadeImpl deleteUser   successfully. ");	
 	} 
 
     /**
@@ -409,10 +409,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<User> searchBy(User bean) {
-		log.debug("EinvFacadeImpl searchWith User   before dao searchWith : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchWith User   before dao searchWith : bean "+bean);	
 		List<User> results = null;
 		results = user2Repository.searchWithVo(bean);	
-		log.debug("EinvFacadeImpl searchWithUser   successfully. ");	
+		logger.debug("EinvFacadeImpl searchWithUser   successfully. ");	
 		return results;
     }
 
@@ -421,10 +421,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<User> searchLike(User bean) {
-		log.debug("EinvFacadeImpl searchLike User   before dao searchLike : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchLike User   before dao searchLike : bean "+bean);	
 		List<User> results = null;
 		results = user2Repository.searchLikeVo(bean);
-		log.debug("EinvFacadeImpl searchLikeUser   successfully. ");	
+		logger.debug("EinvFacadeImpl searchLikeUser   successfully. ");	
 		return results;
     }
 
@@ -434,7 +434,7 @@ public class EinvFacadeImpl implements EinvFacade {
      */
 	public InvoiceDetails save(InvoiceDetails bean) {
 
-		log.debug("EinvFacadeImpl create InvoiceDetails  before dao save InvoiceDetails :  "+bean);	
+		logger.debug("EinvFacadeImpl create InvoiceDetails  before dao save InvoiceDetails :  "+bean);	
 		return invoiceDetails2Repository.save(bean); 
 		//log.debug("EinvFacadeImpl create InvoiceDetails   successfully.");		
 	}
@@ -447,7 +447,7 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long invoiceDetailsId 
 	) {
 		Optional<InvoiceDetails> data = null;
-		log.debug("EinvFacadeImpl findUserById begin :" 
+		logger.debug("EinvFacadeImpl findUserById begin :" 
 			+"invoiceDetailsId = "+ invoiceDetailsId
 		);	
 		try {
@@ -460,7 +460,7 @@ public class EinvFacadeImpl implements EinvFacade {
 			return null;
 		}
 		
-		log.debug("EinvFacadeImpl findUserById successfully.");	
+		logger.debug("EinvFacadeImpl findUserById successfully.");	
 		return null;
 	}
 
@@ -469,11 +469,11 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception       EinvSysException if something is wrong.
      */
     public List<InvoiceDetails> findInvoiceDetailsAll() {
-		log.debug("EinvFacadeImpl searchInvoiceDetailsAll  before dao get all ");	
+		logger.debug("EinvFacadeImpl searchInvoiceDetailsAll  before dao get all ");	
 
 		List<InvoiceDetails> results = null;
 		results = invoiceDetails2Repository.findAll();
-		log.debug("EinvFacadeImpl searchInvoiceDetailsAll   successfully.");	
+		logger.debug("EinvFacadeImpl searchInvoiceDetailsAll   successfully.");	
 		return results;
     }
 
@@ -483,7 +483,7 @@ public class EinvFacadeImpl implements EinvFacade {
      * @exception    EinvSysException if something is wrong.
      */
     public InvoiceDetails update(InvoiceDetails bean) {
-		log.debug("EinvFacadeImpl update InvoiceDetails   before dao update : bean "+bean);	
+		logger.debug("EinvFacadeImpl update InvoiceDetails   before dao update : bean "+bean);	
 		return invoiceDetails2Repository.save(bean);
 		//log.debug("EinvFacadeImpl update InvoiceDetails    successfully.");	
 
@@ -496,14 +496,14 @@ public class EinvFacadeImpl implements EinvFacade {
 		java.lang.Long invoiceDetailsId 
 	) {
 
-			log.debug("EinvFacadeImpl deleteInvoiceDetails   delete :" 
+			logger.debug("EinvFacadeImpl deleteInvoiceDetails   delete :" 
 				+"invoiceDetailsId = "+ invoiceDetailsId
 			);			
 			invoiceDetails2Repository.deleteById(
 				invoiceDetailsId 
 			);
 			 
-		log.debug("EinvFacadeImpl deleteInvoiceDetails   successfully. ");	
+		logger.debug("EinvFacadeImpl deleteInvoiceDetails   successfully. ");	
 	} 
 
     /**
@@ -511,10 +511,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceDetails> searchBy(InvoiceDetails bean) {
-		log.debug("EinvFacadeImpl searchWith InvoiceDetails   before dao searchWith : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchWith InvoiceDetails   before dao searchWith : bean "+bean);	
 		List<InvoiceDetails> results = null;
 		results = invoiceDetails2Repository.searchWithVo(bean);	
-		log.debug("EinvFacadeImpl searchWithInvoiceDetails   successfully. ");	
+		logger.debug("EinvFacadeImpl searchWithInvoiceDetails   successfully. ");	
 		return results;
     }
 
@@ -523,10 +523,10 @@ public class EinvFacadeImpl implements EinvFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceDetails> searchLike(InvoiceDetails bean) {
-		log.debug("EinvFacadeImpl searchLike InvoiceDetails   before dao searchLike : bean "+bean);	
+		logger.debug("EinvFacadeImpl searchLike InvoiceDetails   before dao searchLike : bean "+bean);	
 		List<InvoiceDetails> results = null;
 		results = invoiceDetails2Repository.searchLikeVo(bean);
-		log.debug("EinvFacadeImpl searchLikeInvoiceDetails   successfully. ");	
+		logger.debug("EinvFacadeImpl searchLikeInvoiceDetails   successfully. ");	
 		return results;
     }
     

@@ -7,8 +7,8 @@ package com.gateweb.charge.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 
 	@SuppressWarnings("unchecked")
 	public List<CommissionLogEntity> searchWithVo(CommissionLogEntity vo) {
-		log.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCommissionLogEntity commissionLogEntity = QCommissionLogEntity.commissionLogEntity;
 
@@ -114,13 +114,13 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 		if ( vo.getInDateStart() != null && !"".equals(vo.getInDateStart())) {
 			builder.and(commissionLogEntity.inDateStart.eq(vo.getInDateStart())); //java.util.Date
 		}
-		log.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(commissionLogRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<CommissionLogEntity> searchWithVo(CommissionLogEntity vo, Pageable pageable) {
-		log.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCommissionLogEntity commissionLogEntity = QCommissionLogEntity.commissionLogEntity;
 
@@ -181,7 +181,7 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 		if ( vo.getInDateStart() != null && !"".equals(vo.getInDateStart())) {
 			builder.and(commissionLogEntity.inDateStart.eq(vo.getInDateStart())); //java.util.Date
 		}
-		log.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(commissionLogRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -193,7 +193,7 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 	
 	@SuppressWarnings("unchecked")
 	public List<CommissionLogEntity> searchLikeVo(CommissionLogEntity vo) {
-		log.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCommissionLogEntity commissionLogEntity = QCommissionLogEntity.commissionLogEntity;
 
@@ -254,7 +254,7 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 		if ( vo.getInDateStart() != null && !"".equals(vo.getInDateStart())) {
 			builder.and(commissionLogEntity.inDateStart.eq(vo.getInDateStart())); //java.util.Date
 		}
-		log.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(commissionLogRepository.findAll(builder.getValue()));
 	}		
 	
@@ -262,7 +262,7 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 
 	@SuppressWarnings("unchecked")
 	public List<CommissionLogEntity> searchLikeVo(CommissionLogEntity vo, Pageable pageable) {
-		log.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CommissionLogRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCommissionLogEntity commissionLogEntity = QCommissionLogEntity.commissionLogEntity;
 
@@ -323,7 +323,7 @@ public class CommissionLogRepositoryImpl implements CommissionLogRepositoryCusto
 		if ( vo.getInDateStart() != null && !"".equals(vo.getInDateStart())) {
 			builder.and(commissionLogEntity.inDateStart.eq(vo.getInDateStart())); //java.util.Date
 		}
-		log.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CommissionLogRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(commissionLogRepository.findAll(builder.getValue(), pageable));
 	}	
 	

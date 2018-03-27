@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 
 	@SuppressWarnings("unchecked")
 	public List<LogParameterEntity> searchWithVo(LogParameterEntity vo) {
-		log.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogParameterEntity logParameterEntity = QLogParameterEntity.logParameterEntity;
 
@@ -75,13 +75,13 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 		if ( vo.getParameterId() != null ) {
 			builder.and(logParameterEntity.parameterId.eq(vo.getParameterId())); //java.lang.Integer
 		}	
-		log.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logParameterRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<LogParameterEntity> searchWithVo(LogParameterEntity vo, Pageable pageable) {
-		log.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogParameterEntity logParameterEntity = QLogParameterEntity.logParameterEntity;
 
@@ -94,7 +94,7 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 		if ( vo.getParameterId() != null ) {
 			builder.and(logParameterEntity.parameterId.eq(vo.getParameterId())); //java.lang.Integer
 		}	
-		log.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logParameterRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -106,7 +106,7 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 	
 	@SuppressWarnings("unchecked")
 	public List<LogParameterEntity> searchLikeVo(LogParameterEntity vo) {
-		log.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogParameterEntity logParameterEntity = QLogParameterEntity.logParameterEntity;
 
@@ -119,7 +119,7 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 		if ( vo.getParameterId() != null ) {
 			builder.and(logParameterEntity.parameterId.eq(vo.getParameterId())); //java.lang.Integer
 		}	
-		log.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logParameterRepository.findAll(builder.getValue()));
 	}		
 	
@@ -127,7 +127,7 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 
 	@SuppressWarnings("unchecked")
 	public List<LogParameterEntity> searchLikeVo(LogParameterEntity vo, Pageable pageable) {
-		log.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogParameterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogParameterEntity logParameterEntity = QLogParameterEntity.logParameterEntity;
 
@@ -140,7 +140,7 @@ public class LogParameterRepositoryImpl implements LogParameterRepositoryCustom 
 		if ( vo.getParameterId() != null ) {
 			builder.and(logParameterEntity.parameterId.eq(vo.getParameterId())); //java.lang.Integer
 		}	
-		log.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogParameterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logParameterRepository.findAll(builder.getValue(), pageable));
 	}	
 	

@@ -7,8 +7,8 @@ package com.gateweb.charge.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainUniqueEntity> searchWithVo(InvoiceMainUniqueEntity vo) {
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainUniqueEntity invoiceMainUniqueEntity = QInvoiceMainUniqueEntity.invoiceMainUniqueEntity;
 
@@ -69,13 +69,13 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceMainUniqueEntity.id.invoiceNumber.equalsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainUniqueRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainUniqueEntity> searchWithVo(InvoiceMainUniqueEntity vo, Pageable pageable) {
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainUniqueEntity invoiceMainUniqueEntity = QInvoiceMainUniqueEntity.invoiceMainUniqueEntity;
 
@@ -91,7 +91,7 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceMainUniqueEntity.id.invoiceNumber.equalsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainUniqueRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -103,7 +103,7 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainUniqueEntity> searchLikeVo(InvoiceMainUniqueEntity vo) {
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainUniqueEntity invoiceMainUniqueEntity = QInvoiceMainUniqueEntity.invoiceMainUniqueEntity;
 
@@ -119,7 +119,7 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceMainUniqueEntity.id.invoiceNumber.containsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainUniqueRepository.findAll(builder.getValue()));
 	}		
 	
@@ -127,7 +127,7 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceMainUniqueEntity> searchLikeVo(InvoiceMainUniqueEntity vo, Pageable pageable) {
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceMainUniqueEntity invoiceMainUniqueEntity = QInvoiceMainUniqueEntity.invoiceMainUniqueEntity;
 
@@ -143,7 +143,7 @@ public class InvoiceMainUniqueRepositoryImpl implements InvoiceMainUniqueReposit
 		if ( vo.getId().getInvoiceNumber() != null && !"".equals(vo.getId().getInvoiceNumber())) {
 			builder.and(invoiceMainUniqueEntity.id.invoiceNumber.containsIgnoreCase(vo.getId().getInvoiceNumber())); //java.lang.String
 		}
-		log.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceMainUniqueRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceMainUniqueRepository.findAll(builder.getValue(), pageable));
 	}	
 	

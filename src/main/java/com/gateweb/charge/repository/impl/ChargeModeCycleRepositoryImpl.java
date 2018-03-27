@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleEntity> searchWithVo(ChargeModeCycleEntity vo) {
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleEntity chargeModeCycleEntity = QChargeModeCycleEntity.chargeModeCycleEntity;
 
@@ -120,13 +120,13 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeCycleEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleEntity> searchWithVo(ChargeModeCycleEntity vo, Pageable pageable) {
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleEntity chargeModeCycleEntity = QChargeModeCycleEntity.chargeModeCycleEntity;
 
@@ -184,7 +184,7 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeCycleEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -196,7 +196,7 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 	
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleEntity> searchLikeVo(ChargeModeCycleEntity vo) {
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleEntity chargeModeCycleEntity = QChargeModeCycleEntity.chargeModeCycleEntity;
 
@@ -254,7 +254,7 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeCycleEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleRepository.findAll(builder.getValue()));
 	}		
 	
@@ -262,7 +262,7 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleEntity> searchLikeVo(ChargeModeCycleEntity vo, Pageable pageable) {
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleEntity chargeModeCycleEntity = QChargeModeCycleEntity.chargeModeCycleEntity;
 
@@ -320,7 +320,7 @@ public class ChargeModeCycleRepositoryImpl implements ChargeModeCycleRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeCycleEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleRepository.findAll(builder.getValue(), pageable));
 	}	
 	

@@ -7,8 +7,8 @@ package com.gateweb.einv.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceDetails> searchWithVo(InvoiceDetails vo) {
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceDetails invoiceDetails = QInvoiceDetails.invoiceDetails;
 
@@ -135,13 +135,13 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceDetails> searchWithVo(InvoiceDetails vo, Pageable pageable) {
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceDetails invoiceDetails = QInvoiceDetails.invoiceDetails;
 
@@ -223,7 +223,7 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue(), pageable));
 	}
 	
@@ -235,7 +235,7 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceDetails> searchLikeVo(InvoiceDetails vo) {
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceDetails invoiceDetails = QInvoiceDetails.invoiceDetails;
 
@@ -317,7 +317,7 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue()));
 	}		
 	
@@ -325,7 +325,7 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceDetails> searchLikeVo(InvoiceDetails vo, Pageable pageable) {
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceDetails invoiceDetails = QInvoiceDetails.invoiceDetails;
 
@@ -407,7 +407,7 @@ public class EinvInvoiceDetailsRepositoryImpl implements EinvInvoiceDetailsRepos
 		if ( vo.getModifyDate() != null ) {
 			builder.and(invoiceDetails.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceDetails2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvInvoiceDetailsRepository.findAll(builder.getValue(), pageable));
 	}	
 	

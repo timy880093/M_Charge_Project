@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<LogDataEntity> searchWithVo(LogDataEntity vo) {
-		log.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogDataEntity logDataEntity = QLogDataEntity.logDataEntity;
 
@@ -87,13 +87,13 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 		if ( vo.getAccessTime() != null ) {
 			builder.and(logDataEntity.accessTime.eq(vo.getAccessTime())); //java.sql.Timestamp
 		}	
-		log.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logDataRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<LogDataEntity> searchWithVo(LogDataEntity vo, Pageable pageable) {
-		log.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogDataEntity logDataEntity = QLogDataEntity.logDataEntity;
 
@@ -118,7 +118,7 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 		if ( vo.getAccessTime() != null ) {
 			builder.and(logDataEntity.accessTime.eq(vo.getAccessTime())); //java.sql.Timestamp
 		}	
-		log.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logDataRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -130,7 +130,7 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<LogDataEntity> searchLikeVo(LogDataEntity vo) {
-		log.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogDataEntity logDataEntity = QLogDataEntity.logDataEntity;
 
@@ -155,7 +155,7 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 		if ( vo.getAccessTime() != null ) {
 			builder.and(logDataEntity.accessTime.eq(vo.getAccessTime())); //java.sql.Timestamp
 		}	
-		log.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logDataRepository.findAll(builder.getValue()));
 	}		
 	
@@ -163,7 +163,7 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<LogDataEntity> searchLikeVo(LogDataEntity vo, Pageable pageable) {
-		log.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("LogDataRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QLogDataEntity logDataEntity = QLogDataEntity.logDataEntity;
 
@@ -188,7 +188,7 @@ public class LogDataRepositoryImpl implements LogDataRepositoryCustom {
 		if ( vo.getAccessTime() != null ) {
 			builder.and(logDataEntity.accessTime.eq(vo.getAccessTime())); //java.sql.Timestamp
 		}	
-		log.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("LogDataRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(logDataRepository.findAll(builder.getValue(), pageable));
 	}	
 	

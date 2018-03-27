@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<CompanyEntity> searchWithVo(CompanyEntity vo) {
-		log.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompanyEntity companyEntity = QCompanyEntity.companyEntity;
 
@@ -153,13 +153,13 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(companyEntity.cityId.eq(vo.getCityId())); //java.lang.Integer
 		}	
-		log.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(companyRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<CompanyEntity> searchWithVo(CompanyEntity vo, Pageable pageable) {
-		log.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompanyEntity companyEntity = QCompanyEntity.companyEntity;
 
@@ -250,7 +250,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(companyEntity.cityId.eq(vo.getCityId())); //java.lang.Integer
 		}	
-		log.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(companyRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -262,7 +262,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<CompanyEntity> searchLikeVo(CompanyEntity vo) {
-		log.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompanyEntity companyEntity = QCompanyEntity.companyEntity;
 
@@ -353,7 +353,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(companyEntity.cityId.eq(vo.getCityId())); //java.lang.Integer
 		}	
-		log.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(companyRepository.findAll(builder.getValue()));
 	}		
 	
@@ -361,7 +361,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<CompanyEntity> searchLikeVo(CompanyEntity vo, Pageable pageable) {
-		log.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CompanyRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompanyEntity companyEntity = QCompanyEntity.companyEntity;
 
@@ -452,7 +452,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(companyEntity.cityId.eq(vo.getCityId())); //java.lang.Integer
 		}	
-		log.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CompanyRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(companyRepository.findAll(builder.getValue(), pageable));
 	}	
 	

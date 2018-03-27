@@ -10,8 +10,8 @@ import java.util.List;
 import javax.persistence.Query;
 import javax.persistence.TransactionRequiredException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 import com.gateweb.charge.dao.InvoiceMainUniqueDao;
@@ -39,14 +39,14 @@ public class JpaInvoiceMainUniqueDaoImpl extends JpaGenericDaoImpl<InvoiceMainUn
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
     */
 	public void delete(
 					InvoiceMainUniqueEntityPK id						) {
-		log.debug("JpaInvoiceMainUniqueDaoImpl delete  begin "
+		logger.debug("JpaInvoiceMainUniqueDaoImpl delete  begin "
 					);	
 		try {
 			Object data = entityManager.find(InvoiceMainUniqueEntity.class
@@ -102,7 +102,7 @@ public class JpaInvoiceMainUniqueDaoImpl extends JpaGenericDaoImpl<InvoiceMainUn
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from InvoiceMainUniqueEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaInvoiceMainUniqueDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaInvoiceMainUniqueDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -151,7 +151,7 @@ public class JpaInvoiceMainUniqueDaoImpl extends JpaGenericDaoImpl<InvoiceMainUn
 		Query q;
 		List<InvoiceMainUniqueEntity> results;
 		try {
-			log.debug("JpaInvoiceMainUniqueDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaInvoiceMainUniqueDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -202,7 +202,7 @@ public class JpaInvoiceMainUniqueDaoImpl extends JpaGenericDaoImpl<InvoiceMainUn
 		Query q;
 		List<InvoiceMainUniqueEntity> results;
 		try {
-			log.debug("JpaInvoiceMainUniqueDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaInvoiceMainUniqueDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

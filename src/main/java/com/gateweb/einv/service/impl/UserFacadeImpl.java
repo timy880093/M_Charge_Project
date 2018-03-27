@@ -3,8 +3,8 @@ package com.gateweb.einv.service.impl;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -27,7 +27,7 @@ public class UserFacadeImpl implements UserFacade {
 	@Autowired
 	EinvFacade einvfacade;
 	
-	protected Log log = LogFactory.getLog(this.getClass());
+	protected Logger logger = LogManager.getLogger(this.getClass());
 	
 	@Override
 	public User getUserByLogin(String account) {
@@ -70,8 +70,8 @@ public class UserFacadeImpl implements UserFacade {
 		try {
 			user = getUserByLogin(account);
 			if (null == user) {
-				log.error("User with login: " + account+ " not found in database.");
-				log.error("Authentication failed for user " + account);
+				logger.error("User with login: " + account+ " not found in database.");
+				logger.error("Authentication failed for user " + account);
 				throw new UsernameNotFoundException("Username not found");
 			}
 		} catch (IllegalArgumentException e) {

@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<GradeEntity> searchWithVo(GradeEntity vo) {
-		log.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QGradeEntity gradeEntity = QGradeEntity.gradeEntity;
 
@@ -93,13 +93,13 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 		if ( vo.getCntStart() != null ) {
 			builder.and(gradeEntity.cntStart.eq(vo.getCntStart())); //java.lang.Integer
 		}	
-		log.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(gradeRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<GradeEntity> searchWithVo(GradeEntity vo, Pageable pageable) {
-		log.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QGradeEntity gradeEntity = QGradeEntity.gradeEntity;
 
@@ -130,7 +130,7 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 		if ( vo.getCntStart() != null ) {
 			builder.and(gradeEntity.cntStart.eq(vo.getCntStart())); //java.lang.Integer
 		}	
-		log.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(gradeRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -142,7 +142,7 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<GradeEntity> searchLikeVo(GradeEntity vo) {
-		log.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QGradeEntity gradeEntity = QGradeEntity.gradeEntity;
 
@@ -173,7 +173,7 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 		if ( vo.getCntStart() != null ) {
 			builder.and(gradeEntity.cntStart.eq(vo.getCntStart())); //java.lang.Integer
 		}	
-		log.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(gradeRepository.findAll(builder.getValue()));
 	}		
 	
@@ -181,7 +181,7 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<GradeEntity> searchLikeVo(GradeEntity vo, Pageable pageable) {
-		log.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("GradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QGradeEntity gradeEntity = QGradeEntity.gradeEntity;
 
@@ -212,7 +212,7 @@ public class GradeRepositoryImpl implements GradeRepositoryCustom {
 		if ( vo.getCntStart() != null ) {
 			builder.and(gradeEntity.cntStart.eq(vo.getCntStart())); //java.lang.Integer
 		}	
-		log.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("GradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(gradeRepository.findAll(builder.getValue(), pageable));
 	}	
 	

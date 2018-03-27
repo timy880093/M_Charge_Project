@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaPrepayDeductMasterDaoImpl extends JpaGenericDaoImpl<PrepayDeduct
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaPrepayDeductMasterDaoImpl extends JpaGenericDaoImpl<PrepayDeduct
 	public void delete(
 						 java.lang.Integer prepayDeductMasterId 
 											) {
-		log.debug("JpaPrepayDeductMasterDaoImpl delete  begin "
+		logger.debug("JpaPrepayDeductMasterDaoImpl delete  begin "
 			+"id="+prepayDeductMasterId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaPrepayDeductMasterDaoImpl extends JpaGenericDaoImpl<PrepayDeduct
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from PrepayDeductMasterEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaPrepayDeductMasterDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaPrepayDeductMasterDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -164,7 +164,7 @@ public class JpaPrepayDeductMasterDaoImpl extends JpaGenericDaoImpl<PrepayDeduct
 		Query q;
 		List<PrepayDeductMasterEntity> results;
 		try {
-			log.debug("JpaPrepayDeductMasterDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaPrepayDeductMasterDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -239,7 +239,7 @@ public class JpaPrepayDeductMasterDaoImpl extends JpaGenericDaoImpl<PrepayDeduct
 		Query q;
 		List<PrepayDeductMasterEntity> results;
 		try {
-			log.debug("JpaPrepayDeductMasterDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaPrepayDeductMasterDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

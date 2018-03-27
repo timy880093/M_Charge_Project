@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<PrinterEntity> searchWithVo(PrinterEntity vo) {
-		log.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrinterEntity printerEntity = QPrinterEntity.printerEntity;
 
@@ -108,13 +108,13 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 		if ( vo.getKey() != null && !"".equals(vo.getKey())) {
 			builder.and(printerEntity.key.equalsIgnoreCase(vo.getKey())); //java.lang.String
 		}
-		log.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(printerRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<PrinterEntity> searchWithVo(PrinterEntity vo, Pageable pageable) {
-		log.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrinterEntity printerEntity = QPrinterEntity.printerEntity;
 
@@ -160,7 +160,7 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 		if ( vo.getKey() != null && !"".equals(vo.getKey())) {
 			builder.and(printerEntity.key.equalsIgnoreCase(vo.getKey())); //java.lang.String
 		}
-		log.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(printerRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -172,7 +172,7 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<PrinterEntity> searchLikeVo(PrinterEntity vo) {
-		log.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrinterEntity printerEntity = QPrinterEntity.printerEntity;
 
@@ -218,7 +218,7 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 		if ( vo.getKey() != null && !"".equals(vo.getKey())) {
 			builder.and(printerEntity.key.containsIgnoreCase(vo.getKey())); //java.lang.String
 		}
-		log.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(printerRepository.findAll(builder.getValue()));
 	}		
 	
@@ -226,7 +226,7 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<PrinterEntity> searchLikeVo(PrinterEntity vo, Pageable pageable) {
-		log.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("PrinterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QPrinterEntity printerEntity = QPrinterEntity.printerEntity;
 
@@ -272,7 +272,7 @@ public class PrinterRepositoryImpl implements PrinterRepositoryCustom {
 		if ( vo.getKey() != null && !"".equals(vo.getKey())) {
 			builder.and(printerEntity.key.containsIgnoreCase(vo.getKey())); //java.lang.String
 		}
-		log.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("PrinterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(printerRepository.findAll(builder.getValue(), pageable));
 	}	
 	

@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 	public void delete(
 																																						 java.lang.Long invoiceId 
 																																																																																																																							) {
-		log.debug("JpaInvoiceMainDaoImpl delete  begin "
+		logger.debug("JpaInvoiceMainDaoImpl delete  begin "
 			+"id="+invoiceId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from InvoiceMainEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaInvoiceMainDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaInvoiceMainDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -374,7 +374,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		Query q;
 		List<InvoiceMainEntity> results;
 		try {
-			log.debug("JpaInvoiceMainDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaInvoiceMainDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -869,7 +869,7 @@ public class JpaInvoiceMainDaoImpl extends JpaGenericDaoImpl<InvoiceMainEntity, 
 		Query q;
 		List<InvoiceMainEntity> results;
 		try {
-			log.debug("JpaInvoiceMainDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaInvoiceMainDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

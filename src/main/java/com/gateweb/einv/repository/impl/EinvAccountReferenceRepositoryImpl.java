@@ -7,8 +7,8 @@ package com.gateweb.einv.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 
 	@SuppressWarnings("unchecked")
 	public List<AccountReference> searchWithVo(AccountReference vo) {
-		log.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAccountReference accountReference = QAccountReference.accountReference;
 
@@ -70,13 +70,13 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 			builder.and(accountReference.userId.eq(vo.getUserId())); //java.lang.Long
 		}	
 		
-		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<AccountReference> searchWithVo(AccountReference vo, Pageable pageable) {
-		log.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAccountReference accountReference = QAccountReference.accountReference;
 
@@ -93,7 +93,7 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 			builder.and(accountReference.userId.eq(vo.getUserId())); //java.lang.Long
 		}	
 		
-		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue(), pageable));
 	}
 	
@@ -105,7 +105,7 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 	
 	@SuppressWarnings("unchecked")
 	public List<AccountReference> searchLikeVo(AccountReference vo) {
-		log.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAccountReference accountReference = QAccountReference.accountReference;
 
@@ -122,7 +122,7 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 			builder.and(accountReference.userId.eq(vo.getUserId())); //java.lang.Long
 		}	
 		
-		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue()));
 	}		
 	
@@ -130,7 +130,7 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 
 	@SuppressWarnings("unchecked")
 	public List<AccountReference> searchLikeVo(AccountReference vo, Pageable pageable) {
-		log.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AccountReference2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAccountReference accountReference = QAccountReference.accountReference;
 
@@ -147,7 +147,7 @@ public class EinvAccountReferenceRepositoryImpl implements EinvAccountReferenceR
 			builder.and(accountReference.userId.eq(vo.getUserId())); //java.lang.Long
 		}	
 		
-		log.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AccountReference2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvAccountReferenceRepository.findAll(builder.getValue(), pageable));
 	}	
 	

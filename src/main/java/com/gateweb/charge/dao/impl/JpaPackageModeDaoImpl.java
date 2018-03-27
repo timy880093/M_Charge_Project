@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaPackageModeDaoImpl extends JpaGenericDaoImpl<PackageModeEntity, 
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaPackageModeDaoImpl extends JpaGenericDaoImpl<PackageModeEntity, 
 	public void delete(
 														 java.lang.Integer packageId 
 																			) {
-		log.debug("JpaPackageModeDaoImpl delete  begin "
+		logger.debug("JpaPackageModeDaoImpl delete  begin "
 			+"id="+packageId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaPackageModeDaoImpl extends JpaGenericDaoImpl<PackageModeEntity, 
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from PackageModeEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaPackageModeDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaPackageModeDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -188,7 +188,7 @@ public class JpaPackageModeDaoImpl extends JpaGenericDaoImpl<PackageModeEntity, 
 		Query q;
 		List<PackageModeEntity> results;
 		try {
-			log.debug("JpaPackageModeDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaPackageModeDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -311,7 +311,7 @@ public class JpaPackageModeDaoImpl extends JpaGenericDaoImpl<PackageModeEntity, 
 		Query q;
 		List<PackageModeEntity> results;
 		try {
-			log.debug("JpaPackageModeDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaPackageModeDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

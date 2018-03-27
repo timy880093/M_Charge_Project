@@ -1,17 +1,23 @@
 package com.gateweb.charge.dao.impl;
 
-import com.gateweb.jpa.dao.JpaGenericDao;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Repository;
+import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.util.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
+
+import com.gateweb.jpa.dao.JpaGenericDao;
 
 /**
  * This class serves as the Base class for all other DAOs - namely to hold
@@ -29,7 +35,7 @@ public abstract class ChargeJpaGenericDaoImpl<T extends Serializable, PrimaryKey
 	 * Log variable for all child classes. Uses LogFactory.getLog(getClass())
 	 * from Commons Logging
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
 	/**
      *
@@ -102,7 +108,7 @@ public abstract class ChargeJpaGenericDaoImpl<T extends Serializable, PrimaryKey
 		T entity = get(id);
 
 		if (entity == null) {
-			log.warn("JpaGenericDaoImpl findById Uh oh, '"
+			logger.warn("JpaGenericDaoImpl findById Uh oh, '"
 					+ this.persistentClass + "' object with id '" + id
 					+ "' not found...");
 			throw new EntityNotFoundException("JPA10003-"

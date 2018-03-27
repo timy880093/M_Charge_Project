@@ -4,11 +4,12 @@ import java.util.Map;
 
 import com.gateweb.charge.repository.CompanyRepository;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gate.utils.SendEmailFileUtils;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CompanyVO;
 import com.gate.web.formbeans.CompanyBean;
@@ -23,7 +24,7 @@ import dao.CompanyDAO;
 @Service("companyService")
 public class CompanyServiceImp implements CompanyService{
 
-    private Log logger = LogFactory.getLog(this.getClass().getName());
+	private static Logger logger = LogManager.getLogger(CompanyServiceImp.class);
 	
 	@Autowired
     CompanyDAO companyDAO;

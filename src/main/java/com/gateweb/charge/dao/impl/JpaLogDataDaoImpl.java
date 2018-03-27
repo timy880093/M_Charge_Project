@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaLogDataDaoImpl extends JpaGenericDaoImpl<LogDataEntity,    java.
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaLogDataDaoImpl extends JpaGenericDaoImpl<LogDataEntity,    java.
 	public void delete(
 				 java.lang.Integer logId 
 											) {
-		log.debug("JpaLogDataDaoImpl delete  begin "
+		logger.debug("JpaLogDataDaoImpl delete  begin "
 			+"id="+logId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaLogDataDaoImpl extends JpaGenericDaoImpl<LogDataEntity,    java.
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from LogDataEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaLogDataDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaLogDataDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -161,7 +161,7 @@ public class JpaLogDataDaoImpl extends JpaGenericDaoImpl<LogDataEntity,    java.
 		Query q;
 		List<LogDataEntity> results;
 		try {
-			log.debug("JpaLogDataDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaLogDataDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -230,7 +230,7 @@ public class JpaLogDataDaoImpl extends JpaGenericDaoImpl<LogDataEntity,    java.
 		Query q;
 		List<LogDataEntity> results;
 		try {
-			log.debug("JpaLogDataDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaLogDataDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

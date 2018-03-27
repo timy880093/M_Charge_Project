@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaWarrantyDaoImpl extends JpaGenericDaoImpl<WarrantyEntity,       
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaWarrantyDaoImpl extends JpaGenericDaoImpl<WarrantyEntity,       
 	public void delete(
 												 java.lang.Integer warrantyId 
 																			) {
-		log.debug("JpaWarrantyDaoImpl delete  begin "
+		logger.debug("JpaWarrantyDaoImpl delete  begin "
 			+"id="+warrantyId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaWarrantyDaoImpl extends JpaGenericDaoImpl<WarrantyEntity,       
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from WarrantyEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaWarrantyDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaWarrantyDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -185,7 +185,7 @@ public class JpaWarrantyDaoImpl extends JpaGenericDaoImpl<WarrantyEntity,       
 		Query q;
 		List<WarrantyEntity> results;
 		try {
-			log.debug("JpaWarrantyDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaWarrantyDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -302,7 +302,7 @@ public class JpaWarrantyDaoImpl extends JpaGenericDaoImpl<WarrantyEntity,       
 		Query q;
 		List<WarrantyEntity> results;
 		try {
-			log.debug("JpaWarrantyDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaWarrantyDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

@@ -1,8 +1,8 @@
 package com.gate.utils;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -34,7 +34,7 @@ import java.util.TimeZone;
 @Component
 public class TimeUtils {
 
-	private static final Log log = LogFactory.getLog(TimeUtils.class);
+	private static final Logger logger = LogManager.getLogger(TimeUtils.class);
 
 	protected static final String DEFAULT_TIME_FORMAT = "yyyy/MM/dd";
 
@@ -168,9 +168,9 @@ public class TimeUtils {
 	public Timestamp getFutureDate(Timestamp nextPublishDate,
 			Timestamp endDate, int frequency) {
 
-		log.info(">>>>>>>>:nextPublishDate " + nextPublishDate);
-		log.info(">>>>>>>>:endDate " + endDate);
-		log.info(">>>>>>>>:frequency " + frequency);
+		logger.info(">>>>>>>>:nextPublishDate " + nextPublishDate);
+		logger.info(">>>>>>>>:endDate " + endDate);
+		logger.info(">>>>>>>>:frequency " + frequency);
 
 		Calendar startCal = null;
 		Calendar endCal = null;
@@ -246,8 +246,8 @@ public class TimeUtils {
 	 */
 	public Timestamp getPreviousDate(Timestamp publishDate, int frequency) {
 
-//		log.info(">>>>>>>>:nextPublishDate " + publishDate);
-//		log.info(">>>>>>>>:frequency " + frequency);
+//		logger.info(">>>>>>>>:nextPublishDate " + publishDate);
+//		logger.info(">>>>>>>>:frequency " + frequency);
 
 		Calendar cal = string2Calendar("yyyy-MM-dd", timestamp2String(null,
 				publishDate));

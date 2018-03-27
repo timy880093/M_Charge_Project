@@ -18,8 +18,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 import com.meshinnovation.db.model.BaseObject;
@@ -40,7 +40,7 @@ public abstract class JpaGenericDaoImpl<T extends BaseObject, PrimaryKey extends
 	 * Log variable for all child classes. Uses LogFactory.getLog(getClass())
 	 * from Commons Logging
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
 	/**
      *
@@ -126,7 +126,7 @@ public abstract class JpaGenericDaoImpl<T extends BaseObject, PrimaryKey extends
 		T entity = get(id);
 
 		if (entity == null) {
-			log.warn("JpaGenericDaoImpl findById Uh oh, '"
+			logger.warn("JpaGenericDaoImpl findById Uh oh, '"
 					+ this.persistentClass + "' object with id '" + id
 					+ "' not found...");
 			throw new EntityNotFoundException("JPA10003-"

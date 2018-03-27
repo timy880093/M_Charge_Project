@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeGradeEntity> searchWithVo(ChargeModeGradeEntity vo) {
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeGradeEntity chargeModeGradeEntity = QChargeModeGradeEntity.chargeModeGradeEntity;
 
@@ -117,13 +117,13 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeGradeEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeGradeRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeGradeEntity> searchWithVo(ChargeModeGradeEntity vo, Pageable pageable) {
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeGradeEntity chargeModeGradeEntity = QChargeModeGradeEntity.chargeModeGradeEntity;
 
@@ -178,7 +178,7 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeGradeEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeGradeRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -190,7 +190,7 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 	
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeGradeEntity> searchLikeVo(ChargeModeGradeEntity vo) {
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeGradeEntity chargeModeGradeEntity = QChargeModeGradeEntity.chargeModeGradeEntity;
 
@@ -245,7 +245,7 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeGradeEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeGradeRepository.findAll(builder.getValue()));
 	}		
 	
@@ -253,7 +253,7 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeGradeEntity> searchLikeVo(ChargeModeGradeEntity vo, Pageable pageable) {
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeGradeEntity chargeModeGradeEntity = QChargeModeGradeEntity.chargeModeGradeEntity;
 
@@ -308,7 +308,7 @@ public class ChargeModeGradeRepositoryImpl implements ChargeModeGradeRepositoryC
 		if ( vo.getStatus() != null ) {
 			builder.and(chargeModeGradeEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeGradeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeGradeRepository.findAll(builder.getValue(), pageable));
 	}	
 	

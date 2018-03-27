@@ -7,8 +7,8 @@ package com.gateweb.charge.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +75,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 	/**
 	* <p><code>Log</code> instance for this application. </p>
 	*/
-	private Log log = LogFactory.getLog(this.getClass().getName());
+	private Logger logger = LogManager.getLogger(this.getClass().getName());
 	
 	
 	/**
@@ -549,7 +549,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public PrinterEntity save(PrinterEntity bean) {
 
-		log.debug("ChargeFacadeImpl create Printer  before dao save Printer :  "+bean);	
+		logger.debug("ChargeFacadeImpl create Printer  before dao save Printer :  "+bean);	
 		return printerRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create Printer   successfully.");		
 	}
@@ -562,7 +562,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer printerId 
 	) {
 		Optional<PrinterEntity> data = null;
-		log.debug("ChargeFacadeImpl findPrinterById   findInvoiceDetailsById :" 
+		logger.debug("ChargeFacadeImpl findPrinterById   findInvoiceDetailsById :" 
 			+"printerId = "+ printerId
 		);	
 		try {
@@ -575,7 +575,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findPrinterById   successfully.");	
+		logger.debug("ChargeFacadeImpl findPrinterById   successfully.");	
 		return null;
 	}
 
@@ -584,11 +584,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<PrinterEntity> findPrinterAll() {
-		log.debug("ChargeFacadeImpl searchPrinterAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchPrinterAll  before dao get all ");	
 
 		List<PrinterEntity> results = null;
 		results = printerRepository.findAll();
-		log.debug("ChargeFacadeImpl searchPrinterAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchPrinterAll   successfully.");	
 		return results;
     }
 
@@ -598,7 +598,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public PrinterEntity update(PrinterEntity bean) {
-		log.debug("ChargeFacadeImpl update Printer   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update Printer   before dao update : bean "+bean);	
 		return printerRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update Printer    successfully.");	
 
@@ -611,14 +611,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer printerId 
 	) {
 
-			log.debug("ChargeFacadeImpl deletePrinter   delete :" 
+			logger.debug("ChargeFacadeImpl deletePrinter   delete :" 
 				+"printerId = "+ printerId
 			);
 			printerRepository.deleteById(
 				printerId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deletePrinter   successfully. ");	
+		logger.debug("ChargeFacadeImpl deletePrinter   successfully. ");	
 	} 
 
     /**
@@ -626,10 +626,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PrinterEntity> searchBy(PrinterEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith Printer   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith Printer   before dao searchWith : bean "+bean);	
 		List<PrinterEntity> results = null;
 		results = printerRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithPrinter   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithPrinter   successfully. ");	
 		return results;
     }
 
@@ -638,10 +638,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PrinterEntity> searchLike(PrinterEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike Printer   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike Printer   before dao searchLike : bean "+bean);	
 		List<PrinterEntity> results = null;
 		results = printerRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikePrinter   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikePrinter   successfully. ");	
 		return results;
     }
     /**
@@ -650,7 +650,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public GradeEntity save(GradeEntity bean) {
 
-		log.debug("ChargeFacadeImpl create Grade  before dao save Grade :  "+bean);	
+		logger.debug("ChargeFacadeImpl create Grade  before dao save Grade :  "+bean);	
 		return gradeRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create Grade   successfully.");		
 	}
@@ -663,7 +663,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer gradeId 
 	) {
 		Optional<GradeEntity> data = null;
-		log.debug("ChargeFacadeImpl findGradeById begin :" 
+		logger.debug("ChargeFacadeImpl findGradeById begin :" 
 			+"gradeId = "+ gradeId
 		);	
 		try {
@@ -676,7 +676,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findGradeById successfully.");	
+		logger.debug("ChargeFacadeImpl findGradeById successfully.");	
 		return null;
 	}
 
@@ -685,11 +685,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<GradeEntity> findGradeAll() {
-		log.debug("ChargeFacadeImpl searchGradeAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchGradeAll  before dao get all ");	
 
 		List<GradeEntity> results = null;
 		results = gradeRepository.findAll();
-		log.debug("ChargeFacadeImpl searchGradeAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchGradeAll   successfully.");	
 		return results;
     }
 
@@ -699,7 +699,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public GradeEntity update(GradeEntity bean) {
-		log.debug("ChargeFacadeImpl update Grade   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update Grade   before dao update : bean "+bean);	
 		return gradeRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update Grade    successfully.");	
 
@@ -712,14 +712,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer gradeId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteGrade   delete :" 
+			logger.debug("ChargeFacadeImpl deleteGrade   delete :" 
 				+"gradeId = "+ gradeId
 			);
 			gradeRepository.deleteById(
 				gradeId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteGrade   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteGrade   successfully. ");	
 	} 
 
     /**
@@ -727,10 +727,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<GradeEntity> searchBy(GradeEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith Grade   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith Grade   before dao searchWith : bean "+bean);	
 		List<GradeEntity> results = null;
 		results = gradeRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithGrade   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithGrade   successfully. ");	
 		return results;
     }
 
@@ -739,10 +739,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<GradeEntity> searchLike(GradeEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike Grade   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike Grade   before dao searchLike : bean "+bean);	
 		List<GradeEntity> results = null;
 		results = gradeRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeGrade   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeGrade   successfully. ");	
 		return results;
     }
     
@@ -752,7 +752,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public ChargeModeCycleEntity save(ChargeModeCycleEntity bean) {
 
-		log.debug("ChargeFacadeImpl create ChargeModeCycle  before dao save ChargeModeCycle :  "+bean);	
+		logger.debug("ChargeFacadeImpl create ChargeModeCycle  before dao save ChargeModeCycle :  "+bean);	
 		return chargeModeCycleRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create ChargeModeCycle   successfully.");		
 	}
@@ -765,7 +765,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer chargeId 
 	) {
 		Optional<ChargeModeCycleEntity> data = null;
-		log.debug("ChargeFacadeImpl findChargeModeCycleById begin :" 
+		logger.debug("ChargeFacadeImpl findChargeModeCycleById begin :" 
 			+"chargeId = "+ chargeId
 		);	
 		try {
@@ -778,7 +778,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findChargeModeCycleById successfully.");	
+		logger.debug("ChargeFacadeImpl findChargeModeCycleById successfully.");	
 		return null;
 	}
 
@@ -787,11 +787,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<ChargeModeCycleEntity> findChargeModeCycleAll() {
-		log.debug("ChargeFacadeImpl searchChargeModeCycleAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchChargeModeCycleAll  before dao get all ");	
 
 		List<ChargeModeCycleEntity> results = null;
 		results = chargeModeCycleRepository.findAll();
-		log.debug("ChargeFacadeImpl searchChargeModeCycleAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchChargeModeCycleAll   successfully.");	
 		return results;
     }
 
@@ -801,7 +801,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public ChargeModeCycleEntity update(ChargeModeCycleEntity bean) {
-		log.debug("ChargeFacadeImpl update ChargeModeCycle   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update ChargeModeCycle   before dao update : bean "+bean);	
 		return chargeModeCycleRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update ChargeModeCycle    successfully.");	
 
@@ -814,14 +814,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer chargeId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteChargeModeCycle   delete :" 
+			logger.debug("ChargeFacadeImpl deleteChargeModeCycle   delete :" 
 				+"chargeId = "+ chargeId
 			);
 			chargeModeCycleRepository.deleteById(
 				chargeId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteChargeModeCycle   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteChargeModeCycle   successfully. ");	
 	} 
 
     /**
@@ -829,10 +829,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<ChargeModeCycleEntity> searchBy(ChargeModeCycleEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith ChargeModeCycle   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith ChargeModeCycle   before dao searchWith : bean "+bean);	
 		List<ChargeModeCycleEntity> results = null;
 		results = chargeModeCycleRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithChargeModeCycle   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithChargeModeCycle   successfully. ");	
 		return results;
     }
 
@@ -841,10 +841,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<ChargeModeCycleEntity> searchLike(ChargeModeCycleEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike ChargeModeCycle   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike ChargeModeCycle   before dao searchLike : bean "+bean);	
 		List<ChargeModeCycleEntity> results = null;
 		results = chargeModeCycleRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeChargeModeCycle   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeChargeModeCycle   successfully. ");	
 		return results;
     }
     /**
@@ -853,7 +853,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public PackageModeEntity save(PackageModeEntity bean) {
 
-		log.debug("ChargeFacadeImpl create PackageMode  before dao save PackageMode :  "+bean);	
+		logger.debug("ChargeFacadeImpl create PackageMode  before dao save PackageMode :  "+bean);	
 		return packageModeRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create PackageMode   successfully.");		
 	}
@@ -866,7 +866,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer packageId 
 	) {
 		Optional<PackageModeEntity> data = null;
-		log.debug("ChargeFacadeImpl findPackageModeById begin :" 
+		logger.debug("ChargeFacadeImpl findPackageModeById begin :" 
 			+"packageId = "+ packageId
 		);	
 		try {
@@ -879,7 +879,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findPackageModeById successfully.");	
+		logger.debug("ChargeFacadeImpl findPackageModeById successfully.");	
 		return null;
 	}
 
@@ -888,11 +888,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<PackageModeEntity> findPackageModeAll() {
-		log.debug("ChargeFacadeImpl searchPackageModeAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchPackageModeAll  before dao get all ");	
 
 		List<PackageModeEntity> results = null;
 		results = packageModeRepository.findAll();
-		log.debug("ChargeFacadeImpl searchPackageModeAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchPackageModeAll   successfully.");	
 		return results;
     }
 
@@ -902,7 +902,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public PackageModeEntity update(PackageModeEntity bean) {
-		log.debug("ChargeFacadeImpl update PackageMode   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update PackageMode   before dao update : bean "+bean);	
 		return packageModeRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update PackageMode    successfully.");	
 
@@ -915,14 +915,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer packageId 
 	) {
 
-			log.debug("ChargeFacadeImpl deletePackageMode   delete :" 
+			logger.debug("ChargeFacadeImpl deletePackageMode   delete :" 
 				+"packageId = "+ packageId
 			);
 			packageModeRepository.deleteById(
 				packageId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deletePackageMode   successfully. ");	
+		logger.debug("ChargeFacadeImpl deletePackageMode   successfully. ");	
 	} 
 
     /**
@@ -930,10 +930,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PackageModeEntity> searchBy(PackageModeEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith PackageMode   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith PackageMode   before dao searchWith : bean "+bean);	
 		List<PackageModeEntity> results = null;
 		results = packageModeRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithPackageMode   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithPackageMode   successfully. ");	
 		return results;
     }
 
@@ -942,10 +942,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PackageModeEntity> searchLike(PackageModeEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike PackageMode   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike PackageMode   before dao searchLike : bean "+bean);	
 		List<PackageModeEntity> results = null;
 		results = packageModeRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikePackageMode   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikePackageMode   successfully. ");	
 		return results;
     }
     /**
@@ -954,7 +954,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public CompanyEntity save(CompanyEntity bean) {
 
-		log.debug("ChargeFacadeImpl create Company  before dao save Company :  "+bean);	
+		logger.debug("ChargeFacadeImpl create Company  before dao save Company :  "+bean);	
 		return companyRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create Company   successfully.");		
 	}
@@ -967,7 +967,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer companyId 
 	) {
 		Optional<CompanyEntity> data = null;
-		log.debug("ChargeFacadeImpl findCompanyById begin :" 
+		logger.debug("ChargeFacadeImpl findCompanyById begin :" 
 			+"packageId = "+ companyId
 		);	
 		try {
@@ -980,7 +980,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findCompanyById successfully.");	
+		logger.debug("ChargeFacadeImpl findCompanyById successfully.");	
 		return null;
 	}
 
@@ -989,11 +989,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<CompanyEntity> findCompanyAll() {
-		log.debug("ChargeFacadeImpl searchCompanyAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchCompanyAll  before dao get all ");	
 
 		List<CompanyEntity> results = null;
 		results = companyRepository.findAll();
-		log.debug("ChargeFacadeImpl searchCompanyAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchCompanyAll   successfully.");	
 		return results;
     }
 
@@ -1003,7 +1003,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public CompanyEntity update(CompanyEntity bean) {
-		log.debug("ChargeFacadeImpl update Company   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update Company   before dao update : bean "+bean);	
 		return companyRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update Company    successfully.");	
 
@@ -1016,14 +1016,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer companyId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteCompany   delete :" 
+			logger.debug("ChargeFacadeImpl deleteCompany   delete :" 
 				+"companyId = "+ companyId
 			);
 			companyRepository.deleteById(
 				companyId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteCompany   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteCompany   successfully. ");	
 	} 
 
     /**
@@ -1031,10 +1031,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CompanyEntity> searchBy(CompanyEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith Company   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith Company   before dao searchWith : bean "+bean);	
 		List<CompanyEntity> results = null;
 		results = companyRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithCompany   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithCompany   successfully. ");	
 		return results;
     }
 
@@ -1043,10 +1043,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CompanyEntity> searchLike(CompanyEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike Company   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike Company   before dao searchLike : bean "+bean);	
 		List<CompanyEntity> results = null;
 		results = companyRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeCompany   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeCompany   successfully. ");	
 		return results;
     }
     /**
@@ -1055,7 +1055,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public InvoiceMainUniqueEntity save(InvoiceMainUniqueEntity bean) {
 
-		log.debug("ChargeFacadeImpl create InvoiceMainUnique  before dao save InvoiceMainUnique :  "+bean);	
+		logger.debug("ChargeFacadeImpl create InvoiceMainUnique  before dao save InvoiceMainUnique :  "+bean);	
 		return invoiceMainUniqueRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create InvoiceMainUnique   successfully.");		
 	}
@@ -1068,7 +1068,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 					InvoiceMainUniqueEntityPK id
 	) {
 		Optional<InvoiceMainUniqueEntity> data = null;
-		log.debug("ChargeFacadeImpl findPackageModeById begin :" 
+		logger.debug("ChargeFacadeImpl findPackageModeById begin :" 
 			+"id = "+ id
 		);	
 		try {
@@ -1081,7 +1081,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findPackageModeById successfully.");	
+		logger.debug("ChargeFacadeImpl findPackageModeById successfully.");	
 		return null;
 	}
 
@@ -1090,11 +1090,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<InvoiceMainUniqueEntity> findInvoiceMainUniqueAll() {
-		log.debug("ChargeFacadeImpl searchInvoiceMainUniqueAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchInvoiceMainUniqueAll  before dao get all ");	
 
 		List<InvoiceMainUniqueEntity> results = null;
 		results = invoiceMainUniqueRepository.findAll();
-		log.debug("ChargeFacadeImpl searchInvoiceMainUniqueAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchInvoiceMainUniqueAll   successfully.");	
 		return results;
     }
 
@@ -1104,7 +1104,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public InvoiceMainUniqueEntity update(InvoiceMainUniqueEntity bean) {
-		log.debug("ChargeFacadeImpl update InvoiceMainUnique   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update InvoiceMainUnique   before dao update : bean "+bean);	
 		return invoiceMainUniqueRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update InvoiceMainUnique    successfully.");	
 
@@ -1117,13 +1117,13 @@ public class ChargeFacadeImpl implements ChargeFacade {
 					InvoiceMainUniqueEntityPK id	
 	) {
 
-			log.debug("ChargeFacadeImpl deleteInvoiceMainUnique   delete :" +id
+			logger.debug("ChargeFacadeImpl deleteInvoiceMainUnique   delete :" +id
 			);
 			invoiceMainUniqueRepository.deleteById(
 							id
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteInvoiceMainUnique   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteInvoiceMainUnique   successfully. ");	
 	} 
 
     /**
@@ -1131,10 +1131,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceMainUniqueEntity> searchBy(InvoiceMainUniqueEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith InvoiceMainUnique   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith InvoiceMainUnique   before dao searchWith : bean "+bean);	
 		List<InvoiceMainUniqueEntity> results = null;
 		results = invoiceMainUniqueRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithInvoiceMainUnique   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithInvoiceMainUnique   successfully. ");	
 		return results;
     }
 
@@ -1143,10 +1143,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceMainUniqueEntity> searchLike(InvoiceMainUniqueEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike InvoiceMainUnique   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike InvoiceMainUnique   before dao searchLike : bean "+bean);	
 		List<InvoiceMainUniqueEntity> results = null;
 		results = invoiceMainUniqueRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeInvoiceMainUnique   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeInvoiceMainUnique   successfully. ");	
 		return results;
     }
     /**
@@ -1155,7 +1155,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public CashDetailEntity save(CashDetailEntity bean) {
 
-		log.debug("ChargeFacadeImpl create CashDetail  before dao save CashDetail :  "+bean);	
+		logger.debug("ChargeFacadeImpl create CashDetail  before dao save CashDetail :  "+bean);	
 		return cashDetailRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create CashDetail   successfully.");		
 	}
@@ -1168,7 +1168,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer cashDetailId 
 	) {
 		Optional<CashDetailEntity> data = null;
-		log.debug("ChargeFacadeImpl findCashDetailById begin :" 
+		logger.debug("ChargeFacadeImpl findCashDetailById begin :" 
 			+"cashDetailId = "+ cashDetailId
 		);	
 		try {
@@ -1181,7 +1181,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findCashDetailById successfully.");	
+		logger.debug("ChargeFacadeImpl findCashDetailById successfully.");	
 		return null;
 	}
 
@@ -1190,11 +1190,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<CashDetailEntity> findCashDetailAll() {
-		log.debug("ChargeFacadeImpl searchCashDetailAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchCashDetailAll  before dao get all ");	
 
 		List<CashDetailEntity> results = null;
 		results = cashDetailRepository.findAll();
-		log.debug("ChargeFacadeImpl searchCashDetailAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchCashDetailAll   successfully.");	
 		return results;
     }
 
@@ -1204,7 +1204,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public CashDetailEntity update(CashDetailEntity bean) {
-		log.debug("ChargeFacadeImpl update CashDetail   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update CashDetail   before dao update : bean "+bean);	
 		return cashDetailRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update CashDetail    successfully.");	
 
@@ -1217,14 +1217,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer cashDetailId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteCashDetail   delete :" 
+			logger.debug("ChargeFacadeImpl deleteCashDetail   delete :" 
 				+"cashDetailId = "+ cashDetailId
 			);
 			cashDetailRepository.deleteById(
 				cashDetailId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteCashDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteCashDetail   successfully. ");	
 	} 
 
     /**
@@ -1232,10 +1232,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CashDetailEntity> searchBy(CashDetailEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith CashDetail   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith CashDetail   before dao searchWith : bean "+bean);	
 		List<CashDetailEntity> results = null;
 		results = cashDetailRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithCashDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithCashDetail   successfully. ");	
 		return results;
     }
 
@@ -1244,10 +1244,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CashDetailEntity> searchLike(CashDetailEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike CashDetail   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike CashDetail   before dao searchLike : bean "+bean);	
 		List<CashDetailEntity> results = null;
 		results = cashDetailRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeCashDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeCashDetail   successfully. ");	
 		return results;
     }
     /**
@@ -1256,7 +1256,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public DealerCompanyEntity save(DealerCompanyEntity bean) {
 
-		log.debug("ChargeFacadeImpl create DealerCompany  before dao save DealerCompany :  "+bean);	
+		logger.debug("ChargeFacadeImpl create DealerCompany  before dao save DealerCompany :  "+bean);	
 		return dealerCompanyRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create DealerCompany   successfully.");		
 	}
@@ -1269,7 +1269,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer dealerCompanyId 
 	) {
 		Optional<DealerCompanyEntity> data = null;
-		log.debug("ChargeFacadeImpl findDealerCompanyById begin :" 
+		logger.debug("ChargeFacadeImpl findDealerCompanyById begin :" 
 			+"dealerCompanyId = "+ dealerCompanyId
 		);	
 		try {
@@ -1282,7 +1282,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findDealerCompanyById successfully.");	
+		logger.debug("ChargeFacadeImpl findDealerCompanyById successfully.");	
 		return null;
 	}
 
@@ -1291,11 +1291,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<DealerCompanyEntity> findDealerCompanyAll() {
-		log.debug("ChargeFacadeImpl searchDealerCompanyAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchDealerCompanyAll  before dao get all ");	
 
 		List<DealerCompanyEntity> results = null;
 		results = dealerCompanyRepository.findAll();
-		log.debug("ChargeFacadeImpl searchDealerCompanyAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchDealerCompanyAll   successfully.");	
 		return results;
     }
 
@@ -1305,7 +1305,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public DealerCompanyEntity update(DealerCompanyEntity bean) {
-		log.debug("ChargeFacadeImpl update DealerCompany   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update DealerCompany   before dao update : bean "+bean);	
 		return dealerCompanyRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update DealerCompany    successfully.");	
 
@@ -1318,14 +1318,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer dealerCompanyId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteDealerCompany   delete :" 
+			logger.debug("ChargeFacadeImpl deleteDealerCompany   delete :" 
 				+"dealerCompanyId = "+ dealerCompanyId
 			);
 			dealerCompanyRepository.deleteById(
 				dealerCompanyId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteDealerCompany   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteDealerCompany   successfully. ");	
 	} 
 
     /**
@@ -1333,10 +1333,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<DealerCompanyEntity> searchBy(DealerCompanyEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith DealerCompany   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith DealerCompany   before dao searchWith : bean "+bean);	
 		List<DealerCompanyEntity> results = null;
 		results = dealerCompanyRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithDealerCompany   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithDealerCompany   successfully. ");	
 		return results;
     }
 
@@ -1345,10 +1345,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<DealerCompanyEntity> searchLike(DealerCompanyEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike DealerCompany   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike DealerCompany   before dao searchLike : bean "+bean);	
 		List<DealerCompanyEntity> results = null;
 		results = dealerCompanyRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeDealerCompany   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeDealerCompany   successfully. ");	
 		return results;
     }
     /**
@@ -1357,7 +1357,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public CommissionLogEntity save(CommissionLogEntity bean) {
 
-		log.debug("ChargeFacadeImpl create CommissionLog  before dao save CommissionLog :  "+bean);	
+		logger.debug("ChargeFacadeImpl create CommissionLog  before dao save CommissionLog :  "+bean);	
 		return commissionLogRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create CommissionLog   successfully.");		
 	}
@@ -1370,7 +1370,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer commissionLogId 
 	) {
 		Optional<CommissionLogEntity> data = null;
-		log.debug("ChargeFacadeImpl findCommissionLogById begin :" 
+		logger.debug("ChargeFacadeImpl findCommissionLogById begin :" 
 			+"commissionLogId = "+ commissionLogId
 		);	
 		try {
@@ -1383,7 +1383,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findCommissionLogById successfully.");	
+		logger.debug("ChargeFacadeImpl findCommissionLogById successfully.");	
 		return null;
 	}
 
@@ -1392,11 +1392,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<CommissionLogEntity> findCommissionLogAll() {
-		log.debug("ChargeFacadeImpl searchCommissionLogAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchCommissionLogAll  before dao get all ");	
 
 		List<CommissionLogEntity> results = null;
 		results = commissionLogRepository.findAll();
-		log.debug("ChargeFacadeImpl searchCommissionLogAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchCommissionLogAll   successfully.");	
 		return results;
     }
 
@@ -1406,7 +1406,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public CommissionLogEntity update(CommissionLogEntity bean) {
-		log.debug("ChargeFacadeImpl update CommissionLog   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update CommissionLog   before dao update : bean "+bean);	
 		return commissionLogRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update CommissionLog    successfully.");	
 
@@ -1419,14 +1419,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer commissionLogId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteCommissionLog   delete :" 
+			logger.debug("ChargeFacadeImpl deleteCommissionLog   delete :" 
 				+"commissionLogId = "+ commissionLogId
 			);
 			commissionLogRepository.deleteById(
 				commissionLogId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteCommissionLog   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteCommissionLog   successfully. ");	
 	} 
 
     /**
@@ -1434,10 +1434,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CommissionLogEntity> searchBy(CommissionLogEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith CommissionLog   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith CommissionLog   before dao searchWith : bean "+bean);	
 		List<CommissionLogEntity> results = null;
 		results = commissionLogRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithCommissionLog   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithCommissionLog   successfully. ");	
 		return results;
     }
 
@@ -1446,10 +1446,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CommissionLogEntity> searchLike(CommissionLogEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike CommissionLog   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike CommissionLog   before dao searchLike : bean "+bean);	
 		List<CommissionLogEntity> results = null;
 		results = commissionLogRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeCommissionLog   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeCommissionLog   successfully. ");	
 		return results;
     }
     /**
@@ -1458,7 +1458,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public LogDataEntity save(LogDataEntity bean) {
 
-		log.debug("ChargeFacadeImpl create LogData  before dao save LogData :  "+bean);	
+		logger.debug("ChargeFacadeImpl create LogData  before dao save LogData :  "+bean);	
 		return logDataRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create LogData   successfully.");		
 	}
@@ -1471,7 +1471,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer logId 
 	) {
 		Optional<LogDataEntity> data = null;
-		log.debug("ChargeFacadeImpl findLogDataById begin :" 
+		logger.debug("ChargeFacadeImpl findLogDataById begin :" 
 			+"logId = "+ logId
 		);	
 		try {
@@ -1484,7 +1484,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findLogDataById successfully.");	
+		logger.debug("ChargeFacadeImpl findLogDataById successfully.");	
 		return null;
 	}
 
@@ -1493,11 +1493,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<LogDataEntity> findLogDataAll() {
-		log.debug("ChargeFacadeImpl searchLogDataAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchLogDataAll  before dao get all ");	
 
 		List<LogDataEntity> results = null;
 		results = logDataRepository.findAll();
-		log.debug("ChargeFacadeImpl searchLogDataAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchLogDataAll   successfully.");	
 		return results;
     }
 
@@ -1507,7 +1507,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public LogDataEntity update(LogDataEntity bean) {
-		log.debug("ChargeFacadeImpl update LogData   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update LogData   before dao update : bean "+bean);	
 		return logDataRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update LogData    successfully.");	
 
@@ -1520,14 +1520,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer logId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteLogData   delete :" 
+			logger.debug("ChargeFacadeImpl deleteLogData   delete :" 
 				+"logId = "+ logId
 			);
 			logDataRepository.deleteById(
-				logId 
+					logId
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteLogData   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteLogData   successfully. ");	
 	} 
 
     /**
@@ -1535,10 +1535,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<LogDataEntity> searchBy(LogDataEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith LogData   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith LogData   before dao searchWith : bean "+bean);	
 		List<LogDataEntity> results = null;
 		results = logDataRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithLogData   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithLogData   successfully. ");	
 		return results;
     }
 
@@ -1547,10 +1547,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<LogDataEntity> searchLike(LogDataEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike LogData   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike LogData   before dao searchLike : bean "+bean);	
 		List<LogDataEntity> results = null;
 		results = logDataRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeLogData   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeLogData   successfully. ");	
 		return results;
     }
     /**
@@ -1559,7 +1559,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public InvoiceTypeEntity save(InvoiceTypeEntity bean) {
 
-		log.debug("ChargeFacadeImpl create InvoiceType  before dao save InvoiceType :  "+bean);	
+		logger.debug("ChargeFacadeImpl create InvoiceType  before dao save InvoiceType :  "+bean);	
 		return invoiceTypeRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create InvoiceType   successfully.");		
 	}
@@ -1572,7 +1572,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.String typeCode 
 	) {
 		Optional<InvoiceTypeEntity> data = null;
-		log.debug("ChargeFacadeImpl findInvoiceTypeById begin :" 
+		logger.debug("ChargeFacadeImpl findInvoiceTypeById begin :" 
 			+"typeCode = "+ typeCode
 		);	
 		try {
@@ -1585,7 +1585,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findInvoiceTypeById successfully.");	
+		logger.debug("ChargeFacadeImpl findInvoiceTypeById successfully.");	
 		return null;
 	}
 
@@ -1594,11 +1594,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<InvoiceTypeEntity> findInvoiceTypeAll() {
-		log.debug("ChargeFacadeImpl searchInvoiceTypeAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchInvoiceTypeAll  before dao get all ");	
 
 		List<InvoiceTypeEntity> results = null;
 		results = invoiceTypeRepository.findAll();
-		log.debug("ChargeFacadeImpl searchInvoiceTypeAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchInvoiceTypeAll   successfully.");	
 		return results;
     }
 
@@ -1608,7 +1608,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public InvoiceTypeEntity update(InvoiceTypeEntity bean) {
-		log.debug("ChargeFacadeImpl update InvoiceType   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update InvoiceType   before dao update : bean "+bean);	
 		return invoiceTypeRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update InvoiceType    successfully.");	
 
@@ -1621,14 +1621,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.String typeCode 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteInvoiceType   delete :" 
+			logger.debug("ChargeFacadeImpl deleteInvoiceType   delete :" 
 				+"typeCode = "+ typeCode
 			);
 			invoiceTypeRepository.deleteById(
 				typeCode 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteInvoiceType   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteInvoiceType   successfully. ");	
 	} 
 
     /**
@@ -1636,10 +1636,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceTypeEntity> searchBy(InvoiceTypeEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith InvoiceType   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith InvoiceType   before dao searchWith : bean "+bean);	
 		List<InvoiceTypeEntity> results = null;
 		results = invoiceTypeRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithInvoiceType   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithInvoiceType   successfully. ");	
 		return results;
     }
 
@@ -1648,10 +1648,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceTypeEntity> searchLike(InvoiceTypeEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike InvoiceType   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike InvoiceType   before dao searchLike : bean "+bean);	
 		List<InvoiceTypeEntity> results = null;
 		results = invoiceTypeRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeInvoiceType   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeInvoiceType   successfully. ");	
 		return results;
     }
     /**
@@ -1660,7 +1660,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public PrepayDetailEntity save(PrepayDetailEntity bean) {
 
-		log.debug("ChargeFacadeImpl create PrepayDetail  before dao save PrepayDetail :  "+bean);	
+		logger.debug("ChargeFacadeImpl create PrepayDetail  before dao save PrepayDetail :  "+bean);	
 		return prepayDetailRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create PrepayDetail   successfully.");		
 	}
@@ -1673,7 +1673,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer prepayDetailId 
 	) {
 		Optional<PrepayDetailEntity> data = null;
-		log.debug("ChargeFacadeImpl findPrepayDetailById begin :" 
+		logger.debug("ChargeFacadeImpl findPrepayDetailById begin :" 
 			+"prepayDetailId = "+ prepayDetailId
 		);	
 		try {
@@ -1686,7 +1686,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findPrepayDetailById successfully.");	
+		logger.debug("ChargeFacadeImpl findPrepayDetailById successfully.");	
 		return null;
 	}
 
@@ -1695,11 +1695,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<PrepayDetailEntity> findPrepayDetailAll() {
-		log.debug("ChargeFacadeImpl searchPrepayDetailAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchPrepayDetailAll  before dao get all ");	
 
 		List<PrepayDetailEntity> results = null;
 		results = prepayDetailRepository.findAll();
-		log.debug("ChargeFacadeImpl searchPrepayDetailAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchPrepayDetailAll   successfully.");	
 		return results;
     }
 
@@ -1709,7 +1709,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public PrepayDetailEntity update(PrepayDetailEntity bean) {
-		log.debug("ChargeFacadeImpl update PrepayDetail   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update PrepayDetail   before dao update : bean "+bean);	
 		return prepayDetailRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update PrepayDetail    successfully.");	
 
@@ -1722,14 +1722,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer prepayDetailId 
 	) {
 
-			log.debug("ChargeFacadeImpl deletePrepayDetail   delete :" 
+			logger.debug("ChargeFacadeImpl deletePrepayDetail   delete :" 
 				+"prepayDetailId = "+ prepayDetailId
 			);
 			prepayDetailRepository.deleteById(
 				prepayDetailId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deletePrepayDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl deletePrepayDetail   successfully. ");	
 	} 
 
     /**
@@ -1737,10 +1737,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PrepayDetailEntity> searchBy(PrepayDetailEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith PrepayDetail   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith PrepayDetail   before dao searchWith : bean "+bean);	
 		List<PrepayDetailEntity> results = null;
 		results = prepayDetailRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithPrepayDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithPrepayDetail   successfully. ");	
 		return results;
     }
 
@@ -1749,10 +1749,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PrepayDetailEntity> searchLike(PrepayDetailEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike PrepayDetail   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike PrepayDetail   before dao searchLike : bean "+bean);	
 		List<PrepayDetailEntity> results = null;
 		results = prepayDetailRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikePrepayDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikePrepayDetail   successfully. ");	
 		return results;
     }
     /**
@@ -1761,7 +1761,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public DeductDetailEntity save(DeductDetailEntity bean) {
 
-		log.debug("ChargeFacadeImpl create DeductDetail  before dao save DeductDetail :  "+bean);	
+		logger.debug("ChargeFacadeImpl create DeductDetail  before dao save DeductDetail :  "+bean);	
 		return deductDetailRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create DeductDetail   successfully.");		
 	}
@@ -1774,7 +1774,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer deductDetailId 
 	) {
 		Optional<DeductDetailEntity> data = null;
-		log.debug("ChargeFacadeImpl findDeductDetailById begin :" 
+		logger.debug("ChargeFacadeImpl findDeductDetailById begin :" 
 			+"deductDetailId = "+ deductDetailId
 		);	
 		try {
@@ -1787,7 +1787,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findDeductDetailById successfully.");	
+		logger.debug("ChargeFacadeImpl findDeductDetailById successfully.");	
 		return null;
 	}
 
@@ -1796,11 +1796,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<DeductDetailEntity> findDeductDetailAll() {
-		log.debug("ChargeFacadeImpl searchDeductDetailAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchDeductDetailAll  before dao get all ");	
 
 		List<DeductDetailEntity> results = null;
 		results = deductDetailRepository.findAll();
-		log.debug("ChargeFacadeImpl searchDeductDetailAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchDeductDetailAll   successfully.");	
 		return results;
     }
 
@@ -1810,7 +1810,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public DeductDetailEntity update(DeductDetailEntity bean) {
-		log.debug("ChargeFacadeImpl update DeductDetail   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update DeductDetail   before dao update : bean "+bean);	
 		return deductDetailRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update DeductDetail    successfully.");	
 
@@ -1823,14 +1823,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer deductDetailId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteDeductDetail   delete :" 
+			logger.debug("ChargeFacadeImpl deleteDeductDetail   delete :" 
 				+"deductDetailId = "+ deductDetailId
 			);
 			deductDetailRepository.deleteById(
 				deductDetailId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteDeductDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteDeductDetail   successfully. ");	
 	} 
 
     /**
@@ -1838,10 +1838,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<DeductDetailEntity> searchBy(DeductDetailEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith DeductDetail   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith DeductDetail   before dao searchWith : bean "+bean);	
 		List<DeductDetailEntity> results = null;
 		results = deductDetailRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithDeductDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithDeductDetail   successfully. ");	
 		return results;
     }
 
@@ -1850,10 +1850,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<DeductDetailEntity> searchLike(DeductDetailEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike DeductDetail   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike DeductDetail   before dao searchLike : bean "+bean);	
 		List<DeductDetailEntity> results = null;
 		results = deductDetailRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeDeductDetail   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeDeductDetail   successfully. ");	
 		return results;
     }
     /**
@@ -1862,7 +1862,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public InvoiceMainEntity save(InvoiceMainEntity bean) {
 
-		log.debug("ChargeFacadeImpl create InvoiceMain  before dao save InvoiceMain :  "+bean);	
+		logger.debug("ChargeFacadeImpl create InvoiceMain  before dao save InvoiceMain :  "+bean);	
 		return invoiceMainRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create InvoiceMain   successfully.");		
 	}
@@ -1875,7 +1875,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Long invoiceId 
 	) {
 		Optional<InvoiceMainEntity> data = null;
-		log.debug("ChargeFacadeImpl findInvoiceMainById begin :" 
+		logger.debug("ChargeFacadeImpl findInvoiceMainById begin :" 
 			+"invoiceId = "+ invoiceId
 		);	
 		try {
@@ -1888,7 +1888,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findInvoiceMainById successfully.");	
+		logger.debug("ChargeFacadeImpl findInvoiceMainById successfully.");	
 		return null;
 	}
 
@@ -1897,11 +1897,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<InvoiceMainEntity> findInvoiceMainAll() {
-		log.debug("ChargeFacadeImpl searchInvoiceMainAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchInvoiceMainAll  before dao get all ");	
 
 		List<InvoiceMainEntity> results = null;
 		results = invoiceMainRepository.findAll();
-		log.debug("ChargeFacadeImpl searchInvoiceMainAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchInvoiceMainAll   successfully.");	
 		return results;
     }
 
@@ -1911,7 +1911,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public InvoiceMainEntity update(InvoiceMainEntity bean) {
-		log.debug("ChargeFacadeImpl update InvoiceMain   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update InvoiceMain   before dao update : bean "+bean);	
 		return invoiceMainRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update InvoiceMain    successfully.");	
 
@@ -1924,14 +1924,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Long invoiceId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteInvoiceMain   delete :" 
+			logger.debug("ChargeFacadeImpl deleteInvoiceMain   delete :" 
 				+"invoiceId = "+ invoiceId
 			);
 			invoiceMainRepository.deleteById(
 				invoiceId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteInvoiceMain   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteInvoiceMain   successfully. ");	
 	} 
 
     /**
@@ -1939,10 +1939,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceMainEntity> searchBy(InvoiceMainEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith InvoiceMain   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith InvoiceMain   before dao searchWith : bean "+bean);	
 		List<InvoiceMainEntity> results = null;
 		results = invoiceMainRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithInvoiceMain   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithInvoiceMain   successfully. ");	
 		return results;
     }
 
@@ -1951,10 +1951,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceMainEntity> searchLike(InvoiceMainEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike InvoiceMain   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike InvoiceMain   before dao searchLike : bean "+bean);	
 		List<InvoiceMainEntity> results = null;
 		results = invoiceMainRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeInvoiceMain   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeInvoiceMain   successfully. ");	
 		return results;
     }
     /**
@@ -1963,7 +1963,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public BillCycleEntity save(BillCycleEntity bean) {
 
-		log.debug("ChargeFacadeImpl create BillCycle  before dao save BillCycle :  "+bean);	
+		logger.debug("ChargeFacadeImpl create BillCycle  before dao save BillCycle :  "+bean);	
 		return billCycleRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create BillCycle   successfully.");		
 	}
@@ -1976,7 +1976,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer billId 
 	) {
 		Optional<BillCycleEntity> data = null;
-		log.debug("ChargeFacadeImpl findBillCycleById begin :" 
+		logger.debug("ChargeFacadeImpl findBillCycleById begin :" 
 			+"billId = "+ billId
 		);	
 		try {
@@ -1989,7 +1989,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findBillCycleById successfully.");	
+		logger.debug("ChargeFacadeImpl findBillCycleById successfully.");	
 		return null;
 	}
 
@@ -1998,11 +1998,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<BillCycleEntity> findBillCycleAll() {
-		log.debug("ChargeFacadeImpl searchBillCycleAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchBillCycleAll  before dao get all ");	
 
 		List<BillCycleEntity> results = null;
 		results = billCycleRepository.findAll();
-		log.debug("ChargeFacadeImpl searchBillCycleAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchBillCycleAll   successfully.");	
 		return results;
     }
 
@@ -2012,7 +2012,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public BillCycleEntity update(BillCycleEntity bean) {
-		log.debug("ChargeFacadeImpl update BillCycle   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update BillCycle   before dao update : bean "+bean);	
 		return billCycleRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update BillCycle    successfully.");	
 
@@ -2025,14 +2025,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer billId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteBillCycle   delete :" 
+			logger.debug("ChargeFacadeImpl deleteBillCycle   delete :" 
 				+"billId = "+ billId
 			);
 			billCycleRepository.deleteById(
 				billId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteBillCycle   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteBillCycle   successfully. ");	
 	} 
 
     /**
@@ -2040,10 +2040,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<BillCycleEntity> searchBy(BillCycleEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith BillCycle   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith BillCycle   before dao searchWith : bean "+bean);	
 		List<BillCycleEntity> results = null;
 		results = billCycleRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithBillCycle   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithBillCycle   successfully. ");	
 		return results;
     }
 
@@ -2052,10 +2052,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<BillCycleEntity> searchLike(BillCycleEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike BillCycle   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike BillCycle   before dao searchLike : bean "+bean);	
 		List<BillCycleEntity> results = null;
 		results = billCycleRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeBillCycle   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeBillCycle   successfully. ");	
 		return results;
     }
     /**
@@ -2064,7 +2064,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public LogParameterEntity save(LogParameterEntity bean) {
 
-		log.debug("ChargeFacadeImpl create LogParameter  before dao save LogParameter :  "+bean);	
+		logger.debug("ChargeFacadeImpl create LogParameter  before dao save LogParameter :  "+bean);	
 		return logParameterRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create LogParameter   successfully.");		
 	}
@@ -2077,7 +2077,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer parameterId 
 	) {
 		Optional<LogParameterEntity> data = null;
-		log.debug("ChargeFacadeImpl findLogParameterById begin :" 
+		logger.debug("ChargeFacadeImpl findLogParameterById begin :" 
 			+"parameterId = "+ parameterId
 		);	
 		try {
@@ -2090,7 +2090,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findLogParameterById successfully.");	
+		logger.debug("ChargeFacadeImpl findLogParameterById successfully.");	
 		return null;
 	}
 
@@ -2099,11 +2099,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<LogParameterEntity> findLogParameterAll() {
-		log.debug("ChargeFacadeImpl searchLogParameterAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchLogParameterAll  before dao get all ");	
 
 		List<LogParameterEntity> results = null;
 		results = logParameterRepository.findAll();
-		log.debug("ChargeFacadeImpl searchLogParameterAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchLogParameterAll   successfully.");	
 		return results;
     }
 
@@ -2113,7 +2113,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public LogParameterEntity update(LogParameterEntity bean) {
-		log.debug("ChargeFacadeImpl update LogParameter   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update LogParameter   before dao update : bean "+bean);	
 		return logParameterRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update LogParameter    successfully.");	
 
@@ -2126,14 +2126,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer parameterId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteLogParameter   delete :" 
+			logger.debug("ChargeFacadeImpl deleteLogParameter   delete :" 
 				+"parameterId = "+ parameterId
 			);
 			logParameterRepository.deleteById(
 				parameterId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteLogParameter   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteLogParameter   successfully. ");	
 	} 
 
     /**
@@ -2141,10 +2141,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<LogParameterEntity> searchBy(LogParameterEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith LogParameter   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith LogParameter   before dao searchWith : bean "+bean);	
 		List<LogParameterEntity> results = null;
 		results = logParameterRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithLogParameter   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithLogParameter   successfully. ");	
 		return results;
     }
 
@@ -2153,10 +2153,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<LogParameterEntity> searchLike(LogParameterEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike LogParameter   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike LogParameter   before dao searchLike : bean "+bean);	
 		List<LogParameterEntity> results = null;
 		results = logParameterRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeLogParameter   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeLogParameter   successfully. ");	
 		return results;
     }
     /**
@@ -2165,7 +2165,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public ChargeModeCycleAddEntity save(ChargeModeCycleAddEntity bean) {
 
-		log.debug("ChargeFacadeImpl create ChargeModeCycleAdd  before dao save ChargeModeCycleAdd :  "+bean);	
+		logger.debug("ChargeFacadeImpl create ChargeModeCycleAdd  before dao save ChargeModeCycleAdd :  "+bean);	
 		return chargeModeCycleAddRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create ChargeModeCycleAdd   successfully.");		
 	}
@@ -2178,7 +2178,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer additionId 
 	) {
 		Optional<ChargeModeCycleAddEntity> data = null;
-		log.debug("ChargeFacadeImpl findChargeModeCycleAddById begin :" 
+		logger.debug("ChargeFacadeImpl findChargeModeCycleAddById begin :" 
 			+"additionId = "+ additionId
 		);	
 		try {
@@ -2191,7 +2191,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findChargeModeCycleAddById successfully.");	
+		logger.debug("ChargeFacadeImpl findChargeModeCycleAddById successfully.");	
 		return null;
 	}
 
@@ -2200,11 +2200,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<ChargeModeCycleAddEntity> findChargeModeCycleAddAll() {
-		log.debug("ChargeFacadeImpl searchChargeModeCycleAddAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchChargeModeCycleAddAll  before dao get all ");	
 
 		List<ChargeModeCycleAddEntity> results = null;
 		results = chargeModeCycleAddRepository.findAll();
-		log.debug("ChargeFacadeImpl searchChargeModeCycleAddAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchChargeModeCycleAddAll   successfully.");	
 		return results;
     }
 
@@ -2214,7 +2214,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public ChargeModeCycleAddEntity update(ChargeModeCycleAddEntity bean) {
-		log.debug("ChargeFacadeImpl update ChargeModeCycleAdd   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update ChargeModeCycleAdd   before dao update : bean "+bean);	
 		return chargeModeCycleAddRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update ChargeModeCycleAdd    successfully.");	
 
@@ -2227,14 +2227,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer additionId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteChargeModeCycleAdd   delete :" 
+			logger.debug("ChargeFacadeImpl deleteChargeModeCycleAdd   delete :" 
 				+"additionId = "+ additionId
 			);
 			chargeModeCycleAddRepository.deleteById(
 				additionId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteChargeModeCycleAdd   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteChargeModeCycleAdd   successfully. ");	
 	} 
 
     /**
@@ -2242,10 +2242,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<ChargeModeCycleAddEntity> searchBy(ChargeModeCycleAddEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith ChargeModeCycleAdd   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith ChargeModeCycleAdd   before dao searchWith : bean "+bean);	
 		List<ChargeModeCycleAddEntity> results = null;
 		results = chargeModeCycleAddRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithChargeModeCycleAdd   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithChargeModeCycleAdd   successfully. ");	
 		return results;
     }
 
@@ -2254,10 +2254,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<ChargeModeCycleAddEntity> searchLike(ChargeModeCycleAddEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike ChargeModeCycleAdd   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike ChargeModeCycleAdd   before dao searchLike : bean "+bean);	
 		List<ChargeModeCycleAddEntity> results = null;
 		results = chargeModeCycleAddRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeChargeModeCycleAdd   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeChargeModeCycleAdd   successfully. ");	
 		return results;
     }
     /**
@@ -2266,7 +2266,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public DealerEntity save(DealerEntity bean) {
 
-		log.debug("ChargeFacadeImpl create Dealer  before dao save Dealer :  "+bean);	
+		logger.debug("ChargeFacadeImpl create Dealer  before dao save Dealer :  "+bean);	
 		return dealerRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create Dealer   successfully.");		
 	}
@@ -2279,7 +2279,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer dealerId 
 	) {
 		Optional<DealerEntity> data = null;
-		log.debug("ChargeFacadeImpl findDealerById begin :" 
+		logger.debug("ChargeFacadeImpl findDealerById begin :" 
 			+"dealerId = "+ dealerId
 		);	
 		try {
@@ -2292,7 +2292,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findDealerById successfully.");	
+		logger.debug("ChargeFacadeImpl findDealerById successfully.");	
 		return null;
 	}
 
@@ -2301,11 +2301,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<DealerEntity> findDealerAll() {
-		log.debug("ChargeFacadeImpl searchDealerAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchDealerAll  before dao get all ");	
 
 		List<DealerEntity> results = null;
 		results = dealerRepository.findAll();
-		log.debug("ChargeFacadeImpl searchDealerAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchDealerAll   successfully.");	
 		return results;
     }
 
@@ -2315,7 +2315,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public DealerEntity update(DealerEntity bean) {
-		log.debug("ChargeFacadeImpl update Dealer   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update Dealer   before dao update : bean "+bean);	
 		return dealerRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update Dealer    successfully.");	
 
@@ -2328,14 +2328,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer dealerId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteDealer   delete :" 
+			logger.debug("ChargeFacadeImpl deleteDealer   delete :" 
 				+"dealerId = "+ dealerId
 			);
 			dealerRepository.deleteById(
 				dealerId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteDealer   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteDealer   successfully. ");	
 	} 
 
     /**
@@ -2343,10 +2343,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<DealerEntity> searchBy(DealerEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith Dealer   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith Dealer   before dao searchWith : bean "+bean);	
 		List<DealerEntity> results = null;
 		results = dealerRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithDealer   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithDealer   successfully. ");	
 		return results;
     }
 
@@ -2355,10 +2355,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<DealerEntity> searchLike(DealerEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike Dealer   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike Dealer   before dao searchLike : bean "+bean);	
 		List<DealerEntity> results = null;
 		results = dealerRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeDealer   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeDealer   successfully. ");	
 		return results;
     }
     /**
@@ -2367,7 +2367,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public WarrantyEntity save(WarrantyEntity bean) {
 
-		log.debug("ChargeFacadeImpl create Warranty  before dao save Warranty :  "+bean);	
+		logger.debug("ChargeFacadeImpl create Warranty  before dao save Warranty :  "+bean);	
 		return warrantyRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create Warranty   successfully.");		
 	}
@@ -2380,7 +2380,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer warrantyId 
 	) {
 		Optional<WarrantyEntity> data = null;
-		log.debug("ChargeFacadeImpl findWarrantyById begin :" 
+		logger.debug("ChargeFacadeImpl findWarrantyById begin :" 
 			+"warrantyId = "+ warrantyId
 		);	
 		try {
@@ -2393,7 +2393,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findWarrantyById successfully.");	
+		logger.debug("ChargeFacadeImpl findWarrantyById successfully.");	
 		return null;
 	}
 
@@ -2402,11 +2402,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<WarrantyEntity> findWarrantyAll() {
-		log.debug("ChargeFacadeImpl searchWarrantyAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchWarrantyAll  before dao get all ");	
 
 		List<WarrantyEntity> results = null;
 		results = warrantyRepository.findAll();
-		log.debug("ChargeFacadeImpl searchWarrantyAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchWarrantyAll   successfully.");	
 		return results;
     }
 
@@ -2416,7 +2416,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public WarrantyEntity update(WarrantyEntity bean) {
-		log.debug("ChargeFacadeImpl update Warranty   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update Warranty   before dao update : bean "+bean);	
 		return warrantyRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update Warranty    successfully.");	
 
@@ -2429,14 +2429,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer warrantyId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteWarranty   delete :" 
+			logger.debug("ChargeFacadeImpl deleteWarranty   delete :" 
 				+"warrantyId = "+ warrantyId
 			);
 			warrantyRepository.deleteById(
 				warrantyId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteWarranty   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteWarranty   successfully. ");	
 	} 
 
     /**
@@ -2444,10 +2444,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<WarrantyEntity> searchBy(WarrantyEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith Warranty   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith Warranty   before dao searchWith : bean "+bean);	
 		List<WarrantyEntity> results = null;
 		results = warrantyRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithWarranty   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithWarranty   successfully. ");	
 		return results;
     }
 
@@ -2456,10 +2456,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<WarrantyEntity> searchLike(WarrantyEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike Warranty   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike Warranty   before dao searchLike : bean "+bean);	
 		List<WarrantyEntity> results = null;
 		results = warrantyRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeWarranty   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeWarranty   successfully. ");	
 		return results;
     }
     /**
@@ -2468,7 +2468,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public ChargeModeGradeEntity save(ChargeModeGradeEntity bean) {
 
-		log.debug("ChargeFacadeImpl create ChargeModeGrade  before dao save ChargeModeGrade :  "+bean);	
+		logger.debug("ChargeFacadeImpl create ChargeModeGrade  before dao save ChargeModeGrade :  "+bean);	
 		return chargeModeGradeRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create ChargeModeGrade   successfully.");		
 	}
@@ -2481,7 +2481,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer chargeId 
 	) {
 		Optional<ChargeModeGradeEntity> data = null;
-		log.debug("ChargeFacadeImpl findChargeModeGradeById begin :" 
+		logger.debug("ChargeFacadeImpl findChargeModeGradeById begin :" 
 			+"chargeId = "+ chargeId
 		);	
 		try {
@@ -2494,7 +2494,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findChargeModeGradeById successfully.");	
+		logger.debug("ChargeFacadeImpl findChargeModeGradeById successfully.");	
 		return null;
 	}
 
@@ -2503,11 +2503,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<ChargeModeGradeEntity> findChargeModeGradeAll() {
-		log.debug("ChargeFacadeImpl searchChargeModeGradeAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchChargeModeGradeAll  before dao get all ");	
 
 		List<ChargeModeGradeEntity> results = null;
 		results = chargeModeGradeRepository.findAll();
-		log.debug("ChargeFacadeImpl searchChargeModeGradeAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchChargeModeGradeAll   successfully.");	
 		return results;
     }
 
@@ -2517,7 +2517,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public ChargeModeGradeEntity update(ChargeModeGradeEntity bean) {
-		log.debug("ChargeFacadeImpl update ChargeModeGrade   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update ChargeModeGrade   before dao update : bean "+bean);	
 		return chargeModeGradeRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update ChargeModeGrade    successfully.");	
 
@@ -2530,14 +2530,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer chargeId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteChargeModeGrade   delete :" 
+			logger.debug("ChargeFacadeImpl deleteChargeModeGrade   delete :" 
 				+"chargeId = "+ chargeId
 			);
 			chargeModeGradeRepository.deleteById(
 				chargeId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteChargeModeGrade   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteChargeModeGrade   successfully. ");	
 	} 
 
     /**
@@ -2545,10 +2545,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<ChargeModeGradeEntity> searchBy(ChargeModeGradeEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith ChargeModeGrade   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith ChargeModeGrade   before dao searchWith : bean "+bean);	
 		List<ChargeModeGradeEntity> results = null;
 		results = chargeModeGradeRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithChargeModeGrade   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithChargeModeGrade   successfully. ");	
 		return results;
     }
 
@@ -2557,10 +2557,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<ChargeModeGradeEntity> searchLike(ChargeModeGradeEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike ChargeModeGrade   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike ChargeModeGrade   before dao searchLike : bean "+bean);	
 		List<ChargeModeGradeEntity> results = null;
 		results = chargeModeGradeRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeChargeModeGrade   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeChargeModeGrade   successfully. ");	
 		return results;
     }
     /**
@@ -2569,7 +2569,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public InvoiceSyncRelationEntity save(InvoiceSyncRelationEntity bean) {
 
-		log.debug("ChargeFacadeImpl create InvoiceSyncRelation  before dao save InvoiceSyncRelation :  "+bean);	
+		logger.debug("ChargeFacadeImpl create InvoiceSyncRelation  before dao save InvoiceSyncRelation :  "+bean);	
 		return invoiceSyncRelationRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create InvoiceSyncRelation   successfully.");		
 	}
@@ -2584,14 +2584,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 ,		java.lang.String cYearMonth 
 ,		java.lang.String invoiceNumber 
 	) {
-			log.debug("ChargeFacadeImpl findInvoiceSyncRelationById   findInvoiceSyncRelationById :" 
+			logger.debug("ChargeFacadeImpl findInvoiceSyncRelationById   findInvoiceSyncRelationById :" 
 				+"uploadType = "+ uploadType
   				+"sellerIdentifier = "+ sellerIdentifier
   				+"cYearMonth = "+ cYearMonth
   				+"invoiceNumber = "+ invoiceNumber
 			);	
 			Optional<InvoiceSyncRelationEntity> data = null;
-			log.debug("ChargeFacadeImpl findInvoiceSyncRelationById begin :");
+			logger.debug("ChargeFacadeImpl findInvoiceSyncRelationById begin :");
 			try {
 				data = invoiceSyncRelationRepository.findById(new InvoiceSyncRelationEntityPK(
 								 uploadType,  sellerIdentifier,  cYearMonth,
@@ -2604,7 +2604,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 				return null;
 			}
 			
-			log.debug("ChargeFacadeImpl findInvoiceSyncRelationById successfully.");	
+			logger.debug("ChargeFacadeImpl findInvoiceSyncRelationById successfully.");	
 			return null;
 	}
 
@@ -2615,11 +2615,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
 	public InvoiceSyncRelationEntity findInvoiceSyncRelationById(
 					InvoiceSyncRelationEntityPK id
 	) {
-			log.debug("ChargeFacadeImpl findInvoiceSyncRelationById   findInvoiceSyncRelationById :" 
+			logger.debug("ChargeFacadeImpl findInvoiceSyncRelationById   findInvoiceSyncRelationById :" 
 				+id
 			);	
 			Optional<InvoiceSyncRelationEntity> data = null;
-			log.debug("ChargeFacadeImpl findInvoiceSyncRelationById begin :");
+			logger.debug("ChargeFacadeImpl findInvoiceSyncRelationById begin :");
 			try {
 				data = invoiceSyncRelationRepository.findById(id);	
 				if(data.isPresent()) {
@@ -2630,7 +2630,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 				return null;
 			}
 			
-			log.debug("ChargeFacadeImpl findInvoiceSyncRelationById successfully.");	
+			logger.debug("ChargeFacadeImpl findInvoiceSyncRelationById successfully.");	
 			return null;
 	}
 
@@ -2639,11 +2639,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<InvoiceSyncRelationEntity> findInvoiceSyncRelationAll() {
-		log.debug("ChargeFacadeImpl searchInvoiceSyncRelationAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchInvoiceSyncRelationAll  before dao get all ");	
 
 		List<InvoiceSyncRelationEntity> results = null;
 		results = invoiceSyncRelationRepository.findAll();
-		log.debug("ChargeFacadeImpl searchInvoiceSyncRelationAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchInvoiceSyncRelationAll   successfully.");	
 		return results;
     }
 
@@ -2653,7 +2653,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public InvoiceSyncRelationEntity update(InvoiceSyncRelationEntity bean) {
-		log.debug("ChargeFacadeImpl update InvoiceSyncRelation   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update InvoiceSyncRelation   before dao update : bean "+bean);	
 		return invoiceSyncRelationRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update InvoiceSyncRelation    successfully.");	
 
@@ -2669,7 +2669,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 , 		java.lang.String invoiceNumber 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   delete :" 
+			logger.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   delete :" 
 				+"uploadType = "+ uploadType
   				+"sellerIdentifier = "+ sellerIdentifier
   				+"cYearMonth = "+ cYearMonth
@@ -2680,7 +2680,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 							 invoiceNumber)
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   successfully. ");	
 	} 
 	
     /**
@@ -2690,12 +2690,12 @@ public class ChargeFacadeImpl implements ChargeFacade {
 					InvoiceSyncRelationEntityPK id
 	) {
 
-			log.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   delete :" 
+			logger.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   delete :" 
 				+id
 			);
 			invoiceSyncRelationRepository.deleteById(id);
 			 
-		log.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteInvoiceSyncRelation   successfully. ");	
 	} 
 
     /**
@@ -2703,10 +2703,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceSyncRelationEntity> searchBy(InvoiceSyncRelationEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith InvoiceSyncRelation   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith InvoiceSyncRelation   before dao searchWith : bean "+bean);	
 		List<InvoiceSyncRelationEntity> results = null;
 		results = invoiceSyncRelationRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithInvoiceSyncRelation   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithInvoiceSyncRelation   successfully. ");	
 		return results;
     }
 
@@ -2715,10 +2715,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<InvoiceSyncRelationEntity> searchLike(InvoiceSyncRelationEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike InvoiceSyncRelation   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike InvoiceSyncRelation   before dao searchLike : bean "+bean);	
 		List<InvoiceSyncRelationEntity> results = null;
 		results = invoiceSyncRelationRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeInvoiceSyncRelation   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeInvoiceSyncRelation   successfully. ");	
 		return results;
     }
     /**
@@ -2727,7 +2727,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public CashMasterEntity save(CashMasterEntity bean) {
 
-		log.debug("ChargeFacadeImpl create CashMaster  before dao save CashMaster :  "+bean);	
+		logger.debug("ChargeFacadeImpl create CashMaster  before dao save CashMaster :  "+bean);	
 		return cashMasterRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create CashMaster   successfully.");		
 	}
@@ -2740,7 +2740,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer cashMasterId 
 	) {
 		Optional<CashMasterEntity> data = null;
-		log.debug("ChargeFacadeImpl findCashMasterById begin :" 
+		logger.debug("ChargeFacadeImpl findCashMasterById begin :" 
 			+"cashMasterId = "+ cashMasterId
 		);	
 		try {
@@ -2753,7 +2753,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findCashMasterById successfully.");	
+		logger.debug("ChargeFacadeImpl findCashMasterById successfully.");	
 		return null;
 	}
 
@@ -2762,11 +2762,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<CashMasterEntity> findCashMasterAll() {
-		log.debug("ChargeFacadeImpl searchCashMasterAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchCashMasterAll  before dao get all ");	
 
 		List<CashMasterEntity> results = null;
 		results = cashMasterRepository.findAll();
-		log.debug("ChargeFacadeImpl searchCashMasterAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchCashMasterAll   successfully.");	
 		return results;
     }
 
@@ -2776,7 +2776,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public CashMasterEntity update(CashMasterEntity bean) {
-		log.debug("ChargeFacadeImpl update CashMaster   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update CashMaster   before dao update : bean "+bean);	
 		return cashMasterRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update CashMaster    successfully.");	
 
@@ -2789,14 +2789,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer cashMasterId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteCashMaster   delete :" 
+			logger.debug("ChargeFacadeImpl deleteCashMaster   delete :" 
 				+"cashMasterId = "+ cashMasterId
 			);
 			cashMasterRepository.deleteById(
 				cashMasterId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteCashMaster   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteCashMaster   successfully. ");	
 	} 
 
     /**
@@ -2804,10 +2804,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CashMasterEntity> searchBy(CashMasterEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith CashMaster   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith CashMaster   before dao searchWith : bean "+bean);	
 		List<CashMasterEntity> results = null;
 		results = cashMasterRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithCashMaster   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithCashMaster   successfully. ");	
 		return results;
     }
 
@@ -2816,10 +2816,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<CashMasterEntity> searchLike(CashMasterEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike CashMaster   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike CashMaster   before dao searchLike : bean "+bean);	
 		List<CashMasterEntity> results = null;
 		results = cashMasterRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeCashMaster   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeCashMaster   successfully. ");	
 		return results;
     }
     /**
@@ -2828,7 +2828,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public PrepayDeductMasterEntity save(PrepayDeductMasterEntity bean) {
 
-		log.debug("ChargeFacadeImpl create PrepayDeductMaster  before dao save PrepayDeductMaster :  "+bean);	
+		logger.debug("ChargeFacadeImpl create PrepayDeductMaster  before dao save PrepayDeductMaster :  "+bean);	
 		return prepayDeductMasterRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create PrepayDeductMaster   successfully.");		
 	}
@@ -2841,7 +2841,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer prepayDeductMasterId 
 	) {
 		Optional<PrepayDeductMasterEntity> data = null;
-		log.debug("ChargeFacadeImpl findPrepayDeductMasterById begin :" 
+		logger.debug("ChargeFacadeImpl findPrepayDeductMasterById begin :" 
 			+"prepayDeductMasterId = "+ prepayDeductMasterId
 		);	
 		try {
@@ -2854,7 +2854,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findPrepayDeductMasterById successfully.");	
+		logger.debug("ChargeFacadeImpl findPrepayDeductMasterById successfully.");	
 		return null;
 	}
 
@@ -2863,11 +2863,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<PrepayDeductMasterEntity> findPrepayDeductMasterAll() {
-		log.debug("ChargeFacadeImpl searchPrepayDeductMasterAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchPrepayDeductMasterAll  before dao get all ");	
 
 		List<PrepayDeductMasterEntity> results = null;
 		results = prepayDeductMasterRepository.findAll();
-		log.debug("ChargeFacadeImpl searchPrepayDeductMasterAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchPrepayDeductMasterAll   successfully.");	
 		return results;
     }
 
@@ -2877,7 +2877,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public PrepayDeductMasterEntity update(PrepayDeductMasterEntity bean) {
-		log.debug("ChargeFacadeImpl update PrepayDeductMaster   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update PrepayDeductMaster   before dao update : bean "+bean);	
 		return prepayDeductMasterRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update PrepayDeductMaster    successfully.");	
 
@@ -2890,14 +2890,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer prepayDeductMasterId 
 	) {
 
-			log.debug("ChargeFacadeImpl deletePrepayDeductMaster   delete :" 
+			logger.debug("ChargeFacadeImpl deletePrepayDeductMaster   delete :" 
 				+"prepayDeductMasterId = "+ prepayDeductMasterId
 			);
 			prepayDeductMasterRepository.deleteById(
 				prepayDeductMasterId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deletePrepayDeductMaster   successfully. ");	
+		logger.debug("ChargeFacadeImpl deletePrepayDeductMaster   successfully. ");	
 	} 
 
     /**
@@ -2905,10 +2905,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PrepayDeductMasterEntity> searchBy(PrepayDeductMasterEntity bean) {
-		log.debug("ChargeFacadeImpl searchWith PrepayDeductMaster   before dao searchWith : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchWith PrepayDeductMaster   before dao searchWith : bean "+bean);	
 		List<PrepayDeductMasterEntity> results = null;
 		results = prepayDeductMasterRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchWithPrepayDeductMaster   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchWithPrepayDeductMaster   successfully. ");	
 		return results;
     }
 
@@ -2917,10 +2917,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<PrepayDeductMasterEntity> searchLike(PrepayDeductMasterEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike PrepayDeductMaster   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike PrepayDeductMaster   before dao searchLike : bean "+bean);	
 		List<PrepayDeductMasterEntity> results = null;
 		results = prepayDeductMasterRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikePrepayDeductMaster   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikePrepayDeductMaster   successfully. ");	
 		return results;
     }
     /**
@@ -2929,7 +2929,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      */
 	public UserEntity save(UserEntity bean) {
 
-		log.debug("ChargeFacadeImpl create User  before dao save User :  "+bean);	
+		logger.debug("ChargeFacadeImpl create User  before dao save User :  "+bean);	
 		return userRepository.save(bean); 
 		//log.debug("ChargeFacadeImpl create User   successfully.");		
 	}
@@ -2942,7 +2942,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer userId 
 	) {
 		Optional<UserEntity> data = null;
-		log.debug("ChargeFacadeImpl findUserById begin :" 
+		logger.debug("ChargeFacadeImpl findUserById begin :" 
 			+"userId = "+ userId
 		);	
 		try {
@@ -2955,7 +2955,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			return null;
 		}
 		
-		log.debug("ChargeFacadeImpl findUserById successfully.");	
+		logger.debug("ChargeFacadeImpl findUserById successfully.");	
 		return null;
 	}
 
@@ -2964,11 +2964,11 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception       ChargeSysException if something is wrong.
      */
     public List<UserEntity> findUserAll() {
-		log.debug("ChargeFacadeImpl searchUserAll  before dao get all ");	
+		logger.debug("ChargeFacadeImpl searchUserAll  before dao get all ");	
 
 		List<UserEntity> results = null;
 		results = userRepository.findAll();
-		log.debug("ChargeFacadeImpl searchUserAll   successfully.");	
+		logger.debug("ChargeFacadeImpl searchUserAll   successfully.");	
 		return results;
     }
 
@@ -2978,7 +2978,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @exception    ChargeSysException if something is wrong.
      */
     public UserEntity update(UserEntity bean) {
-		log.debug("ChargeFacadeImpl update User   before dao update : bean "+bean);	
+		logger.debug("ChargeFacadeImpl update User   before dao update : bean "+bean);	
 		return userRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update User    successfully.");	
 
@@ -2991,14 +2991,14 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		java.lang.Integer userId 
 	) {
 
-			log.debug("ChargeFacadeImpl deleteUser   delete :" 
+			logger.debug("ChargeFacadeImpl deleteUser   delete :" 
 				+"userId = "+ userId
 			);
 			userRepository.deleteById(
 				userId 
 			);
 			 
-		log.debug("ChargeFacadeImpl deleteUser   successfully. ");	
+		logger.debug("ChargeFacadeImpl deleteUser   successfully. ");	
 	} 
 
     /**
@@ -3009,7 +3009,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		//log.debug("ChargeFacadeImpl searchWith User   before dao searchWith bean: "+bean);	
 		List<UserEntity> results = null;
 		results = userRepository.searchWithVo(bean);	
-		log.debug("ChargeFacadeImpl searchBy successfully. ");	
+		logger.debug("ChargeFacadeImpl searchBy successfully. ");	
 		return results;
     }
 
@@ -3018,10 +3018,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object search criteria
      */
     public List<UserEntity> searchLike(UserEntity bean) {
-		log.debug("ChargeFacadeImpl searchLike User   before dao searchLike : bean "+bean);	
+		logger.debug("ChargeFacadeImpl searchLike User   before dao searchLike : bean "+bean);	
 		List<UserEntity> results = null;
 		results = userRepository.searchLikeVo(bean);
-		log.debug("ChargeFacadeImpl searchLikeUser   successfully. ");	
+		logger.debug("ChargeFacadeImpl searchLikeUser   successfully. ");	
 		return results;
     }
 }

@@ -7,8 +7,8 @@ package com.gateweb.charge.dao.impl;
 import com.gateweb.charge.dao.*; 
 import com.gateweb.charge.model.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class JpaChargeModeCycleAddDaoImpl extends JpaGenericDaoImpl<ChargeModeCy
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -43,7 +43,7 @@ public class JpaChargeModeCycleAddDaoImpl extends JpaGenericDaoImpl<ChargeModeCy
 	public void delete(
 		 java.lang.Integer additionId 
 																							) {
-		log.debug("JpaChargeModeCycleAddDaoImpl delete  begin "
+		logger.debug("JpaChargeModeCycleAddDaoImpl delete  begin "
 			+"id="+additionId
 		);	
 		try {
@@ -101,7 +101,7 @@ public class JpaChargeModeCycleAddDaoImpl extends JpaGenericDaoImpl<ChargeModeCy
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from ChargeModeCycleAddEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaChargeModeCycleAddDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaChargeModeCycleAddDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -174,7 +174,7 @@ public class JpaChargeModeCycleAddDaoImpl extends JpaGenericDaoImpl<ChargeModeCy
 		Query q;
 		List<ChargeModeCycleAddEntity> results;
 		try {
-			log.debug("JpaChargeModeCycleAddDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaChargeModeCycleAddDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -273,7 +273,7 @@ public class JpaChargeModeCycleAddDaoImpl extends JpaGenericDaoImpl<ChargeModeCy
 		Query q;
 		List<ChargeModeCycleAddEntity> results;
 		try {
-			log.debug("JpaChargeModeCycleAddDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaChargeModeCycleAddDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

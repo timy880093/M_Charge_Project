@@ -7,8 +7,8 @@ package com.gateweb.charge.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -53,7 +53,7 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleAddEntity> searchWithVo(ChargeModeCycleAddEntity vo) {
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleAddEntity chargeModeCycleAddEntity = QChargeModeCycleAddEntity.chargeModeCycleAddEntity;
 
@@ -93,13 +93,13 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 		if ( vo.getStartDate() != null && !"".equals(vo.getStartDate())) {
 			builder.and(chargeModeCycleAddEntity.startDate.eq(vo.getStartDate())); //java.util.Date
 		}
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleAddRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleAddEntity> searchWithVo(ChargeModeCycleAddEntity vo, Pageable pageable) {
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleAddEntity chargeModeCycleAddEntity = QChargeModeCycleAddEntity.chargeModeCycleAddEntity;
 
@@ -139,7 +139,7 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 		if ( vo.getStartDate() != null && !"".equals(vo.getStartDate())) {
 			builder.and(chargeModeCycleAddEntity.startDate.eq(vo.getStartDate())); //java.util.Date
 		}
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleAddRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -151,7 +151,7 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 	
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleAddEntity> searchLikeVo(ChargeModeCycleAddEntity vo) {
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleAddEntity chargeModeCycleAddEntity = QChargeModeCycleAddEntity.chargeModeCycleAddEntity;
 
@@ -191,7 +191,7 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 		if ( vo.getStartDate() != null && !"".equals(vo.getStartDate())) {
 			builder.and(chargeModeCycleAddEntity.startDate.eq(vo.getStartDate())); //java.util.Date
 		}
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleAddRepository.findAll(builder.getValue()));
 	}		
 	
@@ -199,7 +199,7 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 
 	@SuppressWarnings("unchecked")
 	public List<ChargeModeCycleAddEntity> searchLikeVo(ChargeModeCycleAddEntity vo, Pageable pageable) {
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QChargeModeCycleAddEntity chargeModeCycleAddEntity = QChargeModeCycleAddEntity.chargeModeCycleAddEntity;
 
@@ -239,7 +239,7 @@ public class ChargeModeCycleAddRepositoryImpl implements ChargeModeCycleAddRepos
 		if ( vo.getStartDate() != null && !"".equals(vo.getStartDate())) {
 			builder.and(chargeModeCycleAddEntity.startDate.eq(vo.getStartDate())); //java.util.Date
 		}
-		log.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("ChargeModeCycleAddRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeModeCycleAddRepository.findAll(builder.getValue(), pageable));
 	}	
 	

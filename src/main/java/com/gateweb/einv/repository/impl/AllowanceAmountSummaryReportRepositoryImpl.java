@@ -12,8 +12,8 @@ import com.gateweb.charge.repository.AllowanceAmountSummaryReportRepository;
 import com.gateweb.charge.repository.AllowanceAmountSummaryReportRepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -38,7 +38,7 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -57,7 +57,7 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 
 	@SuppressWarnings("unchecked")
 	public List<AllowanceAmountSummaryReportEntity> searchWithVo(AllowanceAmountSummaryReportEntity vo) {
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAllowanceAmountSummaryReportEntity allowanceAmountSummaryReportEntity = QAllowanceAmountSummaryReportEntity.allowanceAmountSummaryReportEntity;
 
@@ -94,13 +94,13 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 		if ( vo.getAllowanceStatus() != null ) {
 			builder.and(allowanceAmountSummaryReportEntity.allowanceStatus.eq(vo.getAllowanceStatus())); //java.lang.Integer
 		}	
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeAllowanceAmountSummaryReportRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<AllowanceAmountSummaryReportEntity> searchWithVo(AllowanceAmountSummaryReportEntity vo, Pageable pageable) {
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAllowanceAmountSummaryReportEntity allowanceAmountSummaryReportEntity = QAllowanceAmountSummaryReportEntity.allowanceAmountSummaryReportEntity;
 
@@ -137,7 +137,7 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 		if ( vo.getAllowanceStatus() != null ) {
 			builder.and(allowanceAmountSummaryReportEntity.allowanceStatus.eq(vo.getAllowanceStatus())); //java.lang.Integer
 		}	
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeAllowanceAmountSummaryReportRepository.findAll(builder.getValue(), pageable));
 	}
 	
@@ -149,7 +149,7 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 	
 	@SuppressWarnings("unchecked")
 	public List<AllowanceAmountSummaryReportEntity> searchLikeVo(AllowanceAmountSummaryReportEntity vo) {
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAllowanceAmountSummaryReportEntity allowanceAmountSummaryReportEntity = QAllowanceAmountSummaryReportEntity.allowanceAmountSummaryReportEntity;
 
@@ -186,7 +186,7 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 		if ( vo.getAllowanceStatus() != null ) {
 			builder.and(allowanceAmountSummaryReportEntity.allowanceStatus.eq(vo.getAllowanceStatus())); //java.lang.Integer
 		}	
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeAllowanceAmountSummaryReportRepository.findAll(builder.getValue()));
 	}		
 	
@@ -194,7 +194,7 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 
 	@SuppressWarnings("unchecked")
 	public List<AllowanceAmountSummaryReportEntity> searchLikeVo(AllowanceAmountSummaryReportEntity vo, Pageable pageable) {
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QAllowanceAmountSummaryReportEntity allowanceAmountSummaryReportEntity = QAllowanceAmountSummaryReportEntity.allowanceAmountSummaryReportEntity;
 
@@ -231,7 +231,7 @@ public class AllowanceAmountSummaryReportRepositoryImpl implements AllowanceAmou
 		if ( vo.getAllowanceStatus() != null ) {
 			builder.and(allowanceAmountSummaryReportEntity.allowanceStatus.eq(vo.getAllowanceStatus())); //java.lang.Integer
 		}	
-		log.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("AllowanceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(chargeAllowanceAmountSummaryReportRepository.findAll(builder.getValue(), pageable));
 	}	
 	

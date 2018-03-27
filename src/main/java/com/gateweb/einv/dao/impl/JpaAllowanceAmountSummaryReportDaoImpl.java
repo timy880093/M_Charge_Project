@@ -8,8 +8,8 @@ package com.gateweb.einv.dao.impl;
 import com.gateweb.einv.dao.AllowanceAmountSummaryReportDao;
 import com.gateweb.einv.model.AllowanceAmountSummaryReportEntity;
 import com.gateweb.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -34,7 +34,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends EinvJpaGenericDaoImp
 	/**
 	 *
 	 */
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -43,7 +43,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends EinvJpaGenericDaoImp
 	public void delete(
 												 Long id
 											) {
-		log.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl delete  begin "
+		logger.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl delete  begin "
 			+"id="+id
 		);	
 		try {
@@ -101,7 +101,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends EinvJpaGenericDaoImp
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from AllowanceAmountSummaryReportEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -171,7 +171,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends EinvJpaGenericDaoImp
 		Query q;
 		List<AllowanceAmountSummaryReportEntity> results;
 		try {
-			log.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -264,7 +264,7 @@ public class JpaAllowanceAmountSummaryReportDaoImpl extends EinvJpaGenericDaoImp
 		Query q;
 		List<AllowanceAmountSummaryReportEntity> results;
 		try {
-			log.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaAllowanceAmountSummaryReportEntityDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

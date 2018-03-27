@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaDealerDaoImpl extends JpaGenericDaoImpl<DealerEntity,           
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaDealerDaoImpl extends JpaGenericDaoImpl<DealerEntity,           
 	public void delete(
 																		 java.lang.Integer dealerId 
 	) {
-		log.debug("JpaDealerDaoImpl delete  begin "
+		logger.debug("JpaDealerDaoImpl delete  begin "
 			+"id="+dealerId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaDealerDaoImpl extends JpaGenericDaoImpl<DealerEntity,           
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from DealerEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaDealerDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaDealerDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -167,7 +167,7 @@ public class JpaDealerDaoImpl extends JpaGenericDaoImpl<DealerEntity,           
 		Query q;
 		List<DealerEntity> results;
 		try {
-			log.debug("JpaDealerDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaDealerDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -248,7 +248,7 @@ public class JpaDealerDaoImpl extends JpaGenericDaoImpl<DealerEntity,           
 		Query q;
 		List<DealerEntity> results;
 		try {
-			log.debug("JpaDealerDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaDealerDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

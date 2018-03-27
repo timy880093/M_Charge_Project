@@ -12,8 +12,8 @@ import com.gateweb.charge.repository.InvoiceAmountSummaryReportRepository;
 import com.gateweb.charge.repository.InvoiceAmountSummaryReportRepositoryCustom;
 import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +36,7 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -55,7 +55,7 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceAmountSummaryReportEntity> searchWithVo(InvoiceAmountSummaryReportEntity vo) {
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity = QInvoiceAmountSummaryReportEntity.invoiceAmountSummaryReportEntity;
 
@@ -92,13 +92,13 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 		if ( vo.getInvoiceStatus() != null ) {
 			builder.and(invoiceAmountSummaryReportEntity.invoiceStatus.eq(vo.getInvoiceStatus())); //java.lang.Integer
 		}	
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceAmountSummaryReportRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceAmountSummaryReportEntity> searchWithVo(InvoiceAmountSummaryReportEntity vo, Pageable pageable) {
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity = QInvoiceAmountSummaryReportEntity.invoiceAmountSummaryReportEntity;
 
@@ -135,7 +135,7 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 		if ( vo.getInvoiceStatus() != null ) {
 			builder.and(invoiceAmountSummaryReportEntity.invoiceStatus.eq(vo.getInvoiceStatus())); //java.lang.Integer
 		}	
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceAmountSummaryReportRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -147,7 +147,7 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceAmountSummaryReportEntity> searchLikeVo(InvoiceAmountSummaryReportEntity vo) {
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity = QInvoiceAmountSummaryReportEntity.invoiceAmountSummaryReportEntity;
 
@@ -184,7 +184,7 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 		if ( vo.getInvoiceStatus() != null ) {
 			builder.and(invoiceAmountSummaryReportEntity.invoiceStatus.eq(vo.getInvoiceStatus())); //java.lang.Integer
 		}	
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceAmountSummaryReportRepository.findAll(builder.getValue()));
 	}		
 	
@@ -192,7 +192,7 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceAmountSummaryReportEntity> searchLikeVo(InvoiceAmountSummaryReportEntity vo, Pageable pageable) {
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity = QInvoiceAmountSummaryReportEntity.invoiceAmountSummaryReportEntity;
 
@@ -229,7 +229,7 @@ public class InvoiceAmountSummaryReportRepositoryImpl implements InvoiceAmountSu
 		if ( vo.getInvoiceStatus() != null ) {
 			builder.and(invoiceAmountSummaryReportEntity.invoiceStatus.eq(vo.getInvoiceStatus())); //java.lang.Integer
 		}	
-		log.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceAmountSummaryReportRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceAmountSummaryReportRepository.findAll(builder.getValue(), pageable));
 	}	
 	

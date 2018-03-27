@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaChargeModeCycleDaoImpl extends JpaGenericDaoImpl<ChargeModeCycle
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaChargeModeCycleDaoImpl extends JpaGenericDaoImpl<ChargeModeCycle
 	public void delete(
 																 java.lang.Integer chargeId 
 																					) {
-		log.debug("JpaChargeModeCycleDaoImpl delete  begin "
+		logger.debug("JpaChargeModeCycleDaoImpl delete  begin "
 			+"id="+chargeId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaChargeModeCycleDaoImpl extends JpaGenericDaoImpl<ChargeModeCycle
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from ChargeModeCycleEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaChargeModeCycleDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaChargeModeCycleDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -194,7 +194,7 @@ public class JpaChargeModeCycleDaoImpl extends JpaGenericDaoImpl<ChargeModeCycle
 		Query q;
 		List<ChargeModeCycleEntity> results;
 		try {
-			log.debug("JpaChargeModeCycleDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaChargeModeCycleDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -329,7 +329,7 @@ public class JpaChargeModeCycleDaoImpl extends JpaGenericDaoImpl<ChargeModeCycle
 		Query q;
 		List<ChargeModeCycleEntity> results;
 		try {
-			log.debug("JpaChargeModeCycleDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaChargeModeCycleDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

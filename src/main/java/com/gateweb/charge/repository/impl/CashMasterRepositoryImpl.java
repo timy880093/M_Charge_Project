@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<CashMasterEntity> searchWithVo(CashMasterEntity vo) {
-		log.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashMasterEntity cashMasterEntity = QCashMasterEntity.cashMasterEntity;
 
@@ -132,13 +132,13 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashMasterEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashMasterRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<CashMasterEntity> searchWithVo(CashMasterEntity vo, Pageable pageable) {
-		log.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashMasterEntity cashMasterEntity = QCashMasterEntity.cashMasterEntity;
 
@@ -208,7 +208,7 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashMasterEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashMasterRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -220,7 +220,7 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<CashMasterEntity> searchLikeVo(CashMasterEntity vo) {
-		log.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashMasterEntity cashMasterEntity = QCashMasterEntity.cashMasterEntity;
 
@@ -290,7 +290,7 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashMasterEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashMasterRepository.findAll(builder.getValue()));
 	}		
 	
@@ -298,7 +298,7 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<CashMasterEntity> searchLikeVo(CashMasterEntity vo, Pageable pageable) {
-		log.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("CashMasterRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCashMasterEntity cashMasterEntity = QCashMasterEntity.cashMasterEntity;
 
@@ -368,7 +368,7 @@ public class CashMasterRepositoryImpl implements CashMasterRepositoryCustom {
 		if ( vo.getStatus() != null ) {
 			builder.and(cashMasterEntity.status.eq(vo.getStatus())); //java.lang.Integer
 		}	
-		log.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("CashMasterRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(cashMasterRepository.findAll(builder.getValue(), pageable));
 	}	
 	

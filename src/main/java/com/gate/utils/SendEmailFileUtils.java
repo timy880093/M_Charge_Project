@@ -4,8 +4,8 @@ package com.gate.utils;
 import com.gate.config.MailConfig;
 import com.gate.config.SystemConfig;
 import com.gate.config.SystemConfigLoader;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.commons.mail.*;
 
 import javax.mail.internet.InternetAddress;
@@ -22,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 public class SendEmailFileUtils extends MultiPartEmail {
 
 
-    private static Log log = LogFactory.getLog(SendEmailFileUtils.class);
+    private static Logger logger = LogManager.getLogger(SendEmailFileUtils.class);
 
     private static MultiPartEmail mailSender;
     private static SendEmailFileUtils instance = null;
@@ -77,7 +77,7 @@ public class SendEmailFileUtils extends MultiPartEmail {
         email.setMsg(sb.toString());
         email.attach(getAttachment(path,fileName));
         email.send();
-        log.info("send to: " + to.toString());
+        logger.info("send to: " + to.toString());
     }
 
     public static void sendEmail(String to, String toName, String subject, String content) throws EmailException, UnsupportedEncodingException {
@@ -92,7 +92,7 @@ public class SendEmailFileUtils extends MultiPartEmail {
         sb.append("</html>");
         email.setMsg(sb.toString());
         email.send();
-        log.info("send to: " + to.toString());
+        logger.info("send to: " + to.toString());
     }
 
     public static void sendEmail(String[] to, String subject, String content) throws EmailException, UnsupportedEncodingException {
@@ -107,7 +107,7 @@ public class SendEmailFileUtils extends MultiPartEmail {
         sb.append("</html>");
         email.setMsg(sb.toString());
         email.send();
-        log.info("send to: " + to.toString());
+        logger.info("send to: " + to.toString());
     }
 
     public static void main(String... args) {

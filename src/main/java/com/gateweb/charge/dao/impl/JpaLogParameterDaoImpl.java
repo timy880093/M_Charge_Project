@@ -8,8 +8,8 @@ import com.gateweb.charge.dao.*;
 import com.gateweb.charge.model.*;    
 import com.gateweb.charge.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,7 +36,7 @@ public class JpaLogParameterDaoImpl extends JpaGenericDaoImpl<LogParameterEntity
 	/**
 	 *
 	 */ 
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -45,7 +45,7 @@ public class JpaLogParameterDaoImpl extends JpaGenericDaoImpl<LogParameterEntity
 	public void delete(
 						 java.lang.Integer parameterId 
 	) {
-		log.debug("JpaLogParameterDaoImpl delete  begin "
+		logger.debug("JpaLogParameterDaoImpl delete  begin "
 			+"id="+parameterId
 		);	
 		try {
@@ -103,7 +103,7 @@ public class JpaLogParameterDaoImpl extends JpaGenericDaoImpl<LogParameterEntity
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from LogParameterEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaLogParameterDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaLogParameterDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -149,7 +149,7 @@ public class JpaLogParameterDaoImpl extends JpaGenericDaoImpl<LogParameterEntity
 		Query q;
 		List<LogParameterEntity> results;
 		try {
-			log.debug("JpaLogParameterDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaLogParameterDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -194,7 +194,7 @@ public class JpaLogParameterDaoImpl extends JpaGenericDaoImpl<LogParameterEntity
 		Query q;
 		List<LogParameterEntity> results;
 		try {
-			log.debug("JpaLogParameterDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaLogParameterDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

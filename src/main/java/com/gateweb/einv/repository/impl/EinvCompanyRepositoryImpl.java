@@ -7,8 +7,8 @@ package com.gateweb.einv.repository.impl;
 //import org.springframework.orm.ObjectRetrievalFailureException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +36,7 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -54,7 +54,7 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<Company> searchWithVo(Company vo) {
-		log.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompany company = QCompany.company;
 
@@ -142,13 +142,13 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
-		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue()));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Company> searchWithVo(Company vo, Pageable pageable) {
-		log.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompany company = QCompany.company;
 
@@ -236,7 +236,7 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
-		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue(), pageable));
 	}
 	
@@ -248,7 +248,7 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<Company> searchLikeVo(Company vo) {
-		log.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompany company = QCompany.company;
 
@@ -336,7 +336,7 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
-		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue()));
 	}		
 	
@@ -344,7 +344,7 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<Company> searchLikeVo(Company vo, Pageable pageable) {
-		log.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("Company2RepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QCompany company = QCompany.company;
 
@@ -432,7 +432,7 @@ public class EinvCompanyRepositoryImpl implements EinvCompanyRepositoryCustom {
 		if ( vo.getCityId() != null ) {
 			builder.and(company.cityId.eq(vo.getCityId())); //java.lang.Long
 		}	
-		log.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("Company2RepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(einvCompanyRepository.findAll(builder.getValue(), pageable));
 	}	
 	

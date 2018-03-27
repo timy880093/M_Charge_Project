@@ -8,8 +8,8 @@ package com.gateweb.charge.dao.impl;
 import com.gateweb.db.dao.exception.DaoSystemException;
 import com.gateweb.charge.dao.InvoiceAmountSummaryReportDao;
 import com.gateweb.charge.model.InvoiceAmountSummaryReportEntity;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -35,7 +35,7 @@ public class JpaInvoiceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoImp
 	/**
 	 *
 	 */
-	protected final Log logger = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 
     /**
      * Delete a record in Database.
@@ -44,7 +44,7 @@ public class JpaInvoiceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoImp
 	public void delete(
 												 Long id
 											) {
-		log.debug("JpaInvoiceAmountSummaryReportDaoImpl delete  begin "
+		logger.debug("JpaInvoiceAmountSummaryReportDaoImpl delete  begin "
 			+"id="+id
 		);	
 		try {
@@ -102,7 +102,7 @@ public class JpaInvoiceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoImp
 			final Object value, final int... rowStartIdxAndCount) {
 		final String queryString = "select model from InvoiceAmountSummaryReportEntity model where model."
 					+ propertyName + "= :propertyValue";
-		log.debug("JpaInvoiceAmountSummaryReportDaoImpl findByProperty   queryString :   "+queryString);
+		logger.debug("JpaInvoiceAmountSummaryReportDaoImpl findByProperty   queryString :   "+queryString);
 		try {
 			Query query = entityManager.createQuery(queryString);
 			query.setParameter("propertyValue", value);
@@ -172,7 +172,7 @@ public class JpaInvoiceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoImp
 		Query q;
 		List<InvoiceAmountSummaryReportEntity> results;
 		try {
-			log.debug("JpaInvoiceAmountSummaryReportDaoImpl searchBy  query : "+sb.toString());
+			logger.debug("JpaInvoiceAmountSummaryReportDaoImpl searchBy  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException
@@ -265,7 +265,7 @@ public class JpaInvoiceAmountSummaryReportDaoImpl extends ChargeJpaGenericDaoImp
 		Query q;
 		List<InvoiceAmountSummaryReportEntity> results;
 		try {
-			log.debug("JpaInvoiceAmountSummaryReportDaoImpl searchLike  query : "+sb.toString());
+			logger.debug("JpaInvoiceAmountSummaryReportDaoImpl searchLike  query : "+sb.toString());
 			q = entityManager.createQuery(sb.toString());
 		} catch (IllegalStateException ise){
 			//	RuntimeException

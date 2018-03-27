@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceTypeEntity> searchWithVo(InvoiceTypeEntity vo) {
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceTypeEntity invoiceTypeEntity = QInvoiceTypeEntity.invoiceTypeEntity;
 
@@ -81,13 +81,13 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 		if ( vo.getOutFormat() != null && !"".equals(vo.getOutFormat())) {
 			builder.and(invoiceTypeEntity.outFormat.equalsIgnoreCase(vo.getOutFormat())); //java.lang.String
 		}
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceTypeRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceTypeEntity> searchWithVo(InvoiceTypeEntity vo, Pageable pageable) {
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceTypeEntity invoiceTypeEntity = QInvoiceTypeEntity.invoiceTypeEntity;
 
@@ -106,7 +106,7 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 		if ( vo.getOutFormat() != null && !"".equals(vo.getOutFormat())) {
 			builder.and(invoiceTypeEntity.outFormat.equalsIgnoreCase(vo.getOutFormat())); //java.lang.String
 		}
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceTypeRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -118,7 +118,7 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 	
 	@SuppressWarnings("unchecked")
 	public List<InvoiceTypeEntity> searchLikeVo(InvoiceTypeEntity vo) {
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceTypeEntity invoiceTypeEntity = QInvoiceTypeEntity.invoiceTypeEntity;
 
@@ -137,7 +137,7 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 		if ( vo.getOutFormat() != null && !"".equals(vo.getOutFormat())) {
 			builder.and(invoiceTypeEntity.outFormat.containsIgnoreCase(vo.getOutFormat())); //java.lang.String
 		}
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceTypeRepository.findAll(builder.getValue()));
 	}		
 	
@@ -145,7 +145,7 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	public List<InvoiceTypeEntity> searchLikeVo(InvoiceTypeEntity vo, Pageable pageable) {
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QInvoiceTypeEntity invoiceTypeEntity = QInvoiceTypeEntity.invoiceTypeEntity;
 
@@ -164,7 +164,7 @@ public class InvoiceTypeRepositoryImpl implements InvoiceTypeRepositoryCustom {
 		if ( vo.getOutFormat() != null && !"".equals(vo.getOutFormat())) {
 			builder.and(invoiceTypeEntity.outFormat.containsIgnoreCase(vo.getOutFormat())); //java.lang.String
 		}
-		log.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("InvoiceTypeRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(invoiceTypeRepository.findAll(builder.getValue(), pageable));
 	}	
 	

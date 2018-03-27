@@ -9,8 +9,8 @@ import com.gateweb.charge.model.*;
 import com.gateweb.charge.*;
 
 import com.meshinnovation.db.dao.exception.DaoSystemException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import java.util.Collection;
 import javax.persistence.Query;
 //import org.springframework.orm.ObjectRetrievalFailureException;
@@ -44,7 +44,7 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 	 * <code>Log</code> instance for this application.
 	 * </p>
 	 */
-	protected final Log log = LogFactory.getLog(getClass());
+	protected final Logger logger = LogManager.getLogger(getClass());
 	
 	/*	@PersistenceContext
 	private EntityManager em;
@@ -62,7 +62,7 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 
 	@SuppressWarnings("unchecked")
 	public List<DeductDetailEntity> searchWithVo(DeductDetailEntity vo) {
-		log.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDeductDetailEntity deductDetailEntity = QDeductDetailEntity.deductDetailEntity;
 
@@ -99,13 +99,13 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(deductDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(deductDetailRepository.findAll(builder.getValue()));	
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<DeductDetailEntity> searchWithVo(DeductDetailEntity vo, Pageable pageable) {
-		log.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDeductDetailEntity deductDetailEntity = QDeductDetailEntity.deductDetailEntity;
 
@@ -142,7 +142,7 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(deductDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(deductDetailRepository.findAll(builder.getValue(), pageable));	
 	}
 	
@@ -154,7 +154,7 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 	
 	@SuppressWarnings("unchecked")
 	public List<DeductDetailEntity> searchLikeVo(DeductDetailEntity vo) {
-		log.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDeductDetailEntity deductDetailEntity = QDeductDetailEntity.deductDetailEntity;
 
@@ -191,7 +191,7 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(deductDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(deductDetailRepository.findAll(builder.getValue()));
 	}		
 	
@@ -199,7 +199,7 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 
 	@SuppressWarnings("unchecked")
 	public List<DeductDetailEntity> searchLikeVo(DeductDetailEntity vo, Pageable pageable) {
-		log.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
+		logger.debug("DeductDetailRepositoryImpl searchWithVo vo: " + vo);
 		BooleanBuilder builder = new BooleanBuilder();
 		QDeductDetailEntity deductDetailEntity = QDeductDetailEntity.deductDetailEntity;
 
@@ -236,7 +236,7 @@ public class DeductDetailRepositoryImpl implements DeductDetailRepositoryCustom 
 		if ( vo.getModifyDate() != null ) {
 			builder.and(deductDetailEntity.modifyDate.eq(vo.getModifyDate())); //java.sql.Timestamp
 		}	
-		log.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
+		logger.debug("DeductDetailRepositoryImpl searchWithVo predicate  " + builder.getValue());
 		return Lists.newArrayList(deductDetailRepository.findAll(builder.getValue(), pageable));
 	}	
 	
