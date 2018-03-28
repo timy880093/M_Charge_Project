@@ -236,6 +236,50 @@ public class CalCycleDAO extends BaseDAO {
         return true;
     }
 
+    /**
+     * 計算該公司該期使用了幾張發票。
+     * @param companyEntity
+     * @param calYM
+     * @return
+     */
+    public Integer calOverByCompany(CompanyEntity companyEntity,String calYM){
+        Integer useCnt = 0;
+        try{
+            //1.找出所有用戶的當月張數：計算當期發票開立A0401/C0401張數
+            List parameterList = new ArrayList();
+            //取得發票期別(民國年+雙數月)
+            String cYearMonth = timeUtils.getYearMonth(calYM+"01");
+            parameterList.add(cYearMonth);
+            String tempWhereSql = "";
+            if(null != companyEntity.getCompanyId() ){
+                tempWhereSql = " and cp.company_id = ? " ;
+                parameterList.add(companyEntity.getCompanyId());
+            }
+            parameterList.add(calYM); //超額計算年月
+
+            String sql = "select im.seller,cp.company_id,name,count(1) " +
+                    "from invoice_main im left join company cp on im.seller=cp.business_no " +
+                    "where 1=1 and im.c_year_month = ? " + tempWhereSql +
+                    " and im.invoice_date is not null and substring(im.invoice_date,1,6)= ?  " +
+                    //只計算我們公司一般用戶使用張數，不計算樂天用戶使用張數
+                    " and (im.sync_company_key is null or im.sync_company_key not in ('41112002-23dc-440e-944c-4fed3777a187')) ";
+
+            sql += "group by im.seller,cp.company_id order by cp.company_id ";
+            Query query = createQuery(sql, parameterList, null);
+            List<Map> useCntList = query.list();
+
+            for (int k = 0; k < useCntList.size(); k++) {
+                //Integer cpId = (Integer)(useCntList.get(k).get("company_id"));
+                //String cpName = (String)(useCntList.get(k).get("name"));
+                useCnt = ((BigInteger) useCntList.get(k).get("count")).intValue(); //該公司某年月開的發票數量
+            }
+            System.out.println("cpId="+companyEntity.getCompanyId()+" useCnt="+useCnt+" calYM="+calYM + " cYearMonth="+cYearMonth);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return useCnt;
+        }
+    }
 
     /**計算超額
      * @param calYM 要計算到哪個年月
@@ -260,55 +304,26 @@ public class CalCycleDAO extends BaseDAO {
             List<BillCycleEntity> billCycleList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(calYM,companyEntity.getCompanyId());
 
             //該公司在某年月的那一筆billCycle
-            for(int m=0; m<billCycleList.size(); m++){
-                BillCycleEntity billCycleEntity = (BillCycleEntity)billCycleList.get(m);
+            for(BillCycleEntity billCycleEntity: billCycleList){
                 //如果bill_cycle的Cash_Out_Over_Id不是null，則不作超額計算(已被計算過了(算到cash_detail裡))
                 if(null != billCycleEntity.getCashOutOverId()){
                     continue;
                 }
+
                 //作廢的不計算
                 if("2".equals(billCycleEntity.getStatus())){
                     continue;
                 }
 
-                //1.找出所有用戶的當月張數：計算當期發票開立A0401/C0401張數
-                List parameterList = new ArrayList();
-                //取得發票期別(民國年+雙數月)
-                String cYearMonth = timeUtils.getYearMonth(calYM+"01");
-                parameterList.add(cYearMonth);
-                String tempWhereSql = "";
-                if(null != companyEntity.getCompanyId() ){
-                    tempWhereSql = " and cp.company_id = ? " ;
-                    parameterList.add(companyEntity.getCompanyId());
-                }
-                parameterList.add(calYM); //超額計算年月
+                Integer useCnt = calOverByCompany(companyEntity,calYM);
 
-                String sql = "select im.seller,cp.company_id,name,count(1) " +
-                        "from invoice_main im left join company cp on im.seller=cp.business_no " +
-                        "where 1=1 and im.c_year_month = ? " + tempWhereSql +
-                        " and im.invoice_date is not null and substring(im.invoice_date,1,6)= ?  " +
-                        //只計算我們公司一般用戶使用張數，不計算樂天用戶使用張數
-                        " and (im.sync_company_key is null or im.sync_company_key not in ('41112002-23dc-440e-944c-4fed3777a187')) ";
-
-                sql += "group by im.seller,cp.company_id order by cp.company_id ";
-                Query query = createQuery(sql, parameterList, null);
-                List<Map> useCntList = query.list();
-
-                Integer useCnt = 0;
-                for (int k = 0; k < useCntList.size(); k++) {
-                    //Integer cpId = (Integer)(useCntList.get(k).get("company_id"));
-                    //String cpName = (String)(useCntList.get(k).get("name"));
-                    useCnt = ((BigInteger) useCntList.get(k).get("count")).intValue(); //該公司某年月開的發票數量
-
-                }
-                System.out.println("cpId="+companyEntity.getCompanyId()+" useCnt="+useCnt+" calYM="+calYM + " cYearMonth="+cYearMonth);
                 //System.out.println("sql= "+sql);
                 //System.out.println("cYearMonth= "+cYearMonth+",company_id="+company_id+",calYM="+calYM);
 
                 billCycleEntity.setCnt(useCnt); //當月使用張數
                 Integer cntGift = (null == billCycleEntity.getCntGift() )?0:(billCycleEntity.getCntGift()); //贈送張數
                 Integer cntLimit = billCycleEntity.getCntLimit(); //當月免費張數上限
-                BigDecimal singlePirce = billCycleEntity.getSinglePrice(); //單一張發票收費價格
+                BigDecimal singlePrice = billCycleEntity.getSinglePrice(); //單一張發票收費價格
                 BigDecimal priceMax = billCycleEntity.getPriceMax(); //當月繳款金額上限
                 BigDecimal price = billCycleEntity.getPrice(); //月租金額
 
@@ -329,7 +344,7 @@ public class CalCycleDAO extends BaseDAO {
                         billCycleEntity.setCntOver(cntOverTemp); //超限張數
 
                         //超限金額 = 超限張數*單一張發票收費價格
-                        BigDecimal priceOver = cntOver.multiply(singlePirce) ; //超限金額
+                        BigDecimal priceOver = cntOver.multiply(singlePrice) ; //超限金額
                         billCycleEntity.setPriceOver(priceOver); //超限金額
 
                         BigDecimal priceMaxTemp = priceMax.subtract(price);
@@ -392,7 +407,7 @@ public class CalCycleDAO extends BaseDAO {
                 cnt++;  //計算了幾筆
 
                 if(isSum == true){ //isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
-                    //3.如果超額達300元，將資料寫sh_flow table
+                    //3.如果超額達300元，將資料寫cash_flow table
                     BigDecimal sumOfPayOver = getSumOfPayOver(companyEntity.getCompanyId(), calYM);
                     double sumOver = sumOfPayOver.doubleValue();
                     //該超額總額大於500元
