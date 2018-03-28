@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.facades.CompanyChargeService;
 import com.gate.web.facades.CompanyService;
-import com.gate.web.servlets.SearchServlet;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
