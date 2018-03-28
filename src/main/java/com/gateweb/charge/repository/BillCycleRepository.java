@@ -52,6 +52,8 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 	
 	public long count();*/
 
+	public List<BillCycleEntity> findByYearMonthIsAndCompanyIdIs(String yearMonth,Integer companyId);
+
 			
 }
 

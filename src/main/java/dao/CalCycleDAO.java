@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.charge.repository.BillCycleRepository;
 import com.gateweb.charge.repository.CompanyRepository;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
@@ -45,6 +46,9 @@ public class CalCycleDAO extends BaseDAO {
 
     @Autowired
     CompanyRepository companyRepository;
+
+    @Autowired
+    BillCycleRepository billCycleRepository;
 
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Timestamp evlS = timeUtils.getCurrentTimestamp();
@@ -253,10 +257,7 @@ public class CalCycleDAO extends BaseDAO {
         }
 
         for(CompanyEntity companyEntity: companyEntityList){
-            BillCycleEntity searchBillCycleEntity = new BillCycleEntity();
-            searchBillCycleEntity.setYearMonth(calYM);
-            searchBillCycleEntity.setCompanyId(companyEntity.getCompanyId());
-            List billCycleList =  getSearchEntity(BillCycleEntity.class, searchBillCycleEntity);
+            List<BillCycleEntity> billCycleList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(calYM,companyEntity.getCompanyId());
 
             //該公司在某年月的那一筆billCycle
             for(int m=0; m<billCycleList.size(); m++){
