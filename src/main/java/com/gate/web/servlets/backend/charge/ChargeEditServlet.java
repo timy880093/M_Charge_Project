@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.gate.core.bean.BaseFormBean;
+import com.gate.web.displaybeans.DealerVO;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
 import com.gateweb.charge.model.ChargeModeGradeEntity;
+import com.gateweb.charge.model.DealerCompanyEntity;
 import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.gateweb.charge.model.UserEntity;
 import com.gateweb.einv.exception.EinvAjaxException;
@@ -88,11 +90,12 @@ public class ChargeEditServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=edit", produces = "application/json;charset=utf-8")
     public String edit(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type
-
+            , @RequestParam(value = "chargeId", required = true) Integer chargeId
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("editPrepay model:   " + model);
         System.out.println("editPrepay method:   " + method);
-        System.out.println("editPrepay masterId:   " + charge_type);
+        System.out.println("editPrepay masterId:   " +charge_type);
+        System.out.println("editPrepay masterId:   " +chargeId);
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -100,29 +103,37 @@ public class ChargeEditServlet extends MvcBaseServlet {
         Map requestAttMap = requestAttMap(request);
         Map sessionAttMap = sessionAttMap(request);
         Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
 
         List<Object> outList = new ArrayList<Object>();
-        Integer chargeId = null;
-        if ("1".equals(charge_type)) { //月租制
-            if (chargeId != null) {
+        if(method.equals("edit")){
+            outList.add("edit");
+        }else{
+            outList.add("read");
+        }
+        if("1".equals(charge_type)){ //月租制
+            if(chargeId!=null){
                 ChargeModeCycleVO chargeVO = chargeService.findChargeModeCycleByChargeId(chargeId);
                 outList.add(chargeVO);
             }
-
             otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
-        } else if ("2".equals(charge_type)) { //級距制
+        } else if("2".equals(charge_type)) { //級距制
             if (chargeId != null) {
                 //級距型方案
                 ChargeModeGradeVO chargeVO = chargeService.findChargeModeGradeByChargeId(chargeId);
                 outList.add(chargeVO);
+                //級距型方案的級距表
+                List gradeList = chargeService.getGradeList(chargeId);
+                outList.add(gradeList);
             }
             otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE_2);
-            //級距型方案的級距表
-            List gradeList = chargeService.getGradeList(chargeId);
-            outList.add(gradeList);
         }
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
         sendObjToViewer(request, otherMap);
+
         return POP_TEMPLATE_PAGE;
+
     }
 
 
