@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.gate.core.bean.BaseFormBean;
 import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.CommissionLogEntity;
 import com.gateweb.charge.model.UserEntity;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class CommissionLogEditServlet extends MvcBaseServlet {
     private static final String DEFAULT_EDIT_DISPATCH_PAGE = "/backendAdmin/commissionLog/commissionLog_edit.jsp";
-
+    private static final String DEFAULT_EDIT_DISPATCH_PAGE_2 = "/backendAdmin/commissionLog/commissionLog_list.jsp";
 
     @Autowired
     CommissionLogService commissionLogService;
@@ -68,19 +69,19 @@ public class CommissionLogEditServlet extends MvcBaseServlet {
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "method=edit", produces = "application/json;charset=utf-8")
-    public String edit(@RequestParam("method") Integer method, Model model
-            , @RequestParam(value = "commissionLogId", required = true) String  commissionLogId
-            , HttpServletRequest request, HttpServletResponse response) throws Exception {
-        System.out.println("edit model:   " + model);
+    public String edit(@RequestParam("method") String method, @RequestParam("commission_log_id")  String commissionLogId, HttpServletRequest request,
+                       HttpServletResponse response) throws Exception {
+        System.out.println("edit memberId:   " + commissionLogId);
         System.out.println("edit method:   " + method);
-        System.out.println("edit commissionLogId:   " + commissionLogId);
+
+
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
         Map requestParameterMap = request.getParameterMap();
         Map requestAttMap = requestAttMap(request);
         Map sessionAttMap = sessionAttMap(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
+        Map otherMap =  otherMap(request, response, formBeanObject);
 
         List<Object> outList = new ArrayList<Object>();
         List comLogDetailList = commissionLogService.getCommissionLogDetailList(commissionLogId);
@@ -91,7 +92,9 @@ public class CommissionLogEditServlet extends MvcBaseServlet {
         sendObjToViewer(request, otherMap);
 
         return POP_TEMPLATE_PAGE;
+
     }
+
 
     @RequestMapping(method = RequestMethod.GET, params = "method=updateNote", produces = "application/json;charset=utf-8")
     public @ResponseBody
@@ -114,16 +117,18 @@ public class CommissionLogEditServlet extends MvcBaseServlet {
 
         //Search list
         //remove function
-        String data = "success!!";
-        Integer commissionLogId = 0;
+        String data = "delete success!! ";
         try {
-
+            Integer commissionLogId = 0;
+            String strCommissionLogId = ((String[]) requestParameterMap.get("commission_log_id"))[0];
+            if (null != strCommissionLogId) {
+                commissionLogId = Integer.parseInt(strCommissionLogId);
+            }
             String note = ((String[]) requestParameterMap.get("note"))[0];
             commissionLogService.updateNote(commissionLogId, note);
-
-        } catch (Exception ex) {
-            System.out.println(ex);
-            data = " fail!!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            data = "delete error";
         }
 
         // otherMap.put(AJAX_JSON_OBJECT, pageMap);
