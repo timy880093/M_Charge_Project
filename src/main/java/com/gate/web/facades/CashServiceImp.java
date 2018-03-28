@@ -184,7 +184,8 @@ public class CashServiceImp implements CashService {
     }
 
     //取得CashMasterEntityListById
-    public CashVO getCashMasterEntityList(Long cashMasterId) throws Exception{
+    @Override
+    public CashVO findCashVoById(Integer cashMasterId) throws Exception{
         CashVO cashVO = new CashVO();
         CashMasterEntity cashMasterEntity = cashMasterRepository.findByCashMasterId(cashMasterId);
         List<CashDetailEntity> cashDetailEntityList

@@ -46,6 +46,7 @@
                             <option value="import">入帳-匯入入帳資料(Excel)</option>
                             <option value="invoice">匯出發票資料-多筆(請勾選欲執行的資料)</option>
                             <option value="invoiceYM">匯出發票資料-批次(請選擇出帳單年月)</option>
+                            <option value="exportOrderCsv">匯出訂單資料-多筆(請勾選欲執行的資料)</option>
                         </select>
                         <a href="#" id="run" title="執行" class="butbox"><span>執行</span></a>
                     </form>
@@ -405,6 +406,15 @@
                 var url = path + '/backendAdmin/cashSearchServlet?method=outExcel&outYM='+outYm+"&destJson="+destJson;
                 location.href = url;
                 break;
+            case "exportOrderCsv":
+                var destJson  = multiSelected();
+                if(destJson == false){
+                    alert("請先勾選資料列。");
+                    break;
+                }
+                var url = path + '/backendAdmin/cashSearchServlet?method=exportOrderCsv&destJson='+destJson;
+                location.href = url;
+                break;
             case "cancelOutYM": //取消出帳-By年月
                 runMethod("cancelOutYM");
                 break;
@@ -420,8 +430,7 @@
             case "emailYM": //寄email明細通知-批次(請選擇出帳單年月)
                 runMethod("emailYM");
                 break;
-
-                case "invoiceYM": //匯出發票資料-批次(by年月)
+            case "invoiceYM": //匯出發票資料-批次(by年月)
                 var outYm = $("#outYM").val();
                 if(outYm == ''){
                     alert('請選擇帳單年月');
@@ -429,7 +438,6 @@
                 }
                 var url = path + '/backendAdmin/cashSearchServlet?method=invoiceExcelYM&outYM='+outYm;
                 location.href = url;
-                break;
                 break;
             case "invoice": //匯出發票資料-多筆
                 var destJson  = multiSelected();
@@ -439,7 +447,6 @@
                 }
                 var url = path + '/backendAdmin/cashSearchServlet?method=invoiceExcel&outYM='+outYm+"&destJson="+destJson;
                 location.href = url;
-                break;
                 break;
             default:
                 alert("有事嗎?");

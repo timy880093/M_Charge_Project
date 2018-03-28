@@ -4,18 +4,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gate.core.bean.BaseFormBean;
+import com.gate.utils.CsvUtils;
+import com.gate.utils.FileUtils;
 import com.gate.utils.JxlsUtils;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
@@ -23,9 +20,13 @@ import com.gate.web.servlets.MvcBaseServlet;
 import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.CompanyRepository;
 import com.gateweb.charge.repository.PackageModeRepository;
+import com.gateweb.charge.vo.CashVO;
 import com.gateweb.einv.exception.EinvSysException;
 import com.gateweb.reportModel.InvoiceBatchRecord;
+import com.gateweb.reportModel.OrderCsv;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.jxls.common.CellRef;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -50,6 +51,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = "tempFile/out_jxls_template.xls";
     private static final String JXLS_TEMPLATE_CONFIGURATION = "tempFile/out_jxls_template_configuration.xml";
     private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = "tempFile/invoice_jxls_template.xls";
+
     
     @Autowired
     CashService cashService;
@@ -65,6 +67,12 @@ public class CashSearchServlet extends MvcBaseServlet {
 
     @Autowired
     JxlsUtils jxlsUtils;
+
+    @Autowired
+    CsvUtils csvUtils;
+
+    @Autowired
+    FileUtils fileUtils;
 
     @RequestMapping(method = RequestMethod.POST)
     public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
@@ -672,6 +680,46 @@ public class CashSearchServlet extends MvcBaseServlet {
             request.setAttribute(ERROR_MESSAGE, errorMessage);
         }
         return returnPage;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "method=exportOrderCsv", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    void exportOrderCsv(@RequestParam MultiValueMap<String, String> paramMap,
+                  @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "destJson", required = true) String destJson //多筆的選擇
+            , HttpServletRequest request, HttpServletResponse response) {
+        try{
+            Gson gson = new Gson();
+            JsonArray jsonArray = gson.fromJson(destJson,JsonArray.class);
+            for(int i=0;i<jsonArray.size();i++){
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                Integer id = jsonObject.get("cashMasterId").getAsInt();
+                CashVO cashVO = cashService.findCashVoById(id);
+                List<OrderCsv> orderCsvList = cashService.genOrderCsvListByCashVO(new Long(2),cashVO);
+                //第一行欄位資料
+                List<String> headerValueList = csvUtils.genBeanHeaderData(OrderCsv.class,new ArrayList<>());
+                String headerStringData = csvUtils.dataListToCsvLineData(headerValueList,",");
+                List<String> detailStringDataList = new ArrayList<>();
+                //後續明細資料
+                for(OrderCsv orderCsv: orderCsvList){
+                    List<Object> beanDataObjectList = csvUtils.genBeanValueData(orderCsv,new ArrayList<>());
+                    List<String> beanDataArrayList = csvUtils.objectListToStringList(beanDataObjectList);
+                    String detailStringData = csvUtils.dataListToCsvLineData(beanDataArrayList,",");
+                    detailStringDataList.add(detailStringData);
+                }
+                List<String> summaryStringDataList = new ArrayList<>();
+                summaryStringDataList.add(headerStringData);
+                summaryStringDataList.addAll(detailStringDataList);
+                if(detailStringDataList.size()!=0){
+                    response.setContentType("text/plain");
+                    response.setContentType("application/vnd.ms-excel");
+                    response.setHeader("Content-Disposition", "attachment;filename=" + "exportOrderCsv.xls");
+                    fileUtils.writeTextFileToOutputStream(response.getOutputStream(),summaryStringDataList);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void responseExcelFileToClient(ExcelPoiWrapper excel, HttpServletResponse response,String fileName)

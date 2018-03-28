@@ -353,13 +353,17 @@ public class FileUtils {
 	public void writeTextFile(File outputFile,List<String> textList) throws IOException {
 		if(textList.size()>0){
 			FileOutputStream fos = new FileOutputStream(outputFile);
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-			for(String text : textList){
-				bw.write(text);
-				bw.newLine();
-			}
-			bw.close();
+			writeTextFileToOutputStream(fos,textList);
 			fos.close();
 		}
+	}
+
+	public void writeTextFileToOutputStream(OutputStream outputStream,List<String> textList)throws IOException{
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
+		for(String text : textList){
+			bw.write(text);
+			bw.newLine();
+		}
+		bw.close();
 	}
 }

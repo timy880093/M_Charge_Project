@@ -55,6 +55,9 @@ public interface CashService extends Service {
 
     public List getInvoiceItem(String ym) throws Exception;
 
+    //取得CashMasterEntityListById
+    CashVO findCashVoById(Integer cashMasterId) throws Exception;
+
     public List getInvoiceItem(String ym, String destJson) throws Exception;
 
     public Integer transactionCancelIn(String strCashMasterId) throws Exception;
