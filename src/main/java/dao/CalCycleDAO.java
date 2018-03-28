@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.charge.repository.CompanyRepository;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class CalCycleDAO extends BaseDAO {
 	
 	@Autowired
     CashDAO cashDAO;
+
+    @Autowired
+    CompanyRepository companyRepository;
 
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Timestamp evlS = timeUtils.getCurrentTimestamp();
@@ -241,20 +245,17 @@ public class CalCycleDAO extends BaseDAO {
         Integer cnt = 0;  //計算了幾筆
 
         //找出所有的公司-by年月時，會找出所有的公司
-        String companySql = " select company_id from company where 1=1 ";
-        List cpParameterList = new ArrayList();
-        if(null != companyId ){
-            companySql+= " and company_id = ? " ;
-            cpParameterList.add(companyId);
+        List<CompanyEntity> companyEntityList = new ArrayList<>();
+        if(null != companyId){
+            companyEntityList.add(companyRepository.findByCompanyId(companyId));
+        }else{
+            companyEntityList.addAll(companyRepository.findAll());
         }
-        Query cpQuery = createQuery(companySql, cpParameterList, null);
-        List<Map> cpList = cpQuery.list();
 
-        for(int i=0; i<cpList.size(); i++){
-            Integer company_id = (Integer)(cpList.get(i).get("company_id"));
+        for(CompanyEntity companyEntity: companyEntityList){
             BillCycleEntity searchBillCycleEntity = new BillCycleEntity();
             searchBillCycleEntity.setYearMonth(calYM);
-            searchBillCycleEntity.setCompanyId(company_id);
+            searchBillCycleEntity.setCompanyId(companyEntity.getCompanyId());
             List billCycleList =  getSearchEntity(BillCycleEntity.class, searchBillCycleEntity);
 
             //該公司在某年月的那一筆billCycle
@@ -275,12 +276,11 @@ public class CalCycleDAO extends BaseDAO {
                 String cYearMonth = timeUtils.getYearMonth(calYM+"01");
                 parameterList.add(cYearMonth);
                 String tempWhereSql = "";
-                if(null != company_id ){
+                if(null != companyEntity.getCompanyId() ){
                     tempWhereSql = " and cp.company_id = ? " ;
-                    parameterList.add(company_id);
+                    parameterList.add(companyEntity.getCompanyId());
                 }
                 parameterList.add(calYM); //超額計算年月
-
 
                 String sql = "select im.seller,cp.company_id,name,count(1) " +
                         "from invoice_main im left join company cp on im.seller=cp.business_no " +
@@ -300,7 +300,7 @@ public class CalCycleDAO extends BaseDAO {
                     useCnt = ((BigInteger) useCntList.get(k).get("count")).intValue(); //該公司某年月開的發票數量
 
                 }
-                System.out.println("cpId="+company_id+" useCnt="+useCnt+" calYM="+calYM + " cYearMonth="+cYearMonth);
+                System.out.println("cpId="+companyEntity.getCompanyId()+" useCnt="+useCnt+" calYM="+calYM + " cYearMonth="+cYearMonth);
                 //System.out.println("sql= "+sql);
                 //System.out.println("cYearMonth= "+cYearMonth+",company_id="+company_id+",calYM="+calYM);
 
@@ -392,11 +392,11 @@ public class CalCycleDAO extends BaseDAO {
 
                 if(isSum == true){ //isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
                     //3.如果超額達300元，將資料寫sh_flow table
-                    BigDecimal sumOfPayOver = getSumOfPayOver(company_id, calYM);
+                    BigDecimal sumOfPayOver = getSumOfPayOver(companyEntity.getCompanyId(), calYM);
                     double sumOver = sumOfPayOver.doubleValue();
                     //該超額總額大於500元
                     if(sumOver > 500d) {
-                        sumOverOut(company_id, calYM, packageId, sumOfPayOver, null, true, billType, modifierId);
+                        sumOverOut(companyEntity.getCompanyId(), calYM, packageId, sumOfPayOver, null, true, billType, modifierId);
                     }
                 }
             }

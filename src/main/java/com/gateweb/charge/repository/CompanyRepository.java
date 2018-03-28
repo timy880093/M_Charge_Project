@@ -46,7 +46,7 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
 //
 //	public boolean exists(Long companyId);
 //
-//	public List<CompanyEntity> findAll();
+	public List<CompanyEntity> findAll();
 //
 //	public List<CompanyEntity> findTop100ByCompanyId(Long companyId);
 //
