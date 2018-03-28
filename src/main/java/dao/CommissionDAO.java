@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.DealerCompanyVO;
 import com.gate.web.displaybeans.DealerVO;
 import com.gate.web.formbeans.DealerCompanyBean;
 import com.gateweb.charge.model.DealerCompanyEntity;
@@ -59,17 +58,6 @@ public class CommissionDAO extends BaseDAO {
         int end = querySettingVO.getRows();
         Map returnMap = queryForPageData(countSb.toString(), dataSb.toString(), parameters, first, end, -1, null);
         return returnMap;
-    }
-
-    //取得某經銷商資訊
-    public DealerCompanyVO getDealerCompanyByDealerCompanyId(Integer dealerCompanyId) throws Exception {
-        DealerCompanyEntity entity = (DealerCompanyEntity) getEntity(DealerCompanyEntity.class, dealerCompanyId);
-        if(null == entity){
-            return null;
-        }
-        DealerCompanyVO vo = new DealerCompanyVO();
-        BeanUtils.copyProperties(vo,entity);
-        return vo;
     }
 
     //取得某經銷商的業務員清單

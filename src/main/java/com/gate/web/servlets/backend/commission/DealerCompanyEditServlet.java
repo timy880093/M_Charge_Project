@@ -4,23 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gate.core.bean.BaseFormBean;
-import com.gate.web.displaybeans.GiftVO;
 import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.DealerCompanyEntity;
 import com.gateweb.charge.model.UserEntity;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gate.utils.MapBeanConverterUtils;
-import com.gate.web.displaybeans.DealerCompanyVO;
 import com.gate.web.displaybeans.DealerVO;
 import com.gate.web.facades.CommissionService;
 import com.gate.web.formbeans.DealerCompanyBean;
-import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -90,8 +87,8 @@ public class DealerCompanyEditServlet extends MvcBaseServlet {
         sendObjToViewer(request, otherMap);
 
         List<Object> outList = new ArrayList<Object>();
-        DealerCompanyVO vo = commissionService.getDealerCompanyByDealerCompanyId(Integer.parseInt(dealerCompanyId));
-        outList.add(vo);
+        DealerCompanyEntity dealerCompanyEntity = commissionService.getDealerCompanyByDealerCompanyId(Integer.parseInt(dealerCompanyId));
+        outList.add(dealerCompanyEntity);
 
         List<DealerVO> dealerList = commissionService.getDealerByDealerCompanyId(Integer.parseInt(dealerCompanyId));
         outList.add(dealerList);

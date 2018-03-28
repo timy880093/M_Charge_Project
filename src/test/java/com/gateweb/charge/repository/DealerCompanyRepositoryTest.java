@@ -28,4 +28,10 @@ public class DealerCompanyRepositoryTest {
             System.out.println(gson.toJson(dealerCompanyEntity));
         }
     }
+
+    @Test
+    public void findDealerCompanyByDealerCompanyId(){
+        DealerCompanyEntity dealerCompanyEntity = dealerCompanyRepository.findByDealerCompanyId(2);
+        System.out.println(gson.toJson(dealerCompanyEntity));
+    }
 }

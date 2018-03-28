@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.DealerCompanyVO;
 import com.gate.web.displaybeans.DealerVO;
 import com.gate.web.formbeans.DealerCompanyBean;
 import com.gateweb.charge.model.DealerCompanyEntity;
@@ -38,8 +37,8 @@ public class CommissionServiceImp implements CommissionService{
         return commissionDAO.transactionInsertDealerCompany(bean,userId);
     }
 
-    public DealerCompanyVO getDealerCompanyByDealerCompanyId(Integer dealerCompanyId) throws Exception {
-        return commissionDAO.getDealerCompanyByDealerCompanyId(dealerCompanyId);
+    public DealerCompanyEntity getDealerCompanyByDealerCompanyId(Integer dealerCompanyId) throws Exception {
+        return dealerCompanyRepository.findByDealerCompanyId(dealerCompanyId);
     }
 
     public List<DealerVO> getDealerByDealerCompanyId(Integer dealerCompanyId) throws Exception{
