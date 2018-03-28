@@ -25,8 +25,10 @@ public class CommissionServiceImp implements CommissionService{
 
     @Autowired
     CommissionLogReportUtils commissionLogReportUtils;
+
     @Autowired
     DealerCompanyRepository dealerCompanyRepository;
+
     public Map getDealerCompanyList(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = commissionDAO.getDealerCompanyList(querySettingVO);
         return returnMap;

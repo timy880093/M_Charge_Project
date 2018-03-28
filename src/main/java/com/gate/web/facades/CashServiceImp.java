@@ -690,6 +690,14 @@ public class CashServiceImp implements CashService {
             orderCsv.setDetailAmount(
                     orderCsv.getDetailQuantity().multiply(taxInclusivePrice)
             );
+            orderCsv.setTaxAmount(
+                    orderCsv.getDetailAmount().subtract(
+                            orderCsv.getDetailAmount().divide(
+                                    new BigDecimal(1).add(new BigDecimal(0.05)),0,BigDecimal.ROUND_HALF_UP
+                            )
+                    )
+            );
+            orderCsv.setTotalAmount(orderCsv.getDetailAmount().add(orderCsv.getTaxAmount()));
 
             //明細基本資料
             orderCsv.setYearMonth(timeUtils.getYearMonth(timeUtils.getCurrentDateString("yyyyMMdd")));

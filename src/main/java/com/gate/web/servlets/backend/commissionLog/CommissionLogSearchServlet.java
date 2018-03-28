@@ -34,7 +34,6 @@ import com.gate.web.facades.CommissionLogService;
 public class CommissionLogSearchServlet extends MvcBaseServlet {
     private static final String SESSION_SEARCH_OBJ_NAME = "commissionLogListSearchVO";
     private static final String DOWNLOAD_FILE_NAME = "commission_temp";
-    private static String TEMPLATE_Commission_EXCEL_LOCATION = "tempFile/commission_temp.xls";
     private static String JXLS_COMMISSION_EXCEL_TEMPLATE = "tempFile/commission_jxls_template.xls";
     private static String JXLS_COMMISSION_EXCEL_OUTPUT = "tempFile/commission_jxls_output.xls";
     private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/commissionLog/commissionLog_list.jsp";
@@ -263,7 +262,7 @@ public class CommissionLogSearchServlet extends MvcBaseServlet {
         logger.debug("downloadFile model:   " + model);
         logger.debug("downloadFile method:   " + method);
         logger.debug("downloadFile classPath:   " + classPath);
-        logger.debug("downloadFile CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD:   "+TEMPLATE_Commission_EXCEL_LOCATION);
+        logger.debug("downloadFile CommissionLogSearchServlet.TEMPLATE_Commission_EXCEL_DOWNLOAD:   "+JXLS_COMMISSION_EXCEL_TEMPLATE);
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
