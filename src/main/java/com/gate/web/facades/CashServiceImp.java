@@ -146,8 +146,7 @@ public class CashServiceImp implements CashService {
             billCycleEntity.setPayOver(null);
             billCycleEntity.setCashOutOverId(null);
             billCycleEntity.setCashInOverId(null);
-//            billCycleRepository.save(billCycleEntity);
-            billCycleRepository.delete(billCycleEntity);
+            billCycleRepository.save(billCycleEntity);
         }
 
         //3.把這筆cash_detail刪掉
