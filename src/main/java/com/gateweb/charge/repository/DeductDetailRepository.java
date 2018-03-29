@@ -33,7 +33,7 @@ public interface DeductDetailRepository extends JpaRepository<DeductDetailEntity
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param deductDetailId   PK
 	 * @throws DaoSystemException	if system is wrong.
      */
 	void deleteByDeductDetailId(	
@@ -51,6 +51,8 @@ public interface DeductDetailRepository extends JpaRepository<DeductDetailEntity
 //	public List<DeductDetailEntity> findTop100ByDeductDetailId(Long deductDetailId);
 //	
 //	public long count();
+
+	public List<DeductDetailEntity> findByPrepayDeductMasterIdIsAndCalYmIsAndDeductTypeIs(Integer prepayDeductMasterId,String calYm,Integer deductType);
 
 			
 }

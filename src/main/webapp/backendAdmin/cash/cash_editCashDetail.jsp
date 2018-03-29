@@ -151,7 +151,7 @@
           });
 
             $("#cancel"+element.cashDetailId).click(function(){
-                $("#cashEditForm").attr("action",path+'/backendAdmin/cashEditServlet?method=cancelOver&cashDetailId=' + element.cashDetailId + "&cashMasterId=" +$("#cashMasterId").val()) + '&billType='+element.billType;
+                $("#cashEditForm").attr("action",path+'/backendAdmin/cashEditServlet?method=cancelOver&cashDetailId=' + element.cashDetailId + "&cashMasterId=" +$("#cashMasterId").val());
                 $("#cashEditForm").submit();
             });
         } else if(element.cashType == 6) { //預繳

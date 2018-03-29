@@ -200,7 +200,7 @@ public class CashEditServlet extends MvcBaseServlet {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=cancelOver", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.POST, params = "method=cancelOver", produces = "application/json;charset=utf-8")
     public String cancelOver(@RequestParam("method") String method, Model model
             , @RequestParam(value = "cashDetailId", required = true) Integer cashDetailId
             , @RequestParam(value = "cashMasterId", required = true) Integer cashMasterId
@@ -219,7 +219,7 @@ public class CashEditServlet extends MvcBaseServlet {
 
         List<Object> outList = new ArrayList<>();
 
-        boolean isOK = cashService.transactionCancelOver(cashDetailId);
+        boolean isOK = cashService.transactionCancelOver(cashMasterId,cashDetailId);
 
         List<CashDetailVO> cashDetailList = cashService.getCashDetailListByMasterId(cashMasterId);
         outList.add(cashDetailList);
@@ -271,17 +271,16 @@ public class CashEditServlet extends MvcBaseServlet {
         return POP_TEMPLATE_PAGE;
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=delCashMaster", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.POST, params = "method=delCashMaster", produces = "application/json;charset=utf-8")
 
     public  @ResponseBody
     String delCashMaster(@RequestParam("method") String method, Model model
             , @RequestParam(value = "cashMasterId", required = true) Integer cashMasterId
-            , @RequestParam(value = "cashMaster", required = true) Integer cashMaster
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("delCashMaster model:   " + model);
         System.out.println("delCashMaster method:   " + method);
         System.out.println("delCashMaster cashMasterId:   " + cashMasterId);
-        System.out.println("delCashMastery cashMaster:   " + cashMaster);
+
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
         Map requestParameterMap = request.getParameterMap();
@@ -290,13 +289,9 @@ public class CashEditServlet extends MvcBaseServlet {
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
 
-
         String data = "success!!";
-        cashMasterId = 0;
         try {
-
             cashService.delCashMaster(cashMasterId);
-
         } catch (Exception ex) {
             System.out.println(ex);
             data = " fail!!";

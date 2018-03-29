@@ -40,7 +40,7 @@ public interface CashService extends Service {
 
     public List getCashMasterDetail(String ym, String destJson) throws Exception;
 
-    boolean transactionCancelOver(Integer cashDetailId) throws Exception;
+    boolean transactionCancelOver(Integer cashMasterId, Integer cashDetailId) throws Exception;
 
     public Integer cancelOutYM(String outYM) throws Exception ;
 

@@ -133,7 +133,7 @@ public class CashServiceImp implements CashService {
      * @throws Exception
      */
     @Override
-    public boolean transactionCancelOver(Integer cashDetailId) throws Exception{
+    public boolean transactionCancelOver(Integer cashMasterId, Integer cashDetailId) throws Exception{
         //1.找出bill_cycle的over_id有cash_detail_id的資料
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByCashOutOverId(cashDetailId);
 
@@ -146,53 +146,62 @@ public class CashServiceImp implements CashService {
             billCycleEntity.setPayOver(null);
             billCycleEntity.setCashOutOverId(null);
             billCycleEntity.setCashInOverId(null);
-            billCycleRepository.save(billCycleEntity);
+//            billCycleRepository.save(billCycleEntity);
+            billCycleRepository.delete(billCycleEntity);
         }
 
         //3.把這筆cash_detail刪掉
         CashDetailEntity cashDetailEntity = cashDetailRepository.findByCashDetailId(cashDetailId);
+        cashDetailRepository.delete(cashDetailEntity);
         //BigDecimal noTaxInclusivePrice = cashDetailEntity.getNoTaxInclusivePrice();
         //undo 2017/12/1 robinson edit
         //假如有公司預佣金部分須把code加回去
         Integer companyId = cashDetailEntity.getCompanyId();
         String calYM = cashDetailEntity.getCalYm();
-        cashDetailRepository.delete(cashDetailEntity);
 
         //4.把這筆cash_detail對應的扣抵的資料也刪掉
-        CashDetailEntity searchDeductCashDetailEntity = new CashDetailEntity();
         //不可加金額條件，因為該筆帳單有可能用完最後的預用金，所以超額不會全扣抵
         //searchDeductCashDetailEntity.setNoTaxInclusivePrice(new BigDecimal(0).subtract(noTaxInclusivePrice));
 
-        List<CashDetailEntity> deductCashDetailList
-                = cashDetailRepository.findByCompanyIdIsAndCalYmIsAndCashTypeIs(companyId,calYM,7);
-        if(null == deductCashDetailList || deductCashDetailList.size()==0){
-            throw new Exception();
-        }
-        CashDetailEntity deductCashDetailEntity = deductCashDetailList.get(0);
-        Integer deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
-        cashDetailRepository.delete(deductCashDetailEntity);
-
+        //先查詢他有沒有預用金
         //5.在prepay_deduct_master把錢加回去
-        List<PrepayDeductMasterEntity> prepayDeductMasterList= prepayDeductMasterRepository.findByCompanyId(companyId);
-        if(null == prepayDeductMasterList || prepayDeductMasterList.size()==0){
-            throw new Exception();
-        }
-        PrepayDeductMasterEntity prepayDeductMasterEntity = prepayDeductMasterList.get(0);
-        Integer prepayDeductMasterId = prepayDeductMasterEntity.getPrepayDeductMasterId();
-        Integer amount = prepayDeductMasterEntity.getAmount();
-        amount = amount + deductMoney;
-        prepayDeductMasterEntity.setAmount(amount);
-        prepayDeductMasterRepository.save(prepayDeductMasterEntity);
+        List<PrepayDeductMasterEntity> prepayDeductMasterList = prepayDeductMasterRepository.findByCompanyId(companyId);
 
-        //6.在deduct_detail增加一筆還原(加回去)的紀錄
-        DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
-        deductDetailEntity.setPrepayDeductMasterId(prepayDeductMasterId);
-        deductDetailEntity.setCashDetailId(0);
-        deductDetailEntity.setCompanyId(companyId);
-        deductDetailEntity.setCalYm(calYM);
-        deductDetailEntity.setDeductType(6);
-        deductDetailEntity.setMoney(deductMoney);
-        deductDetailRepository.save(deductDetailEntity);
+        if(prepayDeductMasterList.size()!=0){
+            //根據PrepayDeductMaster查出為扣抵的DeductDetail
+            for(PrepayDeductMasterEntity prepayDeductMasterEntity:prepayDeductMasterList){
+                Integer deductMoney = 0;
+                List<DeductDetailEntity> deductDetailEntityList
+                        = deductDetailRepository.findByPrepayDeductMasterIdIsAndCalYmIsAndDeductTypeIs(
+                            prepayDeductMasterEntity.getPrepayDeductMasterId()
+                            ,calYM
+                            ,2
+                );
+                //根據DeductDetail查出產生的cashDetail
+                for(DeductDetailEntity deductDetailEntity: deductDetailEntityList){
+                    CashDetailEntity deductCashDetailEntity
+                            = cashDetailRepository.findByCashDetailIdIsAndCashTypeIs(deductDetailEntity.getCashDetailId(),7);
+                    //刪除cashDetail及deductDetail
+                    cashDetailRepository.delete(deductCashDetailEntity);
+                    deductDetailRepository.delete(deductDetailEntity);
+                    deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
+                }
+                Integer amount = prepayDeductMasterEntity.getAmount();
+                amount = amount + deductMoney;
+                prepayDeductMasterEntity.setAmount(amount);
+                prepayDeductMasterRepository.save(prepayDeductMasterEntity);
+            }
+        }
+
+//        //6.在deduct_detail增加一筆還原(加回去)的紀錄
+//        DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
+//        deductDetailEntity.setPrepayDeductMasterId(prepayDeductMasterId);
+//        deductDetailEntity.setCashDetailId(0);
+//        deductDetailEntity.setCompanyId(companyId);
+//        deductDetailEntity.setCalYm(calYM);
+//        deductDetailEntity.setDeductType(6);
+//        deductDetailEntity.setMoney(deductMoney);
+//        deductDetailRepository.save(deductDetailEntity);
 
         return false;
     }
@@ -222,7 +231,30 @@ public class CashServiceImp implements CashService {
     }
 
     public boolean delCashMaster(Integer cashMasterId)throws Exception{
-        return cashDAO.delCashMaster(cashMasterId);
+        //刪除帳單(帳單裡沒有任何明細，則可刪除)
+        //先檢查帳單裡是否沒有任何明細
+        boolean isCashMasterEmpty = isCashMasterEmpty(cashMasterId);
+
+        if(isCashMasterEmpty){
+            //刪除帳單
+            CashMasterEntity cashMasterEntity = cashMasterRepository.findByCashMasterId(cashMasterId);
+            cashMasterRepository.delete(cashMasterEntity);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //檢查帳單裡是否沒有任何明細
+    public boolean isCashMasterEmpty(Integer cashMasterId)throws Exception{
+        CashDetailEntity searchCashDetailEntity = new CashDetailEntity();
+        searchCashDetailEntity.setCashMasterId(cashMasterId);
+        List<CashDetailEntity> cashDetailEntityList = cashDetailRepository.findByCashMasterId(cashMasterId);
+        if(null == cashDetailEntityList || cashDetailEntityList.size() == 0){
+            return true; //沒有任何明細
+        } else {
+            return false; //有明細
+        }
     }
 
     //使用CashVO的資料建立訂單。

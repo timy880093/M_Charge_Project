@@ -146,9 +146,9 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
 
     @RequestMapping(method = RequestMethod.GET, params = "method=calOver", produces = "application/json;charset=utf-8")
     public @ResponseBody
-    String calOver(@RequestParam MultiValueMap<String, String> paramMap,
-                   @RequestHeader HttpHeaders headers, Model model
-            , @RequestParam(value = "calOver", required = true) String calOverAry //帳單年月
+    String calOver(@RequestParam MultiValueMap<String, String> paramMap
+            , @RequestHeader HttpHeaders headers, Model model
+            , @RequestParam(value = "calOverAry", required = true) String calOverAry //帳單年月
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("calOver model:   " + model);
         logger.debug("calOver calOver:   " + calOverAry);

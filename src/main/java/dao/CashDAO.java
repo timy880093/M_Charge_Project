@@ -1300,31 +1300,5 @@ public class CashDAO extends BaseDAO {
         return true;
     }
 
-    //刪除帳單(帳單裡沒有任何明細，則可刪除)
-    public boolean delCashMaster(Integer cashMasterId)throws Exception{
-        //先檢查帳單裡是否沒有任何明細
-        boolean isCashMasterEmpty = isCashMasterEmpty(cashMasterId);
-
-        if(isCashMasterEmpty){
-            //刪除帳單
-            CashMasterEntity cashMasterEntity = (CashMasterEntity) getEntity(CashMasterEntity.class, cashMasterId);
-            deleteEntity(cashMasterEntity);
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    //檢查帳單裡是否沒有任何明細
-    public boolean isCashMasterEmpty(Integer cashMasterId)throws Exception{
-        CashDetailEntity searchCashDetailEntity = new CashDetailEntity();
-        searchCashDetailEntity.setCashMasterId(cashMasterId);
-        List cashDetailList = getSearchEntity(CashDetailEntity.class, searchCashDetailEntity);
-        if(null == cashDetailList || cashDetailList.size() == 0){
-            return true; //沒有任何明細
-        } else {
-            return false; //有明細
-        }
-    }
 }
 

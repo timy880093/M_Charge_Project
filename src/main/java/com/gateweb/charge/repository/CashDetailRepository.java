@@ -44,6 +44,8 @@ public interface CashDetailRepository extends JpaRepository<CashDetailEntity, In
 
 	public CashDetailEntity findByCashDetailId(Integer cashDetailId);
 
+	public CashDetailEntity findByCashDetailIdIsAndCashTypeIs(Integer cashDetailId,Integer cashType);
+
 	public List<CashDetailEntity> findByCompanyIdIsAndCalYmIsAndCashTypeIs(Integer companyId,String calYm,Integer cashType);
 
 	/*
