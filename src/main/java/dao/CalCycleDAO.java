@@ -164,7 +164,6 @@ public class CalCycleDAO extends BaseDAO {
 
             cnt += CalOver(calYM, companyId, true, modifierId);
         }
-
         return cnt;
     }
 
@@ -427,6 +426,8 @@ public class CalCycleDAO extends BaseDAO {
         logger.info("CalOver end = " + new java.util.Date());
         return cnt;  //計算了幾筆
     }
+
+
 
     //加總計算超額到cash_detail和cash_Master
     public void sumOverOut(Integer cpId, String calYM, Integer packageId, BigDecimal sumOfPayOver, List<BillCycleEntity> overList,boolean isConintueCal, Integer chargeType, Integer modifierId)throws Exception{

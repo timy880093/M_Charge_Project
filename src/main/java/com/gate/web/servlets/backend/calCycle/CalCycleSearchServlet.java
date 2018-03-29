@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gate.core.bean.BaseFormBean;
+import com.gate.utils.JsonUtils;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
@@ -34,6 +35,9 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
 
     @Autowired
     CalCycleService calCycleService;
+
+    @Autowired
+    JsonUtils jsonUtils;
 
     @RequestMapping(method = RequestMethod.POST)
     public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
@@ -153,13 +157,14 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         logger.debug("calOver model:   " + model);
         logger.debug("calOver calOver:   " + calOverAry);
         logger.debug("calOver paramMap:   " + paramMap);
-
+        List<Integer> billIdList = jsonUtils.parseMultiSelectedValueJsonArray(calOverAry,"billId");
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
         Integer exeCnt = 0;
         String responseMessage = "";
         try {
+            //這裡的calOverArray存的其實是billCycle的billId
             exeCnt = calCycleService.calOver(calOverAry, 10);
             responseMessage += "  total counts: " + exeCnt + "";
         } catch (Exception ex) {
