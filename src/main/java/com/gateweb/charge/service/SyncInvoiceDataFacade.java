@@ -9,5 +9,7 @@ import java.sql.Timestamp;
 public interface SyncInvoiceDataFacade {
     void syncInvoiceDataFromEinvDatabase(Timestamp previousTime) throws InvocationTargetException, IllegalAccessException;
 
+    void syncInvoiceDataFromEinvDatabase(Timestamp from, Timestamp to) throws InvocationTargetException, IllegalAccessException;
+
     void syncYesterdaysInvoiceDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException;
 }

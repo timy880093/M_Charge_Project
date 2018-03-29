@@ -39,9 +39,23 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
     //應該根據修改日期才可以得到完全正確的資料，因為發票資料包括折讓及註銷的部份。
     public void syncInvoiceDataFromEinvDatabase(Timestamp previousTime) throws InvocationTargetException, IllegalAccessException {
         List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByModifyDateIsGreaterThan(previousTime);
+        syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
+    }
+
+    @Override
+    public void syncInvoiceDataFromEinvDatabase(Timestamp from, Timestamp to) throws InvocationTargetException, IllegalAccessException {
+        List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByModifyDateIsGreaterThanAndModifyDateIsLessThan(from,to);
+        syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
+    }
+
+    public void syncInvoiceDataByInvoiceMainEntityList(List<InvoiceMain> einvInvoiceMainEntityList) throws InvocationTargetException, IllegalAccessException {
         for(InvoiceMain einvInvoiceMain: einvInvoiceMainEntityList){
             InvoiceMainEntity existsInvoiceMainEntity
-                    = invoiceMainRepository.findByInvoiceIdAndCYearMonth(einvInvoiceMain.getInvoiceId(),einvInvoiceMain.getcYearMonth());
+                    = invoiceMainRepository.findByInvoiceIdAndCYearMonthAndInvoiceNumber(
+                    einvInvoiceMain.getInvoiceId()
+                    ,einvInvoiceMain.getcYearMonth()
+                    ,einvInvoiceMain.getInvoiceNumber()
+            );
             if(existsInvoiceMainEntity!=null){
                 transactionUpdateInvoiceMainDataFromEinvDatabase(existsInvoiceMainEntity, einvInvoiceMain);
             }else{

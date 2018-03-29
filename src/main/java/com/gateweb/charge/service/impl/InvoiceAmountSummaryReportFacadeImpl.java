@@ -56,6 +56,7 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
             if(existsInvoiceAmountSummaryReportEntity!=null){
                 logger.info(existsInvoiceAmountSummaryReportEntity.getId()+", 此筆記錄已存在。");
             }else{
+                result.setClosed(false);
                 chargeInvoiceAmountSummaryReportDao.save(result);
             }
         }

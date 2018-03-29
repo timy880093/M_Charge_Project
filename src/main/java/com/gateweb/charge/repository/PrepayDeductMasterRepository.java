@@ -52,7 +52,8 @@ public interface PrepayDeductMasterRepository extends JpaRepository<PrepayDeduct
 //	
 //	public long count();
 
-			
+	public List<PrepayDeductMasterEntity> findByCompanyId(Integer companyId);
+
 }
 
 	

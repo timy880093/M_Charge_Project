@@ -33,7 +33,7 @@ public interface CashDetailRepository extends JpaRepository<CashDetailEntity, In
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param cashDetailId PK
 	 * @throws DaoSystemException	if system is wrong.
      */
 	void deleteByCashDetailId(	
@@ -42,8 +42,11 @@ public interface CashDetailRepository extends JpaRepository<CashDetailEntity, In
 
 	public List<CashDetailEntity> findByCashMasterId(Integer cashMasterId);
 
-	/*public CashDetailEntity findByCashDetailId(Long cashDetailId);
-	
+	public CashDetailEntity findByCashDetailId(Integer cashDetailId);
+
+	public List<CashDetailEntity> findByCompanyIdIsAndCalYmIsAndCashTypeIs(Integer companyId,String calYm,Integer cashType);
+
+	/*
 	public Page<CashDetailEntity> findByCashDetailId(Long cashDetailId, Pageable pageable);
 	
 	public boolean exists(Long cashDetailId);

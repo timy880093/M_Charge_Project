@@ -64,6 +64,15 @@ public class CashServiceImp implements CashService {
     @Autowired
     ChargeModeGradeRepository chargeModeGradeRepository;
 
+    @Autowired
+    BillCycleRepository billCycleRepository;
+
+    @Autowired
+    PrepayDeductMasterRepository prepayDeductMasterRepository;
+
+    @Autowired
+    DeductDetailRepository deductDetailRepository;
+
     public Map getCashMaster(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = cashDAO.getCashMaster(querySettingVO);
         return returnMap;
@@ -117,8 +126,75 @@ public class CashServiceImp implements CashService {
         return cashDAO.getCashMasterDetail(ym, destJson);
     }
 
-    public boolean cancelOver(Integer cashDetailId) throws Exception{
-        return cashDAO.transactionCancelOver(cashDetailId);
+    /**
+     * 取消計算
+     * @param cashDetailId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean transactionCancelOver(Integer cashDetailId) throws Exception{
+        //1.找出bill_cycle的over_id有cash_detail_id的資料
+        List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByCashOutOverId(cashDetailId);
+
+        //2.把這些bill_cycle計算超額的值清掉(包括over_id)
+        for(BillCycleEntity billCycleEntity : billCycleEntityList){
+            billCycleEntity.setCnt(null);
+            billCycleEntity.setCntGift(null);
+            billCycleEntity.setCntOver(null);
+            billCycleEntity.setPriceOver(null);
+            billCycleEntity.setPayOver(null);
+            billCycleEntity.setCashOutOverId(null);
+            billCycleEntity.setCashInOverId(null);
+            billCycleRepository.save(billCycleEntity);
+        }
+
+        //3.把這筆cash_detail刪掉
+        CashDetailEntity cashDetailEntity = cashDetailRepository.findByCashDetailId(cashDetailId);
+        //BigDecimal noTaxInclusivePrice = cashDetailEntity.getNoTaxInclusivePrice();
+        //undo 2017/12/1 robinson edit
+        //假如有公司預佣金部分須把code加回去
+        Integer companyId = cashDetailEntity.getCompanyId();
+        String calYM = cashDetailEntity.getCalYm();
+        cashDetailRepository.delete(cashDetailEntity);
+
+        //4.把這筆cash_detail對應的扣抵的資料也刪掉
+        CashDetailEntity searchDeductCashDetailEntity = new CashDetailEntity();
+        //不可加金額條件，因為該筆帳單有可能用完最後的預用金，所以超額不會全扣抵
+        //searchDeductCashDetailEntity.setNoTaxInclusivePrice(new BigDecimal(0).subtract(noTaxInclusivePrice));
+
+        List<CashDetailEntity> deductCashDetailList
+                = cashDetailRepository.findByCompanyIdIsAndCalYmIsAndCashTypeIs(companyId,calYM,7);
+        if(null == deductCashDetailList || deductCashDetailList.size()==0){
+            throw new Exception();
+        }
+        CashDetailEntity deductCashDetailEntity = deductCashDetailList.get(0);
+        Integer deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
+        cashDetailRepository.delete(deductCashDetailEntity);
+
+        //5.在prepay_deduct_master把錢加回去
+        List<PrepayDeductMasterEntity> prepayDeductMasterList= prepayDeductMasterRepository.findByCompanyId(companyId);
+        if(null == prepayDeductMasterList || prepayDeductMasterList.size()==0){
+            throw new Exception();
+        }
+        PrepayDeductMasterEntity prepayDeductMasterEntity = prepayDeductMasterList.get(0);
+        Integer prepayDeductMasterId = prepayDeductMasterEntity.getPrepayDeductMasterId();
+        Integer amount = prepayDeductMasterEntity.getAmount();
+        amount = amount + deductMoney;
+        prepayDeductMasterEntity.setAmount(amount);
+        prepayDeductMasterRepository.save(prepayDeductMasterEntity);
+
+        //6.在deduct_detail增加一筆還原(加回去)的紀錄
+        DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
+        deductDetailEntity.setPrepayDeductMasterId(prepayDeductMasterId);
+        deductDetailEntity.setCashDetailId(0);
+        deductDetailEntity.setCompanyId(companyId);
+        deductDetailEntity.setCalYm(calYM);
+        deductDetailEntity.setDeductType(6);
+        deductDetailEntity.setMoney(deductMoney);
+        deductDetailRepository.save(deductDetailEntity);
+
+        return false;
     }
 
     public Integer cancelOutYM(String outYM) throws Exception {

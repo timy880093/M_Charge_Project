@@ -31,11 +31,17 @@ public class SyncInvoiceDataFacadeImplTest {
     @Test
     @Transactional
     public void syncInvoiceMainDataTest() throws InvocationTargetException, IllegalAccessException {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.DATE,-1);
+        Calendar from = Calendar.getInstance();
+        from.setTime(new Date());
+        from.add(Calendar.DATE,-16);
 
-        syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabase(timeUtils.date2Timestamp(calendar.getTime()));
+        Calendar to = Calendar.getInstance();
+        to.setTime(new Date());
+        to.add(Calendar.DATE,-1);
+
+        syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabase(
+                timeUtils.date2Timestamp(from.getTime())
+                , timeUtils.date2Timestamp(to.getTime())
+        );
     }
-
 }

@@ -33,16 +33,16 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param id PK
 	 * @throws DaoSystemException	if system is wrong.
      */
 	void deleteByBillId(	
 		java.lang.Integer billId 
 	) throws DaoSystemException;
 
-	/*public BillCycleEntity findByBillId(Long billId);
+	public BillCycleEntity findByBillId(Long billId);
 	
-	public Page<BillCycleEntity> findByBillId(Long billId, Pageable pageable);
+	/*public Page<BillCycleEntity> findByBillId(Long billId, Pageable pageable);
 	
 	public boolean exists(Long billId);
 	
@@ -52,8 +52,11 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 	
 	public long count();*/
 
+	public List<BillCycleEntity> findAll();
+
 	public List<BillCycleEntity> findByYearMonthIsAndCompanyIdIs(String yearMonth,Integer companyId);
 
+	public List<BillCycleEntity> findByCashOutOverId(Integer cashOutOverId);
 			
 }
 

@@ -11,6 +11,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
+import java.util.List;
+
 /**
  * 
  * @author pkliu
@@ -23,16 +26,19 @@ public interface InvoiceAmountSummaryReportRepository extends JpaRepository<Invo
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param id PK
 	 * @throws DaoSystemException    if system is wrong.
      */
 	void deleteById(
 			Long id
 	) throws DaoSystemException;
 
-	
+	List<InvoiceAmountSummaryReportEntity> findAll();
 
-			
+	List<InvoiceAmountSummaryReportEntity> findByClosedNot(boolean closed);
+
+	List<InvoiceAmountSummaryReportEntity> findBySellerIsAndModifyDateGreaterThanAndModifyDateLessThanAndClosedNot(String sellerIdentifier, Date fromModifyDate, Date toModifyDate, boolean closed);
+	
 }
 
 	

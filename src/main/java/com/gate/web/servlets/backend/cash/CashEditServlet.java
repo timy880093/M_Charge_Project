@@ -219,9 +219,7 @@ public class CashEditServlet extends MvcBaseServlet {
 
         List<Object> outList = new ArrayList<>();
 
-
-        boolean isOK = cashService.cancelOver(cashDetailId);
-
+        boolean isOK = cashService.transactionCancelOver(cashDetailId);
 
         List<CashDetailVO> cashDetailList = cashService.getCashDetailListByMasterId(cashMasterId);
         outList.add(cashDetailList);

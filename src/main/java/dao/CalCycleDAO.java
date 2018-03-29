@@ -3,15 +3,14 @@ package dao;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
 
+import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.BillCycleRepository;
 import com.gateweb.charge.repository.CompanyRepository;
+import com.gateweb.charge.repository.InvoiceAmountSummaryReportRepository;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +21,6 @@ import com.gate.utils.SendEmailFileUtils;
 import com.gate.utils.TimeUtils;
 import com.gate.web.beans.CalOver;
 import com.gate.web.beans.QuerySettingVO;
-import com.gateweb.charge.model.BillCycleEntity;
-import com.gateweb.charge.model.CashDetailEntity;
-import com.gateweb.charge.model.CashMasterEntity;
-import com.gateweb.charge.model.ChargeModeCycleEntity;
-import com.gateweb.charge.model.ChargeModeGradeEntity;
-import com.gateweb.charge.model.CompanyEntity;
-import com.gateweb.charge.model.DeductDetailEntity;
-import com.gateweb.charge.model.GradeEntity;
-import com.gateweb.charge.model.PackageModeEntity;
-import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -49,6 +38,12 @@ public class CalCycleDAO extends BaseDAO {
 
     @Autowired
     BillCycleRepository billCycleRepository;
+
+    @Autowired
+    InvoiceAmountSummaryReportRepository invoiceAmountSummaryReportRepository;
+
+    @Autowired
+    TimeUtils timeUtils;
 
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Timestamp evlS = timeUtils.getCurrentTimestamp();
@@ -279,6 +274,17 @@ public class CalCycleDAO extends BaseDAO {
         } finally {
             return useCnt;
         }
+    }
+
+    public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(CompanyEntity companyEntity, Date fromModifyDate, Date toModifyDate){
+        List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
+            = invoiceAmountSummaryReportRepository.findBySellerIsAndModifyDateGreaterThanAndModifyDateLessThanAndClosedNot(
+                    companyEntity.getBusinessNo()
+                    , new java.sql.Date(fromModifyDate.getTime())
+                    , new java.sql.Date(toModifyDate.getTime())
+                    , true
+        );
+        return invoiceAmountSummaryReportEntityList.size();
     }
 
     /**計算超額
