@@ -36,6 +36,8 @@ public interface CashMasterRepository extends JpaRepository<CashMasterEntity, In
 
 	public CashMasterEntity findByCashMasterId(Integer cashMasterId);
 
+	public List<CashMasterEntity> findByOutYmIsAndCompanyIdIs(String yearMonth,Integer companyId);
+
 	/*
 
 	public Page<CashMasterEntity> findByCashMasterId(Long cashMasterId, Pageable pageable);

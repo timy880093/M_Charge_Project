@@ -3,6 +3,7 @@ package com.gate.web.facades;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.charge.model.CashMasterEntity;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 
@@ -23,6 +24,8 @@ public interface CalCycleService extends Service {
 
     //計算超額-多筆
     Integer batchCalOver(List<Integer> billIdList, Integer modifierId) throws Exception;
+
+    CashMasterEntity isHaveCashMaster(String outYm, Integer companyId, Integer modifierId) throws Exception;
 
     //計算超額-by年月
     Integer batchCalOverByYearMonth(String yearMonth, Integer modifierId);

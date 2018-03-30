@@ -261,8 +261,7 @@ public class CalCycleDAO extends BaseDAO {
                 cashDetailEntity_forDeduct.setCompanyId(cpId); //公司名稱
                 cashDetailEntity_forDeduct.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
                 cashDetailEntity_forDeduct.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
-                CashMasterEntity  cashMasterEntity_forDeduct = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), cpId, modifierId);
-                cashDetailEntity_forDeduct.setCashMasterId(cashMasterEntity_forDeduct.getCashMasterId()); //cash_master_id
+                cashDetailEntity_forDeduct.setCashMasterId(cashMasterId); //cash_master_id
                 cashDetailEntity_forDeduct.setCashType(7); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值 6.預繳 7.扣抵
                 cashDetailEntity_forDeduct.setBillType(chargeType); //帳單類型　1.月租 2.級距
                 cashDetailEntity_forDeduct.setPackageId(packageId); //超額的cashDetail不紀錄packageId(超額的cashDetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
@@ -270,7 +269,6 @@ public class CalCycleDAO extends BaseDAO {
 
                 if(amount < sumOver){
                     //剩餘金額不夠扣抵，就先扣抵「剩餘可作扣抵的錢」
-
                     BigDecimal minusSumOfPayOver = new BigDecimal(0).subtract(new BigDecimal(amount));
                     cashDetailEntity_forDeduct = cashDAO.calPriceTax(cashDetailEntity_forDeduct, minusSumOfPayOver, new BigDecimal(0), "超額扣抵");
                     saveEntity(cashDetailEntity_forDeduct);

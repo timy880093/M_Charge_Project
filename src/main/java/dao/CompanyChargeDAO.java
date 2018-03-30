@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gate.web.facades.CalCycleService;
 import com.gateweb.utils.BeanConverterUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Query;
@@ -41,6 +42,9 @@ public class CompanyChargeDAO extends BaseDAO {
 
     @Autowired
     BeanConverterUtils beanConverterUtils;
+
+    @Autowired
+    CalCycleService calCycleService;
 
     public List getChargeMonthList() throws Exception {
         String sql = "select charge_id,package_name from charge_mode_cycle where status = 1 ";
@@ -219,7 +223,7 @@ public class CompanyChargeDAO extends BaseDAO {
         cashDetailEntity.setCompanyId(bean.getCompanyId()); //公司名稱
         cashDetailEntity.setCalYm(timeUtils.getYearMonth2(timeUtils.addMonth(startCal.getTime(), earlyMonth))); //計算年月 預繳(提早出帳)
         cashDetailEntity.setOutYm(timeUtils.getYearMonth2(timeUtils.addMonth(startCal.getTime(), earlyMonth+1))); //帳單年月 預繳
-        CashMasterEntity cashMasterEntity = cashDAO.isHaveCashMaster(cashDetailEntity.getOutYm(), bean.getCompanyId(), modifierId);
+        CashMasterEntity cashMasterEntity = calCycleService.isHaveCashMaster(cashDetailEntity.getOutYm(), bean.getCompanyId(), modifierId);
         cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
         cashDetailEntity.setCashType(1); //月租
         cashDetailEntity.setBillType(chargeType); //帳單類型　1.月租 2.級距
@@ -241,7 +245,7 @@ public class CompanyChargeDAO extends BaseDAO {
             if(null == cashDetailEntity.getCashDetailId()){
 //                String calYM = cashDetailEntity.getCalYm();
                 String outYm = cashDetailEntity.getOutYm();
-                cashMasterEntity = cashDAO.isHaveCashMaster(outYm, bean.getCompanyId(), modifierId);
+                cashMasterEntity = calCycleService.isHaveCashMaster(outYm, bean.getCompanyId(), modifierId);
                 cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
                 saveEntity(cashDetailEntity);
             }

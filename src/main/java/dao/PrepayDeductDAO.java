@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.gate.web.facades.CalCycleService;
+import com.gate.web.facades.CalCycleServiceImp;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class PrepayDeductDAO extends BaseDAO{
 	
 	@Autowired
     CashDAO cashDAO;
+
+    @Autowired
+    CalCycleService calCycleService;
 
     public Map getPrepayDeductCompanyList(QuerySettingVO querySettingVO) throws Exception {
         List<Object> parameters = new ArrayList<Object>();
@@ -107,7 +112,7 @@ public class PrepayDeductDAO extends BaseDAO{
         cashDetailEntity.setCompanyId(cpId); //公司名稱
         cashDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
         cashDetailEntity.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
-        CashMasterEntity  cashMasterEntity = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), cpId, modifierId);
+        CashMasterEntity  cashMasterEntity = calCycleService.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), cpId, modifierId);
         cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
         cashDetailEntity.setCashType(6); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值 6.預繳
         cashDetailEntity.setBillType(3); //帳單類型 1.月租 2.級距 3.預繳

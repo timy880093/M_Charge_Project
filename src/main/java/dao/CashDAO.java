@@ -737,69 +737,6 @@ public class CashDAO extends BaseDAO {
         return cashDetailEntity;
     }
 
-    /**
-     * cash_master是否有這個計算月份的資料，有的話，則回傳master_id，否則建一個新的master，傳回master_id
-     * @param outYm //出帳年月
-     * @param companyId //用戶名稱
-     * @return
-     * @throws Exception
-     */
-    public CashMasterEntity isHaveCashMaster(String outYm, Integer companyId, Integer modifierId) throws Exception {
-        String sql = " select * from cash_master where out_ym = ? and company_id= ? ";
-        List parameterList = new ArrayList();
-        parameterList.add(outYm);
-        parameterList.add(companyId);
-        Query query = createQuery(sql, parameterList, null);
-        List list = query.list();
-        CashMasterEntity cashMasterEntity = null;
-        if(list != null && list.size() > 0){ //已有master_id了，取得master_id
-            Map map = (Map)list.get(0);
-            Integer cashMasterId = (Integer)map.get("cash_master_id");
-            cashMasterEntity = (CashMasterEntity)getEntity(CashMasterEntity.class, cashMasterId);
-
-            //出帳後，不可再更改cash_master
-            if(!isCashMasterOut(cashMasterEntity)){
-                logger.info("出帳後，不可再更改cash_master。 cashMaster.BankYm="+cashMasterEntity.getBankYm()+", cashMaster.OutYm="+cashMasterEntity.getOutYm()+", cashMaster.companyId="+cashMasterEntity.getCompanyId());
-                throw new Exception();
-            }
-        }else{//還沒有master_id，新增一個cash_master
-            CashMasterEntity cashMaster = new CashMasterEntity();
-            cashMaster.setOutYm(outYm);
-            cashMaster.setCompanyId(companyId);
-            cashMaster.setModifierId(modifierId);
-            cashMaster.setModifyDate(Timestamp.from(new Date().toInstant()));
-            cashMaster.setCreatorId(modifierId);
-            cashMaster.setCreateDate(Timestamp.from(new Date().toInstant()));
-
-            //欲轉換的日期字串
-            String dateString = outYm + "01";
-            //設定日期格式
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            //進行轉換
-            Date date = sdf.parse(dateString);
-
-            //出帳上海銀行的帳單年月=出帳年月的下個月
-            Calendar bankCal = Calendar.getInstance();
-            bankCal.setTime(date);
-            bankCal.add(Calendar.MONTH, 1);
-            cashMaster.setBankYm(timeUtils.getYearMonth2(bankCal.getTime())); //出帳上海銀行的帳單年月
-            cashMaster.setStatus(1); //1.生效 2.作廢
-
-            saveEntity(cashMaster);
-            cashMasterEntity = cashMaster;
-        }
-        return cashMasterEntity;
-    }
-
-    //出帳後，不可再更改cash_master
-    public boolean isCashMasterOut(CashMasterEntity master) throws Exception{
-        int status = master.getStatus(); //1.生效 2.作廢 3.出帳 4.入帳 5.佣金
-        if(status >= 3){ //出帳後，不可再更改cash_master
-            return false;
-        }
-        return true;
-    }
-
     //尋找要匯入上海銀行excel的資料-批次(by 年月)
     public List getCashMasterDetail(String outYm) throws Exception{
         return getCashMasterDetailList(outYm, null);

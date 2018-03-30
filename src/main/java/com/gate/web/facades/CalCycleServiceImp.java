@@ -2,10 +2,9 @@ package com.gate.web.facades;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.gate.utils.TimeUtils;
 import com.gate.web.beans.CalOver;
@@ -18,6 +17,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +58,9 @@ public class CalCycleServiceImp implements CalCycleService {
     @Autowired
     TimeUtils timeUtils;
 
+    @Autowired
+    CashMasterRepository cashMasterRepository;
+
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = calCycleDAO.getBillCycleList(querySettingVO);
         return returnMap;
@@ -69,6 +72,63 @@ public class CalCycleServiceImp implements CalCycleService {
 
     public List getUserCompanyList() throws Exception{
         return calCycleDAO.getUserCompanyList();
+    }
+
+    /**
+     * cash_master是否有這個計算月份的資料，有的話，則回傳master_id，否則建一個新的master，傳回master_id
+     * @param outYm //出帳年月
+     * @param companyId //用戶名稱
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public CashMasterEntity isHaveCashMaster(String outYm, Integer companyId, Integer modifierId) throws Exception {
+        List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.findByOutYmIsAndCompanyIdIs(outYm,companyId);
+        CashMasterEntity cashMasterEntity = null;
+        if(cashMasterEntityList.size() > 0){ //已有master_id了，取得master_id
+            cashMasterEntity = cashMasterEntityList.get(0);
+
+            //出帳後，不可再更改cash_master
+            if(!isCashMasterOut(cashMasterEntity)){
+                logger.info("出帳後，不可再更改cash_master。 cashMaster.BankYm="+cashMasterEntity.getBankYm()+", cashMaster.OutYm="+cashMasterEntity.getOutYm()+", cashMaster.companyId="+cashMasterEntity.getCompanyId());
+                throw new Exception();
+            }
+        }else{//還沒有master_id，新增一個cash_master
+            CashMasterEntity cashMaster = new CashMasterEntity();
+            cashMaster.setOutYm(outYm);
+            cashMaster.setCompanyId(companyId);
+            cashMaster.setModifierId(modifierId);
+            cashMaster.setModifyDate(Timestamp.from(new Date().toInstant()));
+            cashMaster.setCreatorId(modifierId);
+            cashMaster.setCreateDate(Timestamp.from(new Date().toInstant()));
+
+            //欲轉換的日期字串
+            String dateString = outYm + "01";
+            //設定日期格式
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            //進行轉換
+            Date date = sdf.parse(dateString);
+
+            //出帳上海銀行的帳單年月=出帳年月的下個月
+            Calendar bankCal = Calendar.getInstance();
+            bankCal.setTime(date);
+            bankCal.add(Calendar.MONTH, 1);
+            cashMaster.setBankYm(timeUtils.getYearMonth2(bankCal.getTime())); //出帳上海銀行的帳單年月
+            cashMaster.setStatus(1); //1.生效 2.作廢
+
+            cashMasterRepository.save(cashMaster);
+            cashMasterEntity = cashMaster;
+        }
+        return cashMasterEntity;
+    }
+
+    //出帳後，不可再更改cash_master
+    public boolean isCashMasterOut(CashMasterEntity master) throws Exception{
+        int status = master.getStatus(); //1.生效 2.作廢 3.出帳 4.入帳 5.佣金
+        if(status >= 3){ //出帳後，不可再更改cash_master
+            return false;
+        }
+        return true;
     }
 
     //計算超額-某年月之前全部計算，並一次結清
@@ -89,7 +149,7 @@ public class CalCycleServiceImp implements CalCycleService {
             CalOver(yearMonth, companyId, false, modifierId);
         }
         BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(companyId, calYM);
-        CashMasterEntity  cashMasterEntity = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), companyId, modifierId);
+        CashMasterEntity  cashMasterEntity = isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), companyId, modifierId);
         calCycleDAO.sumOverOut(companyId, calYM, packageId,cashMasterEntity.getCashMasterId(), sumOfPayOver, null, true, chargeType, modifierId);
 
         logger.info("CalOverIsEnd end = " + new java.util.Date());
@@ -130,7 +190,7 @@ public class CalCycleServiceImp implements CalCycleService {
             }
         }
         BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(companyId, cpOverList);
-        CashMasterEntity  cashMasterEntity = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), companyId, modifierId);
+        CashMasterEntity  cashMasterEntity = isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), companyId, modifierId);
         calCycleDAO.sumOverOut(companyId, calYM, packageId,cashMasterEntity.getCashMasterId(), sumOfPayOver, cpOverList, false, chargeType, modifierId);
 
         return true;
@@ -313,7 +373,11 @@ public class CalCycleServiceImp implements CalCycleService {
             double sumOver = sumOfPayOver.doubleValue();
             //該超額總額大於500元
             if(sumOver > 500d) {
-                CashMasterEntity cashMasterEntity = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(billCycleEntity.getYearMonth()), 1)), billCycleEntity.getCompanyId(), modifierId);
+                CashMasterEntity cashMasterEntity = isHaveCashMaster(
+                        timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(billCycleEntity.getYearMonth()), 1))
+                        , billCycleEntity.getCompanyId()
+                        , modifierId
+                );
                 calCycleDAO.sumOverOut(
                         billCycleEntity.getCompanyId()
                         , billCycleEntity.getYearMonth()
