@@ -228,17 +228,24 @@ public class CalCycleDAO extends BaseDAO {
         Integer cashDetailId = cashDetailEntity.getCashDetailId();
 
         //update bill_cycle的值cash_out_over_id
-        List<BillCycleEntity> sumOfPayOverList = new ArrayList<BillCycleEntity>();
-        if(isConintueCal){
-            sumOfPayOverList= getSumOfPayOverList(cpId, calYM);
-        } else {
-            sumOfPayOverList = overList;
-        }
+        //舊的saveOrUpdateEntity沒有功能，而且他的isConintueCal只是用來看是否為多筆一起計算而已，所以合併方法。
+//        List<BillCycleEntity> sumOfPayOverList = new ArrayList<BillCycleEntity>();
+//        if(isConintueCal){
+//            sumOfPayOverList= getSumOfPayOverList(cpId, calYM);
+//        } else {
+//            sumOfPayOverList = overList;
+//        }
 
-        for(int m = 0; m<sumOfPayOverList.size(); m++){
-            BillCycleEntity updateBillCycleEntity = (BillCycleEntity)sumOfPayOverList.get(m);
-            updateBillCycleEntity.setCashOutOverId(cashDetailId);
-            saveOrUpdateEntity(updateBillCycleEntity, updateBillCycleEntity.getBillId());
+//        for(int m = 0; m<sumOfPayOverList.size(); m++){
+//            BillCycleEntity updateBillCycleEntity = (BillCycleEntity)sumOfPayOverList.get(m);
+//            updateBillCycleEntity.setCashOutOverId(cashDetailId);
+//            saveOrUpdateEntity(updateBillCycleEntity, updateBillCycleEntity.getBillId());
+//        }
+
+        //於billCycle中寫入CashOutOverId
+        for(BillCycleEntity billCycleEntity: overList){
+            billCycleEntity.setCashOutOverId(cashDetailId);
+            billCycleRepository.save(billCycleEntity);
         }
 
         /**如果有啟用扣抵，就作扣抵**/

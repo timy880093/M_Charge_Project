@@ -378,13 +378,15 @@ public class CalCycleServiceImp implements CalCycleService {
                         , billCycleEntity.getCompanyId()
                         , modifierId
                 );
+                List<BillCycleEntity> billCycleEntityList = new ArrayList<>();
+                billCycleEntityList.add(billCycleEntity);
                 calCycleDAO.sumOverOut(
                         billCycleEntity.getCompanyId()
                         , billCycleEntity.getYearMonth()
                         , billCycleEntity.getPackageId()
                         , cashMasterEntity.getCashMasterId()
                         , sumOfPayOver
-                        , null
+                        , billCycleEntityList
                         , true
                         , billCycleEntity.getBillType()
                         , modifierId
