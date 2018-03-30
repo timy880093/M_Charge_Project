@@ -1,26 +1,43 @@
 package com.gate.web.servlets.backend.charge;
 
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import com.gate.core.bean.BaseFormBean;
+import com.gate.web.displaybeans.DealerVO;
+import com.gate.web.exceptions.FormValidationException;
+import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.ChargeModeGradeEntity;
+import com.gateweb.charge.model.DealerCompanyEntity;
+import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.gateweb.charge.model.UserEntity;
+import com.gateweb.einv.exception.EinvAjaxException;
+import com.gateweb.einv.exception.EinvSysException;
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.gate.utils.MapBeanConverterUtils;
 import com.gate.web.displaybeans.ChargeModeCycleVO;
 import com.gate.web.displaybeans.ChargeModeGradeVO;
 import com.gate.web.facades.ChargeService;
+import com.gate.web.facades.ChargeServiceImp;
 import com.gate.web.formbeans.ChargeModeCycleBean;
 import com.gate.web.formbeans.ChargeModeGradeBean;
+import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -73,12 +90,12 @@ public class ChargeEditServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=edit", produces = "application/json;charset=utf-8")
     public String edit(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type
-            , @RequestParam(value = "chargeId", required = true) Integer chargeId
+
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("editPrepay model:   " + model);
         System.out.println("editPrepay method:   " + method);
-        System.out.println("editPrepay masterId:   " +charge_type);
-        System.out.println("editPrepay masterId:   " +chargeId);
+        System.out.println("editPrepay type:   " +charge_type);
+
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -94,7 +111,9 @@ public class ChargeEditServlet extends MvcBaseServlet {
         }else{
             outList.add("read");
         }
+        Integer chargeId = null;
         if("1".equals(charge_type)){ //月租制
+
             if(chargeId!=null){
                 ChargeModeCycleVO chargeVO = chargeService.findChargeModeCycleByChargeId(chargeId);
                 outList.add(chargeVO);
@@ -131,7 +150,7 @@ public class ChargeEditServlet extends MvcBaseServlet {
         System.out.println("insert charge_type:   " + charge_type);
 
 
-       String data = "OK";
+        String data = "OK";
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
         Map requestParameterMap = request.getParameterMap();
