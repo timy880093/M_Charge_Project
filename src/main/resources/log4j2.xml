@@ -53,6 +53,18 @@
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="CHA_PROJECT" />
         </Logger>
+        <logger name="org.springframework.transaction" level="debug" additivity="false">
+            <AppenderRef ref="springframework" />
+            <AppenderRef ref="STDOUT" />
+        </logger>
+        <logger name="org.springframework.transaction.interceptor" level="trace" additivity="false">
+            <AppenderRef ref="springframework" />
+            <AppenderRef ref="STDOUT" />
+        </logger>
+        <logger name="org.springframework.orm.jpa.JpaTransactionManage" level="debug" additivity="false">
+            <AppenderRef ref="springframework" />
+            <AppenderRef ref="STDOUT" />
+        </logger>
         <Root level="ERROR">
             <AppenderRef ref="ConsoleAppender" />
         </Root>
