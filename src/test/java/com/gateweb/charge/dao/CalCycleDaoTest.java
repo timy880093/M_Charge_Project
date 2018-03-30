@@ -33,7 +33,7 @@ public class CalCycleDaoTest {
         List<String> messageList = new ArrayList<>();
         List<CompanyEntity> companyEntityList = companyRepository.findAll();
         for(CompanyEntity companyEntity: companyEntityList){
-            Integer usedCount = calCycleDAO.calOverByCompany(companyEntity,"201803");
+            Integer usedCount = calCycleDAO.calOverByCompany(companyEntity.getCompanyId(),"201803");
             if(usedCount>0){
                 messageList.add(companyEntity.getName() +":"+ usedCount);
             }

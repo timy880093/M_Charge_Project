@@ -9,6 +9,7 @@ import java.util.Date;
 
 import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.BillCycleRepository;
+import com.gateweb.charge.repository.CashDetailRepository;
 import com.gateweb.charge.repository.CompanyRepository;
 import com.gateweb.charge.repository.InvoiceAmountSummaryReportRepository;
 import org.apache.commons.lang.StringUtils;
@@ -44,6 +45,9 @@ public class CalCycleDAO extends BaseDAO {
 
     @Autowired
     TimeUtils timeUtils;
+
+    @Autowired
+    CashDetailRepository cashDetailRepository;
 
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Timestamp evlS = timeUtils.getCurrentTimestamp();
@@ -139,104 +143,13 @@ public class CalCycleDAO extends BaseDAO {
         return query.list();
     }
 
-    //計算超額-by年月
-    public Integer transactionCalBatchOver(String calYM, Integer modifierId) throws Exception {
-        return CalOver(calYM, null, true, modifierId);
-    }
-
-    //計算超額-多筆
-    public Integer transactionCalOver(String calOverAry, Integer modifierId) throws Exception {
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CalOver>>(){}.getType();
-        List<CalOver> calOverList = gson.fromJson(calOverAry, collectionType);
-
-        //排序calOverList
-        Collections.sort(calOverList);
-
-        Integer cnt = 0;
-        //找出所有要計算的超額帳單by CalOver (YYYYMM))
-        for(int i=0; i<calOverList.size(); i++) {
-            CalOver calOver = calOverList.get(i);
-            Integer billId = Integer.parseInt(calOver.getBillId());
-            BillCycleEntity billCycleEntity = (BillCycleEntity) getEntity(BillCycleEntity.class, billId);
-            String calYM = billCycleEntity.getYearMonth();
-            Integer companyId = billCycleEntity.getCompanyId();
-
-            cnt += CalOver(calYM, companyId, true, modifierId);
-        }
-        return cnt;
-    }
-
-    //計算超額-某年月之前全部計算，並一次結清
-    public void CalOverIsEnd(Integer companyId, String calYM, Integer modifierId) throws Exception{
-        logger.info("CalOverIsEnd start = " + new java.util.Date());
-        //1.找出該用戶在calYM之前的所有資料
-        List<BillCycleEntity> beforeBillCycleList = getSumOfPayOverList(companyId, calYM);
-
-        Integer packageId = null; //因為累計超額可能跟合約，所以超額cash_detail的package_id沒用
-        Integer chargeType = null;
-        //2.將這些筆數全部加總
-        //isSum=false: 續約，結清之前的超額(先不在此作加總)
-        for(int i=0; i<beforeBillCycleList.size(); i++){
-            BillCycleEntity entity = (BillCycleEntity)beforeBillCycleList.get(i);
-            String yearMonth = entity.getYearMonth();
-            packageId = entity.getPackageId();
-            chargeType = entity.getBillType();
-            CalOver(yearMonth, companyId, false, modifierId);
-        }
-        BigDecimal sumOfPayOver = getSumOfPayOver(companyId, calYM);
-        sumOverOut(companyId, calYM, packageId, sumOfPayOver, null, true, chargeType, modifierId);
-
-        logger.info("CalOverIsEnd end = " + new java.util.Date());
-    }
-
-    //計算超額-可選擇某幾筆計算且出帳
-    // (需先選擇某用戶名稱,在js擋)
-    // 某用戶的超額任選幾筆，合併出一筆帳單
-    //calYM不代表計算那個年月，而是指:出帳時顯示的計算年月
-    public boolean transactionCalOverToCash(String calYM, Integer companyId, String calOverAry, Integer modifierId) throws Exception {
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CalOver>>(){}.getType();
-        List<CalOver> calOverList = gson.fromJson(calOverAry, collectionType);
-
-        //排序calOverList
-        Collections.sort(calOverList);
-
-        Integer packageId = null; //因為累計超額可能跟合約，所以超額cash_detail的package_id沒用
-        Integer chargeType = null; //1.月租 2.級距
-        Integer cnt = 0; //某公司共有幾筆的超額
-        List<BillCycleEntity> cpOverList = new ArrayList<BillCycleEntity>(); //哪些bill_cycle的資料會被作計算
-        //找出所有要計算的超額帳單by CalOver (YYYYMM))
-        for(int i=0; i<calOverList.size(); i++) {
-            CalOver calOver = calOverList.get(i);
-            Integer billId = Integer.parseInt(calOver.getBillId());
-            BillCycleEntity billCycleEntity = (BillCycleEntity) getEntity(BillCycleEntity.class, billId);
-            Integer billCpId = billCycleEntity.getCompanyId();
-            if(billCpId.intValue() != companyId.intValue()){
-                continue; //如果該筆選擇的不是畫面選擇的用戶名稱，則不處理
-            }
-            packageId = billCycleEntity.getPackageId();
-            chargeType = billCycleEntity.getBillType();
-            String billYearMonth = billCycleEntity.getYearMonth();
-            CalOver(billYearMonth, billCpId, false, modifierId); //計算當個月的超額，先不判斷(累計超額是否超過某個值，需出帳)
-            BillCycleEntity entity = (BillCycleEntity)getEntity(BillCycleEntity.class, billId);
-            if(null == entity.getCashOutOverId()){
-                cpOverList.add(entity);
-            }
-        }
-        BigDecimal sumOfPayOver = getSumOfPayOver(companyId, cpOverList);
-        sumOverOut(companyId, calYM, packageId, sumOfPayOver, cpOverList, false, chargeType, modifierId);
-
-        return true;
-    }
-
     /**
      * 計算該公司該期使用了幾張發票。
-     * @param companyEntity
+     * @param companyId
      * @param calYM
      * @return
      */
-    public Integer calOverByCompany(CompanyEntity companyEntity,String calYM){
+    public Integer calOverByCompany(Integer companyId,String calYM){
         Integer useCnt = 0;
         try{
             //1.找出所有用戶的當月張數：計算當期發票開立A0401/C0401張數
@@ -245,9 +158,9 @@ public class CalCycleDAO extends BaseDAO {
             String cYearMonth = timeUtils.getYearMonth(calYM+"01");
             parameterList.add(cYearMonth);
             String tempWhereSql = "";
-            if(null != companyEntity.getCompanyId() ){
+            if(null != companyId ){
                 tempWhereSql = " and cp.company_id = ? " ;
-                parameterList.add(companyEntity.getCompanyId());
+                parameterList.add(companyId);
             }
             parameterList.add(calYM); //超額計算年月
 
@@ -267,7 +180,7 @@ public class CalCycleDAO extends BaseDAO {
                 //String cpName = (String)(useCntList.get(k).get("name"));
                 useCnt = ((BigInteger) useCntList.get(k).get("count")).intValue(); //該公司某年月開的發票數量
             }
-            System.out.println("cpId="+companyEntity.getCompanyId()+" useCnt="+useCnt+" calYM="+calYM + " cYearMonth="+cYearMonth);
+            System.out.println("cpId="+companyId+" useCnt="+useCnt+" calYM="+calYM + " cYearMonth="+cYearMonth);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -286,167 +199,32 @@ public class CalCycleDAO extends BaseDAO {
         return invoiceAmountSummaryReportEntityList.size();
     }
 
-    /**計算超額
-     * @param calYM 要計算到哪個年月
-     * @param companyId 要計算的公司
-     * @param isSum 判斷是否累計超過某個值，要作加總
-     * @return
-     * @throws Exception
-     */
-    public Integer CalOver(String calYM, Integer companyId, boolean isSum, Integer modifierId) throws Exception{
-        logger.info("CalOver start = " + new java.util.Date());
-        Integer cnt = 0;  //計算了幾筆
-
-        //找出所有的公司-by年月時，會找出所有的公司
-        List<CompanyEntity> companyEntityList = new ArrayList<>();
-        if(null != companyId){
-            companyEntityList.add(companyRepository.findByCompanyId(companyId));
-        }else{
-            companyEntityList.addAll(companyRepository.findAll());
-        }
-
-        for(CompanyEntity companyEntity: companyEntityList){
-            List<BillCycleEntity> billCycleList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(calYM,companyEntity.getCompanyId());
-
-            //該公司在某年月的那一筆billCycle
-            for(BillCycleEntity billCycleEntity: billCycleList){
-                //如果bill_cycle的Cash_Out_Over_Id不是null，則不作超額計算(已被計算過了(算到cash_detail裡))
-                if(null != billCycleEntity.getCashOutOverId()){
-                    continue;
-                }
-
-                //作廢的不計算
-                if("2".equals(billCycleEntity.getStatus())){
-                    continue;
-                }
-
-                Integer useCnt = calOverByCompany(companyEntity,calYM);
-
-                //System.out.println("sql= "+sql);
-                //System.out.println("cYearMonth= "+cYearMonth+",company_id="+company_id+",calYM="+calYM);
-
-                billCycleEntity.setCnt(useCnt); //當月使用張數
-                Integer cntGift = (null == billCycleEntity.getCntGift() )?0:(billCycleEntity.getCntGift()); //贈送張數
-                Integer cntLimit = billCycleEntity.getCntLimit(); //當月免費張數上限
-                BigDecimal singlePrice = billCycleEntity.getSinglePrice(); //單一張發票收費價格
-                BigDecimal priceMax = billCycleEntity.getPriceMax(); //當月繳款金額上限
-                BigDecimal price = billCycleEntity.getPrice(); //月租金額
-
-                //開始作超額計算...........，start
-                //超限張數
-                Integer cntOverTemp = useCnt - cntGift - cntLimit;
-                BigDecimal cntOver = new BigDecimal(cntOverTemp);
-
-                Integer billType = billCycleEntity.getBillType(); //合約類型 1.月租 2.級距
-                Integer packageId = billCycleEntity.getPackageId();
-                if(1 == billType){
-                    //月租型
-                    if(cntOverTemp < 0){
-                        billCycleEntity.setCntOver(0); //超限張數
-                        billCycleEntity.setPriceOver(new BigDecimal(0)); //超限金額
-                        billCycleEntity.setPayOver(new BigDecimal(0)); //超額金額
-                    }else{
-                        billCycleEntity.setCntOver(cntOverTemp); //超限張數
-
-                        //超限金額 = 超限張數*單一張發票收費價格
-                        BigDecimal priceOver = cntOver.multiply(singlePrice) ; //超限金額
-                        billCycleEntity.setPriceOver(priceOver); //超限金額
-
-                        BigDecimal priceMaxTemp = priceMax.subtract(price);
-
-                        //超額金額= 超限金額，如果超額金額大於最大繳款上限，則繳繳款金額上限
-                        if(priceMaxTemp.compareTo(priceOver) == -1){  //-1、0、1，分别表示小於、等於、大於
-                            billCycleEntity.setPayOver(priceMaxTemp); //超額金額
-                        }else{
-                            billCycleEntity.setPayOver(priceOver); //超額金額
-                        }
-                    }
-                } else if(2 == billType){
-                    //級距型
-                    if(cntOverTemp < 0){
-                        billCycleEntity.setCntOver(0); //超限張數
-                        billCycleEntity.setPriceOver(new BigDecimal(0)); //超限金額
-                        billCycleEntity.setPayOver(new BigDecimal(0)); //超額金額
-                    }else {
-                        billCycleEntity.setCntOver(cntOverTemp); //超限張數
-
-                        //找出該合約的方案
-                        PackageModeEntity packageModeEntity = (PackageModeEntity)getEntity(PackageModeEntity.class, packageId);
-                        ChargeModeGradeEntity chargeModeGradeEntity = (ChargeModeGradeEntity)getEntity(ChargeModeGradeEntity.class, packageModeEntity.getChargeId());
-                        String hasGrade = chargeModeGradeEntity.getHasGrade(); //是否有級距表?
-                        if("N".equals(hasGrade)){
-                            //不使用級距表
-                            Integer gradeCnt = chargeModeGradeEntity.getGradeCnt(); //級距區間張數
-                            Integer gradePrice = chargeModeGradeEntity.getGradePrice(); //級距區間費用
-                            boolean isDivisible = (cntOverTemp%gradeCnt) == 0 ;
-                            Integer grades = cntOverTemp/gradeCnt;
-                            if(!isDivisible){grades = grades + 1;}
-
-                            BigDecimal priceOver = new BigDecimal(grades*gradePrice); //超限金額
-                            billCycleEntity.setPriceOver(priceOver); //超限金額
-                            billCycleEntity.setPayOver(priceOver); //超額金額
-                        } else if("Y".equals(hasGrade)){
-                            //使用級距表
-                            GradeEntity searchGradeEntity = new GradeEntity();
-                            searchGradeEntity.setChargeId(chargeModeGradeEntity.getChargeId());
-                            List gradeList = getSearchEntity(GradeEntity.class, searchGradeEntity);
-                            BigDecimal priceOver = new BigDecimal(0);
-                            for(int gradeIndex=0; gradeIndex<gradeList.size(); gradeIndex++){
-                                GradeEntity gradeEntity = (GradeEntity) gradeList.get(gradeIndex);
-                                Integer cntStart = gradeEntity.getCntStart();
-                                Integer cntEnd = gradeEntity.getCntEnd();
-                                Integer gradePrice = gradeEntity.getPrice();
-                                if(cntOverTemp>=cntStart && cntOverTemp<=cntEnd){
-                                    priceOver = priceOver.add(new BigDecimal(gradePrice));
-                                } else if(cntOverTemp>=cntEnd){
-                                    priceOver = priceOver.add(new BigDecimal(gradePrice));
-                                }
-                            }
-                            billCycleEntity.setPriceOver(priceOver); //超限金額
-                            billCycleEntity.setPayOver(priceOver); //超額金額
-                        }
-                    }
-                }
-                //開始作超額計算...........，end
-                saveOrUpdateEntity(billCycleEntity, billCycleEntity.getBillId());
-                cnt++;  //計算了幾筆
-
-                if(isSum == true){ //isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
-                    //3.如果超額達300元，將資料寫cash_flow table
-                    BigDecimal sumOfPayOver = getSumOfPayOver(companyEntity.getCompanyId(), calYM);
-                    double sumOver = sumOfPayOver.doubleValue();
-                    //該超額總額大於500元
-                    if(sumOver > 500d) {
-                        sumOverOut(companyEntity.getCompanyId(), calYM, packageId, sumOfPayOver, null, true, billType, modifierId);
-                    }
-                }
-            }
-        }
-
-        logger.info("CalOver end = " + new java.util.Date());
-        return cnt;  //計算了幾筆
-    }
-
-
-
     //加總計算超額到cash_detail和cash_Master
-    public void sumOverOut(Integer cpId, String calYM, Integer packageId, BigDecimal sumOfPayOver, List<BillCycleEntity> overList,boolean isConintueCal, Integer chargeType, Integer modifierId)throws Exception{
+    public void sumOverOut(
+            Integer cpId
+            , String calYM
+            , Integer packageId
+            , Integer cashMasterId
+            , BigDecimal sumOfPayOver
+            , List<BillCycleEntity> overList
+            , boolean isConintueCal
+            , Integer chargeType
+            , Integer modifierId)throws Exception{
         logger.info("sumOverOut start = " + new java.util.Date());
         //insert 一筆新的cash_detail'、cash_master
         CashDetailEntity cashDetailEntity = new CashDetailEntity();
         cashDetailEntity.setCompanyId(cpId); //公司名稱
         cashDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
         cashDetailEntity.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
-        CashMasterEntity  cashMasterEntity = cashDAO.isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), cpId, modifierId);
-        cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId()); //cash_master_id
+        cashDetailEntity.setCashMasterId(cashMasterId); //cash_master_id
         cashDetailEntity.setCashType(2); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值
         cashDetailEntity.setBillType(chargeType); //帳單類型　1.月租 2.級距
-        cashDetailEntity.setPackageId(packageId); //超額的cashdetail不紀錄packageId(超額的cashdetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
+        cashDetailEntity.setPackageId(packageId); //超額的cashDetail不紀錄packageId(超額的cashDetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
         cashDetailEntity.setStatus(1); //1.生效 2.作廢
 
         cashDetailEntity = cashDAO.calPriceTax(cashDetailEntity, sumOfPayOver, new BigDecimal(0), null);
 
-        saveEntity(cashDetailEntity);
+        cashDetailRepository.save(cashDetailEntity);
         Integer cashDetailId = cashDetailEntity.getCashDetailId();
 
         //update bill_cycle的值cash_out_over_id

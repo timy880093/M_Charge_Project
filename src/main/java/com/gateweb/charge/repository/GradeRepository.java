@@ -52,6 +52,8 @@ public interface GradeRepository extends JpaRepository<GradeEntity, Integer>
 	
 	public long count();*/
 
+	public List<GradeEntity> findByChargeId(Integer chargeId);
+
 			
 }
 

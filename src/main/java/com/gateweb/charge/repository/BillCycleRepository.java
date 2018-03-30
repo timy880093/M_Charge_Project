@@ -40,7 +40,7 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 		java.lang.Integer billId 
 	) throws DaoSystemException;
 
-	public BillCycleEntity findByBillId(Long billId);
+	public BillCycleEntity findByBillId(Integer billId);
 	
 	/*public Page<BillCycleEntity> findByBillId(Long billId, Pageable pageable);
 	

@@ -132,13 +132,15 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         logger.debug("calOverYM calOverYM:   " + calYM);
         logger.debug("outYM paramMap:   " + paramMap);
 
+        UserEntity user = checkLogin(request, response);
+
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
         Integer exeCnt = 0;
         String responseMessage = "";
         try {
-            exeCnt = calCycleService.calBatchOver(calYM, 10);
+            exeCnt = calCycleService.batchCalOverByYearMonth(calYM,user.getUserId().intValue());
             responseMessage += "  total counts: " + exeCnt + "";
         } catch (Exception ex) {
             System.out.println(ex);
@@ -157,7 +159,10 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         logger.debug("calOver model:   " + model);
         logger.debug("calOver calOver:   " + calOverAry);
         logger.debug("calOver paramMap:   " + paramMap);
-        List<Integer> billIdList = jsonUtils.parseMultiSelectedValueJsonArray(calOverAry,"billId");
+
+        UserEntity user = checkLogin(request, response);
+
+        List<Integer> billIdList = jsonUtils.parseMultiSelectedValueJsonArray(calOverAry,"billId",Integer.class);
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
@@ -165,7 +170,7 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         String responseMessage = "";
         try {
             //這裡的calOverArray存的其實是billCycle的billId
-            exeCnt = calCycleService.calOver(calOverAry, 10);
+            exeCnt = calCycleService.batchCalOver(billIdList, user.getUserId().intValue());
             responseMessage += "  total counts: " + exeCnt + "";
         } catch (Exception ex) {
             System.out.println(ex);

@@ -21,9 +21,11 @@ public interface CalCycleService extends Service {
 
     public List getUserCompanyList() throws Exception;
 
-    public Integer calBatchOver(String calYM, Integer modifierId) throws Exception;
+    //計算超額-多筆
+    Integer batchCalOver(List<Integer> billIdList, Integer modifierId) throws Exception;
 
-    public Integer calOver(String calOverAry, Integer modifierId) throws Exception;
+    //計算超額-by年月
+    Integer batchCalOverByYearMonth(String yearMonth, Integer modifierId);
 
     public boolean calOverToCash(String calYM, Integer companyId, String calOverAry, Integer modifierId) throws Exception;
 //    public List calOver(String calYM, String companyId) throws Exception {
