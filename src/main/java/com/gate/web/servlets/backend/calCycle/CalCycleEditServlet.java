@@ -99,7 +99,7 @@ public class CalCycleEditServlet extends MvcBaseServlet {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=updateGift", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.POST, params = "method=updateGift", produces = "application/json;charset=utf-8")
     public String updateGift(@RequestParam("method") String method, Model model
             , @RequestParam(value="billId", required=true) Integer masterId
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
