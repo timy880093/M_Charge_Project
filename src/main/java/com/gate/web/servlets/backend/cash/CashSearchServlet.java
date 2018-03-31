@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gate.core.bean.BaseFormBean;
-import com.gate.utils.CsvUtils;
-import com.gate.utils.FileUtils;
-import com.gate.utils.JxlsUtils;
+import com.gate.utils.*;
+import com.gate.web.beans.CashMasterBean;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
@@ -28,7 +27,6 @@ import com.google.gson.JsonObject;
 import org.jxls.common.CellRef;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gate.utils.ExcelPoiWrapper;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.facades.CalCycleService;
 import com.gate.web.facades.CashService;
@@ -71,6 +69,9 @@ public class CashSearchServlet extends MvcBaseServlet {
 
     @Autowired
     FileUtils fileUtils;
+
+    @Autowired
+    JsonUtils jsonUtils;
 
     @RequestMapping(method = RequestMethod.POST)
     public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
@@ -372,8 +373,9 @@ public class CashSearchServlet extends MvcBaseServlet {
             BaseFormBean formBeanObject = formBeanObject(request);
             Map otherMap = otherMap(request, response, formBeanObject);
             sendObjToViewer(request, otherMap);
-            List cashMasterList =  cashService.getCashMasterDetail(outYM, destJson);
-            Map<String,Object> dataMap = cashService.genCashDataExcelDataMap(cashMasterList);
+            List<Integer> cashMasterIdList = jsonUtils.parseMultiSelectedValueJsonArray(destJson,"cashMasterId",Integer.class);
+            List<CashMasterBean> cashMasterBeanList = cashService.getCashMasterDetail(cashMasterIdList);
+            Map<String,Object> dataMap = cashService.genCashDataExcelDataMap(cashMasterBeanList);
             Map<String,Object> contextMap = new HashMap<>();
             contextMap.put("headers",dataMap.get("header"));
             contextMap.put("rows", dataMap.get("data"));

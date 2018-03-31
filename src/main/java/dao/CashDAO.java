@@ -737,57 +737,21 @@ public class CashDAO extends BaseDAO {
         return cashDetailEntity;
     }
 
-    //尋找要匯入上海銀行excel的資料-批次(by 年月)
-    public List getCashMasterDetail(String outYm) throws Exception{
-        return getCashMasterDetailList(outYm, null);
-    }
-
-    //尋找要匯入上海銀行excel的資料-多筆
-    public List getCashMasterDetail(String outYm, String destJson) throws Exception{
-
-        List<CashMasterEntity> selectOutList = new ArrayList<CashMasterEntity>();
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CashMasterBean>>(){}.getType();
-        List<CashMasterBean> cashMasterList = gson.fromJson(destJson, collectionType);
-
-        for(CashMasterBean masterBean:cashMasterList){
-            Integer masterId = masterBean.getCashMasterId();
-            CashMasterEntity masterEntity = (CashMasterEntity)getEntity(CashMasterEntity.class, masterId);
-            selectOutList.add(masterEntity);
-        }
-
-        return getCashMasterDetailList(outYm, selectOutList);
-    }
-
     //Todo:將會移至CashServiceImp，轉為使用CashMasterIdList做為傳入參數，並且返回設定好的bean，如果是動態，就返回map。
-    public List getCashMasterDetailList(String outYm, List selectOutList) throws Exception{
+    public List getCashMasterDetailList(List<CashMasterEntity> selectOutList) throws Exception{
         List list = new ArrayList();
 
-        CashMasterEntity searchMaster = new CashMasterEntity();
-        searchMaster.setOutYm(outYm);
-        List masterList =  getSearchEntity(CashMasterEntity.class, searchMaster);
-
         //masterList依master_id排序
-        Collections.sort(masterList,
+        Collections.sort(selectOutList,
                 new Comparator<CashMasterEntity>() {
                     public int compare(CashMasterEntity o1, CashMasterEntity o2) {
                         return o2.getCashMasterId().compareTo(o1.getCashMasterId());
                     }
                 });
 
-        //移除沒有選到的筆數
-        if(null != selectOutList && selectOutList.size()>0){
-            for(int i=(masterList.size()-1); i >-1; i--){
-                CashMasterEntity master = (CashMasterEntity)masterList.get(i);
-                if(!selectOutList.contains(master)){
-                    masterList.remove(master);
-                }
-            }
-        }
-
-        for(int i=0; i<masterList.size(); i++){
+        for(int i=0; i<selectOutList.size(); i++){
             CashMasterBean masterBean = new CashMasterBean();
-            CashMasterEntity master = (CashMasterEntity)masterList.get(i);
+            CashMasterEntity master = (CashMasterEntity)selectOutList.get(i);
             Integer masterId = master.getCashMasterId();
             BeanUtils.copyProperties(masterBean, master);
 

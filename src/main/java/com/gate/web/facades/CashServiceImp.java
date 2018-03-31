@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.gate.utils.ExcelPoiWrapper;
 import com.gate.utils.FieldUtils;
+import com.gate.utils.JsonUtils;
 import com.gate.utils.TimeUtils;
 import com.gate.web.beans.CashDetailBean;
 import com.gate.web.beans.CashMasterBean;
@@ -73,6 +74,9 @@ public class CashServiceImp implements CashService {
     @Autowired
     DeductDetailRepository deductDetailRepository;
 
+    @Autowired
+    JsonUtils jsonUtils;
+
     public Map getCashMaster(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = cashDAO.getCashMaster(querySettingVO);
         return returnMap;
@@ -118,12 +122,20 @@ public class CashServiceImp implements CashService {
         return cashDAO.transactionIn(cashMasterId, inAmount, inDate, inNote);
     }
 
-    public List getCashMasterDetail(String ym) throws Exception{
-        return cashDAO.getCashMasterDetail(ym);
+    //尋找要匯入上海銀行excel的資料-多筆
+    @Override
+    public List getCashMasterDetail(List<Integer> cashMasterIdList) throws Exception{
+        List<CashMasterEntity> cashMasterEntityList = new ArrayList<>();
+        for(Integer cashMasterId: cashMasterIdList){
+            cashMasterEntityList.add(cashMasterRepository.findByCashMasterId(cashMasterId));
+        }
+        return cashDAO.getCashMasterDetailList(cashMasterEntityList);
     }
 
-    public List getCashMasterDetail(String ym, String destJson) throws Exception{
-        return cashDAO.getCashMasterDetail(ym, destJson);
+    //尋找要匯入上海銀行excel的資料-批次(by 年月)
+    public List getCashMasterDetail(String outYm) throws Exception{
+        List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.findByOutYm(outYm);
+        return cashDAO.getCashMasterDetailList(cashMasterEntityList);
     }
 
     /**
@@ -591,7 +603,8 @@ public class CashServiceImp implements CashService {
             //就以前的情況，一定只會有一個。
             CashDetailBean cashDetailBean = cashMasterBean.getCashDetailList().get(0);
             for(String packageName: packageList){
-                if(cashDetailBean.getPackageName().equals(packageName)){
+                String cashDetailPackageName =  getPackageName(cashDetailBean.getCashType(),cashDetailBean.getPackageName());
+                if(cashDetailPackageName.equals(packageName)){
                     detailValueList.add(cashDetailBean.getTaxInclusivePrice());
                 }else{
                     detailValueList.add(0);

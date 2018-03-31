@@ -237,7 +237,11 @@ public class CalCycleServiceImp implements CalCycleService {
             }
         }
         BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(companyId, cpOverList);
-        CashMasterEntity  cashMasterEntity = isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), companyId, modifierId);
+        CashMasterEntity  cashMasterEntity = isHaveCashMaster(
+                timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))
+                , companyId
+                , modifierId
+        );
         CashDetailEntity cashDetailEntity = createCashDetailEntityForCalOver(
                 companyId
                 ,calYM
@@ -268,17 +272,11 @@ public class CalCycleServiceImp implements CalCycleService {
         Integer cnt = 0;
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(yearMonth,companyId);
         try{
-            CashMasterEntity cashMasterEntity = isHaveCashMaster(
-                    timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(yearMonth), 1))
-                    , companyId
-                    , modifierId
-            );
             PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
             prepareBillCycleListData(billCycleEntityList);
             writeBillCycleOverData(
                     billCycleEntityList
                     , true
-                    , cashMasterEntity
                     , packageModeEntity
                     , modifierId
             );
@@ -294,6 +292,7 @@ public class CalCycleServiceImp implements CalCycleService {
     /**
      * 計算超額
      * isSum 判斷是否累計超過某個值，要作加總
+     * 帳單年月為billCycle記錄的最後一個年月。
      * @param billIdList
      * @param modifierId
      * @return
@@ -304,6 +303,7 @@ public class CalCycleServiceImp implements CalCycleService {
         //查出選擇的billCycle
         //根據公司類型分類
         Map<Integer,List<BillCycleEntity>> billCycleByCompanyMap = new HashMap<>();
+        //使用選中的billCycle中，最大的期別做為帳單年月
         for(Integer billId: billIdList){
             BillCycleEntity billCycleEntity = billCycleRepository.findByBillId(billId);
             if(billCycleByCompanyMap.containsKey(billCycleEntity.getCompanyId())){
@@ -318,11 +318,6 @@ public class CalCycleServiceImp implements CalCycleService {
         try {
             for(Integer companyId: billCycleByCompanyMap.keySet()) {
                 List<BillCycleEntity> billCycleEntityList = billCycleByCompanyMap.get(companyId);
-                CashMasterEntity cashMasterEntity = isHaveCashMaster(
-                        timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(timeUtils.getCurrentDateString("yyyyMM")), 1))
-                        , companyId
-                        , modifierId
-                );
                 PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
                 //應計算完所有的billCycleEntity後再決定超額資料。
                 prepareBillCycleListData(billCycleEntityList);
@@ -330,7 +325,6 @@ public class CalCycleServiceImp implements CalCycleService {
                 writeBillCycleOverData(
                         billCycleEntityList
                         , true
-                        , cashMasterEntity
                         , packageModeEntity
                         , modifierId
                 );
@@ -357,11 +351,6 @@ public class CalCycleServiceImp implements CalCycleService {
 
         for(CompanyEntity companyEntity: companyEntityList){
             List<BillCycleEntity> billCycleList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(calYM,companyEntity.getCompanyId());
-            CashMasterEntity cashMasterEntity = isHaveCashMaster(
-                    timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))
-                    , companyEntity.getCompanyId()
-                    , modifierId
-            );
             PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
             //應計算完所有的billCycleEntity後再決定超額資料。
             prepareBillCycleListData(billCycleList);
@@ -369,7 +358,6 @@ public class CalCycleServiceImp implements CalCycleService {
             writeBillCycleOverData(
                     billCycleList
                     , isSum
-                    , cashMasterEntity
                     , packageModeEntity
                     , modifierId
             );
@@ -485,25 +473,37 @@ public class CalCycleServiceImp implements CalCycleService {
     public void writeBillCycleOverData(
             List<BillCycleEntity> billCycleEntityList
             , boolean isSum
-            , CashMasterEntity cashMasterEntity
             , PackageModeEntity packageModeEntity
             , Integer modifierId) throws Exception {
         BigDecimal sumOver = BigDecimal.ZERO;
         //要使用已經存在的CashMaster進行更新。
+        //billYearMonth
+        Date billYearMonth= null;
         for(BillCycleEntity billCycleEntity : billCycleEntityList){
             //開始作超額計算...........，end
             calCycleDAO.saveOrUpdateEntity(billCycleEntity, billCycleEntity.getBillId());
             //3.如果超額達300元，將資料寫cash_flow table
 //            BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(billCycleEntity.getCompanyId(), billCycleEntity.getYearMonth());
+            //使用最後超額的年月作為帳單年月
+            Date otherBillCycleDate = timeUtils.parseDate(billCycleEntity.getYearMonth());
+            if(billYearMonth==null || billYearMonth.before(otherBillCycleDate)){
+                billYearMonth = otherBillCycleDate;
+            }
             BigDecimal sumOfPayOver = billCycleEntity.getPayOver();
             sumOver= sumOver.add(sumOfPayOver);
         }
         if(isSum == true){ //isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
             //該超額總額大於500元
             if(sumOver.doubleValue() > 500d) {
+                //只有大於五百的時候要出帳。
+                CashMasterEntity cashMasterEntity = isHaveCashMaster(
+                        timeUtils.getYYYYMM(timeUtils.addMonth(billYearMonth, 1))
+                        , packageModeEntity.getCompanyId()
+                        , modifierId
+                );
                 CashDetailEntity cashDetailEntity = createCashDetailEntityForCalOver(
                         cashMasterEntity.getCompanyId()
-                        , timeUtils.getCurrentDateString("yyyyMM")
+                        , timeUtils.getYYYYMM(billYearMonth)
                         , cashMasterEntity.getCashMasterId()
                         , packageModeEntity.getPackageType()
                         , packageModeEntity.getPackageId()
@@ -528,10 +528,6 @@ public class CalCycleServiceImp implements CalCycleService {
     public boolean calOverToCash(String calYM, Integer companyId, String calOverAry, Integer modifierId) throws Exception {
         return transactionCalOverToCash(calYM, companyId, calOverAry, modifierId);
     }
-
-//    public List calOver(String calYM, String companyId) throws Exception {
-//        return dao.transactionCalOver(calYM, companyId);
-//    }
 
     public void updateGift(GiftBean bean) throws Exception {
         GiftEntity entity = new GiftEntity();
