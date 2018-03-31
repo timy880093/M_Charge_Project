@@ -494,7 +494,8 @@ public class CalCycleServiceImp implements CalCycleService {
             //開始作超額計算...........，end
             calCycleDAO.saveOrUpdateEntity(billCycleEntity, billCycleEntity.getBillId());
             //3.如果超額達300元，將資料寫cash_flow table
-            BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(billCycleEntity.getCompanyId(), billCycleEntity.getYearMonth());
+//            BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(billCycleEntity.getCompanyId(), billCycleEntity.getYearMonth());
+            BigDecimal sumOfPayOver = billCycleEntity.getPayOver();
             sumOver= sumOver.add(sumOfPayOver);
         }
         if(isSum == true){ //isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
