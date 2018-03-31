@@ -31,4 +31,5 @@ public class BillCycleServiceImp implements BillCycleService{
         }
         return billCycleEntityList;
     }
+
 }

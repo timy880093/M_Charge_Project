@@ -194,7 +194,7 @@ public class CompanyChargeDAO extends BaseDAO {
             }
         }
 
-        //目前沒有硇月或足月之分
+        //目前沒有破月或足月之分
 //        if (cycleEntity.getChargeCycle() == 2) {
 //            if (realStartCal.get(Calendar.DATE) > 15) {
 //                //破月成立,多加一個免費月份

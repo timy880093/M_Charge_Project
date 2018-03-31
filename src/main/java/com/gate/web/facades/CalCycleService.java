@@ -22,13 +22,13 @@ public interface CalCycleService extends Service {
 
     public List getUserCompanyList() throws Exception;
 
+    //計算超額-by年月
+    Integer batchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId);
+
     //計算超額-多筆
     Integer batchCalOver(List<Integer> billIdList, Integer modifierId) throws Exception;
 
     CashMasterEntity isHaveCashMaster(String outYm, Integer companyId, Integer modifierId) throws Exception;
-
-    //計算超額-by年月
-    Integer batchCalOverByYearMonth(String yearMonth, Integer modifierId);
 
     public boolean calOverToCash(String calYM, Integer companyId, String calOverAry, Integer modifierId) throws Exception;
 //    public List calOver(String calYM, String companyId) throws Exception {

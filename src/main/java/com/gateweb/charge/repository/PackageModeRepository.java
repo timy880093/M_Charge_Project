@@ -33,7 +33,7 @@ public interface PackageModeRepository extends JpaRepository<PackageModeEntity, 
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param packageId PK
 	 * @throws DaoSystemException	if system is wrong.
      */
 	void deleteByPackageId(	
@@ -41,6 +41,10 @@ public interface PackageModeRepository extends JpaRepository<PackageModeEntity, 
 	) throws DaoSystemException;
 
 	public PackageModeEntity findByPackageId(Integer packageId);
+
+
+	//status0為當前啟用的方案。
+	public PackageModeEntity findByCompanyIdIsAndStatusIs(Integer companyId,String status);
 
 	/*
 	public Page<PackageModeEntity> findByPackageId(Long packageId, Pageable pageable);

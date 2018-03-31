@@ -12,7 +12,9 @@ import com.gate.utils.JsonUtils;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
+import com.gateweb.charge.model.CompanyEntity;
 import com.gateweb.charge.model.UserEntity;
+import com.gateweb.charge.repository.CompanyRepository;
 import com.gateweb.einv.exception.EinvSysException;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
 
     @Autowired
     JsonUtils jsonUtils;
+
+    @Autowired
+    CompanyRepository companyRepository;
 
     @RequestMapping(method = RequestMethod.POST)
     public String defaultPost(@RequestParam MultiValueMap<String, String> paramMap,
@@ -121,7 +126,6 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         return jsonString;
     }
 
-
     @RequestMapping(method = RequestMethod.GET, params = "method=calOverYM", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String calOverYM(@RequestParam MultiValueMap<String, String> paramMap,
@@ -140,7 +144,15 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         Integer exeCnt = 0;
         String responseMessage = "";
         try {
-            exeCnt = calCycleService.batchCalOverByYearMonth(calYM,user.getUserId().intValue());
+            //找出所有公司
+            List<CompanyEntity> companyEntityList = companyRepository.findAll();
+            for(CompanyEntity companyEntity : companyEntityList){
+                exeCnt = calCycleService.batchCalOverByYearMonthAndCompanyId(
+                        companyEntity.getCompanyId()
+                        , calYM
+                        ,user.getUserId().intValue()
+                );
+            }
             responseMessage += "  total counts: " + exeCnt + "";
         } catch (Exception ex) {
             System.out.println(ex);
