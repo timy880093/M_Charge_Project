@@ -18,16 +18,17 @@ import com.gate.web.formbeans.CompanyChargeCycleBean;
 import com.gate.web.servlets.backend.common.BackendPopTemplateServlet;
 import com.gateweb.charge.model.DealerCompanyEntity;
 
+
 @WebServlet(urlPatterns = "/backendAdmin/companyChargeEditServlet")
 public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
-	
-	@Autowired
-	CompanyChargeService companyChargeService;
-	
-	@Autowired
-	CompanyService companyService;
-	
-	@Autowired
+
+    @Autowired
+    CompanyChargeService companyChargeService;
+
+    @Autowired
+    CompanyService companyService;
+
+    @Autowired
     CommissionService commissionService;
 
     @Override
@@ -56,7 +57,7 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
         } else if (method.equals("edit")) { //在用戶清單中，選擇要新增某用戶的合約時，會跳出一個該用戶設定相關合約的內容
 
             String companyId = ((String[]) requestParameterMap.get("companyId"))[0];
-            
+
             Map companyMap = companyService.getCompanyInfoByCompanyId(Integer.parseInt(companyId));
             outList.add(companyMap);    //公司基本資料 0
             String dispatch_page = "";

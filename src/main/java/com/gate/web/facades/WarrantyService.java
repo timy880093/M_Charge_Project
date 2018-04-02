@@ -8,10 +8,11 @@ import com.gate.web.displaybeans.WarrantyVO;
 import com.gate.web.formbeans.WarrantyBean;
 
 public interface WarrantyService extends Service {
-   
-    public Map getWarrantyList(QuerySettingVO querySettingVO) throws Exception ;
 
-    public int updateWarranty(WarrantyBean warrantyBean) throws Exception ;
+    public Map getWarrantyList(QuerySettingVO querySettingVO) throws Exception;
+
+    public Integer updateWarranty(WarrantyBean warrantyBean, Integer userId) throws Exception;
+
 
     public WarrantyVO findWarrantyByWarrantyId(Integer warrantyId) throws Exception;
 
@@ -21,4 +22,5 @@ public interface WarrantyService extends Service {
 
 
     public List getUserDealerCompanyList() throws Exception;
+
 }

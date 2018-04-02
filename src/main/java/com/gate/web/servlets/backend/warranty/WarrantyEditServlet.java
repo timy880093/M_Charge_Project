@@ -4,6 +4,7 @@ import static com.gate.utils.MapBeanConverterUtils.mapToBean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.gate.core.bean.BaseFormBean;
@@ -148,6 +149,9 @@ public class WarrantyEditServlet extends MvcBaseServlet {
         System.out.println("update method:   " + method);
         System.out.println("update warrantyId:   " + warrantyId);
 
+        Gson gson = new Gson();
+        String errorMessage = null;
+        String jsonString = gson.toJson("error");
 
 
         UserEntity user = checkLogin(request, response);
@@ -159,7 +163,7 @@ public class WarrantyEditServlet extends MvcBaseServlet {
 
         sendObjToViewer(request, otherMap);
 
-        String data = "success!!";
+
 
         List<Object> outList = new ArrayList<Object>();
 
@@ -171,14 +175,13 @@ public class WarrantyEditServlet extends MvcBaseServlet {
 
         WarrantyBean warrantyBean = new WarrantyBean();
         mapToBean(requestParameterMap, warrantyBean);
-        warrantyService.updateWarranty(warrantyBean);
+        warrantyService.updateWarranty(warrantyBean,10);
 
-        Gson gson = new Gson();
-        return gson.toJson(data);
+
 //        otherMap.put(SESSION_SEARCH_OBJ_NAME, outList);
 //        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
-//        sendObjToViewer(request, otherMap);
-//        return POP_TEMPLATE_PAGE;
+        sendObjToViewer(request, otherMap);
+        return POP_TEMPLATE_PAGE;
     }
 
     }

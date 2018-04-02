@@ -3,7 +3,9 @@ package com.gate.web.facades;
 import java.util.List;
 import java.util.Map;
 
+import com.gate.utils.TimeUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +21,43 @@ public class WarrantyServiceImp implements WarrantyService{
     
 	@Autowired
 	WarrantyDAO warrantyDAO;
+    private TimeUtils timeUtils;
+
 
     public Map getWarrantyList(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = warrantyDAO.getWarrantyList(querySettingVO);
         return returnMap;
     }
+    @Override
+    public Integer updateWarranty(WarrantyBean warrantyBean, Integer userid) throws Exception {
+        WarrantyEntity entity = new WarrantyEntity();
+        BeanUtils.copyProperties(entity, warrantyBean);
 
-    public int updateWarranty(WarrantyBean warrantyBean) throws Exception {
+        if (null == entity.getCompanyId()) {
+            entity.setCompanyId(0);
+        }
+        if (null == entity.getStartDate()) {
+            entity.setStartDate(timeUtils.parseDateYYYYMMDD("1000101"));
+        }
+        if (null == entity.getEndDate()) {
+            entity.setEndDate(timeUtils.parseDateYYYYMMDD("1000101"));
+        }
+        if (null == entity.getOnlyShip()) {
+            entity.setOnlyShip(2);
+        }
+        if (null == entity.getDealerCompanyId()) {
+            entity.setDealerCompanyId(0);
+        }
 
-        int returnInt = warrantyDAO.updateWarranty(warrantyBean);
-        return returnInt;
+//        saveOrUpdateEntity(entity, entity.getWarrantyId());
+        if (StringUtils.isEmpty(warrantyBean.getWarrantyId())) {
+            //新增
+            warrantyDAO.saveEntity(entity);
+        } else {
+            //更新
+            warrantyDAO.updateEntity(entity, entity.getWarrantyId());
+        }
+        return 1;
     }
 
     public WarrantyVO findWarrantyByWarrantyId(Integer warrantyId) throws Exception {
@@ -46,4 +75,6 @@ public class WarrantyServiceImp implements WarrantyService{
     public List getUserDealerCompanyList() throws Exception{
         return warrantyDAO.getUserDealerCompanyList();
     }
+
+
 }

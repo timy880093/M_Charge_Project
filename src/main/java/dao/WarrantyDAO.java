@@ -85,36 +85,7 @@ public class WarrantyDAO extends BaseDAO {
     }
 
 
-    public Integer updateWarranty(WarrantyBean warrantyBean) throws Exception {
-        WarrantyEntity entity = new WarrantyEntity();
-        BeanUtils.copyProperties(entity, warrantyBean);
 
-        if (null == entity.getCompanyId()) {
-            entity.setCompanyId(0);
-        }
-        if (null == entity.getStartDate()) {
-            entity.setStartDate(timeUtils.parseDateYYYYMMDD("1000101"));
-        }
-        if (null == entity.getEndDate()) {
-            entity.setEndDate(timeUtils.parseDateYYYYMMDD("1000101"));
-        }
-        if (null == entity.getOnlyShip()) {
-            entity.setOnlyShip(2);
-        }
-        if (null == entity.getDealerCompanyId()) {
-            entity.setDealerCompanyId(0);
-        }
-
-//        saveOrUpdateEntity(entity, entity.getWarrantyId());
-        if (StringUtils.isEmpty(warrantyBean.getWarrantyId())) {
-            //新增
-            saveEntity(entity);
-        } else {
-            //更新
-            updateEntity(entity, entity.getWarrantyId());
-        }
-        return 1;
-    }
 
     //經銷商清單
     public List getUserDealerCompanyList() throws Exception {
