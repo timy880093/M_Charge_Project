@@ -26,6 +26,7 @@ public class WarrantyServiceImp implements WarrantyService{
     }
 
     public int updateWarranty(WarrantyBean warrantyBean) throws Exception {
+
         int returnInt = warrantyDAO.updateWarranty(warrantyBean);
         return returnInt;
     }
@@ -40,13 +41,6 @@ public class WarrantyServiceImp implements WarrantyService{
         return warrantyVO;
     }
 
-
-
-
-
-//    public List<Map> exportWar(String warranty)throws Exception{
-//        return warrantyDAO.exportWar(warranty);
-//    }
 
 
     public List getUserDealerCompanyList() throws Exception{
