@@ -87,8 +87,8 @@ public class ChargeEditServlet extends MvcBaseServlet {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=edit", produces = "application/json;charset=utf-8")
-    public String edit(@RequestParam("method") String method, Model model
+    @RequestMapping(method = RequestMethod.POST, params = "method=edit", produces = "application/json;charset=utf-8")
+    public   @ResponseBody  String edit(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type
 
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -139,8 +139,8 @@ public class ChargeEditServlet extends MvcBaseServlet {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, params = "method=insert", produces = "application/json;charset=utf-8")
-    @ResponseBody
+    @RequestMapping(method = RequestMethod.GET, params = "method=insert", produces = "application/json;charset=utf-8")
+
     public String insert(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type
 
