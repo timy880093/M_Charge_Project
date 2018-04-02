@@ -130,7 +130,7 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
     public @ResponseBody
     String calOverYM(@RequestParam MultiValueMap<String, String> paramMap,
                      @RequestHeader HttpHeaders headers, Model model
-            , @RequestParam(value = "calOverYM", required = true) String calYM //帳單年月
+            , @RequestParam(value = "calYM", required = true) String calYM //帳單年月
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.debug("calOverYM model:   " + model);
         logger.debug("calOverYM calOverYM:   " + calYM);

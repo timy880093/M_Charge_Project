@@ -47,6 +47,9 @@ public class CalCycleServiceImp implements CalCycleService {
     ChargeModeGradeRepository chargeModeGradeRepository;
 
     @Autowired
+    ChargeModeCycleAddRepository chargeModeCycleAddRepository;
+
+    @Autowired
     GradeRepository gradeRepository;
 
     @Autowired
@@ -266,22 +269,46 @@ public class CalCycleServiceImp implements CalCycleService {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
+    public PackageModeEntity getCurrentPackageMode(Integer companyId,String yearMonth){
+        PackageModeEntity currentPackageMode = null;
+        List<PackageModeEntity> packageModeEntityList = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
+        for(PackageModeEntity packageModeEntity: packageModeEntityList){
+            //方案的日期記錄在chargeModeCycleAdd當中，也就是說，如果我們要找出當下該公司使用的方案，要根據add當中的real start date 及read end date
+            ChargeModeCycleAddEntity chargeModeCycleAddEntity = chargeModeCycleAddRepository.findByAdditionId(packageModeEntity.getAdditionId());
+            Date calculateDate = timeUtils.stringToDate(yearMonth,"yyyyMM");
+            Date packageStartDate = chargeModeCycleAddEntity.getRealStartDate();
+            Date packageEndDate = chargeModeCycleAddEntity.getRealEndDate();
+            if(calculateDate.after(packageStartDate)&& calculateDate.before(packageEndDate)){
+                currentPackageMode = packageModeEntity;
+            }
+        }
+        return currentPackageMode;
+    }
+
     //計算超額-by年月
     @Override
     public Integer batchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId){
         Integer cnt = 0;
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(yearMonth,companyId);
         try{
-            PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
-            prepareBillCycleListData(billCycleEntityList);
-            billCycleEntityList = keepMinimalRecords(billCycleEntityList);
-            writeBillCycleOverData(
-                    billCycleEntityList
-                    , true
-                    , packageModeEntity
-                    , modifierId
-            );
-            cnt++;
+            PackageModeEntity packageModeEntity = getCurrentPackageMode(companyId,yearMonth);
+            if(packageModeEntity!=null){
+                prepareBillCycleListData(billCycleEntityList);
+                billCycleEntityList = keepMinimalRecords(billCycleEntityList);
+                writeBillCycleOverData(
+                        billCycleEntityList
+                        , true
+                        , packageModeEntity
+                        , modifierId
+                );
+                cnt++;
+            }else{
+                logger.info("CompanyId:" + companyId + " doesn't have enabled package mode");
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -326,7 +353,7 @@ public class CalCycleServiceImp implements CalCycleService {
                         billCycleEntityList.add(notYetOutBillCycleEntity);
                     }
                 }
-                PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
+                PackageModeEntity packageModeEntity = getCurrentPackageMode(companyId,timeUtils.getCurrentDateString("yyyyMM"));
                 //應計算完所有的billCycleEntity後再決定超額資料。
                 prepareBillCycleListData(billCycleEntityList);
                 //根據佳佳的需求最小化計算資料
@@ -361,7 +388,7 @@ public class CalCycleServiceImp implements CalCycleService {
 
         for(CompanyEntity companyEntity: companyEntityList){
             List<BillCycleEntity> billCycleList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(calYM,companyEntity.getCompanyId());
-            PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
+            PackageModeEntity packageModeEntity = getCurrentPackageMode(companyId,timeUtils.getCurrentDateString("yyyyMM"));
             //應計算完所有的billCycleEntity後再決定超額資料。
             prepareBillCycleListData(billCycleList);
             //根據佳佳的需求，最小化計算資料
@@ -486,26 +513,28 @@ public class CalCycleServiceImp implements CalCycleService {
      * @param billCycleEntityList
     */
     public List<BillCycleEntity> keepMinimalRecords(List<BillCycleEntity> billCycleEntityList){
-        //billCycleEntity依yearMonth排序
-        Collections.sort(billCycleEntityList,
-                new Comparator<BillCycleEntity>() {
-                    public int compare(BillCycleEntity o1, BillCycleEntity o2) {
-                        return o1.getYearMonth().compareTo(o2.getYearMonth());
-                    }
-                });
         List<BillCycleEntity> minimalBillCycleEntityList = new ArrayList<>();
-        BigDecimal sumOfPayOver = BigDecimal.ZERO;
-        for(BillCycleEntity billCycleEntity : billCycleEntityList){
-             sumOfPayOver.add(billCycleEntity.getPayOver());
-            if(sumOfPayOver.doubleValue() < 500d) {
-                minimalBillCycleEntityList.add(billCycleEntity);
+        if(billCycleEntityList.size()>0){
+            //billCycleEntity依yearMonth排序
+            Collections.sort(billCycleEntityList,
+                    new Comparator<BillCycleEntity>() {
+                        public int compare(BillCycleEntity o1, BillCycleEntity o2) {
+                            return o1.getYearMonth().compareTo(o2.getYearMonth());
+                        }
+                    });
+            BigDecimal sumOfPayOver = BigDecimal.ZERO;
+            for(BillCycleEntity billCycleEntity : billCycleEntityList){
+                sumOfPayOver.add(billCycleEntity.getPayOver());
+                if(sumOfPayOver.doubleValue() < 500d) {
+                    minimalBillCycleEntityList.add(billCycleEntity);
+                }
             }
-        }
-        //若最後一個billCycleEntity的年月為奇數則不寫出帳單。
-        String lastYearMonth = billCycleEntityList.get(billCycleEntityList.size()-1).getYearMonth();
-        Integer lastMonth = Integer.parseInt(lastYearMonth.substring(3,5));
-        if(lastMonth%2!=0){
-            minimalBillCycleEntityList = new ArrayList<>();
+            //若最後一個billCycleEntity的年月為奇數則不寫出帳單。
+            String lastYearMonth = billCycleEntityList.get(billCycleEntityList.size()-1).getYearMonth();
+            Integer lastMonth = Integer.parseInt(lastYearMonth.substring(3,5));
+            if(lastMonth%2!=0){
+                minimalBillCycleEntityList = new ArrayList<>();
+            }
         }
         return minimalBillCycleEntityList;
     }

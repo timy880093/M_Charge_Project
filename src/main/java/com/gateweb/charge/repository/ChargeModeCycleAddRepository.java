@@ -40,9 +40,9 @@ public interface ChargeModeCycleAddRepository extends JpaRepository<ChargeModeCy
 		java.lang.Integer additionId 
 	) throws DaoSystemException;
 
-	/*public ChargeModeCycleAddEntity findByAdditionId(Long additionId);
+	public ChargeModeCycleAddEntity findByAdditionId(Integer additionId);
 	
-	public Page<ChargeModeCycleAddEntity> findByAdditionId(Long additionId, Pageable pageable);
+	/*public Page<ChargeModeCycleAddEntity> findByAdditionId(Long additionId, Pageable pageable);
 	
 	public boolean exists(Long additionId);
 	
@@ -51,7 +51,6 @@ public interface ChargeModeCycleAddRepository extends JpaRepository<ChargeModeCy
 	public List<ChargeModeCycleAddEntity> findTop100ByAdditionId(Long additionId);
 	
 	public long count();*/
-
 			
 }
 

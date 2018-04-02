@@ -44,7 +44,7 @@ public interface PackageModeRepository extends JpaRepository<PackageModeEntity, 
 
 
 	//status0為當前啟用的方案。
-	public PackageModeEntity findByCompanyIdIsAndStatusIs(Integer companyId,String status);
+	public List<PackageModeEntity> findByCompanyIdIsAndStatusIs(Integer companyId,String status);
 
 	/*
 	public Page<PackageModeEntity> findByPackageId(Long packageId, Pageable pageable);

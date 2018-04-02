@@ -204,11 +204,10 @@ public class CalCycleDAO extends BaseDAO {
      */
     public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(CompanyEntity companyEntity, Date fromModifyDate, Date toModifyDate){
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
-            = invoiceAmountSummaryReportRepository.findBySellerIsAndCreateDateGreaterThanAndModifyDateLessThanAndClosedNot(
+            = invoiceAmountSummaryReportRepository.findBySellerIsAndCreateDateGreaterThanAndModifyDateLessThan(
                     companyEntity.getBusinessNo()
                     , new java.sql.Date(fromModifyDate.getTime())
                     , new java.sql.Date(toModifyDate.getTime())
-                    , true
         );
         Integer usedCount = 0;
         for(InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity: invoiceAmountSummaryReportEntityList){

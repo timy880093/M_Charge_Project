@@ -33,7 +33,7 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param companyId   PK
 	 * @throws DaoSystemException	if system is wrong.
      */
 	void deleteByCompanyId(	
@@ -51,6 +51,8 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
 //	public List<CompanyEntity> findTop100ByCompanyId(Long companyId);
 //
 //	public long count();
+
+	public List<CompanyEntity> findByVerifyStatusIs(Integer verifyStatus);
 
 }
 
