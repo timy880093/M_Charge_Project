@@ -11,6 +11,7 @@ import com.gate.core.bean.BaseFormBean;
 import com.gate.web.displaybeans.WarrantyVO;
 import com.gate.web.servlets.MvcBaseServlet;
 import com.gateweb.charge.model.UserEntity;
+import com.gateweb.charge.model.WarrantyEntity;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.gate.web.facades.CalCycleService;
@@ -22,6 +23,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @RequestMapping("/backendAdmin/warrantyEditServlet")
 @Controller
@@ -104,7 +106,7 @@ public class WarrantyEditServlet extends MvcBaseServlet {
 
 
     @RequestMapping(method = RequestMethod.GET, params = "method=edit", produces = "application/json;charset=utf-8")
-    public String edit(@RequestParam("method") String method, Model model
+    public  String edit(@RequestParam("method") String method, Model model
             , @RequestParam(value = "warrantyId", required = true) String[] values
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("update model:   " + model);
@@ -142,7 +144,7 @@ public class WarrantyEditServlet extends MvcBaseServlet {
 
 
     @RequestMapping(method = RequestMethod.POST, params = "method=update", produces = "application/json;charset=utf-8")
-    public String editPrepay(@RequestParam("method") String method, Model model
+    public @ResponseBody  String editPrepay(@RequestParam("method") String method, Model model
             , @RequestParam(value = "warrantyId", required = true) Integer warrantyId
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("update model:   " + model);
@@ -150,9 +152,7 @@ public class WarrantyEditServlet extends MvcBaseServlet {
         System.out.println("update warrantyId:   " + warrantyId);
 
         Gson gson = new Gson();
-        String errorMessage = null;
         String jsonString = gson.toJson("error");
-
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -173,15 +173,19 @@ public class WarrantyEditServlet extends MvcBaseServlet {
         List userDealerCompanyList = warrantyService.getUserDealerCompanyList();
         outList.add(userDealerCompanyList); //1.經銷商清單
 
+
+
+
         WarrantyBean warrantyBean = new WarrantyBean();
         mapToBean(requestParameterMap, warrantyBean);
         warrantyService.updateWarranty(warrantyBean,10);
 
 
-//        otherMap.put(SESSION_SEARCH_OBJ_NAME, outList);
+//        otherMap.put(REQUEST_SEND_OBJECT, outList);
 //        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
-        sendObjToViewer(request, otherMap);
-        return POP_TEMPLATE_PAGE;
+
+        jsonString = gson.toJson("success");
+        return jsonString;
     }
 
     }

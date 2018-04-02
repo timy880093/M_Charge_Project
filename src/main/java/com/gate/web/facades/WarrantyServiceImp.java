@@ -29,7 +29,7 @@ public class WarrantyServiceImp implements WarrantyService{
         return returnMap;
     }
     @Override
-    public Integer updateWarranty(WarrantyBean warrantyBean, Integer userid) throws Exception {
+    public Integer updateWarranty(WarrantyBean warrantyBean, Integer userId) throws Exception {
         WarrantyEntity entity = new WarrantyEntity();
         BeanUtils.copyProperties(entity, warrantyBean);
 
