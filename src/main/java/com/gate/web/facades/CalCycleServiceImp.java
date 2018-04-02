@@ -501,6 +501,12 @@ public class CalCycleServiceImp implements CalCycleService {
                 minimalBillCycleEntityList.add(billCycleEntity);
             }
         }
+        //若最後一個billCycleEntity的年月為奇數則不寫出帳單。
+        String lastYearMonth = billCycleEntityList.get(billCycleEntityList.size()-1).getYearMonth();
+        Integer lastMonth = Integer.parseInt(lastYearMonth.substring(3,5));
+        if(lastMonth%2!=0){
+            minimalBillCycleEntityList = new ArrayList<>();
+        }
         return minimalBillCycleEntityList;
     }
 
