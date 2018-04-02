@@ -1,5 +1,6 @@
 package com.gateweb.charge.service.impl;
 
+import com.gate.utils.TimeStampDeserializer;
 import com.gate.utils.TimeUtils;
 import com.gateweb.charge.model.InvoiceMainEntity;
 import com.gateweb.charge.repository.InvoiceMainRepository;
@@ -44,7 +45,13 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
 
     @Override
     public void syncInvoiceDataFromEinvDatabase(Timestamp from, Timestamp to) throws InvocationTargetException, IllegalAccessException {
-        List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByModifyDateIsGreaterThanAndModifyDateIsLessThan(from,to);
+        List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByCreateDateIsGreaterThanAndModifyDateIsLessThan(from,to);
+        syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
+    }
+
+    @Override
+    public void syncInvoiceDataFromEinvDatabaseByCompany(Timestamp from, Timestamp to,String sellerIdentifier) throws InvocationTargetException, IllegalAccessException {
+        List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByCreateDateIsGreaterThanAndModifyDateIsLessThanAndSellerIs(from,to,sellerIdentifier);
         syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
     }
 

@@ -37,7 +37,7 @@ public interface InvoiceAmountSummaryReportRepository extends JpaRepository<Invo
 
 	List<InvoiceAmountSummaryReportEntity> findByClosedNot(boolean closed);
 
-	List<InvoiceAmountSummaryReportEntity> findBySellerIsAndModifyDateGreaterThanAndModifyDateLessThanAndClosedNot(String sellerIdentifier, Date fromModifyDate, Date toModifyDate, boolean closed);
+	List<InvoiceAmountSummaryReportEntity> findBySellerIsAndCreateDateGreaterThanAndModifyDateLessThanAndClosedNot(String sellerIdentifier, Date fromModifyDate, Date toModifyDate, boolean closed);
 	
 }
 

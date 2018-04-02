@@ -274,6 +274,7 @@ public class CalCycleServiceImp implements CalCycleService {
         try{
             PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
             prepareBillCycleListData(billCycleEntityList);
+            billCycleEntityList = keepMinimalRecords(billCycleEntityList);
             writeBillCycleOverData(
                     billCycleEntityList
                     , true
@@ -303,7 +304,6 @@ public class CalCycleServiceImp implements CalCycleService {
         //查出選擇的billCycle
         //根據公司類型分類
         Map<Integer,List<BillCycleEntity>> billCycleByCompanyMap = new HashMap<>();
-        //使用選中的billCycle中，最大的期別做為帳單年月
         for(Integer billId: billIdList){
             BillCycleEntity billCycleEntity = billCycleRepository.findByBillId(billId);
             if(billCycleByCompanyMap.containsKey(billCycleEntity.getCompanyId())){
@@ -317,10 +317,20 @@ public class CalCycleServiceImp implements CalCycleService {
         int cnt = 0;
         try {
             for(Integer companyId: billCycleByCompanyMap.keySet()) {
+                //曾經計算過但未出帳的記錄要一併併入計算。
+                List<BillCycleEntity> notYetOutBillCycleEntityList
+                        = billCycleRepository.findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIs(companyId);
                 List<BillCycleEntity> billCycleEntityList = billCycleByCompanyMap.get(companyId);
+                for(BillCycleEntity notYetOutBillCycleEntity:notYetOutBillCycleEntityList){
+                    if(!billIdList.contains(notYetOutBillCycleEntity.getBillId())){
+                        billCycleEntityList.add(notYetOutBillCycleEntity);
+                    }
+                }
                 PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
                 //應計算完所有的billCycleEntity後再決定超額資料。
                 prepareBillCycleListData(billCycleEntityList);
+                //根據佳佳的需求最小化計算資料
+                billCycleEntityList = keepMinimalRecords(billCycleEntityList);
                 //該公司在某年月的那一筆billCycle
                 writeBillCycleOverData(
                         billCycleEntityList
@@ -354,6 +364,8 @@ public class CalCycleServiceImp implements CalCycleService {
             PackageModeEntity packageModeEntity = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
             //應計算完所有的billCycleEntity後再決定超額資料。
             prepareBillCycleListData(billCycleList);
+            //根據佳佳的需求，最小化計算資料
+            billCycleList = keepMinimalRecords(billCycleList);
             //該公司在某年月的那一筆billCycle
             writeBillCycleOverData(
                     billCycleList
@@ -464,7 +476,33 @@ public class CalCycleServiceImp implements CalCycleService {
     }
 
     /**
+     * todo: 五百元就出帳的規則與累計計算的規則有可能會造成原本選擇的帳單不出帳。
+     * 這裡就比較複雜了。
+     * 保留最小超額billCycle的列表
+     * @param billCycleEntityList
+    */
+    public List<BillCycleEntity> keepMinimalRecords(List<BillCycleEntity> billCycleEntityList){
+        //billCycleEntity依yearMonth排序
+        Collections.sort(billCycleEntityList,
+                new Comparator<BillCycleEntity>() {
+                    public int compare(BillCycleEntity o1, BillCycleEntity o2) {
+                        return o1.getYearMonth().compareTo(o2.getYearMonth());
+                    }
+                });
+        List<BillCycleEntity> minimalBillCycleEntityList = new ArrayList<>();
+        BigDecimal sumOfPayOver = BigDecimal.ZERO;
+        for(BillCycleEntity billCycleEntity : billCycleEntityList){
+             sumOfPayOver.add(billCycleEntity.getPayOver());
+            if(sumOfPayOver.doubleValue() < 500d) {
+                minimalBillCycleEntityList.add(billCycleEntity);
+            }
+        }
+        return minimalBillCycleEntityList;
+    }
+
+    /**
      * 若該次的billCycle加總大於500，應於超額明細中每項超額的資料都寫入cashDetailId
+     * isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
      * @param billCycleEntityList
      * @param isSum
      * @param modifierId
@@ -477,22 +515,20 @@ public class CalCycleServiceImp implements CalCycleService {
             , Integer modifierId) throws Exception {
         BigDecimal sumOver = BigDecimal.ZERO;
         //要使用已經存在的CashMaster進行更新。
-        //billYearMonth
         Date billYearMonth= null;
         for(BillCycleEntity billCycleEntity : billCycleEntityList){
             //開始作超額計算...........，end
             calCycleDAO.saveOrUpdateEntity(billCycleEntity, billCycleEntity.getBillId());
-            //3.如果超額達300元，將資料寫cash_flow table
-//            BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(billCycleEntity.getCompanyId(), billCycleEntity.getYearMonth());
+            //3.如果超額達500元，將資料寫cash_flow table
             //使用最後超額的年月作為帳單年月
             Date otherBillCycleDate = timeUtils.parseDate(billCycleEntity.getYearMonth());
             if(billYearMonth==null || billYearMonth.before(otherBillCycleDate)){
                 billYearMonth = otherBillCycleDate;
             }
             BigDecimal sumOfPayOver = billCycleEntity.getPayOver();
-            sumOver= sumOver.add(sumOfPayOver);
+            sumOver = sumOver.add(sumOfPayOver);
         }
-        if(isSum == true){ //isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
+        if(isSum == true){
             //該超額總額大於500元
             if(sumOver.doubleValue() > 500d) {
                 //只有大於五百的時候要出帳。

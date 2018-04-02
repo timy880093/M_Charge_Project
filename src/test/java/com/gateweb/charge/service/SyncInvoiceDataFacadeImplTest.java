@@ -1,6 +1,8 @@
 package com.gateweb.charge.service;
 
 import com.gate.utils.TimeUtils;
+import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.repository.CompanyRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Eason on 3/12/2018.
@@ -25,6 +28,9 @@ public class SyncInvoiceDataFacadeImplTest {
     TimeUtils timeUtils;
 
     @Autowired
+    CompanyRepository companyRepository;
+
+    @Autowired
     @Qualifier("syncInvoiceDataFacade")
     SyncInvoiceDataFacade syncInvoiceDataFacade;
 
@@ -33,15 +39,20 @@ public class SyncInvoiceDataFacadeImplTest {
     public void syncInvoiceMainDataTest() throws InvocationTargetException, IllegalAccessException {
         Calendar from = Calendar.getInstance();
         from.setTime(new Date());
-        from.add(Calendar.DATE,-16);
+        from.add(Calendar.DATE,-32);
 
         Calendar to = Calendar.getInstance();
         to.setTime(new Date());
-        to.add(Calendar.DATE,-1);
+        to.add(Calendar.DATE,-2);
 
-        syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabase(
-                timeUtils.date2Timestamp(from.getTime())
-                , timeUtils.date2Timestamp(to.getTime())
-        );
+        //資料太多，分公司查詢。
+        List<CompanyEntity> companyEntityList = companyRepository.findAll();
+        for(CompanyEntity companyEntity: companyEntityList){
+            syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabaseByCompany(
+                    timeUtils.date2Timestamp(from.getTime())
+                    , timeUtils.date2Timestamp(to.getTime())
+                    , companyEntity.getBusinessNo()
+            );
+        }
     }
 }

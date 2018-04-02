@@ -188,9 +188,14 @@ public class CalCycleDAO extends BaseDAO {
         }
     }
 
+    /**
+     * 根據公司資料計算範圍內月份的發票資料。
+     * 使用InvoiceAmountSummaryReport進行計算。
+     * @return
+     */
     public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(CompanyEntity companyEntity, Date fromModifyDate, Date toModifyDate){
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
-            = invoiceAmountSummaryReportRepository.findBySellerIsAndModifyDateGreaterThanAndModifyDateLessThanAndClosedNot(
+            = invoiceAmountSummaryReportRepository.findBySellerIsAndCreateDateGreaterThanAndModifyDateLessThanAndClosedNot(
                     companyEntity.getBusinessNo()
                     , new java.sql.Date(fromModifyDate.getTime())
                     , new java.sql.Date(toModifyDate.getTime())
