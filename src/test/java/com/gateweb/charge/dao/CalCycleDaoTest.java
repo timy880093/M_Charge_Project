@@ -57,8 +57,11 @@ public class CalCycleDaoTest {
         List<String> messageList = new ArrayList<>();
         List<CompanyEntity> companyEntityList = companyRepository.findAll();
         for(CompanyEntity companyEntity: companyEntityList){
+            if(!companyEntity.getBusinessNo().equals("16105732")){
+                continue;
+            }
             Integer usedCount
-                    = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity,from.getTime(),to.getTime());
+                    = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity.getCompanyId(),"201803");
             if(usedCount>0){
                 messageList.add(companyEntity.getName() +":"+ usedCount);
             }

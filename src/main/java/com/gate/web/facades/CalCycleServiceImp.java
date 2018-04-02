@@ -394,7 +394,11 @@ public class CalCycleServiceImp implements CalCycleService {
         if("2".equals(billCycleEntity.getStatus())){
             return;
         }
-        Integer useCnt = calCycleDAO.calOverByCompany(billCycleEntity.getCompanyId(),billCycleEntity.getYearMonth());
+
+//        Integer useCnt
+//                = calCycleDAO.calOverByCompany(billCycleEntity.getCompanyId(),billCycleEntity.getYearMonth());
+        Integer useCnt
+                = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(billCycleEntity.getCompanyId(),billCycleEntity.getYearMonth());
         billCycleEntity.setCnt(useCnt); //當月使用張數
         Integer cntGift = (null == billCycleEntity.getCntGift() )?0:(billCycleEntity.getCntGift()); //贈送張數
         Integer cntLimit = billCycleEntity.getCntLimit(); //當月免費張數上限

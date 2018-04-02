@@ -188,6 +188,15 @@ public class CalCycleDAO extends BaseDAO {
         }
     }
 
+    public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(Integer companyId,String calYm){
+        CompanyEntity companyEntity = companyRepository.findByCompanyId(companyId);
+        Calendar calendarFrom = timeUtils.string2Calendar("yyyyMM",calYm);
+        Calendar calendarTo = timeUtils.string2Calendar("yyyyMM",calYm);
+        calendarTo.add(Calendar.MONTH,1);
+        calendarTo.add(Calendar.DATE,-1);
+        return calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity,calendarFrom.getTime(),calendarTo.getTime());
+    }
+
     /**
      * 根據公司資料計算範圍內月份的發票資料。
      * 使用InvoiceAmountSummaryReport進行計算。
@@ -201,7 +210,11 @@ public class CalCycleDAO extends BaseDAO {
                     , new java.sql.Date(toModifyDate.getTime())
                     , true
         );
-        return invoiceAmountSummaryReportEntityList.size();
+        Integer usedCount = 0;
+        for(InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity: invoiceAmountSummaryReportEntityList){
+            usedCount +=invoiceAmountSummaryReportEntity.getAmount();
+        }
+        return usedCount;
     }
 
     //加總計算超額到cash_detail和cash_Master

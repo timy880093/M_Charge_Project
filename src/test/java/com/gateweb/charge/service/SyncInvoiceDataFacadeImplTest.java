@@ -48,11 +48,13 @@ public class SyncInvoiceDataFacadeImplTest {
         //資料太多，分公司查詢。
         List<CompanyEntity> companyEntityList = companyRepository.findAll();
         for(CompanyEntity companyEntity: companyEntityList){
-            syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabaseByCompany(
-                    timeUtils.date2Timestamp(from.getTime())
-                    , timeUtils.date2Timestamp(to.getTime())
-                    , companyEntity.getBusinessNo()
-            );
+            if(companyEntity.getBusinessNo().equals("16105732")){
+                syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabaseByCompany(
+                        timeUtils.date2Timestamp(from.getTime())
+                        , timeUtils.date2Timestamp(to.getTime())
+                        , companyEntity.getBusinessNo()
+                );
+            }
         }
     }
 }
