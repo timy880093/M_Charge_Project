@@ -55,7 +55,7 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
         syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
     }
 
-    public void syncInvoiceDataByInvoiceMainEntityList(List<InvoiceMain> einvInvoiceMainEntityList) {
+    public void syncInvoiceDataByInvoiceMainEntityList(List<InvoiceMain> einvInvoiceMainEntityList) throws InvocationTargetException, IllegalAccessException {
         for(InvoiceMain einvInvoiceMain: einvInvoiceMainEntityList){
             InvoiceMainEntity existsInvoiceMainEntity
                     = invoiceMainRepository.findByCYearMonthAndInvoiceNumber(
@@ -68,9 +68,7 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
                 }else{
                     transactionInsertInvoiceMainDataFromEinvDatabase(einvInvoiceMain);
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            }catch (Exception e){
                 e.printStackTrace();
             }
 
@@ -80,8 +78,13 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
     public void transactionUpdateInvoiceMainDataFromEinvDatabase(
             InvoiceMainEntity existsInvoiceMainEntity
             , InvoiceMain einvInvoiceMainEntity) throws InvocationTargetException, IllegalAccessException {
-        BeanUtils.copyProperties(existsInvoiceMainEntity,einvInvoiceMainEntity);
-        logger.info("Update exists invoice data");
+        if(existsInvoiceMainEntity.getInvoiceId().equals(einvInvoiceMainEntity.getInvoiceId())){
+            BeanUtils.copyProperties(existsInvoiceMainEntity,einvInvoiceMainEntity);
+            logger.info("Update exists invoice data");
+        }else{
+            invoiceMainRepository.delete(existsInvoiceMainEntity);
+            logger.info("Remove exists invoice data");
+        }
         invoiceMainRepository.save(existsInvoiceMainEntity);
     }
 
