@@ -55,19 +55,25 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
         syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
     }
 
-    public void syncInvoiceDataByInvoiceMainEntityList(List<InvoiceMain> einvInvoiceMainEntityList) throws InvocationTargetException, IllegalAccessException {
+    public void syncInvoiceDataByInvoiceMainEntityList(List<InvoiceMain> einvInvoiceMainEntityList) {
         for(InvoiceMain einvInvoiceMain: einvInvoiceMainEntityList){
             InvoiceMainEntity existsInvoiceMainEntity
-                    = invoiceMainRepository.findByInvoiceIdAndCYearMonthAndInvoiceNumber(
-                    einvInvoiceMain.getInvoiceId()
-                    ,einvInvoiceMain.getcYearMonth()
+                    = invoiceMainRepository.findByCYearMonthAndInvoiceNumber(
+                    einvInvoiceMain.getcYearMonth()
                     ,einvInvoiceMain.getInvoiceNumber()
             );
-            if(existsInvoiceMainEntity!=null){
-                transactionUpdateInvoiceMainDataFromEinvDatabase(existsInvoiceMainEntity, einvInvoiceMain);
-            }else{
-                transactionInsertInvoiceMainDataFromEinvDatabase(einvInvoiceMain);
+            try{
+                if(existsInvoiceMainEntity!=null){
+                    transactionUpdateInvoiceMainDataFromEinvDatabase(existsInvoiceMainEntity, einvInvoiceMain);
+                }else{
+                    transactionInsertInvoiceMainDataFromEinvDatabase(einvInvoiceMain);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
+
         }
     }
 
