@@ -64,7 +64,7 @@ public class ChargeEditServlet extends MvcBaseServlet {
         Map requestAttMap = requestAttMap(request);
         Map sessionAttMap = sessionAttMap(request);
         Map otherMap = otherMap(request, response, formBeanObject);
-        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+        otherMap.put(DISPATCH_PAGE, DEFAULT_CREATE_DISPATCH_PAGE);
         sendObjToViewer(request, otherMap);
         return POP_TEMPLATE_PAGE;
     }
@@ -86,16 +86,12 @@ public class ChargeEditServlet extends MvcBaseServlet {
         return POP_TEMPLATE_PAGE;
     }
 
-
-    @RequestMapping(method = RequestMethod.POST, params = "method=edit", produces = "application/json;charset=utf-8")
-    public   @ResponseBody  String edit(@RequestParam("method") String method, Model model
-            , @RequestParam(value = "type", required = true) String charge_type
+    @RequestMapping(method = RequestMethod.GET, params = "method=add", produces = "application/json;charset=utf-8")
+    public    String add(@RequestParam("method") String method, Model model
 
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("editPrepay model:   " + model);
         System.out.println("editPrepay method:   " + method);
-        System.out.println("editPrepay type:   " +charge_type);
-
 
         UserEntity user = checkLogin(request, response);
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -106,14 +102,51 @@ public class ChargeEditServlet extends MvcBaseServlet {
         sendObjToViewer(request, otherMap);
 
         List<Object> outList = new ArrayList<Object>();
+
+        otherMap.put(DISPATCH_PAGE, DEFAULT_CREATE_DISPATCH_PAGE);
+        otherMap.put(REQUEST_SEND_OBJECT, outList);
+        sendObjToViewer(request, otherMap);
+
+        return POP_TEMPLATE_PAGE;
+
+    }
+
+
+
+
+
+    @RequestMapping(method = RequestMethod.GET, params = "method=edit", produces = "application/json;charset=utf-8")
+    public    String edit(@RequestParam("method") String method, Model model
+            , @RequestParam(value = "type", required = true) String charge_type
+
+            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("editPrepay model:   " + model);
+        System.out.println("editPrepay method:   " + method);
+        System.out.println("editPrepay type:   " +charge_type);
+
+        UserEntity user = checkLogin(request, response);
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map requestParameterMap = request.getParameterMap();
+        Map requestAttMap = requestAttMap(request);
+        Map sessionAttMap = sessionAttMap(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+
+
+        List<Object> outList = new ArrayList<Object>();
         if(method.equals("edit")){
             outList.add("edit");
         }else{
             outList.add("read");
         }
-        Integer chargeId = null;
-        if("1".equals(charge_type)){ //月租制
 
+        Integer chargeId = null;
+
+        if(requestParameterMap.get("chargeId")!=null){
+            chargeId = Integer.parseInt(((String[]) requestParameterMap.get("chargeId"))[0]);
+        }
+
+        if("1".equals(charge_type)){ //月租制
             if(chargeId!=null){
                 ChargeModeCycleVO chargeVO = chargeService.findChargeModeCycleByChargeId(chargeId);
                 outList.add(chargeVO);
@@ -131,7 +164,7 @@ public class ChargeEditServlet extends MvcBaseServlet {
             otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE_2);
         }
         otherMap.put(REQUEST_SEND_OBJECT, outList);
-        otherMap.put(DISPATCH_PAGE, DEFAULT_EDIT_DISPATCH_PAGE);
+//        otherMap.put(DISPATCH_PAGE, DEFAULT_CREATE_DISPATCH_PAGE);
         sendObjToViewer(request, otherMap);
 
         return POP_TEMPLATE_PAGE;
@@ -139,9 +172,9 @@ public class ChargeEditServlet extends MvcBaseServlet {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=insert", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.POST, params = "method=insert", produces = "application/json;charset=utf-8")
 
-    public String insert(@RequestParam("method") String method, Model model
+    public  @ResponseBody String insert(@RequestParam("method") String method, Model model
             , @RequestParam(value = "type", required = true) String charge_type
 
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
