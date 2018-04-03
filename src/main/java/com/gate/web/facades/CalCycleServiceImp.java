@@ -407,21 +407,25 @@ public class CalCycleServiceImp implements CalCycleService {
     }
 
     public void prepareBillCycleListData(List<BillCycleEntity> billCycleEntityList) throws Exception {
+        //移除狀態為作廢的筆數
+        List<BillCycleEntity> removedBillCycleEntityList = new ArrayList<>();
         for(BillCycleEntity billCycleEntity: billCycleEntityList){
-            prepareBillCycleData(billCycleEntity);
+            //如果bill_cycle的Cash_Out_Over_Id不是null，則不作超額計算(已被計算過了(算到cash_detail裡))
+            if(null != billCycleEntity.getCashOutOverId()){
+                removedBillCycleEntityList.add(billCycleEntity);
+                continue;
+            }else if("2".equals(billCycleEntity.getStatus())){
+                //作廢的不計算
+                removedBillCycleEntityList.add(billCycleEntity);
+                continue;
+            }else{
+                prepareBillCycleData(billCycleEntity);
+            }
         }
+        billCycleEntityList.removeAll(removedBillCycleEntityList);
     }
 
     public void prepareBillCycleData(BillCycleEntity billCycleEntity) throws Exception {
-        //如果bill_cycle的Cash_Out_Over_Id不是null，則不作超額計算(已被計算過了(算到cash_detail裡))
-        if(null != billCycleEntity.getCashOutOverId()){
-            return;
-        }
-        //作廢的不計算
-        if("2".equals(billCycleEntity.getStatus())){
-            return;
-        }
-
 //        Integer useCnt
 //                = calCycleDAO.calOverByCompany(billCycleEntity.getCompanyId(),billCycleEntity.getYearMonth());
         Integer useCnt
