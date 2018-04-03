@@ -64,7 +64,7 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 	 * 他們會在下次計算超額的時候被一併併入計算。
 	 * @return
      */
-	public List<BillCycleEntity> findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIsStatusIsNot(Integer companyId,String status);
+	public List<BillCycleEntity> findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIsAndStatusIsNot(Integer companyId,String status);
 			
 }
 

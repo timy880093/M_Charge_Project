@@ -346,7 +346,7 @@ public class CalCycleServiceImp implements CalCycleService {
             for(Integer companyId: billCycleByCompanyMap.keySet()) {
                 //曾經計算過但未出帳的記錄要一併併入計算。
                 List<BillCycleEntity> notYetOutBillCycleEntityList
-                        = billCycleRepository.findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIsStatusIsNot(companyId,"2");
+                        = billCycleRepository.findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIsAndStatusIsNot(companyId,"2");
                 List<BillCycleEntity> billCycleEntityList = billCycleByCompanyMap.get(companyId);
                 for(BillCycleEntity notYetOutBillCycleEntity:notYetOutBillCycleEntityList){
                     if(!billIdList.contains(notYetOutBillCycleEntity.getBillId())){
