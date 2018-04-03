@@ -346,7 +346,7 @@ public class CalCycleServiceImp implements CalCycleService {
             for(Integer companyId: billCycleByCompanyMap.keySet()) {
                 //曾經計算過但未出帳的記錄要一併併入計算。
                 List<BillCycleEntity> notYetOutBillCycleEntityList
-                        = billCycleRepository.findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIs(companyId);
+                        = billCycleRepository.findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIsStatusIsNot(companyId,"2");
                 List<BillCycleEntity> billCycleEntityList = billCycleByCompanyMap.get(companyId);
                 for(BillCycleEntity notYetOutBillCycleEntity:notYetOutBillCycleEntityList){
                     if(!billIdList.contains(notYetOutBillCycleEntity.getBillId())){
@@ -425,6 +425,11 @@ public class CalCycleServiceImp implements CalCycleService {
         billCycleEntityList.removeAll(removedBillCycleEntityList);
     }
 
+    /**
+     * 若要直接使用這個function，請注意要過瀘狀態為作廢及CashOutOverId不是null的資料，這些不應該被計入超額。
+     * @param billCycleEntity
+     * @throws Exception
+     */
     public void prepareBillCycleData(BillCycleEntity billCycleEntity) throws Exception {
 //        Integer useCnt
 //                = calCycleDAO.calOverByCompany(billCycleEntity.getCompanyId(),billCycleEntity.getYearMonth());
