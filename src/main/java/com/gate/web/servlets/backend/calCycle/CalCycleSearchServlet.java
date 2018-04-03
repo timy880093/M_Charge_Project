@@ -147,7 +147,7 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
             //找出所有公司
             List<CompanyEntity> companyEntityList = companyRepository.findAll();
             for(CompanyEntity companyEntity : companyEntityList){
-                exeCnt = calCycleService.batchCalOverByYearMonthAndCompanyId(
+                exeCnt += calCycleService.batchCalOverByYearMonthAndCompanyId(
                         companyEntity.getCompanyId()
                         , calYM
                         ,user.getUserId().intValue()
