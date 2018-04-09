@@ -276,6 +276,10 @@ public class CalCycleDAO extends BaseDAO {
                 cashDetailEntity_forDeduct.setBillType(chargeType); //帳單類型　1.月租 2.級距
                 cashDetailEntity_forDeduct.setPackageId(packageId); //超額的cashDetail不紀錄packageId(超額的cashDetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
                 cashDetailEntity_forDeduct.setStatus(1); //1.生效 2.作廢
+                cashDetailEntity_forDeduct.setModifierId(modifierId);
+                cashDetailEntity_forDeduct.setCreatorId(modifierId);
+                cashDetailEntity_forDeduct.setCreateDate(new Timestamp(new Date().getTime()));
+                cashDetailEntity_forDeduct.setModifyDate(new Timestamp(new Date().getTime()));
 
                 if(amount < sumOver){
                     //剩餘金額不夠扣抵，就先扣抵「剩餘可作扣抵的錢」
