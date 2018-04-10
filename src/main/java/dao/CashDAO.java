@@ -180,7 +180,7 @@ public class CashDAO extends BaseDAO {
         //1.Find all cashMaster
         CashMasterEntity searchCashMasterEntity = new CashMasterEntity();
         searchCashMasterEntity.setOutYm(outYM);
-        if(userCompanyId != 0){
+        if( userCompanyId!=null && userCompanyId != 0){
             searchCashMasterEntity.setCompanyId(userCompanyId);
         }
         List cashMasterList =  getSearchEntity(CashMasterEntity.class, searchCashMasterEntity);
@@ -811,7 +811,10 @@ public class CashDAO extends BaseDAO {
             }
 
             masterBean.setCashDetailList(detailofMasterList);
-            list.add(masterBean);
+            //若沒有任何明細(通常是作廢了)，那就連master都不要加進去。
+            if(detailofMasterList.size()>0){
+                list.add(masterBean);
+            }
         }
         return list;
     }
