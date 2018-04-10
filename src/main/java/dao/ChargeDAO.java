@@ -136,24 +136,6 @@ public class ChargeDAO extends BaseDAO {
         return list;
     }
 
-    //新增月租型方案
-    public Integer insertChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
-        ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
-        BeanUtils.copyProperties(entity, bean);
-        saveEntity(entity);
-        return null;
-    }
-
-//    //修改月租型方案
-    public void updateChargeModeCycle(ChargeModeCycleBean bean) throws Exception {
-        ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
-        DateConverter dateConverter = new DateConverter();
-        dateConverter.setPattern("yyyy/MM/dd");
-        BeanUtils.copyProperties(entity,bean);
-        updateEntity(entity, entity.getChargeId());
-    }
-
-
 
 
     //新增或修改級距型方案
@@ -163,6 +145,7 @@ public class ChargeDAO extends BaseDAO {
 
         Integer chargeModeGradeId = entity.getChargeId();
         entity.setCreatorId(userId.intValue());
+
 
         //新增或修改 經銷商資訊(dealer_company)
         if(null == chargeModeGradeId){

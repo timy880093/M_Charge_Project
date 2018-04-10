@@ -36,6 +36,7 @@ public class ChargeServiceImp implements ChargeService{
         ChargeModeCycleEntity entity = new ChargeModeCycleEntity();
         BeanUtils.copyProperties(entity, bean);
         entity.setCreatorId(userId.intValue());
+        entity.setModifierId(userId.intValue());
         chargeDAO.saveEntity(entity);
         return null;
     }
@@ -46,7 +47,9 @@ public class ChargeServiceImp implements ChargeService{
         dateConverter.setPattern("yyyy/MM/dd");
         BeanUtils.copyProperties(entity,bean);
         entity.setCreatorId(userId.intValue());
+        entity.setModifierId(userId.intValue());
         chargeDAO.updateEntity(entity, entity.getChargeId());
+
     }
 
     public ChargeModeCycleVO findChargeModeCycleByChargeId(Integer chargeId) throws Exception {
