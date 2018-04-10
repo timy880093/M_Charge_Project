@@ -73,6 +73,9 @@ public class CalCycleServiceImp implements CalCycleService {
     @Autowired
     PrepayDeductMasterRepository prepayDeductMasterRepository;
 
+    @Autowired
+    PackageService packageService;
+
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = calCycleDAO.getBillCycleList(querySettingVO);
         return returnMap;
@@ -283,33 +286,13 @@ public class CalCycleServiceImp implements CalCycleService {
         return true;
     }
 
-    /**
-     *
-     * @return
-     */
-    public PackageModeEntity getCurrentPackageMode(Integer companyId,String yearMonth){
-        PackageModeEntity currentPackageMode = null;
-        List<PackageModeEntity> packageModeEntityList = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
-        for(PackageModeEntity packageModeEntity: packageModeEntityList){
-            //方案的日期記錄在chargeModeCycleAdd當中，也就是說，如果我們要找出當下該公司使用的方案，要根據add當中的real start date 及real end date
-            ChargeModeCycleAddEntity chargeModeCycleAddEntity = chargeModeCycleAddRepository.findByAdditionId(packageModeEntity.getAdditionId());
-            Date calculateDate = timeUtils.stringToDate(yearMonth,"yyyyMM");
-            Date packageStartDate = chargeModeCycleAddEntity.getRealStartDate();
-            Date packageEndDate = chargeModeCycleAddEntity.getRealEndDate();
-            if(calculateDate.after(packageStartDate)&& calculateDate.before(packageEndDate)){
-                currentPackageMode = packageModeEntity;
-            }
-        }
-        return currentPackageMode;
-    }
-
     //計算超額-by年月
     @Override
     public Integer batchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId){
         Integer cnt = 0;
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(yearMonth,companyId);
         try{
-            PackageModeEntity packageModeEntity = getCurrentPackageMode(companyId,yearMonth);
+            PackageModeEntity packageModeEntity = packageService.getCurrentPackageMode(companyId,yearMonth);
             if(packageModeEntity!=null){
                 Date lastYearMonthDate = findLastYearMonthDateByBillCycleList(billCycleEntityList);
                 billCycleEntityList = collectBillCycle(companyId,lastYearMonthDate,billCycleEntityList);
@@ -431,7 +414,7 @@ public class CalCycleServiceImp implements CalCycleService {
         try{
             Date lastYearMonthDate = findLastYearMonthDateByBillCycleList(billCycleEntityList);
             collectBillCycle(companyId, lastYearMonthDate, billCycleEntityList);
-            PackageModeEntity packageModeEntity = getCurrentPackageMode(companyId,timeUtils.getCurrentDateString("yyyyMM"));
+            PackageModeEntity packageModeEntity = packageService.getCurrentPackageMode(companyId,timeUtils.getCurrentDateString("yyyyMM"));
             //應計算完所有的billCycleEntity後再決定超額資料。
             billCycleListDataFilter(billCycleEntityList);
             prepareBillCycleListData(billCycleEntityList);

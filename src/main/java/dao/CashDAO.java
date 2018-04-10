@@ -762,7 +762,9 @@ public class CashDAO extends BaseDAO {
             //如果用戶該月要繳的錢為0元，就不匯出到excel了。
             //masterBean.getTaxInclusiveAmout 有可能是null，不能直接相比
             //PK 2017/09/26
-            if(masterBean != null && masterBean.getTaxInclusiveAmount() != null && (masterBean.getTaxInclusiveAmount().equals(new BigDecimal(0) ) )){
+            if(masterBean != null
+                    && masterBean.getTaxInclusiveAmount() != null
+                    && (masterBean.getTaxInclusiveAmount().equals(new BigDecimal(0) ) )){
                 continue;
             }
             //undo 用友x匯出上銀excel會有error
@@ -812,7 +814,8 @@ public class CashDAO extends BaseDAO {
 
             masterBean.setCashDetailList(detailofMasterList);
             //若沒有任何明細(通常是作廢了)，那就連master都不要加進去。
-            if(detailofMasterList.size()>0){
+            if(detailofMasterList.size()>0
+                    && masterBean.getTaxInclusiveAmount().compareTo(BigDecimal.ZERO)>0){
                 list.add(masterBean);
             }
         }
