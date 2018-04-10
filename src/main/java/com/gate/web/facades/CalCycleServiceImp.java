@@ -67,6 +67,12 @@ public class CalCycleServiceImp implements CalCycleService {
     @Autowired
     CashDetailRepository cashDetailRepository;
 
+    @Autowired
+    DeductDetailRepository deductDetailRepository;
+
+    @Autowired
+    PrepayDeductMasterRepository prepayDeductMasterRepository;
+
     public Map getBillCycleList(QuerySettingVO querySettingVO) throws Exception {
         Map returnMap = calCycleDAO.getBillCycleList(querySettingVO);
         return returnMap;
@@ -143,6 +149,7 @@ public class CalCycleServiceImp implements CalCycleService {
             , Integer cashMasterId
             , Integer billType
             , Integer packageId
+            , Integer modifierId
             , BigDecimal sumOfPayOver ){
         //insert 一筆新的cash_detail'、cash_master
         CashDetailEntity cashDetailEntity = new CashDetailEntity();
@@ -154,7 +161,10 @@ public class CalCycleServiceImp implements CalCycleService {
         cashDetailEntity.setBillType(billType); //帳單類型　1.月租 2.級距
         cashDetailEntity.setPackageId(packageId); //超額的cashDetail不紀錄packageId(超額的cashDetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
         cashDetailEntity.setStatus(1); //1.生效 2.作廢
-
+        cashDetailEntity.setModifierId(modifierId);
+        cashDetailEntity.setCreatorId(modifierId);
+        cashDetailEntity.setCreateDate(new Timestamp(new Date().getTime()));
+        cashDetailEntity.setModifyDate(new Timestamp(new Date().getTime()));
         cashDetailEntity = cashDAO.calPriceTax(cashDetailEntity, sumOfPayOver, new BigDecimal(0), null);
 
         cashDetailRepository.save(cashDetailEntity);
@@ -187,11 +197,12 @@ public class CalCycleServiceImp implements CalCycleService {
                 ,cashMasterEntity.getCashMasterId()
                 ,chargeType
                 ,packageId
+                ,modifierId
                 ,sumOfPayOver
         );
 
         //計算預繳扣抵的部份
-        calCycleDAO.sumOverOut(
+        sumOverOut(
                 companyId
                 , calYM
                 , packageId
@@ -253,9 +264,10 @@ public class CalCycleServiceImp implements CalCycleService {
                 ,cashMasterEntity.getCashMasterId()
                 ,chargeType
                 ,packageId
+                ,modifierId
                 ,sumOfPayOver
         );
-        calCycleDAO.sumOverOut(
+        sumOverOut(
                 companyId
                 , calYM
                 , packageId
@@ -279,7 +291,7 @@ public class CalCycleServiceImp implements CalCycleService {
         PackageModeEntity currentPackageMode = null;
         List<PackageModeEntity> packageModeEntityList = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
         for(PackageModeEntity packageModeEntity: packageModeEntityList){
-            //方案的日期記錄在chargeModeCycleAdd當中，也就是說，如果我們要找出當下該公司使用的方案，要根據add當中的real start date 及read end date
+            //方案的日期記錄在chargeModeCycleAdd當中，也就是說，如果我們要找出當下該公司使用的方案，要根據add當中的real start date 及real end date
             ChargeModeCycleAddEntity chargeModeCycleAddEntity = chargeModeCycleAddRepository.findByAdditionId(packageModeEntity.getAdditionId());
             Date calculateDate = timeUtils.stringToDate(yearMonth,"yyyyMM");
             Date packageStartDate = chargeModeCycleAddEntity.getRealStartDate();
@@ -347,6 +359,10 @@ public class CalCycleServiceImp implements CalCycleService {
      * @return
      */
     public Date findLastYearMonthDateByBillCycleList(List<BillCycleEntity> billCycleEntityList){
+        //因為不會影響任何資料，直接回今天日期
+        if(billCycleEntityList.size()==0){
+            return new Date();
+        }
         //找出最大的年月
         Date lastYearMonthDate = timeUtils.stringToDate(
                 billCycleEntityList.get(billCycleEntityList.size()-1).getYearMonth()
@@ -553,6 +569,117 @@ public class CalCycleServiceImp implements CalCycleService {
         }
     }
 
+    //加總計算超額到cash_detail和cash_Master
+    public void sumOverOut(
+            Integer cpId
+            , String calYM
+            , Integer packageId
+            , Integer cashMasterId
+            , Integer cashDetailId
+            , BigDecimal sumOfPayOver
+            , List<BillCycleEntity> overList
+            , boolean isConintueCal
+            , Integer chargeType
+            , Integer modifierId)throws Exception{
+        logger.info("sumOverOut start = " + new java.util.Date());
+
+        //update bill_cycle的值cash_out_over_id
+        //舊的saveOrUpdateEntity沒有功能，而且他的isConintueCal只是用來看是否為多筆一起計算而已，所以合併方法。
+//        List<BillCycleEntity> sumOfPayOverList = new ArrayList<BillCycleEntity>();
+//        if(isConintueCal){
+//            sumOfPayOverList= getSumOfPayOverList(cpId, calYM);
+//        } else {
+//            sumOfPayOverList = overList;
+//        }
+
+//        for(int m = 0; m<sumOfPayOverList.size(); m++){
+//            BillCycleEntity updateBillCycleEntity = (BillCycleEntity)sumOfPayOverList.get(m);
+//            updateBillCycleEntity.setCashOutOverId(cashDetailId);
+//            saveOrUpdateEntity(updateBillCycleEntity, updateBillCycleEntity.getBillId());
+//        }
+
+        //於billCycle中寫入CashOutOverId
+        for(BillCycleEntity billCycleEntity: overList){
+            billCycleEntity.setCashOutOverId(cashDetailId);
+            billCycleRepository.save(billCycleEntity);
+        }
+
+        /**如果有啟用扣抵，就作扣抵**/
+        //該用戶是否有啟用扣抵?
+        PrepayDeductMasterEntity searchPrepayDeductMasterEntity = new PrepayDeductMasterEntity();
+        searchPrepayDeductMasterEntity.setCompanyId(cpId);
+        List prepayDeductMasterList = calCycleDAO.getSearchEntity(PrepayDeductMasterEntity.class, searchPrepayDeductMasterEntity);
+        for(int masterInx = 0; masterInx<prepayDeductMasterList.size(); masterInx++){
+            PrepayDeductMasterEntity master = (PrepayDeductMasterEntity)prepayDeductMasterList.get(masterInx);
+            String isEnableOver = master.getIsEnableOver(); //該用戶是否有啟用扣抵?
+            if(null != isEnableOver && "Y".equals(isEnableOver)){
+                //該用戶有啟用扣抵, 就作扣抵
+                Integer amount = master.getAmount(); //剩餘可作扣抵的錢
+                if(amount <= 0){ //如果沒錢可扣抵，就不作扣抵
+                    continue;
+                }
+                Integer sumOver = sumOfPayOver.intValue(); //這次超額要繳的錢(註:只作整數的扣抵)
+
+                CashDetailEntity cashDetailEntity_forDeduct = new CashDetailEntity();
+                cashDetailEntity_forDeduct.setCompanyId(cpId); //公司名稱
+                cashDetailEntity_forDeduct.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
+                cashDetailEntity_forDeduct.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
+                cashDetailEntity_forDeduct.setCashMasterId(cashMasterId); //cash_master_id
+                cashDetailEntity_forDeduct.setCashType(7); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值 6.預繳 7.扣抵
+                cashDetailEntity_forDeduct.setBillType(chargeType); //帳單類型　1.月租 2.級距
+                cashDetailEntity_forDeduct.setPackageId(packageId); //超額的cashDetail不紀錄packageId(超額的cashDetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
+                cashDetailEntity_forDeduct.setStatus(1); //1.生效 2.作廢
+                cashDetailEntity_forDeduct.setModifierId(modifierId);
+                cashDetailEntity_forDeduct.setCreatorId(modifierId);
+                cashDetailEntity_forDeduct.setCreateDate(new Timestamp(new Date().getTime()));
+                cashDetailEntity_forDeduct.setModifyDate(new Timestamp(new Date().getTime()));
+
+                if(amount < sumOver){
+                    //剩餘金額不夠扣抵，就先扣抵「剩餘可作扣抵的錢」
+                    BigDecimal minusSumOfPayOver = new BigDecimal(0).subtract(new BigDecimal(amount));
+                    cashDetailEntity_forDeduct = cashDAO.calPriceTax(cashDetailEntity_forDeduct, minusSumOfPayOver, new BigDecimal(0), "超額扣抵");
+                    cashDetailRepository.save(cashDetailEntity_forDeduct);
+
+                    DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
+                    deductDetailEntity.setPrepayDeductMasterId(master.getPrepayDeductMasterId());
+                    deductDetailEntity.setCashDetailId(cashDetailId);
+                    deductDetailEntity.setCompanyId(cpId);
+                    deductDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM)));
+                    deductDetailEntity.setDeductType(2); //1.月租 2.超額(由此可知到抵扣抵了哪類金額(可搭prepay_deduct_master的is_enable_over、is_enable_cycle使用))
+                    deductDetailEntity.setMoney(-amount);
+                    deductDetailRepository.save(deductDetailEntity);
+
+                    master.setAmount(0);
+                    prepayDeductMasterRepository.save(master);
+
+                } else {
+                    //剩餘金額夠扣抵，就作扣抵
+                    Integer leftAmount = amount-sumOver;
+
+                    BigDecimal minusSumOfPayOver = new BigDecimal(0).subtract(sumOfPayOver);
+                    cashDetailEntity_forDeduct = cashDAO.calPriceTax(cashDetailEntity_forDeduct, minusSumOfPayOver, new BigDecimal(0), "超額扣抵");
+                    cashDetailRepository.save(cashDetailEntity_forDeduct);
+
+                    DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
+                    deductDetailEntity.setPrepayDeductMasterId(master.getPrepayDeductMasterId());
+                    deductDetailEntity.setCashDetailId(cashDetailId);
+                    deductDetailEntity.setCompanyId(cpId);
+
+                    deductDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM)));
+                    deductDetailEntity.setDeductType(2); //1.月租 2.超額(由此可知到抵扣抵了哪類金額(可搭prepay_deduct_master的is_enable_over、is_enable_cycle使用))
+                    deductDetailEntity.setMoney(-sumOver);
+                    deductDetailRepository.save(deductDetailEntity);
+
+                    master.setAmount(leftAmount);
+                    prepayDeductMasterRepository.save(master);
+                }
+            }
+            break;
+        }
+
+        logger.info("sumOverOut end = " + new java.util.Date());
+    }
+
     /**
      * 若該次的billCycle加總大於500，應於超額明細中每項超額的資料都寫入cashDetailId
      * isSum=true: 每月計算超額 isSum=false: 續約，結清之前的超額(先不在此作加總)
@@ -603,9 +730,10 @@ public class CalCycleServiceImp implements CalCycleService {
                         , cashMasterEntity.getCashMasterId()
                         , packageModeEntity.getPackageType()
                         , packageModeEntity.getPackageId()
+                        , modifierId
                         , sumOver
                 );
-                calCycleDAO.sumOverOut(
+                sumOverOut(
                         packageModeEntity.getCompanyId()
                         , timeUtils.getCurrentDateString("yyyyMM")
                         , packageModeEntity.getPackageId()

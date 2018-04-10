@@ -81,7 +81,6 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
             otherMap.put(REQUEST_SEND_OBJECT, outList);
             otherMap.put(DISPATCH_PAGE, dispatch_page);
         } else if (method.equals("insert")) { //用戶綁合約: 填要的合約內容後，按下確認新增，作用戶合約的動作
-
             if ("1".equals(charge_type) || "2".equals(charge_type)) {
                 //月租型(packageType=1) //級距型(packageType=2)
                 CompanyChargeCycleBean chargeCycleBean = new CompanyChargeCycleBean();
