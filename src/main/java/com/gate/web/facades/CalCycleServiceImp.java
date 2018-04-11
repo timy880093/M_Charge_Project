@@ -292,7 +292,7 @@ public class CalCycleServiceImp implements CalCycleService {
         Integer cnt = 0;
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(yearMonth,companyId);
         try{
-            PackageModeEntity packageModeEntity = packageService.getCurrentPackageMode(companyId,yearMonth);
+            PackageModeEntity packageModeEntity = packageService.getCurrentPackageModeByYearMonth(companyId,yearMonth);
             if(packageModeEntity!=null){
                 Date lastYearMonthDate = findLastYearMonthDateByBillCycleList(billCycleEntityList);
                 billCycleEntityList = collectBillCycle(companyId,lastYearMonthDate,billCycleEntityList);
@@ -414,7 +414,7 @@ public class CalCycleServiceImp implements CalCycleService {
         try{
             Date lastYearMonthDate = findLastYearMonthDateByBillCycleList(billCycleEntityList);
             collectBillCycle(companyId, lastYearMonthDate, billCycleEntityList);
-            PackageModeEntity packageModeEntity = packageService.getCurrentPackageMode(companyId,timeUtils.getCurrentDateString("yyyyMM"));
+            PackageModeEntity packageModeEntity = packageService.getCurrentPackageModeByYearMonth(companyId,timeUtils.getCurrentDateString("yyyyMM"));
             //應計算完所有的billCycleEntity後再決定超額資料。
             billCycleListDataFilter(billCycleEntityList);
             prepareBillCycleListData(billCycleEntityList);
