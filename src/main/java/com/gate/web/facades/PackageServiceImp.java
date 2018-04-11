@@ -29,7 +29,7 @@ public class PackageServiceImp implements PackageService{
      * @return
      */
     @Override
-    public PackageModeEntity getCurrentPackageMode(Integer companyId, String yearMonth){
+    public PackageModeEntity getCurrentPackageModeByYearMonth(Integer companyId, String yearMonth){
         PackageModeEntity currentPackageMode = null;
         List<PackageModeEntity> packageModeEntityList = packageModeRepository.findByCompanyIdIsAndStatusIs(companyId,"1");
         for(PackageModeEntity packageModeEntity: packageModeEntityList){
@@ -43,5 +43,20 @@ public class PackageServiceImp implements PackageService{
             }
         }
         return currentPackageMode;
+    }
+
+    @Override
+    public PackageModeEntity getPackageModeByDate(Integer companyId, Date date){
+        PackageModeEntity resultPackageMode = null;
+        List<PackageModeEntity> packageModeEntityList = packageModeRepository.findByCompanyIdIs(companyId);
+        for(PackageModeEntity packageModeEntity : packageModeEntityList){
+            ChargeModeCycleAddEntity chargeModeCycleAddEntity = chargeModeCycleAddRepository.findByAdditionId(packageModeEntity.getAdditionId());
+            Date packageStartDate = chargeModeCycleAddEntity.getRealStartDate();
+            Date packageEndDate = chargeModeCycleAddEntity.getRealEndDate();
+            if(date.after(packageStartDate) && date.before(packageEndDate)){
+                resultPackageMode = packageModeEntity;
+            }
+        }
+        return resultPackageMode;
     }
 }
