@@ -19,6 +19,7 @@ import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.gateweb.reportModel.OrderCsv;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -600,12 +601,15 @@ public class CashServiceImp implements CashService {
             detailValueList.add(cashMasterBean.getCompanyName());
             detailValueList.add(cashMasterBean.getBusinessNo());
             //寫value
-            //就以前的情況，一定只會有一個。
-            CashDetailBean cashDetailBean = cashMasterBean.getCashDetailList().get(0);
+            String currentPackageName = "";
+            BigDecimal taxInclusiveAmount = BigDecimal.ZERO;
+            for(CashDetailBean cashDetailBean:cashMasterBean.getCashDetailList()){
+                currentPackageName = getPackageName(cashDetailBean.getCashType(),cashDetailBean.getPackageName());
+                taxInclusiveAmount = taxInclusiveAmount.add(cashDetailBean.getTaxInclusivePrice().setScale(0,BigDecimal.ROUND_HALF_UP));
+            }
             for(String packageName: packageList){
-                String cashDetailPackageName =  getPackageName(cashDetailBean.getCashType(),cashDetailBean.getPackageName());
-                if(cashDetailPackageName.equals(packageName)){
-                    detailValueList.add(cashDetailBean.getTaxInclusivePrice());
+                if(currentPackageName.equals(packageName)){
+                    detailValueList.add(taxInclusiveAmount);
                 }else{
                     detailValueList.add(0);
                 }

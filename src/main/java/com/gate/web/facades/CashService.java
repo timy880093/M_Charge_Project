@@ -13,6 +13,7 @@ import com.gateweb.charge.model.BillCycleEntity;
 import com.gateweb.charge.vo.CashVO;
 import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.gateweb.reportModel.OrderCsv;
+import org.apache.commons.collections.map.MultiValueMap;
 
 public interface CashService extends Service {
 
