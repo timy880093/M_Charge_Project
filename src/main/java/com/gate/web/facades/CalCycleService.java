@@ -23,7 +23,7 @@ public interface CalCycleService extends Service {
     public List getUserCompanyList() throws Exception;
 
     //計算超額-by年月
-    Integer transactionBatchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId);
+    Integer batchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId);
 
     //計算超額-多筆
     Integer batchCalOver(List<Integer> billIdList, Integer modifierId) throws Exception;

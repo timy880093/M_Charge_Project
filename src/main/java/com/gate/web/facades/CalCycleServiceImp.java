@@ -26,6 +26,7 @@ import com.gate.web.displaybeans.GiftVO;
 import com.gate.web.formbeans.GiftBean;
 
 import dao.CalCycleDAO;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("calCycleService")
 public class CalCycleServiceImp implements CalCycleService {
@@ -175,50 +176,50 @@ public class CalCycleServiceImp implements CalCycleService {
     }
 
     //計算超額-某年月之前全部計算，並一次結清
-    public void CalOverIsEnd(Integer companyId, String calYM, Integer modifierId) throws Exception{
-        logger.info("CalOverIsEnd start = " + new java.util.Date());
-        //1.找出該用戶在calYM之前的所有資料
-        List<BillCycleEntity> beforeBillCycleList = calCycleDAO.getSumOfPayOverList(companyId, calYM);
-
-        Integer packageId = null; //因為累計超額可能跟合約，所以超額cash_detail的package_id沒用
-        Integer chargeType = null;
-        //2.將這些筆數全部加總
-        //isSum=false: 續約，結清之前的超額(先不在此作加總)
-        for(int i=0; i<beforeBillCycleList.size(); i++){
-            BillCycleEntity entity = (BillCycleEntity)beforeBillCycleList.get(i);
-            List<BillCycleEntity> billCycleEntityList = new ArrayList<>();
-            billCycleEntityList.add(entity);
-            packageId = entity.getPackageId();
-            chargeType = entity.getBillType();
-            calOverByCompany(companyId,modifierId,false,billCycleEntityList);
-        }
-        BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(companyId, calYM);
-        CashMasterEntity  cashMasterEntity = isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), companyId, modifierId);
-        CashDetailEntity cashDetailEntity = createCashDetailEntityForCalOver(
-                companyId
-                ,calYM
-                ,cashMasterEntity.getCashMasterId()
-                ,chargeType
-                ,packageId
-                ,modifierId
-                ,sumOfPayOver
-        );
-
-        //計算預繳扣抵的部份
-        sumOverOut(
-                companyId
-                , calYM
-                , packageId
-                , cashMasterEntity.getCashMasterId()
-                , cashDetailEntity.getCashDetailId()
-                , sumOfPayOver
-                , null
-                , true
-                , chargeType
-                , modifierId
-        );
-        logger.info("CalOverIsEnd end = " + new java.util.Date());
-    }
+//    public void CalOverIsEnd(Integer companyId, String calYM, Integer modifierId) throws Exception{
+//        logger.info("CalOverIsEnd start = " + new java.util.Date());
+//        //1.找出該用戶在calYM之前的所有資料
+//        List<BillCycleEntity> beforeBillCycleList = calCycleDAO.getSumOfPayOverList(companyId, calYM);
+//
+//        Integer packageId = null; //因為累計超額可能跟合約，所以超額cash_detail的package_id沒用
+//        Integer chargeType = null;
+//        //2.將這些筆數全部加總
+//        //isSum=false: 續約，結清之前的超額(先不在此作加總)
+//        for(int i=0; i<beforeBillCycleList.size(); i++){
+//            BillCycleEntity entity = (BillCycleEntity)beforeBillCycleList.get(i);
+//            List<BillCycleEntity> billCycleEntityList = new ArrayList<>();
+//            billCycleEntityList.add(entity);
+//            packageId = entity.getPackageId();
+//            chargeType = entity.getBillType();
+//            calOverByCompany(companyId,modifierId,false,billCycleEntityList);
+//        }
+//        BigDecimal sumOfPayOver = calCycleDAO.getSumOfPayOver(companyId, calYM);
+//        CashMasterEntity  cashMasterEntity = isHaveCashMaster(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1)), companyId, modifierId);
+//        CashDetailEntity cashDetailEntity = createCashDetailEntityForCalOver(
+//                companyId
+//                ,calYM
+//                ,cashMasterEntity.getCashMasterId()
+//                ,chargeType
+//                ,packageId
+//                ,modifierId
+//                ,sumOfPayOver
+//        );
+//
+//        //計算預繳扣抵的部份
+//        sumOverOut(
+//                companyId
+//                , calYM
+//                , packageId
+//                , cashMasterEntity.getCashMasterId()
+//                , cashDetailEntity.getCashDetailId()
+//                , sumOfPayOver
+//                , null
+//                , true
+//                , chargeType
+//                , modifierId
+//        );
+//        logger.info("CalOverIsEnd end = " + new java.util.Date());
+//    }
 
     //計算超額-可選擇某幾筆計算且出帳
     // (需先選擇某用戶名稱,在js擋)
@@ -288,7 +289,7 @@ public class CalCycleServiceImp implements CalCycleService {
 
     //計算超額-by年月
     @Override
-    public Integer transactionBatchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId){
+    public Integer batchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId){
         Integer cnt = 0;
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(yearMonth,companyId);
         try{
@@ -414,7 +415,7 @@ public class CalCycleServiceImp implements CalCycleService {
             billCycleListDataFilter(billCycleEntityList);
             prepareBillCycleListData(billCycleEntityList);
             //該公司在某年月的那一筆billCycle
-            writeBillCycleOverData(
+            transactionWriteBillCycleOverData(
                     billCycleEntityList
                     , isSum
                     , packageModeEntity
@@ -666,7 +667,7 @@ public class CalCycleServiceImp implements CalCycleService {
      * @param modifierId
      * @throws Exception
      */
-    public void writeBillCycleOverData(
+    public void transactionWriteBillCycleOverData(
             List<BillCycleEntity> billCycleEntityList
             , boolean isSum
             , PackageModeEntity packageModeEntity
