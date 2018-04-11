@@ -288,23 +288,18 @@ public class CalCycleServiceImp implements CalCycleService {
 
     //計算超額-by年月
     @Override
-    public Integer batchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId){
+    public Integer transactionBatchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId){
         Integer cnt = 0;
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByYearMonthIsAndCompanyIdIs(yearMonth,companyId);
         try{
             PackageModeEntity packageModeEntity = packageService.getCurrentPackageModeByYearMonth(companyId,yearMonth);
             if(packageModeEntity!=null){
-                Date lastYearMonthDate = findLastYearMonthDateByBillCycleList(billCycleEntityList);
-                billCycleEntityList = collectBillCycle(companyId,lastYearMonthDate,billCycleEntityList);
-                billCycleListDataFilter(billCycleEntityList);
-                prepareBillCycleListData(billCycleEntityList);
-                writeBillCycleOverData(
-                        billCycleEntityList
-                        , true
-                        , packageModeEntity
+                cnt+=calOverByCompany(
+                        companyId
                         , modifierId
+                        , true
+                        , billCycleEntityList
                 );
-                cnt++;
             }else{
                 logger.info("CompanyId:" + companyId + " doesn't have enabled package mode");
             }
@@ -681,7 +676,7 @@ public class CalCycleServiceImp implements CalCycleService {
         Date billYearMonth= null;
         for(BillCycleEntity billCycleEntity : billCycleEntityList){
             //開始作超額計算...........，end
-            calCycleDAO.saveOrUpdateEntity(billCycleEntity, billCycleEntity.getBillId());
+            billCycleRepository.save(billCycleEntity);
             //3.如果超額達500元，將資料寫cash_flow table
             //使用最後超額的年月作為帳單年月
             Date otherBillCycleDate = timeUtils.parseDate(billCycleEntity.getYearMonth());
