@@ -3,6 +3,7 @@ package com.gate.web.facades;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.charge.model.ChargeModeGradeEntity;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,30 @@ public class ChargeServiceImp implements ChargeService{
         chargeDAO.updateEntity(entity, entity.getChargeId());
 
     }
+
+    @Override
+    public Integer insertChargeModeGrade(ChargeModeCycleBean bean, Long userId) throws Exception {
+        ChargeModeGradeEntity entity = new ChargeModeGradeEntity();
+        BeanUtils.copyProperties(entity, bean);
+        entity.setCreatorId(userId.intValue());
+        entity.setModifierId(userId.intValue());
+        chargeDAO.saveEntity(entity);
+        return null;
+    }
+    @Override
+    public void updateChargeModeGrade(ChargeModeCycleBean bean, Long userId) throws Exception {
+        ChargeModeGradeEntity entity = new ChargeModeGradeEntity();
+        DateConverter dateConverter = new DateConverter();
+        dateConverter.setPattern("yyyy/MM/dd");
+        BeanUtils.copyProperties(entity,bean);
+        entity.setCreatorId(userId.intValue());
+        entity.setModifierId(userId.intValue());
+        chargeDAO.updateEntity(entity, entity.getChargeId());
+
+    }
+
+
+
 
     public ChargeModeCycleVO findChargeModeCycleByChargeId(Integer chargeId) throws Exception {
         ChargeModeCycleEntity chargeEntity = (ChargeModeCycleEntity) chargeDAO.getEntity(ChargeModeCycleEntity.class,chargeId);

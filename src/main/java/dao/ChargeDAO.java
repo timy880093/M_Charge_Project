@@ -145,6 +145,7 @@ public class ChargeDAO extends BaseDAO {
 
         Integer chargeModeGradeId = entity.getChargeId();
         entity.setCreatorId(userId.intValue());
+        entity.setModifierId(userId.intValue());
 
 
         //新增或修改 經銷商資訊(dealer_company)

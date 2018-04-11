@@ -25,6 +25,8 @@ public interface ChargeService extends Service {
 
     void updateChargeModeCycle(ChargeModeCycleBean bean, Long userId) throws Exception;
 
+   
+
     public ChargeModeCycleVO findChargeModeCycleByChargeId(Integer chargeId) throws Exception ;
 
     //新增或修改經銷商和經銷商業務員資訊
