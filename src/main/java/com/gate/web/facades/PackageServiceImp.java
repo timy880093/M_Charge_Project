@@ -5,6 +5,8 @@ import com.gateweb.charge.model.ChargeModeCycleAddEntity;
 import com.gateweb.charge.model.PackageModeEntity;
 import com.gateweb.charge.repository.ChargeModeCycleAddRepository;
 import com.gateweb.charge.repository.PackageModeRepository;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;
@@ -45,11 +47,15 @@ public class PackageServiceImp implements PackageService{
             Date calculateEndDate = calculateEndDateCalendar.getTime();
             Date packageStartDate = chargeModeCycleAddEntity.getRealStartDate();
             Date packageEndDate = chargeModeCycleAddEntity.getRealEndDate();
-            //等於起始日或結束日，或是在中間
-            if( packageStartDate.equals(calculateStartDate)
-                    || packageEndDate.equals(calculateEndDate)
-                    || (packageStartDate.after(calculateStartDate) && packageStartDate.before(calculateEndDate))
-                    || (packageEndDate.after(calculateStartDate)&& packageEndDate.before(calculateEndDate)) ){
+            //不得已，用jodaTime不然太辛酸
+            DateTime calculateStartDateTime = new DateTime(calculateStartDate);
+            DateTime calculateEndDateTime = new DateTime(calculateEndDate);
+            DateTime packageStartDateTime = new DateTime(packageStartDate);
+            DateTime packageEndDateTime = new DateTime(packageEndDate);
+            Interval calculateInterval = new Interval(calculateStartDateTime,calculateEndDateTime);
+            Interval packageInterval = new Interval(packageStartDateTime,packageEndDateTime);
+            //用equals會有問題
+            if(calculateInterval.overlaps(packageInterval) ){
                 currentPackageMode = packageModeEntity;
             }
         }
