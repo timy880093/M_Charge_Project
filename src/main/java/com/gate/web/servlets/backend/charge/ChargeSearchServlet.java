@@ -182,10 +182,13 @@ public class ChargeSearchServlet extends MvcBaseServlet {
         String jsonString = convertAjaxToJson(gridData);
         return jsonString;
 
+
     }
+
+
+
+
 }
-
-
 
 
 

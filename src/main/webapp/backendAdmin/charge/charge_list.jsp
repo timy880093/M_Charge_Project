@@ -78,8 +78,8 @@
             loadComplete: function () {
 
                 //查詢後如無資料，請show"查無資料"的訊息。`
-                var ids =jQuery("#jqgrid").jqGrid('getDataIDs');
-                if(ids.length == 0){
+                var ids = jQuery("#jqgrid").jqGrid('getDataIDs');
+                if (ids.length == 0) {
                     alert("查無資料");
                 }
 
@@ -88,13 +88,16 @@
                     var chargeId = $(this).parent('td').parent('tr').find('td:eq(2)').text();
                     var type = $(this).parent('td').parent('tr').find('td:eq(3)').text();
                     var url = '';
-                    console.log("selectOption="+selectOption+", chargeId="+chargeId+", type="+type);
+                    console.log("selectOption=" + selectOption + ", chargeId=" + chargeId + ", type=" + type);
                     if (selectOption == 'editCharge') {
-                        url = '<%=request.getContextPath()%>/backendAdmin/chargeEditServlet?method=edit&chargeId=' + chargeId+'&type='+type;
+                        url = '<%=request.getContextPath()%>/backendAdmin/chargeEditServlet?method=edit&chargeId=' + chargeId + '&type=' + type;
                     }
-                    MM_openBrWindow(url,800,800);
+                    MM_openBrWindow(url, 800, 800);
+
                 });
             }
+
+
         });
 
         $(document).ajaxStart(function () {
