@@ -7,6 +7,7 @@ import com.gateweb.charge.repository.ChargeModeCycleAddRepository;
 import com.gateweb.charge.repository.PackageModeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -35,10 +36,20 @@ public class PackageServiceImp implements PackageService{
         for(PackageModeEntity packageModeEntity: packageModeEntityList){
             //方案的日期記錄在chargeModeCycleAdd當中，也就是說，如果我們要找出當下該公司使用的方案，要根據add當中的real start date 及real end date
             ChargeModeCycleAddEntity chargeModeCycleAddEntity = chargeModeCycleAddRepository.findByAdditionId(packageModeEntity.getAdditionId());
-            Date calculateDate = timeUtils.stringToDate(yearMonth,"yyyyMM");
+            //取得區間日期為該年一月一號及該年最後一天
+            Date calculateStartDate = timeUtils.stringToDate(yearMonth,"yyyyMM");
+            Calendar calculateEndDateCalendar = Calendar.getInstance();
+            calculateEndDateCalendar.setTime(calculateStartDate);
+            calculateEndDateCalendar.add(Calendar.MONTH,1);
+            calculateEndDateCalendar.add(Calendar.DATE,-1);
+            Date calculateEndDate = calculateEndDateCalendar.getTime();
             Date packageStartDate = chargeModeCycleAddEntity.getRealStartDate();
             Date packageEndDate = chargeModeCycleAddEntity.getRealEndDate();
-            if(calculateDate.after(packageStartDate)&& calculateDate.before(packageEndDate)){
+            //等於起始日或結束日，或是在中間
+            if( packageStartDate.equals(calculateStartDate)
+                    || packageEndDate.equals(calculateEndDate)
+                    || (packageStartDate.after(calculateStartDate) && packageStartDate.before(calculateEndDate))
+                    || (packageEndDate.after(calculateStartDate)&& packageEndDate.before(calculateEndDate)) ){
                 currentPackageMode = packageModeEntity;
             }
         }
