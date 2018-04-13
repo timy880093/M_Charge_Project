@@ -54,8 +54,10 @@ public class PackageServiceImp implements PackageService{
             DateTime packageEndDateTime = new DateTime(packageEndDate);
             Interval calculateInterval = new Interval(calculateStartDateTime,calculateEndDateTime);
             Interval packageInterval = new Interval(packageStartDateTime,packageEndDateTime);
-            //用equals會有問題
-            if(calculateInterval.overlaps(packageInterval) ){
+            //用equals會有問題，包含起始日期
+            if(packageStartDate.compareTo(calculateStartDate)==0
+                    || packageStartDate.compareTo(calculateEndDate)==0
+                    || calculateInterval.overlaps(packageInterval)){
                 currentPackageMode = packageModeEntity;
             }
         }
