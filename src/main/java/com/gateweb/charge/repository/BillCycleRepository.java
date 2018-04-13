@@ -56,6 +56,8 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 
 	public List<BillCycleEntity> findByYearMonthIsAndCompanyIdIs(String yearMonth,Integer companyId);
 
+	public List<BillCycleEntity> findByYearMonthIs(String yearMonth);
+
 	public List<BillCycleEntity> findByCashOutOverId(Integer cashOutOverId);
 
 	/**

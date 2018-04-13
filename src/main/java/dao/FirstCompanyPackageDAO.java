@@ -3,6 +3,7 @@ package dao;
 import java.util.Calendar;
 import java.util.List;
 
+import com.gate.web.facades.CompanyChargeService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class FirstCompanyPackageDAO extends BaseDAO {
     String failResult = "";
     
     @Autowired
-    CompanyChargeDAO companyChargeDAO;
+    CompanyChargeService companyChargeService;
 
     //執行批次建立第一次的用戶綁合約的資料
     public String executionFirstCmpPkg( List<FirstCompanyPackageBean> excelDataList, Integer modifierId) throws Exception{
@@ -170,7 +171,7 @@ public class FirstCompanyPackageDAO extends BaseDAO {
 
             //6.原本用戶綁合約UI按下確定新增後，作的事情
             try{
-            		companyChargeDAO.transactionInsertCompanyChargeCycle(bean, modifierId);
+            		companyChargeService.transactionInsertCompanyChargeCycle(bean, modifierId);
                 successResult += "<br>" + companyName + " " + businesscode + ",companyId=" + companyId + ",chargeId=" + chargeId +",freeMonth=" + freeMonth +
                         ",giftPrice=" + giftPrice +",realStartDate=" + realStartDate +",realEndDate=" + realEndDate +
                         ",dealerCompanyId=" + dealerCompanyId +",dealerId=" + dealerId + ",broker2CpName=" +
