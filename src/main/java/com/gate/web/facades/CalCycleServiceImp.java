@@ -323,7 +323,7 @@ public class CalCycleServiceImp implements CalCycleService {
         //移除已經在清單中的資料
         for(BillCycleEntity notYetOutBillCycleEntity:notYetOutBillCycleEntityList){
             Date tempYearMonthDate = timeUtils.stringToDate(notYetOutBillCycleEntity.getYearMonth(),"yyyyMM");
-            if(!billCycleEntityList.contains(notYetOutBillCycleEntity.getBillId())){
+            if(!billCycleEntityList.contains(notYetOutBillCycleEntity)){
                 if(tempYearMonthDate.before(lastYearMonthDate)){
                     billCycleEntityList.add(notYetOutBillCycleEntity);
                 }
