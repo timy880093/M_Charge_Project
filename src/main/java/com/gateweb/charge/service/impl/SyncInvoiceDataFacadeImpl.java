@@ -1,5 +1,6 @@
 package com.gateweb.charge.service.impl;
 
+import com.gate.utils.TimeStampDeserializer;
 import com.gate.utils.TimeUtils;
 import com.gateweb.charge.model.InvoiceMainEntity;
 import com.gateweb.charge.repository.InvoiceMainRepository;
@@ -44,31 +45,46 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
 
     @Override
     public void syncInvoiceDataFromEinvDatabase(Timestamp from, Timestamp to) throws InvocationTargetException, IllegalAccessException {
-        List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByModifyDateIsGreaterThanAndModifyDateIsLessThan(from,to);
+        List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByCreateDateIsGreaterThanAndModifyDateIsLessThan(from,to);
+        syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
+    }
+
+    @Override
+    public void syncInvoiceDataFromEinvDatabaseByCompany(Timestamp from, Timestamp to,String sellerIdentifier) throws InvocationTargetException, IllegalAccessException {
+        List<InvoiceMain> einvInvoiceMainEntityList = einvInvoiceMainRepository.findByCreateDateIsGreaterThanAndModifyDateIsLessThanAndSellerIs(from,to,sellerIdentifier);
         syncInvoiceDataByInvoiceMainEntityList(einvInvoiceMainEntityList);
     }
 
     public void syncInvoiceDataByInvoiceMainEntityList(List<InvoiceMain> einvInvoiceMainEntityList) throws InvocationTargetException, IllegalAccessException {
         for(InvoiceMain einvInvoiceMain: einvInvoiceMainEntityList){
             InvoiceMainEntity existsInvoiceMainEntity
-                    = invoiceMainRepository.findByInvoiceIdAndCYearMonthAndInvoiceNumber(
-                    einvInvoiceMain.getInvoiceId()
-                    ,einvInvoiceMain.getcYearMonth()
+                    = invoiceMainRepository.findByCYearMonthAndInvoiceNumber(
+                    einvInvoiceMain.getcYearMonth()
                     ,einvInvoiceMain.getInvoiceNumber()
             );
-            if(existsInvoiceMainEntity!=null){
-                transactionUpdateInvoiceMainDataFromEinvDatabase(existsInvoiceMainEntity, einvInvoiceMain);
-            }else{
-                transactionInsertInvoiceMainDataFromEinvDatabase(einvInvoiceMain);
+            try{
+                if(existsInvoiceMainEntity!=null){
+                    transactionUpdateInvoiceMainDataFromEinvDatabase(existsInvoiceMainEntity, einvInvoiceMain);
+                }else{
+                    transactionInsertInvoiceMainDataFromEinvDatabase(einvInvoiceMain);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
     }
 
     public void transactionUpdateInvoiceMainDataFromEinvDatabase(
             InvoiceMainEntity existsInvoiceMainEntity
             , InvoiceMain einvInvoiceMainEntity) throws InvocationTargetException, IllegalAccessException {
-        BeanUtils.copyProperties(existsInvoiceMainEntity,einvInvoiceMainEntity);
-        logger.info("Update exists invoice data");
+        if(existsInvoiceMainEntity.getInvoiceId().equals(einvInvoiceMainEntity.getInvoiceId())){
+            BeanUtils.copyProperties(existsInvoiceMainEntity,einvInvoiceMainEntity);
+            logger.info("Update exists invoice data");
+        }else{
+            invoiceMainRepository.delete(existsInvoiceMainEntity);
+            logger.info("Remove exists invoice data");
+        }
         invoiceMainRepository.save(existsInvoiceMainEntity);
     }
 

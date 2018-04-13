@@ -56,7 +56,8 @@ public interface InvoiceMainRepository extends JpaRepository<InvoiceMainEntity, 
 
 	public InvoiceMainEntity findByInvoiceIdAndCYearMonthAndInvoiceNumber(Long invoiceId,String yearMonth,String invoiceNumber);
 
-			
+	public InvoiceMainEntity findByCYearMonthAndInvoiceNumber(String yearMonth,String invoiceNumber);
+
 }
 
 	

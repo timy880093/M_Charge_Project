@@ -188,138 +188,33 @@ public class CalCycleDAO extends BaseDAO {
         }
     }
 
+    public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(Integer companyId,String calYm){
+        CompanyEntity companyEntity = companyRepository.findByCompanyId(companyId);
+        Calendar calendarFrom = timeUtils.string2Calendar("yyyyMM",calYm);
+        Calendar calendarTo = timeUtils.string2Calendar("yyyyMM",calYm);
+        calendarTo.add(Calendar.MONTH,1);
+        calendarTo.add(Calendar.DATE,-1);
+        return calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity,calendarFrom.getTime(),calendarTo.getTime());
+    }
+
+    /**
+     * 根據公司資料計算範圍內月份的發票資料。
+     * 使用InvoiceAmountSummaryReport進行計算。
+     * @return
+     */
     public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(CompanyEntity companyEntity, Date fromModifyDate, Date toModifyDate){
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
-            = invoiceAmountSummaryReportRepository.findBySellerIsAndModifyDateGreaterThanAndModifyDateLessThanAndClosedNot(
+            = invoiceAmountSummaryReportRepository.findBySellerIsAndCreateDateGreaterThanAndModifyDateLessThan(
                     companyEntity.getBusinessNo()
                     , new java.sql.Date(fromModifyDate.getTime())
                     , new java.sql.Date(toModifyDate.getTime())
-                    , true
         );
-        return invoiceAmountSummaryReportEntityList.size();
-    }
-
-    //加總計算超額到cash_detail和cash_Master
-    public void sumOverOut(
-            Integer cpId
-            , String calYM
-            , Integer packageId
-            , Integer cashMasterId
-            , BigDecimal sumOfPayOver
-            , List<BillCycleEntity> overList
-            , boolean isConintueCal
-            , Integer chargeType
-            , Integer modifierId)throws Exception{
-        logger.info("sumOverOut start = " + new java.util.Date());
-        //insert 一筆新的cash_detail'、cash_master
-        CashDetailEntity cashDetailEntity = new CashDetailEntity();
-        cashDetailEntity.setCompanyId(cpId); //公司名稱
-        cashDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
-        cashDetailEntity.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
-        cashDetailEntity.setCashMasterId(cashMasterId); //cash_master_id
-        cashDetailEntity.setCashType(2); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值
-        cashDetailEntity.setBillType(chargeType); //帳單類型　1.月租 2.級距
-        cashDetailEntity.setPackageId(packageId); //超額的cashDetail不紀錄packageId(超額的cashDetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
-        cashDetailEntity.setStatus(1); //1.生效 2.作廢
-
-        cashDetailEntity = cashDAO.calPriceTax(cashDetailEntity, sumOfPayOver, new BigDecimal(0), null);
-
-        cashDetailRepository.save(cashDetailEntity);
-        Integer cashDetailId = cashDetailEntity.getCashDetailId();
-
-        //update bill_cycle的值cash_out_over_id
-        //舊的saveOrUpdateEntity沒有功能，而且他的isConintueCal只是用來看是否為多筆一起計算而已，所以合併方法。
-//        List<BillCycleEntity> sumOfPayOverList = new ArrayList<BillCycleEntity>();
-//        if(isConintueCal){
-//            sumOfPayOverList= getSumOfPayOverList(cpId, calYM);
-//        } else {
-//            sumOfPayOverList = overList;
-//        }
-
-//        for(int m = 0; m<sumOfPayOverList.size(); m++){
-//            BillCycleEntity updateBillCycleEntity = (BillCycleEntity)sumOfPayOverList.get(m);
-//            updateBillCycleEntity.setCashOutOverId(cashDetailId);
-//            saveOrUpdateEntity(updateBillCycleEntity, updateBillCycleEntity.getBillId());
-//        }
-
-        //於billCycle中寫入CashOutOverId
-        for(BillCycleEntity billCycleEntity: overList){
-            billCycleEntity.setCashOutOverId(cashDetailId);
-            billCycleRepository.save(billCycleEntity);
+        Integer usedCount = 0;
+        for(InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity: invoiceAmountSummaryReportEntityList){
+            usedCount +=invoiceAmountSummaryReportEntity.getAmount();
         }
-
-        /**如果有啟用扣抵，就作扣抵**/
-        //該用戶是否有啟用扣抵?
-        PrepayDeductMasterEntity searchPrepayDeductMasterEntity = new PrepayDeductMasterEntity();
-        searchPrepayDeductMasterEntity.setCompanyId(cpId);
-        List prepayDeductMasterList = getSearchEntity(PrepayDeductMasterEntity.class, searchPrepayDeductMasterEntity);
-        for(int masterInx = 0; masterInx<prepayDeductMasterList.size(); masterInx++){
-            PrepayDeductMasterEntity master = (PrepayDeductMasterEntity)prepayDeductMasterList.get(masterInx);
-            String isEnableOver = master.getIsEnableOver(); //該用戶是否有啟用扣抵?
-            if(null != isEnableOver && "Y".equals(isEnableOver)){
-                //該用戶有啟用扣抵, 就作扣抵
-                Integer amount = master.getAmount(); //剩餘可作扣抵的錢
-                if(amount <= 0){ //如果沒錢可扣抵，就不作扣抵
-                    continue;
-                }
-                Integer sumOver = sumOfPayOver.intValue(); //這次超額要繳的錢(註:只作整數的扣抵)
-
-                CashDetailEntity cashDetailEntity_forDeduct = new CashDetailEntity();
-                cashDetailEntity_forDeduct.setCompanyId(cpId); //公司名稱
-                cashDetailEntity_forDeduct.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM))); //計算年月
-                cashDetailEntity_forDeduct.setOutYm(timeUtils.getYYYYMM(timeUtils.addMonth(timeUtils.parseDate(calYM), 1))); //帳單年月
-                cashDetailEntity_forDeduct.setCashMasterId(cashMasterId); //cash_master_id
-                cashDetailEntity_forDeduct.setCashType(7); //計費類型 1.月租2.月租超額3.代印代計4.加值型服務5.儲值 6.預繳 7.扣抵
-                cashDetailEntity_forDeduct.setBillType(chargeType); //帳單類型　1.月租 2.級距
-                cashDetailEntity_forDeduct.setPackageId(packageId); //超額的cashDetail不紀錄packageId(超額的cashDetail記的packageId只能參考，不是真正值)，因為可能跨兩種不同的package。
-                cashDetailEntity_forDeduct.setStatus(1); //1.生效 2.作廢
-
-                if(amount < sumOver){
-                    //剩餘金額不夠扣抵，就先扣抵「剩餘可作扣抵的錢」
-                    BigDecimal minusSumOfPayOver = new BigDecimal(0).subtract(new BigDecimal(amount));
-                    cashDetailEntity_forDeduct = cashDAO.calPriceTax(cashDetailEntity_forDeduct, minusSumOfPayOver, new BigDecimal(0), "超額扣抵");
-                    saveEntity(cashDetailEntity_forDeduct);
-
-                    DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
-                    deductDetailEntity.setPrepayDeductMasterId(master.getPrepayDeductMasterId());
-                    deductDetailEntity.setCashDetailId(cashDetailId);
-                    deductDetailEntity.setCompanyId(cpId);
-                    deductDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM)));
-                    deductDetailEntity.setDeductType(2); //1.月租 2.超額(由此可知到抵扣抵了哪類金額(可搭prepay_deduct_master的is_enable_over、is_enable_cycle使用))
-                    deductDetailEntity.setMoney(-amount);
-                    saveEntity(deductDetailEntity);
-
-                    master.setAmount(0);
-                    saveOrUpdateEntity(master, master.getPrepayDeductMasterId());
-
-                } else {
-                    //剩餘金額夠扣抵，就作扣抵
-                    Integer leftAmount = amount-sumOver;
-
-                    BigDecimal minusSumOfPayOver = new BigDecimal(0).subtract(sumOfPayOver);
-                    cashDetailEntity_forDeduct = cashDAO.calPriceTax(cashDetailEntity_forDeduct, minusSumOfPayOver, new BigDecimal(0), "超額扣抵");
-                    saveEntity(cashDetailEntity_forDeduct);
-
-                    DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
-                    deductDetailEntity.setPrepayDeductMasterId(master.getPrepayDeductMasterId());
-                    deductDetailEntity.setCashDetailId(cashDetailId);
-                    deductDetailEntity.setCompanyId(cpId);
-
-                    deductDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM)));
-                    deductDetailEntity.setDeductType(2); //1.月租 2.超額(由此可知到抵扣抵了哪類金額(可搭prepay_deduct_master的is_enable_over、is_enable_cycle使用))
-                    deductDetailEntity.setMoney(-sumOver);
-                    saveEntity(deductDetailEntity);
-
-                    master.setAmount(leftAmount);
-                    saveOrUpdateEntity(master, master.getPrepayDeductMasterId());
-                }
-            }
-            break;
-        }
-
-        logger.info("sumOverOut end = " + new java.util.Date());
+        return usedCount;
     }
-
 
     /**計算未出帳超額的加總
      * @param cpId 計算該公司的超額

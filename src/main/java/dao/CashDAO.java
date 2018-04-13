@@ -180,7 +180,7 @@ public class CashDAO extends BaseDAO {
         //1.Find all cashMaster
         CashMasterEntity searchCashMasterEntity = new CashMasterEntity();
         searchCashMasterEntity.setOutYm(outYM);
-        if(userCompanyId != 0){
+        if( userCompanyId!=null && userCompanyId != 0){
             searchCashMasterEntity.setCompanyId(userCompanyId);
         }
         List cashMasterList =  getSearchEntity(CashMasterEntity.class, searchCashMasterEntity);
@@ -737,57 +737,21 @@ public class CashDAO extends BaseDAO {
         return cashDetailEntity;
     }
 
-    //尋找要匯入上海銀行excel的資料-批次(by 年月)
-    public List getCashMasterDetail(String outYm) throws Exception{
-        return getCashMasterDetailList(outYm, null);
-    }
-
-    //尋找要匯入上海銀行excel的資料-多筆
-    public List getCashMasterDetail(String outYm, String destJson) throws Exception{
-
-        List<CashMasterEntity> selectOutList = new ArrayList<CashMasterEntity>();
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CashMasterBean>>(){}.getType();
-        List<CashMasterBean> cashMasterList = gson.fromJson(destJson, collectionType);
-
-        for(CashMasterBean masterBean:cashMasterList){
-            Integer masterId = masterBean.getCashMasterId();
-            CashMasterEntity masterEntity = (CashMasterEntity)getEntity(CashMasterEntity.class, masterId);
-            selectOutList.add(masterEntity);
-        }
-
-        return getCashMasterDetailList(outYm, selectOutList);
-    }
-
     //Todo:將會移至CashServiceImp，轉為使用CashMasterIdList做為傳入參數，並且返回設定好的bean，如果是動態，就返回map。
-    public List getCashMasterDetailList(String outYm, List selectOutList) throws Exception{
+    public List getCashMasterDetailList(List<CashMasterEntity> selectOutList) throws Exception{
         List list = new ArrayList();
 
-        CashMasterEntity searchMaster = new CashMasterEntity();
-        searchMaster.setOutYm(outYm);
-        List masterList =  getSearchEntity(CashMasterEntity.class, searchMaster);
-
         //masterList依master_id排序
-        Collections.sort(masterList,
+        Collections.sort(selectOutList,
                 new Comparator<CashMasterEntity>() {
                     public int compare(CashMasterEntity o1, CashMasterEntity o2) {
                         return o2.getCashMasterId().compareTo(o1.getCashMasterId());
                     }
                 });
 
-        //移除沒有選到的筆數
-        if(null != selectOutList && selectOutList.size()>0){
-            for(int i=(masterList.size()-1); i >-1; i--){
-                CashMasterEntity master = (CashMasterEntity)masterList.get(i);
-                if(!selectOutList.contains(master)){
-                    masterList.remove(master);
-                }
-            }
-        }
-
-        for(int i=0; i<masterList.size(); i++){
+        for(int i=0; i<selectOutList.size(); i++){
             CashMasterBean masterBean = new CashMasterBean();
-            CashMasterEntity master = (CashMasterEntity)masterList.get(i);
+            CashMasterEntity master = (CashMasterEntity)selectOutList.get(i);
             Integer masterId = master.getCashMasterId();
             BeanUtils.copyProperties(masterBean, master);
 
@@ -798,7 +762,9 @@ public class CashDAO extends BaseDAO {
             //如果用戶該月要繳的錢為0元，就不匯出到excel了。
             //masterBean.getTaxInclusiveAmout 有可能是null，不能直接相比
             //PK 2017/09/26
-            if(masterBean != null && masterBean.getTaxInclusiveAmount() != null && (masterBean.getTaxInclusiveAmount().equals(new BigDecimal(0) ) )){
+            if(masterBean != null
+                    && masterBean.getTaxInclusiveAmount() != null
+                    && (masterBean.getTaxInclusiveAmount().equals(new BigDecimal(0) ) )){
                 continue;
             }
             //undo 用友x匯出上銀excel會有error
@@ -847,7 +813,11 @@ public class CashDAO extends BaseDAO {
             }
 
             masterBean.setCashDetailList(detailofMasterList);
-            list.add(masterBean);
+            //若沒有任何明細(通常是作廢了)，那就連master都不要加進去。
+            if(detailofMasterList.size()>0
+                    && masterBean.getTaxInclusiveAmount().compareTo(BigDecimal.ZERO)>0){
+                list.add(masterBean);
+            }
         }
         return list;
     }

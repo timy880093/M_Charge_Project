@@ -3,16 +3,13 @@ package com.gate.web.facades;
 import java.util.List;
 import java.util.Map;
 
-import com.gateweb.charge.model.CashMasterEntity;
+import com.gateweb.charge.model.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.GiftVO;
 import com.gate.web.formbeans.GiftBean;
-import com.gateweb.charge.model.BillCycleEntity;
-import com.gateweb.charge.model.CompanyEntity;
-import com.gateweb.charge.model.GiftEntity;
 
 public interface CalCycleService extends Service {
 
@@ -22,13 +19,19 @@ public interface CalCycleService extends Service {
 
     public List getUserCompanyList() throws Exception;
 
+    //計算超額-by年月
+    Integer batchCalOverByYearMonthAndCompanyId(Integer companyId, String yearMonth, Integer modifierId);
+
     //計算超額-多筆
     Integer batchCalOver(List<Integer> billIdList, Integer modifierId) throws Exception;
 
     CashMasterEntity isHaveCashMaster(String outYm, Integer companyId, Integer modifierId) throws Exception;
 
-    //計算超額-by年月
-    Integer batchCalOverByYearMonth(String yearMonth, Integer modifierId);
+    void transactionWriteBillCycleOverData(
+            List<BillCycleEntity> billCycleEntityList
+            , boolean isSum
+            , PackageModeEntity packageModeEntity
+            , Integer modifierId) throws Exception;
 
     public boolean calOverToCash(String calYM, Integer companyId, String calOverAry, Integer modifierId) throws Exception;
 //    public List calOver(String calYM, String companyId) throws Exception {

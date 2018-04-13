@@ -33,7 +33,7 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 	
     /**
      * Delete a record in Database.
-	 * @param id PK
+	 * @param billId PK
 	 * @throws DaoSystemException	if system is wrong.
      */
 	void deleteByBillId(	
@@ -56,7 +56,17 @@ public interface BillCycleRepository extends JpaRepository<BillCycleEntity, Inte
 
 	public List<BillCycleEntity> findByYearMonthIsAndCompanyIdIs(String yearMonth,Integer companyId);
 
+	public List<BillCycleEntity> findByYearMonthIs(String yearMonth);
+
 	public List<BillCycleEntity> findByCashOutOverId(Integer cashOutOverId);
+
+	/**
+	 * 這個查詢是因為佳佳的使用習慣上，算完後不會馬上出帳，他會留著下次。
+	 * 但因為billCycle根本沒有記錄是否計算過的欄位，所以只能用這三個一定會寫的欄位進行判斷。
+	 * 他們會在下次計算超額的時候被一併併入計算。
+	 * @return
+     */
+	public List<BillCycleEntity> findByCntOverIsNotNullAndPriceOverIsNotNullAndPayOverIsNotNullAndCashOutOverIdIsNullAndCompanyIdIsAndStatusIsNot(Integer companyId,String status);
 			
 }
 

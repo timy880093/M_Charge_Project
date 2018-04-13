@@ -373,7 +373,7 @@
 //        $("#calCycleForm").submit(); //Submit  the FORM
 //        $.unblockUI();
 
-        var url = path + "/backendAdmin/calCycleSearchServlet?method=calOverYM&calYM=" + calYM;
+        var url = path + "/backendAdmin/calCycleSearchServlet?method=calOverYM";
         $.getJSON(url, {calYM: calYM}, function (data) {
             //alert(data);
             alert(data);

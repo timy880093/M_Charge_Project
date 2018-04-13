@@ -82,12 +82,11 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
             otherMap.put(REQUEST_SEND_OBJECT, outList);
             otherMap.put(DISPATCH_PAGE, dispatch_page);
         } else if (method.equals("insert")) { //用戶綁合約: 填要的合約內容後，按下確認新增，作用戶合約的動作
-
             if ("1".equals(charge_type) || "2".equals(charge_type)) {
                 //月租型(packageType=1) //級距型(packageType=2)
                 CompanyChargeCycleBean chargeCycleBean = new CompanyChargeCycleBean();
                 mapToBean(requestParameterMap,chargeCycleBean);
-                companyChargeService.insertCompanyChargeCycle(chargeCycleBean,10);  //新增月租合約(用戶綁合約)
+                companyChargeService.transactionInsertCompanyChargeCycle(chargeCycleBean,10);  //新增月租合約(用戶綁合約)
             }
         } else if(method.equals("settleView")){ //settle(結清畫面)
             if ("1".equals(charge_type) || "2".equals(charge_type)) { //1.月租 2.級距

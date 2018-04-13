@@ -35,6 +35,18 @@
             </Policies>
             <DefaultRolloverStrategy max="20" />
         </RollingRandomAccessFile>
+        <RollingFile name="springframework"
+                     fileName="logs/springframework.log"
+                     filePattern="logs/springframework-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <pattern>%-5p | %d{yyyy-MM-dd HH:mm:ss} | %C{10} (%F:%L) - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="100 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="30" />
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Logger name="com.gate" level="debug" additivity="false">
@@ -49,21 +61,24 @@
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="CHA_PROJECT" />
         </Logger>
-		<Logger name="org.springframework" level="error" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
+        <logger name="com.einvoices.aop.AspectLog" level="info" additivity="false">
             <AppenderRef ref="CHA_PROJECT" />
-        </Logger>
-        <logger name="org.springframework.transaction" level="debug" additivity="false">
-            <AppenderRef ref="springframework" />
-            <AppenderRef ref="STDOUT" />
         </logger>
-        <logger name="org.springframework.transaction.interceptor" level="trace" additivity="false">
+        <logger name="org.springframework" level="error" additivity="false">
             <AppenderRef ref="springframework" />
-            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="CHA_PROJECT" />
         </logger>
-        <logger name="org.springframework.orm.jpa.JpaTransactionManage" level="debug" additivity="false">
+        <logger name="org.springframework.transaction" level="error" additivity="false">
             <AppenderRef ref="springframework" />
-            <AppenderRef ref="STDOUT" />
+            <AppenderRef ref="CHA_PROJECT" />
+        </logger>
+        <logger name="org.springframework.transaction.interceptor" level="error" additivity="false">
+            <AppenderRef ref="springframework" />
+            <AppenderRef ref="CHA_PROJECT" />
+        </logger>
+        <logger name="org.springframework.orm.jpa.JpaTransactionManage" level="error" additivity="false">
+            <AppenderRef ref="springframework" />
+            <AppenderRef ref="CHA_PROJECT" />
         </logger>
         <Root level="ERROR">
             <AppenderRef ref="ConsoleAppender" />

@@ -52,7 +52,9 @@ public interface EinvInvoiceMainRepository extends JpaRepository<InvoiceMain, Lo
 
 	public List<InvoiceMain> findByModifyDateIsGreaterThan(Timestamp timestamp);
 
-	public List<InvoiceMain> findByModifyDateIsGreaterThanAndModifyDateIsLessThan(Timestamp from,Timestamp to);
+	public List<InvoiceMain> findByCreateDateIsGreaterThanAndModifyDateIsLessThan(Timestamp from,Timestamp to);
+
+	public List<InvoiceMain> findByCreateDateIsGreaterThanAndModifyDateIsLessThanAndSellerIs(Timestamp from,Timestamp to,String seller);
 
 }
 

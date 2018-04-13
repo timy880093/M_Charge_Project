@@ -393,11 +393,6 @@
                 location.href = url;
                 break;
             case "outExcel":  //匯出上銀Excel -多筆  (匯出Excel帳單-多筆(請勾選欲執行的資料))
-                var outYm = $("#outYM").val();
-                if(outYm == ''){
-                    alert('請選擇帳單年月');
-                    break;
-                }
                 var destJson  = multiSelected();
                 if(destJson == false){
                     alert("請先勾選資料列。");

@@ -13,6 +13,7 @@ import com.gateweb.charge.model.BillCycleEntity;
 import com.gateweb.charge.vo.CashVO;
 import com.gateweb.reportModel.InvoiceBatchRecord;
 import com.gateweb.reportModel.OrderCsv;
+import org.apache.commons.collections.map.MultiValueMap;
 
 public interface CashService extends Service {
 
@@ -36,9 +37,10 @@ public interface CashService extends Service {
 
     public boolean in(Integer cashMasterId, Double inAmount, String inDate, String inNote) throws Exception;
 
-    public List getCashMasterDetail(String ym) throws Exception;
+    //尋找要匯入上海銀行excel的資料-多筆
+    List getCashMasterDetail(List<Integer> cashMasterIdList) throws Exception;
 
-    public List getCashMasterDetail(String ym, String destJson) throws Exception;
+    public List getCashMasterDetail(String ym) throws Exception;
 
     boolean transactionCancelOver(Integer cashMasterId, Integer cashDetailId) throws Exception;
 

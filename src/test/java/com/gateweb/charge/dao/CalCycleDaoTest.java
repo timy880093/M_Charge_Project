@@ -48,21 +48,25 @@ public class CalCycleDaoTest {
 
         Calendar from = Calendar.getInstance();
         from.setTime(new Date());
-        from.add(Calendar.DATE,-16);
+        from.add(Calendar.DATE,-32);
 
         Calendar to = Calendar.getInstance();
         to.setTime(new Date());
-        to.add(Calendar.DATE,-1);
+        to.add(Calendar.DATE,-2);
 
         List<String> messageList = new ArrayList<>();
         List<CompanyEntity> companyEntityList = companyRepository.findAll();
         for(CompanyEntity companyEntity: companyEntityList){
+            if(!companyEntity.getBusinessNo().equals("16105732")){
+                continue;
+            }
             Integer usedCount
-                    = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity,from.getTime(),to.getTime());
+                    = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity.getCompanyId(),"201803");
             if(usedCount>0){
                 messageList.add(companyEntity.getName() +":"+ usedCount);
             }
         }
+
         for(String message:messageList){
             System.out.println(message);
         }
