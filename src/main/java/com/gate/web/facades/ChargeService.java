@@ -25,7 +25,10 @@ public interface ChargeService extends Service {
 
     void updateChargeModeCycle(ChargeModeCycleBean bean, Long userId) throws Exception;
 
-    
+
+    Integer insertChargeModeGrade(ChargeModeCycleBean bean, Long userId) throws Exception;
+
+    void updateChargeModeGrade(ChargeModeCycleBean bean, Long userId) throws Exception;
 
     public ChargeModeCycleVO findChargeModeCycleByChargeId(Integer chargeId) throws Exception ;
 
