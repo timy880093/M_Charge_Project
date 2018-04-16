@@ -52,6 +52,7 @@
 	
 	<import resource="classpath:com/gateweb/einv/spring/spring_services.xml" />
 	<import resource="classpath:com/gateweb/einv/spring/spring_security.xml" />
+	<import resource="classpath:com/gateweb/einv/spring/spring_freemarker.xml" />
 
 	
 </beans>

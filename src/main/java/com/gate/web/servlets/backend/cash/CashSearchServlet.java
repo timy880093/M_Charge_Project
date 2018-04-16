@@ -465,7 +465,7 @@ public class CashSearchServlet extends MvcBaseServlet {
      * @return
      * @throws Exception
      */
-    @RequestMapping(method = RequestMethod.GET, params = "method=emailYM", produces = "application/json;charset=utf-8")
+    @RequestMapping(method = RequestMethod.POST, params = "method=emailYM", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String emailYM(@RequestParam MultiValueMap<String, String> paramMap,
                      @RequestHeader HttpHeaders headers, Model model
