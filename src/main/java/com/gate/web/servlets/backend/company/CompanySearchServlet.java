@@ -150,7 +150,7 @@ public class CompanySearchServlet extends MvcBaseServlet {
         String data = "success!!";
         Integer exeCnt = 0;
         try {
-            companyChargeService.continuePackage(almostOut, 10);
+            companyChargeService.transactionContinuePackage(almostOut, 10);
         } catch (Exception ex) {
             System.out.println(ex);
             data = " fail!!";

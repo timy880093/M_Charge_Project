@@ -26,7 +26,8 @@ public interface CompanyChargeService extends Service {
 	public Map getCycleTryCalSettle(Integer packageId, String endDate) throws Exception;
 
 	public Map doSettle(Integer packageId, String endDate, String realEndDate) throws Exception;
-	public Map continuePackage(String almostOut,Integer modifierId) throws Exception;
+
+	Map transactionContinuePackage(String almostOut, Integer modifierId) throws Exception;
 
 	public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception ;
 
