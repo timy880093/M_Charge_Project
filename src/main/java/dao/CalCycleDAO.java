@@ -187,13 +187,13 @@ public class CalCycleDAO extends BaseDAO {
             return useCnt;
         }
     }
-
+    //用夾擠，不然會有問題，因為不包含。
     public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(Integer companyId,String calYm){
         CompanyEntity companyEntity = companyRepository.findByCompanyId(companyId);
         Calendar calendarFrom = timeUtils.string2Calendar("yyyyMM",calYm);
         Calendar calendarTo = timeUtils.string2Calendar("yyyyMM",calYm);
         calendarTo.add(Calendar.MONTH,1);
-        calendarTo.add(Calendar.DATE,-1);
+        calendarFrom.add(Calendar.DATE,-1);
         return calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity,calendarFrom.getTime(),calendarTo.getTime());
     }
 
@@ -204,7 +204,7 @@ public class CalCycleDAO extends BaseDAO {
      */
     public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(CompanyEntity companyEntity, Date fromModifyDate, Date toModifyDate){
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
-            = invoiceAmountSummaryReportRepository.findBySellerIsAndCreateDateGreaterThanAndModifyDateLessThan(
+            = invoiceAmountSummaryReportRepository.findBySellerIsAndCreateDateGreaterThanAndCreateDateLessThan(
                     companyEntity.getBusinessNo()
                     , new java.sql.Date(fromModifyDate.getTime())
                     , new java.sql.Date(toModifyDate.getTime())
