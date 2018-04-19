@@ -39,9 +39,9 @@ public class WarrantySearchServlet extends MvcBaseServlet {
     private static final String DOWNLOAD_FILE_NAME_WARRANTY ="warranty_temp";
     private static final String SESSION_SEARCH_OBJ_NAME = "warrantySearchVO";
     private static final String DOWNLOAD_FILE_NAME = "commission_temp";
-    private static String TEMPLATE_Warranty_EXCEL_LOCATION = "tempFile/warranty_temp.xls";
-    private static String JXLS_Warranty_EXCEL_TEMPLATE = "tempFile/warranty_jxls_template.xls";
-    private static String JXLS_Warranty_EXCEL_OUTPUT = "tempFile/warranty_jxls_output.xls";
+    private static String TEMPLATE_Warranty_EXCEL_LOCATION = "template/warranty_temp.xls";
+    private static String JXLS_Warranty_EXCEL_TEMPLATE = "template/warranty_jxls_template.xls";
+    private static String JXLS_Warranty_EXCEL_OUTPUT = "template/warranty_jxls_output.xls";
     private static final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/warranty/warranty_list.jsp";
     private static String TEMPLATE_Commission_EXCEL_DOWNLOAD;
 

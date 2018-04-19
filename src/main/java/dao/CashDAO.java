@@ -13,20 +13,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.gateweb.charge.repository.CashMasterRepository;
-import com.gateweb.charge.vo.CashVO;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.gate.utils.NullConstants;
 import com.gate.utils.SendEmailFileUtils;
-import com.gate.utils.TimeUtils;
 import com.gate.web.beans.CashDetailBean;
 import com.gate.web.beans.CashMasterBean;
-import com.gate.web.beans.InvoiceExcelBean;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CashDetailVO;
 import com.gate.web.displaybeans.CashMasterVO;
@@ -1130,7 +1124,7 @@ public class CashDAO extends BaseDAO {
 //            SendEmailFileUtils.sendEmail(new String[]{email}, subject, content.toString());
                 if(null != reEmail){
                     String[] reEmailList = new String[]{reEmail};
-                    String path = this.getClass().getResource("/").getPath()+"/tempFile"+"/scsbPayBillTutorial.pdf";
+                    String path = this.getClass().getResource("/").getPath()+ "/template" +"/scsbPayBillTutorial.pdf";
                     SendEmailFileUtils.sendEmail(reEmailList, subject, content.toString(),path,"scsbPayBillTutorial.pdf");
                 }else{
                     SendEmailFileUtils.sendEmail(reEmail, cpName , subject, content.toString());

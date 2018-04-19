@@ -44,9 +44,9 @@ public class CashSearchServlet extends MvcBaseServlet {
     private final String DEFAULT_SEARCH_LIST_DISPATCH_PAGE = "/backendAdmin/cash/cash_list.jsp";
     private static final String SESSION_SEARCH_OBJ_NAME = "cashSearchVO";
     private static final String SESSION_SEARCH_DETAIL_OBJ_NAME = "cashFlowDetailSearchVO";
-    private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = "tempFile/out_jxls_template.xls";
-    private static final String JXLS_TEMPLATE_CONFIGURATION = "tempFile/out_jxls_template_configuration.xml";
-    private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = "tempFile/invoice_jxls_template.xls";
+    private static final String TEMPLATE_EXCEL_DOWNLOAD_OUT = "template/out_jxls_template.xls";
+    private static final String JXLS_TEMPLATE_CONFIGURATION = "template/out_jxls_template_configuration.xml";
+    private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = "template/invoice_jxls_template.xls";
 
     
     @Autowired
