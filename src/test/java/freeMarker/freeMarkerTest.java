@@ -33,14 +33,16 @@ public class freeMarkerTest {
         user.setEmail("test@example.com");
         user.setCompanyId(new Long(123));
 
-        Map<String, Object> freeMarkderTemplateMap = new HashMap<String, Object>();
-        freeMarkderTemplateMap.put("user", user);
+        Map<String, Object> freeMarkerTemplateMap = new HashMap<String, Object>();
+        freeMarkerTemplateMap.put("user", user);
         Writer fileWriter = new FileWriter(new File("output.html"));
         //String resultString =  FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerConfiguration.getTemplate(TEMPLATE), freeMarkderTemplateMap);
-        freemarkerConfiguration.getTemplate(TEMPLATE).process(freeMarkderTemplateMap, fileWriter);
+        freemarkerConfiguration.getTemplate(TEMPLATE).process(freeMarkerTemplateMap, fileWriter);
 
         //fileWriter.write(resultString);
 
         //System.out.println("result: "+resultString);
     }
+
+
 }
