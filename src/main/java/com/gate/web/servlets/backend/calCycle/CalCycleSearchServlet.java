@@ -268,6 +268,7 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
             responseMessage += "  total counts: " + exeCnt + "";
         } catch (Exception ex) {
             System.out.println(ex);
+            ex.printStackTrace();
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();

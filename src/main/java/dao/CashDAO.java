@@ -1127,7 +1127,7 @@ public class CashDAO extends BaseDAO {
                     String path = this.getClass().getResource("/").getPath()+ "/template" +"/scsbPayBillTutorial.pdf";
                     SendEmailFileUtils.sendEmail(reEmailList, subject, content.toString(),path,"scsbPayBillTutorial.pdf");
                 }else{
-                    SendEmailFileUtils.sendEmail(reEmail, cpName , subject, content.toString());
+                    SendEmailFileUtils.sendEmail(email, cpName , subject, content.toString());
                 }
             }
             return true;

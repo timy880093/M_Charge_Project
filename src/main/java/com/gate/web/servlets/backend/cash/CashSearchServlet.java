@@ -48,10 +48,10 @@ public class CashSearchServlet extends MvcBaseServlet {
     private static final String JXLS_TEMPLATE_CONFIGURATION = "template/out_jxls_template_configuration.xml";
     private static final String TEMPLATE_EXCEL_DOWNLOAD_INVOICE = "template/invoice_jxls_template.xls";
 
-    
+
     @Autowired
     CashService cashService;
-    
+
     @Autowired
     CalCycleService calCycleService;
 
@@ -189,7 +189,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=searchDetail", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String searchDetail(@RequestParam MultiValueMap<String, String> paramMap,
-                  @RequestHeader HttpHeaders headers, Model model
+                        @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value="searchField[]", required = false) List<String> searchField
             , @RequestParam(value="searchString[]", required = false) List<String> searchString
             , @RequestParam(value="sidx", required= true) String sidx
@@ -268,6 +268,7 @@ public class CashSearchServlet extends MvcBaseServlet {
             responseMessage += "  total counts: "+exeCnt+"";
         } catch (Exception ex) {
             System.out.println(ex);
+            ex.printStackTrace();
         }
         Gson gson = new Gson();
         return gson.toJson(responseMessage);
@@ -288,7 +289,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.POST, params = "method=outYM", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String outYM(@RequestParam MultiValueMap<String, String> paramMap,
-               @RequestHeader HttpHeaders headers, Model model
+                 @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "outYM", required = true) String outYM
             , @RequestParam(value = "userCompanyId", required = true) Integer userCompanyId
             , HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -306,7 +307,7 @@ public class CashSearchServlet extends MvcBaseServlet {
             exeCnt = cashService.outYM(outYM, userCompanyId);
             responseMessage += "  total counts: " + exeCnt;
         }catch(Exception ex){
-                System.out.println(ex);
+            System.out.println(ex);
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();
@@ -326,7 +327,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=outExcelym", produces = "application/json;charset=utf-8")
     public @ResponseBody
     void outExcelym(@RequestParam MultiValueMap<String, String> paramMap,
-                 @RequestHeader HttpHeaders headers, Model model
+                    @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "outYM", required = true) String outYM
             , HttpServletRequest request, HttpServletResponse response) throws Exception{
         try {
@@ -363,7 +364,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=outExcel", produces = "application/json;charset=utf-8")
     public @ResponseBody
     void outExcel(@RequestParam MultiValueMap<String, String> paramMap,
-                    @RequestHeader HttpHeaders headers, Model model
+                  @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson //多筆的選擇
             , @RequestParam(value = "outYM", required = true) String outYM //帳單年月
             , HttpServletRequest request, HttpServletResponse response) {
@@ -402,7 +403,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=cancelOutYM", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String cancelOutYM(@RequestParam MultiValueMap<String, String> paramMap,
-                  @RequestHeader HttpHeaders headers, Model model
+                       @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "outYM", required = true) String outYM //帳單年月
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -435,7 +436,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=cancelOut", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String cancelOut(@RequestParam MultiValueMap<String, String> paramMap,
-                       @RequestHeader HttpHeaders headers, Model model
+                     @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson //帳單年月
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -448,6 +449,7 @@ public class CashSearchServlet extends MvcBaseServlet {
             responseMessage += " total counts: " + exeCnt;
         }catch(Exception ex){
             System.out.println(ex);
+            ex.printStackTrace();
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();
@@ -468,7 +470,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.POST, params = "method=emailYM", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String emailYM(@RequestParam MultiValueMap<String, String> paramMap,
-                     @RequestHeader HttpHeaders headers, Model model
+                   @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "outYM", required = true) String calYM
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -480,7 +482,7 @@ public class CashSearchServlet extends MvcBaseServlet {
             exeCnt = cashService.sendBillMailYM(calYM);
             responseMessage += " total counts: " + exeCnt;
         }catch(Exception ex){
-            System.out.println(ex);
+            ex.printStackTrace();
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();
@@ -499,26 +501,42 @@ public class CashSearchServlet extends MvcBaseServlet {
      * @throws Exception
      */
     @RequestMapping(method = RequestMethod.GET, params = "method=email", produces = "application/json;charset=utf-8")
-    public @ResponseBody
+    public  @ResponseBody
     String email(@RequestParam MultiValueMap<String, String> paramMap,
-                   @RequestHeader HttpHeaders headers, Model model
+                 @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson //帳單年月
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.debug("out model:   " + model);
+        logger.debug("out destJson:   " + destJson);
+        logger.debug("out paramMap:   " + paramMap);
+
+
+        UserEntity user = checkLogin(request,response);
+
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
         Integer exeCnt = 0;
         String responseMessage = "";
+
         try{
             exeCnt = cashService.sendBillMail(destJson);
-            responseMessage += " total counts: " + exeCnt;
+            responseMessage += " total counts: " + exeCnt+ "";
         }catch(Exception ex){
-            System.out.println(ex);
+            ex.printStackTrace();
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();
         return gson.toJson(responseMessage);
     }
+
+
+
+
+
+
+
+
 
     /**
      * 多筆-未繳費客戶通知
@@ -534,9 +552,12 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=email1", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String email1(@RequestParam MultiValueMap<String, String> paramMap,
-                 @RequestHeader HttpHeaders headers, Model model
+                  @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        UserEntity user = checkLogin(request,response);
+
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
@@ -566,7 +587,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=invoiceExcelYM", produces = "application/json;charset=utf-8")
     public @ResponseBody
     void invoiceExcelYM(@RequestParam MultiValueMap<String, String> paramMap,
-                    @RequestHeader HttpHeaders headers, Model model
+                        @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "outYM", required = true) String outYM
             , HttpServletRequest request, HttpServletResponse response) throws Exception{
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -596,7 +617,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=invoiceExcel", produces = "application/json;charset=utf-8")
     public @ResponseBody
     void invoiceExcel(@RequestParam MultiValueMap<String, String> paramMap,
-                        @RequestHeader HttpHeaders headers, Model model
+                      @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson //多筆的選擇
             , HttpServletRequest request, HttpServletResponse response) throws Exception{
         BaseFormBean formBeanObject = formBeanObject(request);
@@ -685,7 +706,7 @@ public class CashSearchServlet extends MvcBaseServlet {
     @RequestMapping(method = RequestMethod.GET, params = "method=exportOrderCsv", produces = "application/json;charset=utf-8")
     public @ResponseBody
     void exportOrderCsv(@RequestParam MultiValueMap<String, String> paramMap,
-                  @RequestHeader HttpHeaders headers, Model model
+                        @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson //多筆的選擇
             , HttpServletRequest request, HttpServletResponse response) {
         try{
