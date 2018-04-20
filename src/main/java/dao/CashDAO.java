@@ -1122,10 +1122,10 @@ public class CashDAO extends BaseDAO {
                         .append("\n客服專線：02-77183770");
 
 //            SendEmailFileUtils.sendEmail(new String[]{email}, subject, content.toString());
-                if(null != reEmail){
-                    String[] reEmailList = new String[]{reEmail};
+                if(null != email){
+                    String[] EmailList = new String[]{email};
                     String path = this.getClass().getResource("/").getPath()+ "/template" +"/scsbPayBillTutorial.pdf";
-                    SendEmailFileUtils.sendEmail(reEmailList, subject, content.toString(),path,"scsbPayBillTutorial.pdf");
+                    SendEmailFileUtils.sendEmail(EmailList, subject, content.toString(),path,"scsbPayBillTutorial.pdf");
                 }else{
                     SendEmailFileUtils.sendEmail(email, cpName , subject, content.toString());
                 }
