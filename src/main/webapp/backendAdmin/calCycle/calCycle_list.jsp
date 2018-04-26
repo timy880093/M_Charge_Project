@@ -42,8 +42,8 @@
                             <option value="calOver">計算超額(請選擇要計算哪幾筆)</option>
                              <%--<option value="calOverPeriod">計算超額上期(請選擇月份)</option>--%>
                             <option value="calOverToCash">計算超額且出帳(請選擇年月、用戶、要計算哪幾筆)</option>
-                            <option value="emailYM">寄E-mail(批次,請選擇計算年月)</option>
-                            <option value="email">寄E-Mail(請選擇哪幾筆要寄E-Mail)</option>
+                            <%--<option value="emailYM">寄E-mail(批次,請選擇計算年月)</option>--%>
+                            <%--<option value="email">寄E-Mail(請選擇哪幾筆要寄E-Mail)</option>--%>
                         </select>
                         <a href="#" id="run" title="執行" class="butbox"><span>執行</span></a>
                     </form>

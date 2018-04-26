@@ -222,58 +222,58 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         return gson.toJson(responseMessage);
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "method=emailYM", produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String emailYM(@RequestParam MultiValueMap<String, String> paramMap,
-                   @RequestHeader HttpHeaders headers, Model model
-            , @RequestParam(value = "calYM", required = true) String calYM //帳單年月
-            , HttpServletRequest request, HttpServletResponse response) throws Exception {
-        logger.debug("calOver model:   " + model);
-        logger.debug("calOver calYM:   " + calYM);
-        logger.debug("calOver paramMap:   " + paramMap);
-
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
-        Integer exeCnt = 0;
-        String responseMessage = "";
-        try {
-            exeCnt = calCycleService.sendOverMailYM(calYM);
-            responseMessage += "  total counts: " + exeCnt + "";
-        } catch (Exception ex) {
-            System.out.println(ex);
-            responseMessage = " fail!!";
-        }
-        Gson gson = new Gson();
-        return gson.toJson(responseMessage);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "method=email", produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String email(@RequestParam MultiValueMap<String, String> paramMap,
-                 @RequestHeader HttpHeaders headers, Model model
-            , @RequestParam(value = "calOverAry", required = true) String calOverAry //帳單年月
-            , HttpServletRequest request, HttpServletResponse response) throws Exception {
-        logger.debug("calOver model:   " + model);
-        logger.debug("calOver calOverAry:   " + calOverAry);
-        logger.debug("calOver paramMap:   " + paramMap);
-
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
-        Integer exeCnt = 0;
-        String responseMessage = "";
-        try {
-            exeCnt = calCycleService.sendOverMailYM(calOverAry);
-            responseMessage += "  total counts: " + exeCnt + "";
-        } catch (Exception ex) {
-            System.out.println(ex);
-            ex.printStackTrace();
-            responseMessage = " fail!!";
-        }
-        Gson gson = new Gson();
-        return gson.toJson(responseMessage);
-    }
+//    @RequestMapping(method = RequestMethod.GET, params = "method=emailYM", produces = "application/json;charset=utf-8")
+//    public @ResponseBody
+//    String emailYM(@RequestParam MultiValueMap<String, String> paramMap,
+//                   @RequestHeader HttpHeaders headers, Model model
+//            , @RequestParam(value = "calYM", required = true) String calYM //帳單年月
+//            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        logger.debug("calOver model:   " + model);
+//        logger.debug("calOver calYM:   " + calYM);
+//        logger.debug("calOver paramMap:   " + paramMap);
+//
+//        BaseFormBean formBeanObject = formBeanObject(request);
+//        Map otherMap = otherMap(request, response, formBeanObject);
+//        sendObjToViewer(request, otherMap);
+//        Integer exeCnt = 0;
+//        String responseMessage = "";
+//        try {
+//            exeCnt = calCycleService.sendOverMailYM(calYM);
+//            responseMessage += "  total counts: " + exeCnt + "";
+//        } catch (Exception ex) {
+//            System.out.println(ex);
+//            responseMessage = " fail!!";
+//        }
+//        Gson gson = new Gson();
+//        return gson.toJson(responseMessage);
+//    }
+//
+//    @RequestMapping(method = RequestMethod.GET, params = "method=email", produces = "application/json;charset=utf-8")
+//    public @ResponseBody
+//    String email(@RequestParam MultiValueMap<String, String> paramMap,
+//                 @RequestHeader HttpHeaders headers, Model model
+//            , @RequestParam(value = "calOverAry", required = true) String calOverAry //帳單年月
+//            , HttpServletRequest request, HttpServletResponse response) throws Exception {
+//        logger.debug("calOver model:   " + model);
+//        logger.debug("calOver calOverAry:   " + calOverAry);
+//        logger.debug("calOver paramMap:   " + paramMap);
+//
+//        BaseFormBean formBeanObject = formBeanObject(request);
+//        Map otherMap = otherMap(request, response, formBeanObject);
+//        sendObjToViewer(request, otherMap);
+//        Integer exeCnt = 0;
+//        String responseMessage = "";
+//        try {
+//            exeCnt = calCycleService.sendOverMailYM(calOverAry);
+//            responseMessage += "  total counts: " + exeCnt + "";
+//        } catch (Exception ex) {
+//            System.out.println(ex);
+//            ex.printStackTrace();
+//            responseMessage = " fail!!";
+//        }
+//        Gson gson = new Gson();
+//        return gson.toJson(responseMessage);
+//    }
 
     @RequestMapping(method = RequestMethod.GET, params = "sessionClean=Y", produces = "application/json;charset=utf-8")
     public String mainList(@RequestParam("sessionClean") String sessionClean, Model model, HttpServletRequest request, HttpServletResponse response)
