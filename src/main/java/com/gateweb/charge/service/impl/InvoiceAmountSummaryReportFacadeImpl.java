@@ -34,6 +34,10 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
     @Qualifier("chargeInvoiceAmountSummaryReportDao")
     InvoiceAmountSummaryReportDao chargeInvoiceAmountSummaryReportDao;
 
+    @Autowired
+    @Qualifier("einvInvoiceMainDao")
+    com.gateweb.einv.dao.InvoiceMainDao einvInvoiceMainDao;
+
     @Override
     public void transactionInsertDataFromEinvDatabase(){
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
@@ -84,7 +88,7 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
         toDateCalendar.add(Calendar.DATE,to);
         Timestamp toTimestamp = new Timestamp(toDateCalendar.getTimeInMillis());
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
-                = einvInvoiceAmountSummaryReportDao.getAmountSummaryReport(fromTimestamp,toTimestamp);
+                = einvInvoiceMainDao.getAmountSummaryReport(fromTimestamp,toTimestamp);
         for(InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity : invoiceAmountSummaryReportEntityList){
             com.gateweb.charge.model.InvoiceAmountSummaryReportEntity result = new com.gateweb.charge.model.InvoiceAmountSummaryReportEntity();
             try{

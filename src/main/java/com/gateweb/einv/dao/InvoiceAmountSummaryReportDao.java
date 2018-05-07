@@ -71,8 +71,6 @@ public interface InvoiceAmountSummaryReportDao extends GenericDao<InvoiceAmountS
 	 */
 	public List<InvoiceAmountSummaryReportEntity> searchLike(InvoiceAmountSummaryReportEntity data) throws DaoSystemException;
 
-	List<InvoiceAmountSummaryReportEntity> getAmountSummaryReport(Timestamp from, Timestamp to);
-
 }
 
 	
