@@ -54,8 +54,8 @@
 	<!--使用fix delay 24*60*1000 處理發票資料的同步-->
 	<bean id="syncInvoiceDataScheduler" class="com.gateweb.charge.service.impl.SyncInvoiceDataFacadeImpl" />
 	<task:scheduled-tasks>
-		<!--<task:scheduled ref="syncInvoiceDataScheduler" method="syncByCurrentLastModifyDate" initial-delay="1440000"  fixed-delay="1440000"/>-->
-		<task:scheduled ref="syncInvoiceDataScheduler" method="syncByCurrentLastModifyDate" initial-delay="0"  fixed-delay="60"/>
+		<task:scheduled ref="syncInvoiceDataScheduler" method="syncByCurrentLastModifyDate" initial-delay="1440000"  fixed-delay="1440000"/>
+		<!--<task:scheduled ref="syncInvoiceDataScheduler" method="syncByCurrentLastModifyDate" initial-delay="0"  fixed-delay="60"/>-->
 	</task:scheduled-tasks>
 
 </beans>
