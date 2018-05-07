@@ -5,6 +5,7 @@ import com.gate.utils.TimeUtils;
 import com.gateweb.charge.model.InvoiceMainEntity;
 import com.gateweb.charge.repository.InvoiceMainRepository;
 
+import com.gateweb.charge.service.InvoiceAmountSummaryReportFacade;
 import com.gateweb.charge.service.SyncInvoiceDataFacade;
 import com.gateweb.einv.model.InvoiceMain;
 import com.gateweb.einv.repository.EinvInvoiceMainRepository;
@@ -35,6 +36,9 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
 
     @Autowired
     EinvInvoiceMainRepository einvInvoiceMainRepository;
+
+    @Autowired
+    InvoiceAmountSummaryReportFacade invoiceAmountSummaryReportFacade;
 
     @Override
     //應該根據修改日期才可以得到完全正確的資料，因為發票資料包括折讓及註銷的部份。
@@ -103,5 +107,17 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
         syncInvoiceDataFromEinvDatabase(timeUtils.date2Timestamp(calendar.getTime()));
     }
 
+    @Override
+    public void syncInvoiceDataFromEinvDatabaseByDate(int date) {
+        for(int i =1;i<=date;i++){
+            System.out.println("from:"+(i-(date+1))+" to "+ (i-date) );
+            invoiceAmountSummaryReportFacade.transactionGenerateAndInsertSummaryReport(i-(date+1),i-date);
+        }
+    }
+
+    @Override
+    public void syncYesterdaysInvoiceDataFromEinvDatabaseDirectly(){
+        invoiceAmountSummaryReportFacade.transactionGenerateAndInsertSummaryReport(-2,-1);
+    }
 
 }

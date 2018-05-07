@@ -14,4 +14,8 @@ public interface SyncInvoiceDataFacade {
     void syncInvoiceDataFromEinvDatabaseByCompany(Timestamp from, Timestamp to, String sellerIdentifier) throws InvocationTargetException, IllegalAccessException;
 
     void syncYesterdaysInvoiceDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException;
+
+    void syncInvoiceDataFromEinvDatabaseByDate(int date);
+
+    void syncYesterdaysInvoiceDataFromEinvDatabaseDirectly();
 }

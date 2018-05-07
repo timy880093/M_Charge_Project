@@ -30,11 +30,13 @@ public class InvocieAmountSummaryReportFacadeImpl {
     @Transactional
     @Rollback(false)
     public void copyDataFromEinvByInvoiceMainTest(){
-        int date = 60;
+        reportDataTestByDate(60);
+    }
+
+    public void reportDataTestByDate(int date){
         for(int i =1;i<=date;i++){
             System.out.println("from:"+(i-(date+1))+" to "+ (i-date) );
             invoiceAmountSummaryReportFacade.transactionGenerateAndInsertSummaryReport(i-(date+1),i-date);
         }
     }
-
 }
