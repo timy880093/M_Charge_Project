@@ -131,12 +131,17 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
         //取得當前最後一個modifyDate
         InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity
                 = chargeInvoiceAmountSummaryReportRepository.findTop1ByOrderByModifyDateDesc();
-        Date lastModifyDate = new Date(invoiceAmountSummaryReportEntity.getModifyDate().getTime());
-        Date currentDate = new Date();
-        DateTime lastModifyDateTime = new DateTime(lastModifyDate);
-        DateTime currentDateTime = new DateTime(currentDate);
-        int lastModifyDaysBetween = Days.daysBetween(lastModifyDateTime,currentDateTime).getDays();
-        syncInvoiceDataFromEinvDatabaseByDate(lastModifyDaysBetween);
+        if(invoiceAmountSummaryReportEntity!=null){
+            Date lastModifyDate = new Date(invoiceAmountSummaryReportEntity.getModifyDate().getTime());
+            Date currentDate = new Date();
+            DateTime lastModifyDateTime = new DateTime(lastModifyDate);
+            DateTime currentDateTime = new DateTime(currentDate);
+            int lastModifyDaysBetween = Days.daysBetween(lastModifyDateTime,currentDateTime).getDays();
+            syncInvoiceDataFromEinvDatabaseByDate(lastModifyDaysBetween);
+        }else{
+            //沒資料就抓一年前
+            syncInvoiceDataFromEinvDatabaseByDate(365);
+        }
     }
 
 }
