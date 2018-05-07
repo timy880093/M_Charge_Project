@@ -1,7 +1,10 @@
 package com.gateweb.charge.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -58,6 +61,49 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
             }else{
                 chargeInvoiceAmountSummaryReportDao.save(result);
             }
+        }
+    }
+
+    @Override
+    public void transactionGenerateAndInsertSummaryReport(int from, int to){
+        Calendar fromDateCalendar = Calendar.getInstance();
+        fromDateCalendar.setTime(new Date());
+        fromDateCalendar.set(Calendar.HOUR_OF_DAY,0);
+        fromDateCalendar.set(Calendar.MINUTE,0);
+        fromDateCalendar.set(Calendar.SECOND,0);
+        fromDateCalendar.set(Calendar.MILLISECOND,0);
+        fromDateCalendar.add(Calendar.DATE,from);
+        Timestamp fromTimestamp = new Timestamp(fromDateCalendar.getTimeInMillis());
+
+        Calendar toDateCalendar = Calendar.getInstance();
+        toDateCalendar.setTime(new Date());
+        toDateCalendar.set(Calendar.HOUR_OF_DAY,0);
+        toDateCalendar.set(Calendar.MINUTE,0);
+        toDateCalendar.set(Calendar.SECOND,0);
+        toDateCalendar.set(Calendar.MILLISECOND,0);
+        toDateCalendar.add(Calendar.DATE,to);
+        Timestamp toTimestamp = new Timestamp(toDateCalendar.getTimeInMillis());
+        List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
+                = einvInvoiceAmountSummaryReportDao.getAmountSummaryReport(fromTimestamp,toTimestamp);
+        for(InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity : invoiceAmountSummaryReportEntityList){
+            com.gateweb.charge.model.InvoiceAmountSummaryReportEntity result = new com.gateweb.charge.model.InvoiceAmountSummaryReportEntity();
+            try{
+                BeanUtils.copyProperties(result,invoiceAmountSummaryReportEntity);
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } finally {
+                chargeInvoiceAmountSummaryReportDao.save(result);
+            }
+        }
+    }
+
+    @Override
+    public void reportDataGenerateAndInsertByDate(int date){
+        for(int i =1;i<=date;i++){
+            System.out.println("from:"+(i-(date+1))+" to "+ (i-date) );
+            transactionGenerateAndInsertSummaryReport(i-(date+1),i-date);
         }
     }
 }

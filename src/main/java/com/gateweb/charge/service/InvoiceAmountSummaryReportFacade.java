@@ -6,4 +6,8 @@ package com.gateweb.charge.service;
 public interface InvoiceAmountSummaryReportFacade {
 
     void transactionInsertDataFromEinvDatabase();
+
+    void transactionGenerateAndInsertSummaryReport(int from, int to);
+
+    void reportDataGenerateAndInsertByDate(int date);
 }

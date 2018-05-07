@@ -933,7 +933,6 @@ public class CashDAO extends BaseDAO {
                 return false;
             } else{
                 //準備寄email.....
-
                 Integer cpId = cashMasterEntity.getCompanyId();
                 CompanyEntity cpEntity = (CompanyEntity)getEntity(CompanyEntity.class, cpId);
                 String email = cpEntity.getEmail1();
@@ -985,16 +984,16 @@ public class CashDAO extends BaseDAO {
                         Integer packageType = packageModeEntity.getPackageType();
 
                         Integer baseQuantity = 0; //發票額度
-                        String PakcageName = ""; //專案名稱
+                        String packageName = ""; //專案名稱
                         if(1 == packageType){
                             //月租型
                             ChargeModeCycleEntity chargeModeCycleEntity = (ChargeModeCycleEntity)getEntity(ChargeModeCycleEntity.class, chargeId);
-                            PakcageName = chargeModeCycleEntity.getPackageName();
+                            packageName = chargeModeCycleEntity.getPackageName();
                             baseQuantity = chargeModeCycleEntity.getBaseQuantity();
                         } else if( 2 == packageType){
                             //級距型
                             ChargeModeGradeEntity chargeModeGradeEntity = (ChargeModeGradeEntity)getEntity(ChargeModeGradeEntity.class, chargeId);
-                            PakcageName = chargeModeGradeEntity.getPackageName();
+                            packageName = chargeModeGradeEntity.getPackageName();
                             baseQuantity = chargeModeGradeEntity.getBaseQuantity();
                         }
 
@@ -1005,10 +1004,10 @@ public class CashDAO extends BaseDAO {
                             Date realStarte = chargeCycleAdd.getRealStartDate();
                             Date realEnd = chargeCycleAdd.getRealEndDate();
                             String period = "(" + parseDate(realStarte)+"  ~  " + parseDate(realEnd) + ")";
-                            PakcageName += "<br>" +  period;
+                            packageName += "<br>" +  period;
                         }
                         content.append(" <tr>")
-                                .append(" <td>"+cashType+"</td><td>" + PakcageName + "</td><td>" + baseQuantity + "</td><td>" + taxInclusivePrice + "</td>")
+                                .append(" <td>"+cashType+"</td><td>" + packageName + "</td><td>" + baseQuantity + "</td><td>" + taxInclusivePrice + "</td>")
                                 .append(" </tr>");
                     }
 
@@ -1134,7 +1133,6 @@ public class CashDAO extends BaseDAO {
         }
         return false;
     }
-
 
     public boolean updateEmailDate(CashMasterEntity master) throws Exception{
         //更新cash_master的email_sent_date(寄送email日期)

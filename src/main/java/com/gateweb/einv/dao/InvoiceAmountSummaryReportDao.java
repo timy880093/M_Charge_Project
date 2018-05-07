@@ -9,6 +9,7 @@ import com.gateweb.einv.model.InvoiceAmountSummaryReportEntity;
 import com.gateweb.db.dao.GenericDao;
 import com.gateweb.db.dao.exception.DaoSystemException;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -69,7 +70,9 @@ public interface InvoiceAmountSummaryReportDao extends GenericDao<InvoiceAmountS
 	 * @throws DaoSystemException    if system is wrong.
 	 */
 	public List<InvoiceAmountSummaryReportEntity> searchLike(InvoiceAmountSummaryReportEntity data) throws DaoSystemException;
-			
+
+	List<InvoiceAmountSummaryReportEntity> getAmountSummaryReport(Timestamp from, Timestamp to);
+
 }
 
 	
