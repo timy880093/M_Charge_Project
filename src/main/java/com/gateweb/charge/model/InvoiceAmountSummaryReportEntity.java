@@ -58,7 +58,7 @@ public class InvoiceAmountSummaryReportEntity implements Serializable {
 	 * 因為需要完整寫入資料，這裡不產生任何ID
      */
 	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
 	protected Long id;
 

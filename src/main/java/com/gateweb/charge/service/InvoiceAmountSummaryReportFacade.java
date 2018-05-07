@@ -9,5 +9,4 @@ public interface InvoiceAmountSummaryReportFacade {
 
     void transactionGenerateAndInsertSummaryReport(int from, int to);
 
-    void reportDataGenerateAndInsertByDate(int date);
 }

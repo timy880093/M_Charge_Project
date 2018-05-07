@@ -29,8 +29,12 @@ public class InvocieAmountSummaryReportFacadeImpl {
     @Test
     @Transactional
     @Rollback(false)
-    public void copyDataFromEinvDataBaseByInvoiceMain(){
-        invoiceAmountSummaryReportFacade.reportDataGenerateAndInsertByDate(10);
+    public void copyDataFromEinvByInvoiceMainTest(){
+        int date = 60;
+        for(int i =1;i<=date;i++){
+            System.out.println("from:"+(i-(date+1))+" to "+ (i-date) );
+            invoiceAmountSummaryReportFacade.transactionGenerateAndInsertSummaryReport(i-(date+1),i-date);
+        }
     }
 
 }

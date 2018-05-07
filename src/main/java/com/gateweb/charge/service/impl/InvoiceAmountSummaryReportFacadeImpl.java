@@ -103,11 +103,4 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
         }
     }
 
-    @Override
-    public void reportDataGenerateAndInsertByDate(int date){
-        for(int i =1;i<=date;i++){
-            System.out.println("from:"+(i-(date+1))+" to "+ (i-date) );
-            transactionGenerateAndInsertSummaryReport(i-(date+1),i-date);
-        }
-    }
 }
