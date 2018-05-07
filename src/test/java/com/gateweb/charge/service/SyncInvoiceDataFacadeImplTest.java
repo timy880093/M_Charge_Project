@@ -63,4 +63,11 @@ public class SyncInvoiceDataFacadeImplTest {
     public void syncInvoiceMainReportData(){
         syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabaseByDate(60);
     }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void syncInvoiceMainReportDataByCurrentData(){
+        syncInvoiceDataFacade.syncByCurrentLastModifyDate();
+    }
 }

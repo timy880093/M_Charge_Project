@@ -37,7 +37,7 @@ public interface InvoiceAmountSummaryReportRepository extends JpaRepository<Invo
 
 	List<InvoiceAmountSummaryReportEntity> findBySellerIsAndCreateDateGreaterThanAndCreateDateLessThan(String sellerIdentifier, Date fromModifyDate, Date toModifyDate);
 
-	InvoiceAmountSummaryReportEntity findTop1ByOrderByModifyDateAsc();
+	InvoiceAmountSummaryReportEntity findTop1ByOrderByModifyDateDesc();
 	
 }
 

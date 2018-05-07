@@ -18,4 +18,6 @@ public interface SyncInvoiceDataFacade {
     void syncInvoiceDataFromEinvDatabaseByDate(int date);
 
     void syncYesterdaysInvoiceDataFromEinvDatabaseDirectly();
+
+    void syncByCurrentLastModifyDate();
 }

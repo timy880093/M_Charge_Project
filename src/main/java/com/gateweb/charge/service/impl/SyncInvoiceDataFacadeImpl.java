@@ -1,8 +1,9 @@
 package com.gateweb.charge.service.impl;
 
-import com.gate.utils.TimeStampDeserializer;
 import com.gate.utils.TimeUtils;
+import com.gateweb.charge.model.InvoiceAmountSummaryReportEntity;
 import com.gateweb.charge.model.InvoiceMainEntity;
+import com.gateweb.charge.repository.InvoiceAmountSummaryReportRepository;
 import com.gateweb.charge.repository.InvoiceMainRepository;
 
 import com.gateweb.charge.service.InvoiceAmountSummaryReportFacade;
@@ -12,6 +13,8 @@ import com.gateweb.einv.repository.EinvInvoiceMainRepository;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +42,9 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
 
     @Autowired
     InvoiceAmountSummaryReportFacade invoiceAmountSummaryReportFacade;
+
+    @Autowired
+    InvoiceAmountSummaryReportRepository chargeInvoiceAmountSummaryReportRepository;
 
     @Override
     //應該根據修改日期才可以得到完全正確的資料，因為發票資料包括折讓及註銷的部份。
@@ -118,6 +124,19 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
     @Override
     public void syncYesterdaysInvoiceDataFromEinvDatabaseDirectly(){
         invoiceAmountSummaryReportFacade.transactionGenerateAndInsertSummaryReport(-2,-1);
+    }
+
+    @Override
+    public void syncByCurrentLastModifyDate(){
+        //取得當前最後一個modifyDate
+        InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity
+                = chargeInvoiceAmountSummaryReportRepository.findTop1ByOrderByModifyDateDesc();
+        Date lastModifyDate = new Date(invoiceAmountSummaryReportEntity.getModifyDate().getTime());
+        Date currentDate = new Date();
+        DateTime lastModifyDateTime = new DateTime(lastModifyDate);
+        DateTime currentDateTime = new DateTime(currentDate);
+        int lastModifyDaysBetween = Days.daysBetween(lastModifyDateTime,currentDateTime).getDays();
+        syncInvoiceDataFromEinvDatabaseByDate(lastModifyDaysBetween);
     }
 
 }

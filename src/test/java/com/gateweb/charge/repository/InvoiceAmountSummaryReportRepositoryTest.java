@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by Eason on 5/7/2018.
@@ -24,8 +24,10 @@ public class InvoiceAmountSummaryReportRepositoryTest {
     @Transactional
     public void findTop1InvoiceAmountSummaryReportRecordOrderByModifyDate(){
         InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity
-                = chargeInvoiceAmountSummaryReportRepository.findTop1ByOrderByModifyDateAsc();
+                = chargeInvoiceAmountSummaryReportRepository.findTop1ByOrderByModifyDateDesc();
         System.out.println("Last ModifyDate:"+ invoiceAmountSummaryReportEntity.getModifyDate());
         System.out.println("Last CreateDate:"+ invoiceAmountSummaryReportEntity.getCreateDate());
+        Date lastModifyDate = new Date(invoiceAmountSummaryReportEntity.getModifyDate().getTime());
+        System.out.println(lastModifyDate);
     }
 }
