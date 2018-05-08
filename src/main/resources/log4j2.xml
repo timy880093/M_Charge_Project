@@ -61,7 +61,7 @@
             <AppenderRef ref="ConsoleAppender" />
             <AppenderRef ref="CHA_PROJECT" />
         </Logger>
-        <logger name="com.einvoices.aop.AspectLog" level="info" additivity="false">
+        <logger name="com.einvoices.aop.AspectLog" level="error" additivity="false">
             <AppenderRef ref="CHA_PROJECT" />
         </logger>
         <logger name="org.springframework" level="error" additivity="false">

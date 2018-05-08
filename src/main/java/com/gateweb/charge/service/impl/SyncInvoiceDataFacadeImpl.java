@@ -116,7 +116,7 @@ public class SyncInvoiceDataFacadeImpl implements SyncInvoiceDataFacade {
     @Override
     public void syncInvoiceDataFromEinvDatabaseByDate(int date) {
         for(int i =1;i<=date;i++){
-            System.out.println("from:"+(i-(date+1))+" to "+ (i-date) );
+            logger.info("from:"+(i-(date+1))+" to "+ (i-date) );
             invoiceAmountSummaryReportFacade.transactionGenerateAndInsertSummaryReport(i-(date+1),i-date);
         }
     }
