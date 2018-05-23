@@ -341,7 +341,6 @@ public class CashSearchServlet extends MvcBaseServlet {
             Map<String,Object> contextMap = new HashMap<>();
             contextMap.put("headers",dataMap.get("header"));
             contextMap.put("rows", dataMap.get("data"));
-            response.setContentType("text/plain");
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition", "attachment;filename=" + "outExcel"+outYM+".xls");
             jxlsUtils.processTemplate(contextMap,templateInputStream,response.getOutputStream(),configurationXmlInputStream,new CellRef("Template!A1"));
