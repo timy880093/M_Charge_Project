@@ -729,6 +729,7 @@ public class CashDAO extends BaseDAO {
         cashDetailEntity.setTaxInclusivePrice(new BigDecimal(taxInclusivePrice).setScale(2, BigDecimal.ROUND_HALF_UP));
 
         return cashDetailEntity;
+
     }
 
     //Todo:將會移至CashServiceImp，轉為使用CashMasterIdList做為傳入參數，並且返回設定好的bean，如果是動態，就返回map。
@@ -944,8 +945,14 @@ public class CashDAO extends BaseDAO {
                 content.append("請注意：本信件是由「關網資訊雲端電子發票系統」自動產生與發送，請勿直接回覆。")
                         .append("\n\n敬愛的 <font color=\"#FF0000\">" + cpName + "</font>您好：")
                         .append("\n\n以下資訊為貴公司"+ bankYm +"月份繳款帳單之明細，請查收。")
-                        .append("\n<font color=\"#FF0000\">★近期將由<font face=\"標楷體\"><b><u>上海銀行</font></b></u>寄發繳款通知予貴公司，請留意email信箱，並惠予繳費。★</font>\n")
-                        .append("\n<font color=\"#FF0000\">★請於<font face=\"標楷體\"><b>編號處請輸入公司統編</font></b>即可進行費用繳納事宜。★</font>\n")
+//                        .append("\n<font color=\"#FF0000\">★近期將由<font face=\"標楷體\"><b><u>上海銀行</font></b></u>寄發繳款通知予貴公司，請留意email信箱，並惠予繳費。★</font>\n")
+//                        .append("\n<font color=\"#FF0000\">★請於<font face=\"標楷體\"><b>編號處請輸入公司統編</font></b>即可進行費用繳納事宜。★</font>\n")
+                        .append("\n1.請點選以下連結<font color=\"FF0000\">「下載帳單」</font>，並惠予繳費\n")
+                        .append("\n「<a title = \"上海銀行 繳費平台- 關網資訊股份有限公司\" href=\"https://payment.fesc.com.tw/fespay/s1_011245492103711.jsp\">上海銀行 繳費平台- 關網資訊股份有限公司</a>」")
+                        .append("\n2.請輸入<b>公司統編</b>→登入")
+                        .append("\n3.確認月份帳單→確定")
+                        .append("\n4.勾選繳費月份→帳單下載")
+                        .append("\n5.再次點選帳單下載，即可產出繳費帳單")
                         .append("\n<font color=\"FF0000\">★【詳細操作，請詳附件】★</font>\n");
 
                 content.append(" <table  style=\"border:2px black solid; border-collapse: collapse\" cellpadding=\"5\" border='2' > ")
