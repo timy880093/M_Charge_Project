@@ -21,14 +21,14 @@ public class InvocieAmountSummaryReportFacadeImpl {
 
     @Test
     @Transactional
-    @Rollback(false)
+    @Rollback(true)
     public void copyDataFromEinvDatabase(){
         invoiceAmountSummaryReportFacade.transactionInsertDataFromEinvDatabase();
     }
 
     @Test
     @Transactional
-    @Rollback(false)
+    @Rollback(true)
     public void copyDataFromEinvByInvoiceMainTest(){
         reportDataTestByDate(60);
     }
