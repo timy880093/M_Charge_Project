@@ -8,9 +8,11 @@ package com.gateweb.charge.repository;
 import com.gateweb.charge.model.InvoiceAmountSummaryReportEntity;
 import com.gateweb.db.dao.exception.DaoSystemException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -38,7 +40,16 @@ public interface InvoiceAmountSummaryReportRepository extends JpaRepository<Invo
 	List<InvoiceAmountSummaryReportEntity> findBySellerIsAndCreateDateGreaterThanAndCreateDateLessThan(String sellerIdentifier, Date fromModifyDate, Date toModifyDate);
 
 	InvoiceAmountSummaryReportEntity findTop1ByOrderByModifyDateDesc();
-	
+
+	List<InvoiceAmountSummaryReportEntity> findBySellerIsAndBuyerIsAndInvoiceDateIsAndInvoiceStatusIsAndAmountIsAndTotalIs(
+			String seller
+			, String buyer
+			, String invoiceDate
+			, Integer invoiceStatus
+			, Integer amount
+			, BigDecimal total
+	);
+
 }
 
 	

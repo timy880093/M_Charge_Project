@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.gateweb.charge.repository.InvoiceAmountSummaryReportRepository;
+import com.google.gson.Gson;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +39,9 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
     @Autowired
     @Qualifier("einvInvoiceMainDao")
     com.gateweb.einv.dao.InvoiceMainDao einvInvoiceMainDao;
+
+    @Autowired
+    InvoiceAmountSummaryReportRepository chargeInvoiceAmountSummaryReportRepository;
 
     @Override
     public void transactionInsertDataFromEinvDatabase(){
@@ -98,11 +103,33 @@ public class InvoiceAmountSummaryReportFacadeImpl implements InvoiceAmountSummar
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } finally {
-                chargeInvoiceAmountSummaryReportDao.save(result);
+                if(isInvoiceRecordExists(invoiceAmountSummaryReportEntity)){
+                    Gson gson = new Gson();
+                    logger.error("Record exists :"+ gson.toJson(invoiceAmountSummaryReportEntity));
+                }else{
+                    chargeInvoiceAmountSummaryReportDao.save(result);
+                }
+
             }
         }
     }
 
-
+    @Override
+    public boolean isInvoiceRecordExists(InvoiceAmountSummaryReportEntity invoiceAmountSummaryReportEntity) {
+        List<com.gateweb.charge.model.InvoiceAmountSummaryReportEntity> existsInvoiceAmountSummaryReport
+                = chargeInvoiceAmountSummaryReportRepository.findBySellerIsAndBuyerIsAndInvoiceDateIsAndInvoiceStatusIsAndAmountIsAndTotalIs(
+                invoiceAmountSummaryReportEntity.getSeller()
+                , invoiceAmountSummaryReportEntity.getBuyer()
+                , invoiceAmountSummaryReportEntity.getInvoiceDate()
+                , invoiceAmountSummaryReportEntity.getInvoiceStatus()
+                , invoiceAmountSummaryReportEntity.getAmount()
+                , invoiceAmountSummaryReportEntity.getTotal()
+        );
+        if (existsInvoiceAmountSummaryReport.size() > 0) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }
