@@ -641,7 +641,7 @@ public class CalCycleServiceImp implements CalCycleService {
 
                     DeductDetailEntity deductDetailEntity = new DeductDetailEntity();
                     deductDetailEntity.setPrepayDeductMasterId(master.getPrepayDeductMasterId());
-                    deductDetailEntity.setCashDetailId(cashDetailId);
+                    deductDetailEntity.setCashDetailId(cashDetailEntity_forDeduct.getCashDetailId());
                     deductDetailEntity.setCompanyId(cpId);
 
                     deductDetailEntity.setCalYm(timeUtils.getYYYYMM(timeUtils.parseDate(calYM)));
@@ -715,7 +715,7 @@ public class CalCycleServiceImp implements CalCycleService {
                 );
                 sumOverOut(
                         packageModeEntity.getCompanyId()
-                        , timeUtils.getCurrentDateString("yyyyMM")
+                        , timeUtils.getYYYYMM(billYearMonth)
                         , packageModeEntity.getPackageId()
                         , cashMasterEntity.getCashMasterId()
                         , cashDetailEntity.getCashDetailId()
