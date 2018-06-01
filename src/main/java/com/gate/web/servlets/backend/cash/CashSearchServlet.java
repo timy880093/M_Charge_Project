@@ -494,6 +494,50 @@ public class CashSearchServlet extends MvcBaseServlet {
         }
     }
 
+    /**
+     * 只有空的CashMaster可以被刪除
+     * @param paramMap
+     * @param headers
+     * @param model
+     * @param destJson
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(method = RequestMethod.GET, params = "method=deleteEmptyCashMaster", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String deleteEmptyCashMaster(
+            @RequestParam MultiValueMap<String, String> paramMap
+            , @RequestHeader HttpHeaders headers
+            , Model model
+            , @RequestParam(value = "destJson", required = true) String destJson //選擇的記錄
+            , HttpServletRequest request
+            , HttpServletResponse response ) throws Exception{
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        List<Integer> accept = new ArrayList<>();
+        List<Integer> ignore = new ArrayList<>();
+        try{
+            List<Integer> cashMasterIdList = jsonUtils.parseMultiSelectedValueJsonArray(destJson,"cashMasterId",Integer.class);
+            for(Integer cashMasterId : cashMasterIdList){
+                CashVO cashVO = cashService.findCashVoById(cashMasterId);
+                if(cashVO.getCashDetailEntityList().size()==0){
+                    cashService.delCashMaster(cashMasterId);
+                    accept.add(cashMasterId);
+                }else{
+                    ignore.add(cashMasterId);
+                }
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage());
+        }finally {
+            Gson gson = new Gson();
+            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
+        }
+    }
+
 
 
     /**
