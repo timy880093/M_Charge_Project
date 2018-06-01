@@ -107,8 +107,8 @@ public class PrepayDeductSearchServlet extends MvcBaseServlet {
 	    	//ServiceBU
 	    	List<Object> outList = new ArrayList<Object>();
 	    	List userCompanyList = calCycleService.getUserCompanyList();
-        outList.add(userCompanyList); //1.用戶下拉選單
-        otherMap.put(REQUEST_SEND_OBJECT, outList);
+			outList.add(userCompanyList); //1.用戶下拉選單
+			otherMap.put(REQUEST_SEND_OBJECT, outList);
 	    	otherMap.put(DISPATCH_PAGE, DEFAULT_SEARCH_LIST_DISPATCH_PAGE);
 	    	sendObjToViewer(request, otherMap);
 	    	

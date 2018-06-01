@@ -384,9 +384,9 @@ public class CashDAO extends BaseDAO {
             if(6 == cashType){
                 //註:6:預繳 7:扣抵 (註:入帳/取消入帳時 只處理預繳的資料(修改prepay_deduct_master、deduct_detail))
                 // (註:扣抵的資料不在此處理。在超額計算時，會算出超額的錢&要扣抵超額的錢，並修改prepay_deduct_master、deduct_detail)
-                PrepayDetailEntity seachPrepayDetailEntity = new PrepayDetailEntity();
-                seachPrepayDetailEntity.setCashDetailId(cashDetailId);
-                List prepayDetailList = getSearchEntity(PrepayDetailEntity.class, seachPrepayDetailEntity);
+                PrepayDetailEntity searchPrepayDetailEntity = new PrepayDetailEntity();
+                searchPrepayDetailEntity.setCashDetailId(cashDetailId);
+                List prepayDetailList = getSearchEntity(PrepayDetailEntity.class, searchPrepayDetailEntity);
                 if(null != prepayDetailList && prepayDetailList.size()>0){
                     PrepayDetailEntity prepayDetailEntity = (PrepayDetailEntity)prepayDetailList.get(0);
                     Integer money = prepayDetailEntity.getMoney();
