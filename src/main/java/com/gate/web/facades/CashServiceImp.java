@@ -315,6 +315,9 @@ public class CashServiceImp implements CashService {
         }
         if(cashDetailEntityList.size()!=0){
             cashVO.setCashDetailEntityList(cashDetailEntityList);
+        }else{
+            //不能傳null回去害別人爆。
+            cashVO.setCashDetailEntityList(new ArrayList<>());
         }
         return cashVO;
     }

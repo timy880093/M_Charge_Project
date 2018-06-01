@@ -47,6 +47,8 @@
                             <option value="invoice">匯出發票資料-多筆(請勾選欲執行的資料)</option>
                             <option value="invoiceYM">匯出發票資料-批次(請選擇出帳單年月)</option>
                             <option value="exportOrderCsv">匯出訂單資料-多筆(請勾選欲執行的資料)</option>
+                            <option value="cancelCalOver">取消計算月租超額-多筆(請勾選欲執行的資料)</option>
+                            <option value="deleteEmptyCashMaster">刪除空白的帳單-多筆(請勾選欲執行的資料)</option>
                         </select>
                         <a href="#" id="run" title="執行" class="butbox"><span>執行</span></a>
                     </form>
@@ -415,6 +417,12 @@
                 break;
             case "cancelOut": //取消出帳-多筆
                 multiMethod("cancelOut");
+                break;
+            case "cancelCalOver": //取消計算月租超額-多筆
+                multiMethod("cancelCalOver");
+                break;
+            case "deleteEmptyCashMaster"://刪除空白的帳單-多筆
+                multiMethod("deleteEmptyCashMaster");
                 break;
             case "email": //寄email明細通知-多筆(請勾選欲執行的資料)
                 multiMethod("email");

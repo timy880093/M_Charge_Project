@@ -455,6 +455,47 @@ public class CashSearchServlet extends MvcBaseServlet {
         return gson.toJson(responseMessage);
     }
 
+    @RequestMapping(method = RequestMethod.GET, params = "method=cancelCalOver", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String cancelCalOver(
+            @RequestParam MultiValueMap<String, String> paramMap
+            , @RequestHeader HttpHeaders headers
+            , Model model
+            , @RequestParam(value = "destJson", required = true) String destJson //選擇的記錄
+            , HttpServletRequest request
+            , HttpServletResponse response) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        List<Integer> accept = new ArrayList<>();
+        List<Integer> ignore = new ArrayList<>();
+        try{
+            List<Integer> cashMasterIdList = jsonUtils.parseMultiSelectedValueJsonArray(destJson,"cashMasterId",Integer.class);
+            for(Integer cashMasterId : cashMasterIdList){
+                CashVO cashVO = cashService.findCashVoById(cashMasterId);
+                boolean haveCalOver = false;
+                for(CashDetailEntity cashDetailEntity: cashVO.getCashDetailEntityList()){
+                    if(cashDetailEntity.getCashType().equals(2)){
+                        cashService.transactionCancelOver(cashMasterId,cashDetailEntity.getCashDetailId());
+                        haveCalOver = true;
+                    }
+                }
+                if(haveCalOver){
+                    accept.add(cashMasterId);
+                }else{
+                    ignore.add(cashMasterId);
+                }
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }finally {
+            Gson gson = new Gson();
+            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
+        }
+    }
+
+
+
     /**
      * 批次-寄email
      * @param paramMap
