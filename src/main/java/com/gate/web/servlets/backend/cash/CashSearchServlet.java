@@ -493,6 +493,38 @@ public class CashSearchServlet extends MvcBaseServlet {
         }
     }
 
+    @RequestMapping(method = RequestMethod.POST, params = "method=deleteEmptyCashMasterYM", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String deleteEmptyCashMasterYm(
+            @RequestParam MultiValueMap<String, String> paramMap
+            , @RequestHeader HttpHeaders headers
+            , Model model
+            , @RequestParam(value = "outYM", required = true) String outYm
+            , HttpServletRequest request
+            , HttpServletResponse response ) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        List<Integer> accept = new ArrayList<>();
+        List<Integer> ignore = new ArrayList<>();
+        try{
+            List<CashVO> cashVoList = cashService.findCashVoByOutYm(outYm);
+            for(CashVO cashVO: cashVoList){
+                if(cashVO.getCashDetailEntityList().size()==0){
+                    cashService.delCashMaster(cashVO.getCashMasterEntity().getCashMasterId());
+                    accept.add(cashVO.getCashMasterEntity().getCashMasterId());
+                }else{
+                    ignore.add(cashVO.getCashMasterEntity().getCashMasterId());
+                }
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage());
+        }finally {
+            Gson gson = new Gson();
+            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
+        }
+    }
+
     @RequestMapping(method = RequestMethod.GET, params = "method=cancelCalOver", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String cancelCalOver(

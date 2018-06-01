@@ -50,6 +50,7 @@
                             <option value="cancelCalOver">取消計算月租超額-多筆(請勾選欲執行的資料)</option>
                             <option value="cancelCalOverYM">取消計算月租超額-批次(請選擇出帳單年月)</option>
                             <option value="deleteEmptyCashMaster">刪除空白的帳單-多筆(請勾選欲執行的資料)</option>
+                            <option value="deleteEmptyCashMasterYM">刪除空白的帳單-批次(請選擇出帳年月)</option>
                         </select>
                         <a href="#" id="run" title="執行" class="butbox"><span>執行</span></a>
                     </form>
@@ -427,6 +428,9 @@
                 break;
             case "deleteEmptyCashMaster"://刪除空白的帳單-多筆
                 multiMethod("deleteEmptyCashMaster");
+                break;
+            case "deleteEmptyCashMasterYM"://刪除空白的帳單-批次
+                runMethod("deleteEmptyCashMasterYM");
                 break;
             case "email": //寄email明細通知-多筆(請勾選欲執行的資料)
                 multiMethod("email");
