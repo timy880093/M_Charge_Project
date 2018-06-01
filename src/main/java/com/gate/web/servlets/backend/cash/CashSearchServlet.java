@@ -455,6 +455,44 @@ public class CashSearchServlet extends MvcBaseServlet {
         return gson.toJson(responseMessage);
     }
 
+    @RequestMapping(method = RequestMethod.POST, params = "method=cancelCalOverYM", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String cancelCalOverYm(
+            @RequestParam MultiValueMap<String, String> paramMap
+            , @RequestHeader HttpHeaders headers
+            , Model model
+            , @RequestParam(value = "outYM", required = true) String outYm
+            , HttpServletRequest request
+            , HttpServletResponse response ) throws Exception {
+        BaseFormBean formBeanObject = formBeanObject(request);
+        Map otherMap = otherMap(request, response, formBeanObject);
+        sendObjToViewer(request, otherMap);
+        List<Integer> accept = new ArrayList<>();
+        List<Integer> ignore = new ArrayList<>();
+        try{
+            boolean haveCalOver = false;
+            List<CashVO> cashVoList = cashService.findCashVoByOutYm(outYm);
+            for(CashVO cashVO : cashVoList){
+                for(CashDetailEntity cashDetailEntity: cashVO.getCashDetailEntityList()){
+                    if(cashDetailEntity.getCashType().equals(2)){
+                        cashService.transactionCancelOver(cashVO.getCashMasterEntity().getCashMasterId(),cashDetailEntity.getCashDetailId());
+                        haveCalOver = true;
+                    }
+                }
+                if(haveCalOver){
+                    accept.add(cashVO.getCashMasterEntity().getCashMasterId());
+                }else{
+                    ignore.add(cashVO.getCashMasterEntity().getCashMasterId());
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            Gson gson = new Gson();
+            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
+        }
+    }
+
     @RequestMapping(method = RequestMethod.GET, params = "method=cancelCalOver", produces = "application/json;charset=utf-8")
     public @ResponseBody
     String cancelCalOver(
@@ -487,7 +525,7 @@ public class CashSearchServlet extends MvcBaseServlet {
                 }
             }
         }catch (Exception e){
-            logger.error(e.getMessage());
+            e.printStackTrace();
         }finally {
             Gson gson = new Gson();
             return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());

@@ -60,6 +60,8 @@ public interface CashService extends Service {
     //取得CashMasterEntityListById
     CashVO findCashVoById(Integer cashMasterId) throws Exception;
 
+    List<CashVO> findCashVoByOutYm(String outYm);
+
     public List getInvoiceItem(String ym, String destJson) throws Exception;
 
     public Integer transactionCancelIn(String strCashMasterId) throws Exception;
@@ -73,8 +75,6 @@ public interface CashService extends Service {
 
     //輸入自行要重寄的Email(帳單明細表)
     Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception;
-
-    List<CashVO> findCashVoByOutYm(String yearMonth);
 
     Map<String,Object> genCashDataExcelDataMap(List<CashMasterBean> cashMasterBeanList);
 

@@ -139,6 +139,8 @@ public class CashServiceImp implements CashService {
         return cashDAO.getCashMasterDetailList(cashMasterEntityList);
     }
 
+
+
     /**
      * 取消計算
      * @param cashDetailId
@@ -193,10 +195,12 @@ public class CashServiceImp implements CashService {
                 for(DeductDetailEntity deductDetailEntity: deductDetailEntityList){
                     CashDetailEntity deductCashDetailEntity
                             = cashDetailRepository.findByCashDetailIdIsAndCashTypeIs(deductDetailEntity.getCashDetailId(),7);
-                    //刪除cashDetail及deductDetail
-                    cashDetailRepository.delete(deductCashDetailEntity);
-                    deductDetailRepository.delete(deductDetailEntity);
-                    deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
+                    //刪除cashDetail及deductDetail，有deductCashDetail才有扣抵，所以沒有就不用處理。
+                    if(deductCashDetailEntity!=null){
+                        cashDetailRepository.delete(deductCashDetailEntity);
+                        deductDetailRepository.delete(deductDetailEntity);
+                        deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
+                    }
                 }
                 Integer amount = prepayDeductMasterEntity.getAmount();
                 amount = amount + deductMoney;
@@ -543,18 +547,24 @@ public class CashServiceImp implements CashService {
     }
 
     @Override
-    public List<CashVO> findCashVoByOutYm(String yearMonth){
+    public List<CashVO> findCashVoByOutYm(String outYm) {
         List<CashVO> cashVOList = new ArrayList<>();
-        List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.findByOutYm(yearMonth);
+        List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.findByOutYm(outYm);
         for(CashMasterEntity cashMasterEntity : cashMasterEntityList){
+            CashVO cashVO = new CashVO();
             List<CashDetailEntity> cashDetailEntityList
                     = cashDetailRepository.findByCashMasterId(cashMasterEntity.getCashMasterId());
-            if(cashDetailEntityList!=null && cashDetailEntityList.size()>0){
-                CashVO cashVO = new CashVO();
+            cashVO.setCashMasterEntity(cashMasterEntity);
+            if(cashMasterEntity!=null){
                 cashVO.setCashMasterEntity(cashMasterEntity);
-                cashVO.setCashDetailEntityList(cashDetailEntityList);
-                cashVOList.add(cashVO);
             }
+            if(cashDetailEntityList.size()!=0){
+                cashVO.setCashDetailEntityList(cashDetailEntityList);
+            }else{
+                //不能傳null回去害別人爆。
+                cashVO.setCashDetailEntityList(new ArrayList<>());
+            }
+            cashVOList.add(cashVO);
         }
         return cashVOList;
     }
