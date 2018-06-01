@@ -4,6 +4,7 @@ import com.gateweb.charge.model.BillCycleEntity;
 import com.gateweb.charge.model.CashDetailEntity;
 import com.gateweb.charge.model.CompanyEntity;
 import com.google.gson.Gson;
+import dao.CalCycleDAO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class BillCycleRepositoryTest {
 
     @Autowired
     CompanyRepository companyRepository;
+
+    @Autowired
+    CalCycleDAO calCycleDAO;
 
     Gson gson = new Gson();
 
@@ -56,6 +60,23 @@ public class BillCycleRepositoryTest {
         }
         for(String message: messageList){
             System.out.println(message);
+        }
+    }
+
+    @Test
+    public void compareBillCycleAndCntCount(){
+        List<BillCycleEntity> billCycleEntityList = billCycleRepository.findAll();
+        for(BillCycleEntity billCycleEntity: billCycleEntityList){
+            if(billCycleEntity.getStatus().equals("1")){
+                if(billCycleEntity.getYearMonth().contains("201803")||billCycleEntity.getYearMonth().contains("201804")){
+                    CompanyEntity companyEntity = companyRepository.findByCompanyId(billCycleEntity.getCompanyId());
+                    Integer usedCount = calCycleDAO.calOverByCompany(companyEntity.getCompanyId(),billCycleEntity.getYearMonth());
+                    if(usedCount!=billCycleEntity.getCnt()){
+                        System.out.println("Wrong:"+billCycleEntity.getBillId()+", usedCount:"+usedCount+",current cnt:"+billCycleEntity.getCnt());
+                    }
+                }
+            }
+
         }
     }
 }

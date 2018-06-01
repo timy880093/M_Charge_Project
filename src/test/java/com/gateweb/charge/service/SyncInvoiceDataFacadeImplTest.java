@@ -66,7 +66,7 @@ public class SyncInvoiceDataFacadeImplTest {
 
     @Test
     @Transactional
-    @Rollback(true)
+    @Rollback(false)
     public void syncInvoiceMainReportDataByCurrentData(){
         syncInvoiceDataFacade.syncByCurrentLastModifyDate();
     }

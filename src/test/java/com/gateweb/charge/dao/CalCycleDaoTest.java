@@ -49,23 +49,23 @@ public class CalCycleDaoTest {
 
     @Test
     public void calOverByCompanyAndInvoiceAmountSummaryReport(){
-
-        Calendar from = Calendar.getInstance();
-        from.setTime(new Date());
-        from.add(Calendar.DATE,-32);
-
-        Calendar to = Calendar.getInstance();
-        to.setTime(new Date());
-        to.add(Calendar.DATE,-2);
+//
+//        Calendar from = Calendar.getInstance();
+//        from.setTime(timeUtils.stringToDate("20180101","yyyyMMdd"));
+//        from.add(Calendar.DATE,-1);
+//
+//        Calendar to = Calendar.getInstance();
+//        to.setTime(timeUtils.stringToDate("20180301","yyyyMMdd"));
+//        to.add(Calendar.MONTH,1);
 
         List<String> messageList = new ArrayList<>();
         List<CompanyEntity> companyEntityList = companyRepository.findAll();
         for(CompanyEntity companyEntity: companyEntityList){
-            if(!companyEntity.getBusinessNo().equals("16105732")){
+            if(!companyEntity.getBusinessNo().equals("22099548")){
                 continue;
             }
             Integer usedCount
-                    = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity.getCompanyId(),"201803");
+                    = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity.getCompanyId(),"201801");
             if(usedCount>0){
                 messageList.add(companyEntity.getName() +":"+ usedCount);
             }
