@@ -48,18 +48,18 @@
 	<!--使用fix delay 24*60*1000 處理發票資料的同步-->
 	<bean id="syncCompanyDataScheduler" class="com.gateweb.charge.service.impl.SyncCompanyDataFacadeImpl" />
 	<task:scheduled-tasks>
-		<task:scheduled ref="syncCompanyDataScheduler" method="syncCompanyDataFromEinvDatabase" initial-delay="10" fixed-delay="1440000"/>
+		<task:scheduled ref="syncCompanyDataScheduler" method="syncCompanyDataFromEinvDatabase" initial-delay="10" fixed-delay="86400000"/>
 	</task:scheduled-tasks>
 
 	<bean id="syncUserDataScheduler" class="com.gateweb.charge.service.impl.SyncUserDataFacadeImpl" />
 	<task:scheduled-tasks>
-		<task:scheduled ref="syncUserDataScheduler" method="syncUserDataFromEinvDatabase" initial-delay="5" fixed-delay="1440000"/>
+		<task:scheduled ref="syncUserDataScheduler" method="syncUserDataFromEinvDatabase" initial-delay="5" fixed-delay="86400000"/>
 	</task:scheduled-tasks>
 
 	<!--使用fix delay 24*60*1000 處理發票資料的同步-->
 	<bean id="syncInvoiceDataScheduler" class="com.gateweb.charge.service.impl.SyncInvoiceDataFacadeImpl" />
 	<task:scheduled-tasks>
-		<task:scheduled ref="syncInvoiceDataScheduler" method="syncByCurrentLastModifyDate" initial-delay="1"  fixed-delay="1440000"/>
+		<task:scheduled ref="syncInvoiceDataScheduler" method="syncByCurrentLastModifyDate" initial-delay="1"  fixed-delay="86400000"/>
 	</task:scheduled-tasks>
 
 </beans>
