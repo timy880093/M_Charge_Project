@@ -145,36 +145,35 @@
 <script type="text/javascript">
     $(function(){
         if (${!empty REQUEST_SEND_OBJECT_0}) {
-            var packageMap = $.parseJSON('${REQUEST_SEND_OBJECT_0}');
-            $("#business_no").val(packageMap.business_no);
-            $("#company_name").val(packageMap.company_name);
-            $("#package_name").val(packageMap.package_name);
-            $("#charge_cycle").val(packageMap.charge_cycle);
-            $("#base_quantity").val(packageMap.base_quantity);
-            $("#single_price").val(packageMap.single_price);
-            $("#max_price").val(packageMap.max_price);
-//            $("#free_quantity").val(packageMap.free_quantity);
-            $("#free_month_base").val(packageMap.free_month_base);
-            $("#pre_payment").val(packageMap.pre_payment);
-            $("#sales_price").val(packageMap.sales_price);
-            $("#contract_limit").val(packageMap.contract_limit);
-            $("#addition_quantity").val(packageMap.addition_quantity);
-            $("#free_month").val(packageMap.free_month);
-            $("#real_start_date").val(packageMap.real_start_date);
-            $("#real_end_date").val(packageMap.real_end_date);
-            $("#start_date").val(packageMap.start_date);
-            $("#end_date").val(packageMap.end_date);
-            $("#gift_price").val(packageMap.gift_price);
-            $("#dealer_company_name").val(packageMap.dealer_company_name);
-            $("#dealer_name").val(packageMap.dealer_name);
-            $("#broker_cp2").val(packageMap.broker_cp2);
-            $("#broker2").val(packageMap.broker2);
-            $("#broker_cp3").val(packageMap.broker_cp3);
-            $("#broker3").val(packageMap.broker3);
-            $("#createDate").text(packageMap.create_date);
-            $("#modifyDate").text(packageMap.modify_date);
-            $("#creator").text(packageMap.creator);
-            $("#modifier").text(packageMap.modifier);
+            var chargeDetailViewObject = $.parseJSON('${REQUEST_SEND_OBJECT_0}');
+            $("#business_no").val(chargeDetailViewObject.businessNo);
+            $("#company_name").val(chargeDetailViewObject.companyName);
+            $("#package_name").val(chargeDetailViewObject.packageName);
+            $("#charge_cycle").val(chargeDetailViewObject.chargeCycle);
+            $("#base_quantity").val(chargeDetailViewObject.baseQuantity);
+            $("#single_price").val(chargeDetailViewObject.singlePrice);
+            $("#max_price").val(chargeDetailViewObject.maxPrice);
+            $("#free_month_base").val(chargeDetailViewObject.freeMonthBase);
+            $("#pre_payment").val(chargeDetailViewObject.prePayment);
+            $("#sales_price").val(chargeDetailViewObject.salesPrice);
+            $("#contract_limit").val(chargeDetailViewObject.contractLimit);
+            $("#addition_quantity").val(chargeDetailViewObject.additionQuantity);
+            $("#free_month").val(chargeDetailViewObject.freeMonth);
+            $("#real_start_date").val(chargeDetailViewObject.realStartDate);
+            $("#real_end_date").val(chargeDetailViewObject.realEndDate);
+            $("#start_date").val(chargeDetailViewObject.startDate);
+            $("#end_date").val(chargeDetailViewObject.endDate);
+            $("#gift_price").val(chargeDetailViewObject.giftPrice);
+            $("#dealer_company_name").val(chargeDetailViewObject.dealerCompanyName);
+            $("#dealer_name").val(chargeDetailViewObject.dealerName);
+            $("#broker_cp2").val(chargeDetailViewObject.brokerCp2);
+            $("#broker2").val(chargeDetailViewObject.broker2);
+            $("#broker_cp3").val(chargeDetailViewObject.brokerCp3);
+            $("#broker3").val(chargeDetailViewObject.broker3);
+            $("#createDate").text(chargeDetailViewObject.createDate);
+            $("#modifyDate").text(chargeDetailViewObject.modifyDate);
+            $("#creator").text(chargeDetailViewObject.creator);
+            $("#modifier").text(chargeDetailViewObject.modifier);
         }
     });
 

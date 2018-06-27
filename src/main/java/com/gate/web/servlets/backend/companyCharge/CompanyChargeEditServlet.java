@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.gate.web.beans.ChargeDetailMonthViewObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gate.web.facades.CommissionService;
@@ -44,8 +45,9 @@ public class CompanyChargeEditServlet extends BackendPopTemplateServlet {
             String dispatch_page = "";
             String package_id = ((String[]) requestParameterMap.get("packageId"))[0];
             if ("1".equals(charge_type)) {
-                Map packageMap = companyChargeService.getCyclePackageInfoByPackageId(Integer.parseInt(package_id));
-                outList.add(packageMap);
+                ChargeDetailMonthViewObject chargeDetailMonthViewObject
+                        = companyChargeService.getChargeDetailMonthViewObject(Integer.parseInt(package_id));
+                outList.add(chargeDetailMonthViewObject);
                 dispatch_page = "/backendAdmin/companyCharge/read_company_charge_detail_month.jsp";
             } else if("2".equals(charge_type)){
                 Map packageMap = companyChargeService.getGradePackageInfoByPackageId(Integer.parseInt(package_id));

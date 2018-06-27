@@ -3,6 +3,7 @@ package com.gate.web.facades;
 import java.util.List;
 import java.util.Map;
 
+import com.gate.web.beans.ChargeDetailMonthViewObject;
 import com.gate.web.displaybeans.ChargeModeCycleVO;
 import com.gate.web.displaybeans.ChargeModeGradeVO;
 import com.gate.web.formbeans.CompanyChargeCycleBean;
@@ -29,7 +30,13 @@ public interface CompanyChargeService extends Service {
 
 	Map transactionContinuePackage(String almostOut, Integer modifierId) throws Exception;
 
-	public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception ;
+	//    public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception{
+//        Map infoMap = companyChargeDAO.getCyclePackageInfoByPackageId(packageId);
+//        Map map = companyChargeDAO.getCreatorAndModifier(Integer.parseInt(infoMap.get("creator_id").toString()),Integer.parseInt(infoMap.get("modifier_id").toString()));
+//        infoMap.put("creator",map.get("creator"));
+//        infoMap.put("modifier",map.get("modifier"));
+//    }
+	ChargeDetailMonthViewObject getChargeDetailMonthViewObject(Integer packageId);
 
 	public Map getGradePackageInfoByPackageId(Integer packageId) throws Exception ;
 }

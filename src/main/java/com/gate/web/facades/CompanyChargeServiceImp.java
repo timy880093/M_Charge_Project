@@ -1,10 +1,12 @@
 package com.gate.web.facades;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.*;
 
 import com.gate.utils.TimeUtils;
+import com.gate.web.beans.ChargeDetailMonthViewObject;
 import com.gate.web.beans.ContinuePackage;
 import com.gateweb.charge.model.*;
 import com.gateweb.charge.repository.*;
@@ -57,6 +59,12 @@ public class CompanyChargeServiceImp implements CompanyChargeService{
 
     @Autowired
     BillCycleRepository billCycleRepository;
+
+    @Autowired
+    CompanyRepository companyRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     CashDAO cashDAO;
@@ -495,12 +503,55 @@ public class CompanyChargeServiceImp implements CompanyChargeService{
         return null;
     }
 
-    public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception {
-        Map infoMap = companyChargeDAO.getCyclePackageInfoByPackageId(packageId);
-        Map map = companyChargeDAO.getCreatorAndModifier(Integer.parseInt(infoMap.get("creator_id").toString()),Integer.parseInt(infoMap.get("modifier_id").toString()));
-        infoMap.put("creator",map.get("creator"));
-        infoMap.put("modifier",map.get("modifier"));
-        return infoMap;
+    /**
+     * deprecated
+     * @param packageId
+     * @return
+     * @throws Exception
+     */
+//    public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception{
+//        Map infoMap = companyChargeDAO.getCyclePackageInfoByPackageId(packageId);
+//        Map map = companyChargeDAO.getCreatorAndModifier(Integer.parseInt(infoMap.get("creator_id").toString()),Integer.parseInt(infoMap.get("modifier_id").toString()));
+//        infoMap.put("creator",map.get("creator"));
+//        infoMap.put("modifier",map.get("modifier"));
+//    }
+    @Override
+    public ChargeDetailMonthViewObject getChargeDetailMonthViewObject(Integer packageId) {
+        ChargeDetailMonthViewObject chargeDetailMonthViewObject = new ChargeDetailMonthViewObject();
+        try{
+            PackageModeEntity packageModeEntity = packageModeRepository.findByPackageId(packageId);
+            if(packageModeEntity!=null){
+                BeanUtils.copyProperties(chargeDetailMonthViewObject,packageModeEntity);
+            }
+            CompanyEntity companyEntity = companyRepository.findByCompanyId(packageModeEntity.getCompanyId());
+            if(companyEntity!=null){
+                chargeDetailMonthViewObject.setCompanyName(companyEntity.getName());
+                chargeDetailMonthViewObject.setBusinessNo(companyEntity.getBusinessNo());
+            }
+            ChargeModeCycleEntity chargeModeCycleEntity = chargeModeCycleRepository.findByChargeId(packageModeEntity.getChargeId());
+            if(chargeModeCycleEntity!=null){
+                BeanUtils.copyProperties(chargeDetailMonthViewObject,chargeModeCycleEntity);
+                chargeDetailMonthViewObject.setFreeMonthBase(chargeModeCycleEntity.getFreeMonth());
+            }
+            ChargeModeCycleAddEntity chargeModeCycleAddEntity = chargeModeCycleAddRepository.findByAdditionId(packageModeEntity.getAdditionId());
+            if(chargeModeCycleAddEntity!=null){
+                BeanUtils.copyProperties(chargeDetailMonthViewObject,chargeModeCycleAddEntity);
+                if(chargeModeCycleAddEntity.getCreatorId()!=null){
+                    UserEntity creatorEntity = userRepository.findByUserId(new Long(chargeModeCycleAddEntity.getCreatorId()));
+                    chargeDetailMonthViewObject.setCreator(creatorEntity.getName());
+                }
+                if(chargeModeCycleAddEntity.getModifierId()!=null){
+                    UserEntity modifierEntity = userRepository.findByUserId(new Long(chargeModeCycleAddEntity.getModifierId()));
+                    chargeDetailMonthViewObject.setModifier(modifierEntity.getName());
+                }
+            }
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }finally {
+            return chargeDetailMonthViewObject;
+        }
     }
 
     public Map getGradePackageInfoByPackageId(Integer packageId) throws Exception {
