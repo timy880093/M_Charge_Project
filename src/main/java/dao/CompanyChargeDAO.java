@@ -318,27 +318,28 @@ public class CompanyChargeDAO extends BaseDAO {
     }
 
     /**
+     * deprecated
      * 檢視合約明細(月租型)
      * @param packageId
      * @return
      * @throws Exception
      */
-    public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception {
-        String sql = "select cp.name company_name,cp.business_no,cmc.package_name,cmc.charge_cycle," +
-                " cmc.base_quantity,cmc.single_price,cmc.max_price,cmc.free_quantity,cmc.free_month free_month_base, " +
-                " cmc.pre_payment,cmc.sales_price,cmc.contract_limit,cmca.* " +
-                " ,  pm.dealer_company_id, dcp.dealer_company_name, der.dealer_name, pm.dealer_id, pm.broker_cp2, pm.broker2, pm.broker_cp3, pm.broker3  " +
-                " from package_mode pm left join company cp on (pm.company_id = cp.company_id) " +
-                " left join charge_mode_cycle cmc on (pm.charge_id = cmc.charge_id) " +
-                " left join charge_mode_cycle_add cmca on (pm.addition_id = cmca.addition_id) " +
-                " left join dealer_company dcp on pm.dealer_company_id = dcp.dealer_company_id  " +
-                " left join dealer der on pm.dealer_id = der.dealer_id  " +
-                " where pm.package_id=? "; //pm.package_type=1 and
-        List parameterList = new ArrayList();
-        parameterList.add(packageId);
-        Query query = createQuery(sql, parameterList, null);
-        return (Map) query.uniqueResult();
-    }
+//    public Map getCyclePackageInfoByPackageId(Integer packageId) throws Exception {
+//        String sql = "select cp.name company_name,cp.business_no,cmc.package_name,cmc.charge_cycle," +
+//                " cmc.base_quantity,cmc.single_price,cmc.max_price,cmc.free_quantity,cmc.free_month free_month_base, " +
+//                " cmc.pre_payment,cmc.sales_price,cmc.contract_limit,cmca.* " +
+//                " ,  pm.dealer_company_id, dcp.dealer_company_name, der.dealer_name, pm.dealer_id, pm.broker_cp2, pm.broker2, pm.broker_cp3, pm.broker3  " +
+//                " from package_mode pm left join company cp on (pm.company_id = cp.company_id) " +
+//                " left join charge_mode_cycle cmc on (pm.charge_id = cmc.charge_id) " +
+//                " left join charge_mode_cycle_add cmca on (pm.addition_id = cmca.addition_id) " +
+//                " left join dealer_company dcp on pm.dealer_company_id = dcp.dealer_company_id  " +
+//                " left join dealer der on pm.dealer_id = der.dealer_id  " +
+//                " where pm.package_id=? "; //pm.package_type=1 and
+//        List parameterList = new ArrayList();
+//        parameterList.add(packageId);
+//        Query query = createQuery(sql, parameterList, null);
+//        return (Map) query.uniqueResult();
+//    }
 
     /**
      * 檢視合約明細(級距型)

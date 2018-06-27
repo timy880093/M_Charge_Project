@@ -25,7 +25,7 @@ public class ChargeDetailMonthViewObject {
     Integer freeMonth;
     String creator;
     String modifier;
-    String creatDate;
+    String createDate;
     String modifyDate;
     BigDecimal giftPrice;
     Integer additionQuantity;
@@ -117,12 +117,12 @@ public class ChargeDetailMonthViewObject {
         this.contractLimit = contractLimit;
     }
 
-    public String getCreatDate() {
-        return creatDate;
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setCreatDate(String creatDate) {
-        this.creatDate = creatDate;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 
     public String getCreator() {
