@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.gate.web.facades.CalCycleService;
+import com.gateweb.charge.repository.*;
 import com.gateweb.utils.BeanConverterUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Query;
@@ -45,6 +46,18 @@ public class CompanyChargeDAO extends BaseDAO {
 
     @Autowired
     CalCycleService calCycleService;
+
+    @Autowired
+    PackageModeRepository packageModeRepository;
+
+    @Autowired
+    CashDetailRepository cashDetailRepository;
+
+    @Autowired
+    CashMasterRepository cashMasterRepository;
+
+    @Autowired
+    ChargeModeCycleAddRepository chargeModeCycleAddRepository;
 
     public List getChargeMonthList() throws Exception {
         String sql = "select charge_id,package_name from charge_mode_cycle where status = 1 ";
@@ -186,39 +199,28 @@ public class CompanyChargeDAO extends BaseDAO {
     public Map transactionDoSettle(Integer packageId, String endDate, String realEndDate)throws Exception{
         String year = endDate.substring(0, 4);
         String month = endDate.substring(5,7);
-        String packageEndDate = year + month;
+//        String packageEndDate = year + month;
 
         String rYear = realEndDate.substring(0, 4);
         String rMonth = realEndDate.substring(5,7);
-        String packageRealEndDate = rYear + rMonth;
+//        String packageRealEndDate = rYear + rMonth;
 
-        //結清:更新charge_mode_cycle_add的real_end_date和end_date，並且把bill_cylce裡end_date後的bill全部作廢，cash_detail裡的end_date後的cash也要全部作廢
-        PackageModeEntity searchPackageModeEntity = new PackageModeEntity();
-        searchPackageModeEntity.setPackageId(packageId);
-        List packageModeList =  getSearchEntity(PackageModeEntity.class, searchPackageModeEntity);
+        //結清:更新charge_mode_cycle_add的real_end_date和end_date，並且把bill_cycle裡end_date後的bill全部作廢，cash_detail裡的end_date後的cash也要全部作廢
+//        List packageModeList =  getSearchEntity(PackageModeEntity.class, searchPackageModeEntity);
 
         //更新此package_id的status=2(作廢)
-        String sql = " update package_mode set status='2' where package_id=? " ;
-        List parameterList = new ArrayList();
-        parameterList.add(packageId);
-        executeSql(sql, parameterList);
-
-
-        sql = " select addition_id from package_mode where package_id=? " ;
-        parameterList.clear();
-        parameterList.add(packageId);
-        Query query = createQuery(sql, parameterList, null);
-        Map packageModelMap = (Map)query.uniqueResult();
-        Integer additionId = (Integer)packageModelMap.get("addition_id");
+        PackageModeEntity packageModeEntity = packageModeRepository.findByPackageId(packageId);
+        packageModeEntity.setStatus("2");
+        packageModeRepository.save(packageModeEntity);
 
         //1.更新real_end_date和end_date
-        ChargeModeCycleAddEntity chargeModeCycleAddEntity = new ChargeModeCycleAddEntity();
+        ChargeModeCycleAddEntity chargeModeCycleAddEntity = chargeModeCycleAddRepository.findByAdditionId(packageModeEntity.getAdditionId());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date enDateCal = simpleDateFormat.parse(endDate);
         Date realEndDateCal = simpleDateFormat.parse(realEndDate);
         chargeModeCycleAddEntity.setEndDate(new java.sql.Date(enDateCal.getTime()));
         chargeModeCycleAddEntity.setRealEndDate(new java.sql.Date(realEndDateCal.getTime()));
-        saveOrUpdateEntity(chargeModeCycleAddEntity,additionId);
+        chargeModeCycleAddRepository.save(chargeModeCycleAddEntity);
 
         //2.把bill_cylce裡end_date後的bill全部作廢
         BillCycleEntity searchBillCycleEntity = new BillCycleEntity();
@@ -236,7 +238,6 @@ public class CompanyChargeDAO extends BaseDAO {
         for(int j=0; j<billCycleList.size(); j++){
             BillCycleEntity  billCycleEntity = (BillCycleEntity)billCycleList.get(j);
             Integer billId = billCycleEntity.getBillId();
-            Integer companyId = billCycleEntity.getCompanyId();
             if(billId > billFailStartId){
                 billCycleEntity.setStatus("2"); //1.生效 2.作廢
                 saveOrUpdateEntity(billCycleEntity, billCycleEntity.getBillId());
@@ -244,77 +245,43 @@ public class CompanyChargeDAO extends BaseDAO {
                 //3.cash_detail裡的end_date後的cash也要全部作廢
                 //(未入帳的cash_detail全部要作廢)
                 //3.1月租費
-                Integer cashOutMonthId = billCycleEntity.getCashOutMonthId();
-                if(null != cashOutMonthId){ //出帳的
+                if(null != billCycleEntity.getCashOutMonthId()){ //出帳的
                     Integer cashInMonthId = billCycleEntity.getCashInMonthId();
                     if(null == cashInMonthId){ //未入帳的 (要作廢)
                         //已使用月租費
-                        sql = " select cash_master_id from cash_detail where cash_detail_id=? " ;
-                        parameterList.clear();
-                        parameterList.add(cashOutMonthId);
-                        query = createQuery(sql, parameterList, null);
-                        Map cashDetailMap = (Map)query.uniqueResult();
-                        Integer cashMasterId = (Integer)cashDetailMap.get("cash_master_id");
-
-                        CashDetailEntity cashDetail_status = new CashDetailEntity();
-                        cashDetail_status.setStatus(2); //1.生效 2.作廢
-                        saveOrUpdateEntity(cashDetail_status, cashOutMonthId);
-
-
-                        //重算cashMaster
-                        CashMasterEntity searchCashMasterEntity = new CashMasterEntity();
-                        searchCashMasterEntity.setCashMasterId(cashMasterId);
-                        searchCashMasterEntity.setCompanyId(companyId);
-                        List cashMasterList =  getSearchEntity(CashMasterEntity.class, searchCashMasterEntity);
-
-                        for(int k=0; k<cashMasterList.size(); k++){
-                            CashMasterEntity cashMasterEntity = (CashMasterEntity)cashMasterList.get(0);
-                            Integer cashMasterId_m = cashMasterEntity.getCashMasterId();
-                            if(cashMasterId_m.equals(cashMasterId)){
-                                cashMasterEntity = cashDAO.sumCashMaster(cashMasterEntity);
-                                saveOrUpdateEntity(cashMasterEntity, cashMasterEntity.getCashMasterId());
-                            }
-                        }
+                        cancelCashDetailAndRecalculateCashMaster(billCycleEntity.getCashOutMonthId());
                     }
                 }
-
                 //3.2超額費
-                Integer cashOutOverId = billCycleEntity.getCashOutOverId();
-                if(null != cashOutOverId){ //有出帳的(要作廢)
+                if(null != billCycleEntity.getCashOutOverId()){ //有出帳的(要作廢)
                     Integer cashInOverId = billCycleEntity.getCashInOverId();
                     if(null == cashInOverId){ //未入帳的
-                        sql = " select cash_master_id from cash_detail where cash_detail_id=? " ;
-                        parameterList.clear();
-                        parameterList.add(cashOutOverId);
-                        query = createQuery(sql, parameterList, null);
-                        Map cashDetailMap = (Map)query.uniqueResult();
-                        Integer cashMasterId = (Integer)cashDetailMap.get("cash_master_id");
-
-                        CashDetailEntity cashDetail_status = new CashDetailEntity();
-                        cashDetail_status.setStatus(2); //1.生效 2.作廢
-                        saveOrUpdateEntity(cashDetail_status, cashOutMonthId);
-
-                        //重算cashMaster
-                        CashMasterEntity searchCashMasterEntity = new CashMasterEntity();
-                        searchCashMasterEntity.setCashMasterId(cashMasterId);
-                        searchCashMasterEntity.setCompanyId(companyId);
-                        List cashMasterList =  getSearchEntity(CashMasterEntity.class, searchCashMasterEntity);
-                        for(int k=0; k<cashMasterList.size(); k++){
-                            CashMasterEntity cashMasterEntity = (CashMasterEntity)cashMasterList.get(0);
-                            Integer cashMasterId_m = cashMasterEntity.getCashMasterId();
-                            if(cashMasterId_m.equals(cashMasterId)){
-                                cashMasterEntity = cashDAO.sumCashMaster(cashMasterEntity);
-                                saveOrUpdateEntity(cashMasterEntity, cashMasterEntity.getCashMasterId());
-                            }
-                        }
+                        cancelCashDetailAndRecalculateCashMaster(billCycleEntity.getCashOutOverId());
                     }
                 }
             }
         }
 
-
         Map resultMap = new HashMap();
         return resultMap;
+    }
+
+    /**
+     * 拉出方法
+     * @param cashDetailId
+     */
+    public void cancelCashDetailAndRecalculateCashMaster(Integer cashDetailId){
+        try{
+            CashDetailEntity cashDetailEntity = cashDetailRepository.findByCashDetailId(cashDetailId);
+            cashDetailEntity.setStatus(2); //1.生效 2.作廢
+            cashDetailRepository.save(cashDetailEntity);
+            //重算cashMaster
+            CashMasterEntity cashMasterEntity = cashMasterRepository.findByCashMasterId(cashDetailEntity.getCashMasterId());
+            cashMasterEntity = cashDAO.sumCashMaster(cashMasterEntity);
+            cashMasterRepository.save(cashMasterEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
