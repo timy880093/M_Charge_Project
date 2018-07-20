@@ -200,8 +200,8 @@ public class CashDAO extends BaseDAO {
         //sumCashMaster
         cashMasterEntity = sumCashMaster(cashMasterEntity);
 
-        Timestamp tmestamp = timeUtils.getCurrentTimestamp();
-        cashMasterEntity.setOutDate(tmestamp);
+        Timestamp timestamp = timeUtils.getCurrentTimestamp();
+        cashMasterEntity.setOutDate(timestamp);
         cashMasterEntity.setStatus(3); //1.生效 3.出帳 4.入帳 5.佣金
         saveOrUpdateEntity(cashMasterEntity, cashMasterEntity.getCashMasterId());
         return true;
