@@ -268,7 +268,6 @@ public class CashSearchServlet extends MvcBaseServlet {
             responseMessage += "  total counts: "+exeCnt+"";
         } catch (Exception ex) {
             System.out.println(ex);
-            ex.printStackTrace();
         }
         Gson gson = new Gson();
         return gson.toJson(responseMessage);
@@ -341,6 +340,7 @@ public class CashSearchServlet extends MvcBaseServlet {
             Map<String,Object> contextMap = new HashMap<>();
             contextMap.put("headers",dataMap.get("header"));
             contextMap.put("rows", dataMap.get("data"));
+            response.setContentType("text/plain");
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition", "attachment;filename=" + "outExcel"+outYM+".xls");
             jxlsUtils.processTemplate(contextMap,templateInputStream,response.getOutputStream(),configurationXmlInputStream,new CellRef("Template!A1"));
@@ -448,167 +448,11 @@ public class CashSearchServlet extends MvcBaseServlet {
             responseMessage += " total counts: " + exeCnt;
         }catch(Exception ex){
             System.out.println(ex);
-            ex.printStackTrace();
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();
         return gson.toJson(responseMessage);
     }
-
-    @RequestMapping(method = RequestMethod.POST, params = "method=cancelCalOverYM", produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String cancelCalOverYm(
-            @RequestParam MultiValueMap<String, String> paramMap
-            , @RequestHeader HttpHeaders headers
-            , Model model
-            , @RequestParam(value = "outYM", required = true) String outYm
-            , HttpServletRequest request
-            , HttpServletResponse response ) throws Exception {
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
-        List<Integer> accept = new ArrayList<>();
-        List<Integer> ignore = new ArrayList<>();
-        try{
-            boolean haveCalOver = false;
-            List<CashVO> cashVoList = cashService.findCashVoByOutYm(outYm);
-            for(CashVO cashVO : cashVoList){
-                for(CashDetailEntity cashDetailEntity: cashVO.getCashDetailEntityList()){
-                    if(cashDetailEntity.getCashType().equals(2)){
-                        cashService.transactionCancelOver(cashVO.getCashMasterEntity().getCashMasterId(),cashDetailEntity.getCashDetailId());
-                        haveCalOver = true;
-                    }
-                }
-                if(haveCalOver){
-                    accept.add(cashVO.getCashMasterEntity().getCashMasterId());
-                }else{
-                    ignore.add(cashVO.getCashMasterEntity().getCashMasterId());
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            Gson gson = new Gson();
-            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.POST, params = "method=deleteEmptyCashMasterYM", produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String deleteEmptyCashMasterYm(
-            @RequestParam MultiValueMap<String, String> paramMap
-            , @RequestHeader HttpHeaders headers
-            , Model model
-            , @RequestParam(value = "outYM", required = true) String outYm
-            , HttpServletRequest request
-            , HttpServletResponse response ) throws Exception {
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
-        List<Integer> accept = new ArrayList<>();
-        List<Integer> ignore = new ArrayList<>();
-        try{
-            List<CashVO> cashVoList = cashService.findCashVoByOutYm(outYm);
-            for(CashVO cashVO: cashVoList){
-                if(cashVO.getCashDetailEntityList().size()==0){
-                    cashService.delCashMaster(cashVO.getCashMasterEntity().getCashMasterId());
-                    accept.add(cashVO.getCashMasterEntity().getCashMasterId());
-                }else{
-                    ignore.add(cashVO.getCashMasterEntity().getCashMasterId());
-                }
-            }
-        }catch(Exception e){
-            logger.error(e.getMessage());
-        }finally {
-            Gson gson = new Gson();
-            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.GET, params = "method=cancelCalOver", produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String cancelCalOver(
-            @RequestParam MultiValueMap<String, String> paramMap
-            , @RequestHeader HttpHeaders headers
-            , Model model
-            , @RequestParam(value = "destJson", required = true) String destJson //選擇的記錄
-            , HttpServletRequest request
-            , HttpServletResponse response) throws Exception {
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
-        List<Integer> accept = new ArrayList<>();
-        List<Integer> ignore = new ArrayList<>();
-        try{
-            List<Integer> cashMasterIdList = jsonUtils.parseMultiSelectedValueJsonArray(destJson,"cashMasterId",Integer.class);
-            for(Integer cashMasterId : cashMasterIdList){
-                CashVO cashVO = cashService.findCashVoById(cashMasterId);
-                boolean haveCalOver = false;
-                for(CashDetailEntity cashDetailEntity: cashVO.getCashDetailEntityList()){
-                    if(cashDetailEntity.getCashType().equals(2)){
-                        cashService.transactionCancelOver(cashMasterId,cashDetailEntity.getCashDetailId());
-                        haveCalOver = true;
-                    }
-                }
-                if(haveCalOver){
-                    accept.add(cashMasterId);
-                }else{
-                    ignore.add(cashMasterId);
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            Gson gson = new Gson();
-            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
-        }
-    }
-
-    /**
-     * 只有空的CashMaster可以被刪除
-     * @param paramMap
-     * @param headers
-     * @param model
-     * @param destJson
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(method = RequestMethod.GET, params = "method=deleteEmptyCashMaster", produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String deleteEmptyCashMaster(
-            @RequestParam MultiValueMap<String, String> paramMap
-            , @RequestHeader HttpHeaders headers
-            , Model model
-            , @RequestParam(value = "destJson", required = true) String destJson //選擇的記錄
-            , HttpServletRequest request
-            , HttpServletResponse response ) throws Exception{
-        BaseFormBean formBeanObject = formBeanObject(request);
-        Map otherMap = otherMap(request, response, formBeanObject);
-        sendObjToViewer(request, otherMap);
-        List<Integer> accept = new ArrayList<>();
-        List<Integer> ignore = new ArrayList<>();
-        try{
-            List<Integer> cashMasterIdList = jsonUtils.parseMultiSelectedValueJsonArray(destJson,"cashMasterId",Integer.class);
-            for(Integer cashMasterId : cashMasterIdList){
-                CashVO cashVO = cashService.findCashVoById(cashMasterId);
-                if(cashVO.getCashDetailEntityList().size()==0){
-                    cashService.delCashMaster(cashMasterId);
-                    accept.add(cashMasterId);
-                }else{
-                    ignore.add(cashMasterId);
-                }
-            }
-        }catch(Exception e){
-            logger.error(e.getMessage());
-        }finally {
-            Gson gson = new Gson();
-            return gson.toJson("Accept: "+ accept.size()+", Ignore: "+ignore.size());
-        }
-    }
-
-
 
     /**
      * 批次-寄email
@@ -636,7 +480,7 @@ public class CashSearchServlet extends MvcBaseServlet {
             exeCnt = cashService.sendBillMailYM(calYM);
             responseMessage += " total counts: " + exeCnt;
         }catch(Exception ex){
-            ex.printStackTrace();
+            System.out.println(ex);
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();
@@ -655,42 +499,26 @@ public class CashSearchServlet extends MvcBaseServlet {
      * @throws Exception
      */
     @RequestMapping(method = RequestMethod.GET, params = "method=email", produces = "application/json;charset=utf-8")
-    public  @ResponseBody
+    public @ResponseBody
     String email(@RequestParam MultiValueMap<String, String> paramMap,
                  @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson //帳單年月
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
-        logger.debug("out model:   " + model);
-        logger.debug("out destJson:   " + destJson);
-        logger.debug("out paramMap:   " + paramMap);
-
-
-        UserEntity user = checkLogin(request,response);
-
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);
         Integer exeCnt = 0;
         String responseMessage = "";
-
         try{
             exeCnt = cashService.sendBillMail(destJson);
-            responseMessage += " total counts: " + exeCnt+ "";
+            responseMessage += " total counts: " + exeCnt;
         }catch(Exception ex){
-            ex.printStackTrace();
+            System.out.println(ex);
             responseMessage = " fail!!";
         }
         Gson gson = new Gson();
         return gson.toJson(responseMessage);
     }
-
-
-
-
-
-
-
-
 
     /**
      * 多筆-未繳費客戶通知
@@ -709,9 +537,6 @@ public class CashSearchServlet extends MvcBaseServlet {
                   @RequestHeader HttpHeaders headers, Model model
             , @RequestParam(value = "destJson", required = true) String destJson
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        UserEntity user = checkLogin(request,response);
-
         BaseFormBean formBeanObject = formBeanObject(request);
         Map otherMap = otherMap(request, response, formBeanObject);
         sendObjToViewer(request, otherMap);

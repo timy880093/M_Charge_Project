@@ -1128,8 +1128,8 @@ public class CashDAO extends BaseDAO {
                         .append("\n客服專線：02-77183770");
 
 //            SendEmailFileUtils.sendEmail(new String[]{email}, subject, content.toString());
-                if(null != email){
-                    String[] EmailList = new String[]{email};
+                if(null != reEmail){
+                    String[] EmailList = new String[]{reEmail};
                     String path = this.getClass().getResource("/").getPath()+ "/template" +"/scsbPayBillTutorial.pdf";
                     SendEmailFileUtils.sendEmail(EmailList, subject, content.toString(),path,"scsbPayBillTutorial.pdf");
                 }else{
@@ -1172,6 +1172,8 @@ public class CashDAO extends BaseDAO {
         }
         return str;
     }
+
+
 
     //取消預繳
     public boolean transactionCancelPrepay(Integer cashDetailId) throws Exception{

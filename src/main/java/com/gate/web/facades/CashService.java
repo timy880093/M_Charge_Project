@@ -74,7 +74,7 @@ public interface CashService extends Service {
     Integer transactionSendBillMail1(String masterIdAry) throws Exception;
 
     //輸入自行要重寄的Email(帳單明細表)
-    Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception;
+      Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception;
 
     Map<String,Object> genCashDataExcelDataMap(List<CashMasterBean> cashMasterBeanList);
 

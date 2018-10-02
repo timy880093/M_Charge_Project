@@ -402,6 +402,10 @@ public class CompanyChargeServiceImp implements CompanyChargeService{
 
             java.sql.Date endDate = null;
 
+            // todo 已續約
+
+
+
             //將原合約續約
             for(int j=0; j<packageList.size(); j++){
                 Map map = (Map)packageList.get(j);
