@@ -528,10 +528,10 @@ public class CalCycleServiceImp implements CalCycleService {
                     billCycleEntity.setPayOver(priceOver); //超額金額
                 } else if("Y".equals(hasGrade)){
                     //使用級距表
-                    List<GradeEntity> gradeList = gradeRepository.findByChargeId(chargeModeGradeEntity.getChargeId());
+                    List<Grade> gradeList = gradeRepository.findByChargeId(chargeModeGradeEntity.getChargeId());
                     BigDecimal priceOver = new BigDecimal(0);
                     for(int gradeIndex=0; gradeIndex<gradeList.size(); gradeIndex++){
-                        GradeEntity gradeEntity = (GradeEntity) gradeList.get(gradeIndex);
+                        Grade gradeEntity = (Grade) gradeList.get(gradeIndex);
                         Integer cntStart = gradeEntity.getCntStart();
                         Integer cntEnd = gradeEntity.getCntEnd();
                         Integer gradePrice = gradeEntity.getPrice();

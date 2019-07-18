@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.gateweb.charge.model.Grade;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang3.StringUtils;
@@ -16,14 +17,14 @@ import com.gate.web.formbeans.ChargeModeCycleBean;
 import com.gate.web.formbeans.ChargeModeGradeBean;
 import com.gateweb.charge.model.ChargeModeCycleEntity;
 import com.gateweb.charge.model.ChargeModeGradeEntity;
-import com.gateweb.charge.model.GradeEntity;
+import com.gateweb.charge.model.Grade;
 
 @Repository("chargeDAO")
 public class ChargeDAO extends BaseDAO {
 
-	@Autowired
+    @Autowired
     CashDAO cashDAO;
-	
+
     public Map getChargeList(QuerySettingVO querySettingVO) throws Exception {
         List<Object> parameters = new ArrayList<Object>();
         StringBuffer dataSb = new StringBuffer();
@@ -113,35 +114,34 @@ public class ChargeDAO extends BaseDAO {
 
     //找到級距型方案的資料
     public ChargeModeGradeVO findChargeModeGradeByChargeId(Integer chargeId) throws Exception {
-        ChargeModeGradeEntity chargeEntity = (ChargeModeGradeEntity) getEntity(ChargeModeGradeEntity.class,chargeId);
+        ChargeModeGradeEntity chargeEntity = (ChargeModeGradeEntity) getEntity(ChargeModeGradeEntity.class, chargeId);
         ChargeModeGradeVO chargeVO = new ChargeModeGradeVO();
-        BeanUtils.copyProperties(chargeVO,chargeEntity);
-        Map map = getCreatorAndModifier(chargeVO.getCreatorId(),chargeVO.getModifierId());
+        BeanUtils.copyProperties(chargeVO, chargeEntity);
+        Map map = getCreatorAndModifier(chargeVO.getCreatorId(), chargeVO.getModifierId());
         chargeVO.setCreator((String) map.get("creator"));
         chargeVO.setModifier((String) map.get("modifier"));
         return chargeVO;
     }
 
     //取得某級距方案的級距清單
-    public List<GradeEntity> getGradeList(Integer chargeId) throws Exception {
-        GradeEntity searchGradeEntity = new GradeEntity();
+    public List<Grade> getGradeList(Integer chargeId) throws Exception {
+        Grade searchGradeEntity = new Grade();
         searchGradeEntity.setChargeId(chargeId);
-        List queryList = getSearchEntity(GradeEntity.class, searchGradeEntity);
+        List queryList = getSearchEntity(Grade.class, searchGradeEntity);
 
         List list = new ArrayList();
-        for(int i=0; i<queryList.size(); i++){
-            GradeEntity entity = (GradeEntity)queryList.get(i);
+        for (int i = 0; i < queryList.size(); i++) {
+            Grade entity = (Grade) queryList.get(i);
             list.add(entity);
         }
         return list;
     }
 
 
-
     //新增或修改級距型方案
-    public Integer insertChargeModeGrade(ChargeModeGradeBean bean,Long userId) throws Exception {
+    public Integer insertChargeModeGrade(ChargeModeGradeBean bean, Long userId) throws Exception {
         ChargeModeGradeEntity entity = new ChargeModeGradeEntity();
-        BeanUtils.copyProperties(entity,bean);
+        BeanUtils.copyProperties(entity, bean);
 
         Integer chargeModeGradeId = entity.getChargeId();
         entity.setCreatorId(userId.intValue());
@@ -149,38 +149,38 @@ public class ChargeDAO extends BaseDAO {
 
 
         //新增或修改 經銷商資訊(dealer_company)
-        if(null == chargeModeGradeId){
+        if (null == chargeModeGradeId) {
             entity.setStatus(1);
             saveEntity(entity);
             chargeModeGradeId = entity.getChargeId();
-        }else{
+        } else {
             saveOrUpdateEntity(entity, chargeModeGradeId);
         }
 
         //如果是修改資料的話，把原本的grade找出來比較
         List tempGradeIdList = new ArrayList();
-        GradeEntity searchGradeEntity = new GradeEntity();
+        Grade searchGradeEntity = new Grade();
         searchGradeEntity.setChargeId(chargeModeGradeId);
-        List orgGradeList = getSearchEntity(GradeEntity.class, searchGradeEntity);
-        for(int i=0; i<orgGradeList.size(); i++){
-            GradeEntity orgGradeEntity = (GradeEntity)orgGradeList.get(i);
+        List orgGradeList = getSearchEntity(Grade.class, searchGradeEntity);
+        for (int i = 0; i < orgGradeList.size(); i++) {
+            Grade orgGradeEntity = (Grade) orgGradeList.get(i);
             Integer gradeId = orgGradeEntity.getGradeId();
-            tempGradeIdList.add((int)gradeId);
+            tempGradeIdList.add((int) gradeId);
         }
 
 
         //新增或修改 級距表(grade)資料
-        for(int i=0; i<bean.getCntStart().length; i++){
+        for (int i = 0; i < bean.getCntStart().length; i++) {
             Integer gradeId = bean.getGradeId()[i];
             Integer cntStart = bean.getCntStart()[i];
             Integer cntEnd = bean.getCntEnd()[i];
             Integer price = bean.getPrice()[i];
-            if(null == cntStart || null == cntEnd || null == price){
+            if (null == cntStart || null == cntEnd || null == price) {
                 continue;
             }
-            if(null == gradeId){
+            if (null == gradeId) {
                 //新增
-                GradeEntity gradeEntity = new GradeEntity();
+                Grade gradeEntity = new Grade();
                 gradeEntity.setChargeId(entity.getChargeId());
                 gradeEntity.setCntStart(cntStart);
                 gradeEntity.setCntEnd(cntEnd);
@@ -188,15 +188,15 @@ public class ChargeDAO extends BaseDAO {
                 gradeEntity.setCreatorId(userId.intValue());
                 saveEntity(gradeEntity);
 
-            }else{
+            } else {
                 //修改
 
-                if(tempGradeIdList.contains((int)gradeId)){
+                if (tempGradeIdList.contains((int) gradeId)) {
                     //如果gradeId不在原本的grade清單裡，就要刪除
-                    tempGradeIdList.remove((int)gradeId);
+                    tempGradeIdList.remove((int) gradeId);
                 }
 
-                GradeEntity gradeEntity = (GradeEntity)getEntity(GradeEntity.class, gradeId);
+                Grade gradeEntity = (Grade) getEntity(Grade.class, gradeId);
                 gradeEntity.setCntStart(cntStart);
                 gradeEntity.setCntEnd(cntEnd);
                 gradeEntity.setPrice(price);
@@ -205,15 +205,13 @@ public class ChargeDAO extends BaseDAO {
             }
         }
 
-        for(int i=0; i<tempGradeIdList.size(); i++){
-            Integer gradeId = (Integer)tempGradeIdList.get(i);
-            GradeEntity gradeEntity = (GradeEntity)getEntity(GradeEntity.class, gradeId);
+        for (int i = 0; i < tempGradeIdList.size(); i++) {
+            Integer gradeId = (Integer) tempGradeIdList.get(i);
+            Grade gradeEntity = (Grade) getEntity(Grade.class, gradeId);
             deleteEntity(gradeEntity);
         }
         return null;
     }
-
-
 
 
 }

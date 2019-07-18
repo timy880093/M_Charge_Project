@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.gateweb.charge.model.ChargeModeGradeEntity;
+import com.gateweb.charge.model.Grade;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import com.gate.web.displaybeans.ChargeModeGradeVO;
 import com.gate.web.formbeans.ChargeModeCycleBean;
 import com.gate.web.formbeans.ChargeModeGradeBean;
 import com.gateweb.charge.model.ChargeModeCycleEntity;
-import com.gateweb.charge.model.GradeEntity;
+import com.gateweb.charge.model.Grade;
 
 import dao.ChargeDAO;
 
@@ -99,7 +100,7 @@ public class ChargeServiceImp implements ChargeService{
     }
 
     //取得某級距方案的級距清單
-    public List<GradeEntity> getGradeList(Integer chargeId) throws Exception {
+    public List<Grade> getGradeList(Integer chargeId) throws Exception {
         return chargeDAO.getGradeList(chargeId);
     }
 

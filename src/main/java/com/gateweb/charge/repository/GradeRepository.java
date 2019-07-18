@@ -28,12 +28,12 @@ import org.springframework.stereotype.Repository;
  * This class provides methods to populate DB Table of Grade
  */
  @Repository("grade")
-public interface GradeRepository extends JpaRepository<GradeEntity, Integer>
-	, QuerydslPredicateExecutor<GradeEntity> ,GradeRepositoryCustom {
+public interface GradeRepository extends JpaRepository<Grade, Integer>
+	, QuerydslPredicateExecutor<Grade> {
 	
     /**
      * Delete a record in Database.
-	 * @param $pkVar.columnName   PK 
+	 * @param
 	 * @throws DaoSystemException	if system is wrong.
      */
 	void deleteByGradeId(	
@@ -52,7 +52,7 @@ public interface GradeRepository extends JpaRepository<GradeEntity, Integer>
 	
 	public long count();*/
 
-	public List<GradeEntity> findByChargeId(Integer chargeId);
+	public List<Grade> findByChargeId(Integer chargeId);
 
 			
 }

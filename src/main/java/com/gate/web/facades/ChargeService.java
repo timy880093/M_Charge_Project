@@ -12,7 +12,7 @@ import com.gate.web.displaybeans.ChargeModeGradeVO;
 import com.gate.web.formbeans.ChargeModeCycleBean;
 import com.gate.web.formbeans.ChargeModeGradeBean;
 import com.gateweb.charge.model.ChargeModeCycleEntity;
-import com.gateweb.charge.model.GradeEntity;
+import com.gateweb.charge.model.Grade;
 
 /**
  * Created by simon on 2014/7/11.
@@ -41,7 +41,7 @@ public interface ChargeService extends Service {
 
 
     //取得某級距方案的級距清單
-    public List<GradeEntity> getGradeList(Integer chargeId) throws Exception ;
+    public List<Grade> getGradeList(Integer chargeId) throws Exception ;
     public void changeChargeModeStatus(String type, Integer chargeId, Integer status) throws Exception ;
 
 

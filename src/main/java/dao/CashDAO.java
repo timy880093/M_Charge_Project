@@ -32,7 +32,7 @@ import com.gateweb.charge.model.ChargeModeCycleEntity;
 import com.gateweb.charge.model.ChargeModeGradeEntity;
 import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.DeductDetailEntity;
-import com.gateweb.charge.model.GradeEntity;
+import com.gateweb.charge.model.Grade;
 import com.gateweb.charge.model.PackageModeEntity;
 import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.gateweb.charge.model.PrepayDetailEntity;
@@ -1100,11 +1100,11 @@ public class CashDAO extends BaseDAO {
                             content.append(" <tr>")
                                     .append(" <th>張數起</th><th>張數迄</th><th>價格(未稅)</th>")
                                     .append(" </tr>");
-                            GradeEntity searchGradeEntity = new GradeEntity();
+                            Grade searchGradeEntity = new Grade();
                             searchGradeEntity.setChargeId(chargeIdforGrade);
-                            List gradeList = getSearchEntity(GradeEntity.class, searchGradeEntity);
+                            List gradeList = getSearchEntity(Grade.class, searchGradeEntity);
                             for(int gradeInx = 0; gradeInx<gradeList.size(); gradeInx++){
-                                GradeEntity gradeEntity = (GradeEntity)gradeList.get(gradeInx);
+                                Grade gradeEntity = (Grade)gradeList.get(gradeInx);
                                 content.append(" <tr>")
                                         .append(" <td>" + gradeEntity.getCntStart() + "</td><td>" + gradeEntity.getCntEnd() + "</td><td>" + gradeEntity.getPrice() + "</td>")
                                         .append(" </tr>");

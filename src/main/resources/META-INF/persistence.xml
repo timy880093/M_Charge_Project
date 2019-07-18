@@ -5,7 +5,7 @@
     http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
 	<persistence-unit name="chargeFacade" transaction-type="RESOURCE_LOCAL">
 				<class>com.gateweb.charge.model.PrinterEntity</class>
-				<class>com.gateweb.charge.model.GradeEntity</class>
+				<class>com.gateweb.charge.model.Grade</class>
 				<class>com.gateweb.charge.model.ChargeModeCycleEntity</class>
 				<class>com.gateweb.charge.model.PackageModeEntity</class>
 				<class>com.gateweb.charge.model.Company</class>
@@ -29,7 +29,12 @@
 				<class>com.gateweb.charge.model.PrepayDeductMasterEntity</class>
 				<class>com.gateweb.charge.model.UserEntity</class>
 				<class>com.gateweb.charge.model.InvoiceAmountSummaryReportEntity</class>
-				<class>com.gateweb.charge.model.AllowanceAmountSummaryReportEntity</class>
+				<class>com.gateweb.charge.model.ModeReference</class>
+				<class>com.gateweb.charge.model.BillingItem</class>
+				<class>com.gateweb.charge.model.ChargeMode</class>
+				<class>com.gateweb.charge.model.ChargeReference</class>
+				<class>com.gateweb.charge.model.Grade</class>
+				<class>com.gateweb.charge.model.Cycle</class>
 				<exclude-unlisted-classes>true</exclude-unlisted-classes>
 	</persistence-unit>
 	<persistence-unit name="einvFacade" transaction-type="RESOURCE_LOCAL">

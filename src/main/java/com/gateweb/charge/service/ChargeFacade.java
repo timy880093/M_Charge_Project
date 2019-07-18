@@ -55,48 +55,8 @@ public interface ChargeFacade {
      * search records from Database.
      */
     public List<PrinterEntity> searchLike(PrinterEntity bean) ;
-    /**
-     * Create a new record in Database.
-     */
-	public GradeEntity save(GradeEntity bean) ;
 
-    /**
-     * Retrieve a record from Database.
-     */
-	public GradeEntity findGradeById(
-		java.lang.Integer gradeId 
-
-	) ;
-
-    /**
-     * Retrieve a record from Database.
-     */
-    public List<GradeEntity> findGradeAll() ;
-    
-    /**
-     * Update a record in Database.
-     */
-    public GradeEntity update(GradeEntity bean) ;
-
-    /**
-     * Create a new record in Database.
-     */
-	public void deleteGrade(
-		java.lang.Integer gradeId 
-
-	) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<GradeEntity> searchBy(GradeEntity bean) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<GradeEntity> searchLike(GradeEntity bean) ;
-
-    /**
+	/**
      * Create a new record in Database.
      */
 	public ChargeModeCycleEntity save(ChargeModeCycleEntity bean) ;
@@ -486,46 +446,8 @@ public interface ChargeFacade {
      * search records from Database.
      */
     public List<DeductDetailEntity> searchLike(DeductDetailEntity bean) ;
-    /**
-     * Create a new record in Database.
-     */
-	public InvoiceMainEntity save(InvoiceMainEntity bean) ;
 
-    /**
-     * Retrieve a record from Database.
-     */
-	public InvoiceMainEntity findInvoiceMainById(
-		java.lang.Long invoiceId 
 
-	) ;
-
-    /**
-     * Retrieve a record from Database.
-     */
-    public List<InvoiceMainEntity> findInvoiceMainAll() ;
-    
-    /**
-     * Update a record in Database.
-     */
-    public InvoiceMainEntity update(InvoiceMainEntity bean) ;
-
-    /**
-     * Create a new record in Database.
-     */
-	public void deleteInvoiceMain(
-		java.lang.Long invoiceId 
-
-	) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<InvoiceMainEntity> searchBy(InvoiceMainEntity bean) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<InvoiceMainEntity> searchLike(InvoiceMainEntity bean) ;
     /**
      * Create a new record in Database.
      */
@@ -726,92 +648,7 @@ public interface ChargeFacade {
      * search records from Database.
      */
     public List<WarrantyEntity> searchLike(WarrantyEntity bean) ;
-    /**
-     * Create a new record in Database.
-     */
-	public ChargeModeGradeEntity save(ChargeModeGradeEntity bean) ;
 
-    /**
-     * Retrieve a record from Database.
-     */
-	public ChargeModeGradeEntity findChargeModeGradeById(
-		java.lang.Integer chargeId 
-
-	) ;
-
-    /**
-     * Retrieve a record from Database.
-     */
-    public List<ChargeModeGradeEntity> findChargeModeGradeAll() ;
-    
-    /**
-     * Update a record in Database.
-     */
-    public ChargeModeGradeEntity update(ChargeModeGradeEntity bean) ;
-
-    /**
-     * Create a new record in Database.
-     */
-	public void deleteChargeModeGrade(
-		java.lang.Integer chargeId 
-
-	) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<ChargeModeGradeEntity> searchBy(ChargeModeGradeEntity bean) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<ChargeModeGradeEntity> searchLike(ChargeModeGradeEntity bean) ;
-    /**
-     * Create a new record in Database.
-     */
-	public InvoiceSyncRelationEntity save(InvoiceSyncRelationEntity bean) ;
-
-    /**
-     * Retrieve a record from Database.
-     */
-	public InvoiceSyncRelationEntity findInvoiceSyncRelationById(
-		java.lang.String uploadType 
-, 		java.lang.String sellerIdentifier 
-, 		java.lang.String cYearMonth 
-, 		java.lang.String invoiceNumber 
-
-	) ;
-
-    /**
-     * Retrieve a record from Database.
-     */
-    public List<InvoiceSyncRelationEntity> findInvoiceSyncRelationAll() ;
-    
-    /**
-     * Update a record in Database.
-     */
-    public InvoiceSyncRelationEntity update(InvoiceSyncRelationEntity bean) ;
-
-    /**
-     * Create a new record in Database.
-     */
-	public void deleteInvoiceSyncRelation(
-		java.lang.String uploadType 
-, 		java.lang.String sellerIdentifier 
-, 		java.lang.String cYearMonth 
-, 		java.lang.String invoiceNumber 
-
-	) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<InvoiceSyncRelationEntity> searchBy(InvoiceSyncRelationEntity bean) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<InvoiceSyncRelationEntity> searchLike(InvoiceSyncRelationEntity bean) ;
     /**
      * Create a new record in Database.
      */
