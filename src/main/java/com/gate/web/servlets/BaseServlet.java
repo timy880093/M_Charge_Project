@@ -39,7 +39,7 @@ import com.gate.web.authority.UserInfoContext;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.messages.ErrorMessages;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.UserEntity;
 import com.gateweb.charge.service.ChargeFacade;
 import com.google.gson.Gson;
@@ -194,7 +194,7 @@ public abstract class BaseServlet extends HttpServlet {
             
         	UserEntity user = (UserEntity) request.getSession().getAttribute("loginUser");
         	//List<AccountReference> referenceList = (List<AccountReference>)request.getSession().getAttribute("accountReferenceList");
-        	CompanyEntity company = (CompanyEntity)request.getSession().getAttribute("company");
+            Company company = (Company)request.getSession().getAttribute("company");
         	UserInfo userInfo = (UserInfo)request.getSession().getAttribute("userContext");
 
         	if(user == null){

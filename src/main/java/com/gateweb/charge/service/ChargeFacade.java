@@ -6,31 +6,8 @@
 package com.gateweb.charge.service;
 import java.util.List;
 
-import com.gateweb.charge.model.BillCycleEntity;
-import com.gateweb.charge.model.CashDetailEntity;
-import com.gateweb.charge.model.CashMasterEntity;
-import com.gateweb.charge.model.ChargeModeCycleAddEntity;
-import com.gateweb.charge.model.ChargeModeCycleEntity;
-import com.gateweb.charge.model.ChargeModeGradeEntity;
-import com.gateweb.charge.model.CommissionLogEntity;
-import com.gateweb.charge.model.CompanyEntity;
-import com.gateweb.charge.model.DealerCompanyEntity;
-import com.gateweb.charge.model.DealerEntity;
-import com.gateweb.charge.model.DeductDetailEntity;
-import com.gateweb.charge.model.GradeEntity;
-import com.gateweb.charge.model.InvoiceMainEntity;
-import com.gateweb.charge.model.InvoiceMainUniqueEntity;
-import com.gateweb.charge.model.InvoiceMainUniqueEntityPK;
-import com.gateweb.charge.model.InvoiceSyncRelationEntity;
-import com.gateweb.charge.model.InvoiceTypeEntity;
-import com.gateweb.charge.model.LogDataEntity;
-import com.gateweb.charge.model.LogParameterEntity;
-import com.gateweb.charge.model.PackageModeEntity;
-import com.gateweb.charge.model.PrepayDeductMasterEntity;
-import com.gateweb.charge.model.PrepayDetailEntity;
-import com.gateweb.charge.model.PrinterEntity;
-import com.gateweb.charge.model.UserEntity;
-import com.gateweb.charge.model.WarrantyEntity;
+import com.gateweb.charge.model.*;
+import com.gateweb.charge.model.Company;
 
 /**
  * @author pkliu
@@ -202,12 +179,12 @@ public interface ChargeFacade {
     /**
      * Create a new record in Database.
      */
-	public CompanyEntity save(CompanyEntity bean) ;
+	public Company save(Company bean) ;
 
     /**
      * Retrieve a record from Database.
      */
-	public CompanyEntity findCompanyById(
+	public Company findCompanyById(
 		java.lang.Integer companyId 
 
 	) ;
@@ -215,12 +192,12 @@ public interface ChargeFacade {
     /**
      * Retrieve a record from Database.
      */
-    public List<CompanyEntity> findCompanyAll() ;
+    public List<Company> findCompanyAll() ;
     
     /**
      * Update a record in Database.
      */
-    public CompanyEntity update(CompanyEntity bean) ;
+    public Company update(Company bean) ;
 
     /**
      * Create a new record in Database.
@@ -229,54 +206,6 @@ public interface ChargeFacade {
 		java.lang.Integer companyId 
 
 	) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<CompanyEntity> searchBy(CompanyEntity bean) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<CompanyEntity> searchLike(CompanyEntity bean) ;
-    /**
-     * Create a new record in Database.
-     */
-	public InvoiceMainUniqueEntity save(InvoiceMainUniqueEntity bean) ;
-
-    /**
-     * Retrieve a record from Database.
-     */
-	public InvoiceMainUniqueEntity findInvoiceMainUniqueById(
-					InvoiceMainUniqueEntityPK id
-	) ;
-
-    /**
-     * Retrieve a record from Database.
-     */
-    public List<InvoiceMainUniqueEntity> findInvoiceMainUniqueAll() ;
-    
-    /**
-     * Update a record in Database.
-     */
-    public InvoiceMainUniqueEntity update(InvoiceMainUniqueEntity bean) ;
-
-    /**
-     * Create a new record in Database.
-     */
-	public void deleteInvoiceMainUnique(
-					InvoiceMainUniqueEntityPK id
-	) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<InvoiceMainUniqueEntity> searchBy(InvoiceMainUniqueEntity bean) ;
-
-    /**
-     * search records from Database.
-     */
-    public List<InvoiceMainUniqueEntity> searchLike(InvoiceMainUniqueEntity bean) ;
     /**
      * Create a new record in Database.
      */

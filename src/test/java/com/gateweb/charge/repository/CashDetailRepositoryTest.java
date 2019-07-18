@@ -1,7 +1,7 @@
 package com.gateweb.charge.repository;
 
 import com.gateweb.charge.model.CashDetailEntity;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,8 +42,8 @@ public class CashDetailRepositoryTest {
     @Test
     public void findByCompanyIdIsAndCalYmIsAndCashTypeIs() throws Exception{
         List<String> messageList = new ArrayList<>();
-        List<CompanyEntity> companyEntityList = companyRepository.findAll();
-        for(CompanyEntity companyEntity: companyEntityList){
+        List<Company> companyEntityList = companyRepository.findAll();
+        for(Company companyEntity: companyEntityList){
             List<CashDetailEntity> cashDetailEntityList
                     = cashDetailRepository.findByCompanyIdIsAndCalYmIsAndCashTypeIs(companyEntity.getCompanyId(),"201802",7);
             for(CashDetailEntity cashDetailEntity : cashDetailEntityList){

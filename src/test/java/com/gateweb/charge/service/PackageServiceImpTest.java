@@ -2,7 +2,7 @@ package com.gateweb.charge.service;
 
 import com.gate.web.facades.PackageService;
 import com.gateweb.charge.model.BillCycleEntity;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.PackageModeEntity;
 import com.gateweb.charge.repository.BillCycleRepository;
 import com.gateweb.charge.repository.CompanyRepository;
@@ -47,7 +47,7 @@ public class PackageServiceImpTest {
         }
 
         for(PackageModeEntity packageModeEntity : resultPackageModeList){
-            CompanyEntity companyEntity = companyRepository.findByCompanyId(packageModeEntity.getCompanyId());
+            Company companyEntity = companyRepository.findByCompanyId(packageModeEntity.getCompanyId());
             System.out.println(packageModeEntity.getCompanyId()+":"+companyEntity.getName());
         }
     }

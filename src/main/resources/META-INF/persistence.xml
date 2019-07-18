@@ -8,7 +8,7 @@
 				<class>com.gateweb.charge.model.GradeEntity</class>
 				<class>com.gateweb.charge.model.ChargeModeCycleEntity</class>
 				<class>com.gateweb.charge.model.PackageModeEntity</class>
-				<class>com.gateweb.charge.model.CompanyEntity</class>
+				<class>com.gateweb.charge.model.Company</class>
 				<class>com.gateweb.charge.model.InvoiceMainUniqueEntity</class>
 				<class>com.gateweb.charge.model.CashDetailEntity</class>
 				<class>com.gateweb.charge.model.DealerCompanyEntity</class>

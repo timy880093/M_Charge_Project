@@ -1,6 +1,6 @@
 package com.gateweb.charge.repository;
 
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class CompanyRepositoryTest {
 
     @Test
     public void getCompanyEntityById(){
-        CompanyEntity companyEntity = companyRepository.findByCompanyId(2);
+        Company companyEntity = companyRepository.findByCompanyId(2);
         System.out.println(companyEntity.getName());
     }
 }

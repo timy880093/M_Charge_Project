@@ -39,7 +39,7 @@ public class CashServiceImp implements CashService {
 
     private Logger logger = LogManager.getLogger(this.getClass().getName());
 
-	@Autowired
+    @Autowired
     CashDAO cashDAO;
 
     @Autowired
@@ -91,69 +91,69 @@ public class CashServiceImp implements CashService {
         return cashDAO.getCompnay();
     }
 
-    public Integer out(String masterIdAry) throws Exception{
+    public Integer out(String masterIdAry) throws Exception {
         return cashDAO.transactionSumOut(masterIdAry);
     }
 
-    public Integer outYM(String outYM, Integer userCompanyId) throws Exception{
+    public Integer outYM(String outYM, Integer userCompanyId) throws Exception {
         return cashDAO.transactionSumOutYM(outYM, userCompanyId);
     }
 
-    public String excelSumIn(String businesscode, String inDate, String bankYM, Double inMoney) throws Exception{
+    public String excelSumIn(String businesscode, String inDate, String bankYM, Double inMoney) throws Exception {
         return cashDAO.transactionExcelSumIn(businesscode, inDate, bankYM, inMoney);
     }
 
-    public List<CashDetailVO> getCashDetailListByMasterId(Integer cashMasterId) throws Exception{
+    public List<CashDetailVO> getCashDetailListByMasterId(Integer cashMasterId) throws Exception {
         return cashDAO.getCashDetailListByMasterId(cashMasterId);
     }
 
-    public List<BillCycleEntity> getOverListByDetailId(Integer cashDetailId) throws Exception{
+    public List<BillCycleEntity> getOverListByDetailId(Integer cashDetailId) throws Exception {
         return cashDAO.getOverListByDetailId(cashDetailId);
     }
 
-    public CashMasterVO getCashMasterByMasterId(Integer cashMasterId) throws  Exception{
+    public CashMasterVO getCashMasterByMasterId(Integer cashMasterId) throws Exception {
         return cashDAO.getCashMasterByMasterId(cashMasterId);
     }
 
-    public boolean updateCashDetail(Integer cashDetailId, Double diffPrice, String diffPriceNote) throws Exception{
+    public boolean updateCashDetail(Integer cashDetailId, Double diffPrice, String diffPriceNote) throws Exception {
         return cashDAO.transactionUpdateCashDetail(cashDetailId, diffPrice, diffPriceNote);
     }
 
-    public boolean in(Integer cashMasterId, Double inAmount, String inDate, String inNote) throws Exception{
+    public boolean in(Integer cashMasterId, Double inAmount, String inDate, String inNote) throws Exception {
         return cashDAO.transactionIn(cashMasterId, inAmount, inDate, inNote);
     }
 
     //尋找要匯入上海銀行excel的資料-多筆
     @Override
-    public List getCashMasterDetail(List<Integer> cashMasterIdList) throws Exception{
+    public List getCashMasterDetail(List<Integer> cashMasterIdList) throws Exception {
         List<CashMasterEntity> cashMasterEntityList = new ArrayList<>();
-        for(Integer cashMasterId: cashMasterIdList){
+        for (Integer cashMasterId : cashMasterIdList) {
             cashMasterEntityList.add(cashMasterRepository.findByCashMasterId(cashMasterId));
         }
         return cashDAO.getCashMasterDetailList(cashMasterEntityList);
     }
 
     //尋找要匯入上海銀行excel的資料-批次(by 年月)
-    public List getCashMasterDetail(String outYm) throws Exception{
+    public List getCashMasterDetail(String outYm) throws Exception {
         List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.findByOutYm(outYm);
         return cashDAO.getCashMasterDetailList(cashMasterEntityList);
     }
 
 
-
     /**
      * 取消計算
+     *
      * @param cashDetailId
      * @return
      * @throws Exception
      */
     @Override
-    public boolean transactionCancelOver(Integer cashMasterId, Integer cashDetailId) throws Exception{
+    public boolean transactionCancelOver(Integer cashMasterId, Integer cashDetailId) throws Exception {
         //1.找出bill_cycle的over_id有cash_detail_id的資料
         List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByCashOutOverId(cashDetailId);
 
         //2.把這些bill_cycle計算超額的值清掉(包括over_id)
-        for(BillCycleEntity billCycleEntity : billCycleEntityList){
+        for (BillCycleEntity billCycleEntity : billCycleEntityList) {
             billCycleEntity.setCnt(null);
             billCycleEntity.setCntGift(null);
             billCycleEntity.setCntOver(null);
@@ -181,25 +181,25 @@ public class CashServiceImp implements CashService {
         //5.在prepay_deduct_master把錢加回去
         List<PrepayDeductMasterEntity> prepayDeductMasterList = prepayDeductMasterRepository.findByCompanyId(companyId);
 
-        if(prepayDeductMasterList.size()!=0){
+        if (prepayDeductMasterList.size() != 0) {
             //根據PrepayDeductMaster查出為扣抵的DeductDetail
-            for(PrepayDeductMasterEntity prepayDeductMasterEntity:prepayDeductMasterList){
+            for (PrepayDeductMasterEntity prepayDeductMasterEntity : prepayDeductMasterList) {
                 Integer deductMoney = 0;
                 List<DeductDetailEntity> deductDetailEntityList
                         = deductDetailRepository.findByPrepayDeductMasterIdIsAndCalYmIsAndDeductTypeIs(
-                            prepayDeductMasterEntity.getPrepayDeductMasterId()
-                            ,calYM
-                            ,2
+                        prepayDeductMasterEntity.getPrepayDeductMasterId()
+                        , calYM
+                        , 2
                 );
                 //根據DeductDetail查出產生的cashDetail
-                for(DeductDetailEntity deductDetailEntity: deductDetailEntityList){
+                for (DeductDetailEntity deductDetailEntity : deductDetailEntityList) {
                     CashDetailEntity deductCashDetailEntity
-                            = cashDetailRepository.findByCashDetailIdIsAndCashTypeIs(deductDetailEntity.getCashDetailId(),7);
+                            = cashDetailRepository.findByCashDetailIdIsAndCashTypeIs(deductDetailEntity.getCashDetailId(), 7);
                     //刪除cashDetail及deductDetail，有deductCashDetail才有扣抵，所以沒有就不用處理。
-                    if(deductCashDetailEntity!=null){
+                    if (deductCashDetailEntity != null) {
                         cashDetailRepository.delete(deductCashDetailEntity);
                         deductDetailRepository.delete(deductDetailEntity);
-                        deductMoney = 0-deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
+                        deductMoney = 0 - deductCashDetailEntity.getNoTaxInclusivePrice().intValue();
                     }
                 }
                 Integer amount = prepayDeductMasterEntity.getAmount();
@@ -230,43 +230,43 @@ public class CashServiceImp implements CashService {
         return cashDAO.transactionCancelOut(masterIdAry);
     }
 
-    public Integer sendBillMailYM(String outYM) throws Exception{
+    public Integer sendBillMailYM(String outYM) throws Exception {
         return cashDAO.transactionSendBillMailYM(outYM);
     }
 
-    public Integer sendBillMail(String masterIdAry) throws Exception{
+    public Integer sendBillMail(String masterIdAry) throws Exception {
         return cashDAO.transactionSendBillMail(masterIdAry);
     }
 
-    public Integer transactionCancelIn(String strCashMasterId) throws Exception{
+    public Integer transactionCancelIn(String strCashMasterId) throws Exception {
         return cashDAO.transactionCancelIn(strCashMasterId);
     }
 
-    public boolean cancelPrepay(Integer cashDetailId) throws Exception{
+    public boolean cancelPrepay(Integer cashDetailId) throws Exception {
         return cashDAO.transactionCancelPrepay(cashDetailId);
     }
 
-    public boolean delCashMaster(Integer cashMasterId)throws Exception{
+    public boolean delCashMaster(Integer cashMasterId) throws Exception {
         //刪除帳單(帳單裡沒有任何明細，則可刪除)
         //先檢查帳單裡是否沒有任何明細
         boolean isCashMasterEmpty = isCashMasterEmpty(cashMasterId);
 
-        if(isCashMasterEmpty){
+        if (isCashMasterEmpty) {
             //刪除帳單
             CashMasterEntity cashMasterEntity = cashMasterRepository.findByCashMasterId(cashMasterId);
             cashMasterRepository.delete(cashMasterEntity);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     //檢查帳單裡是否沒有任何明細
-    public boolean isCashMasterEmpty(Integer cashMasterId)throws Exception{
+    public boolean isCashMasterEmpty(Integer cashMasterId) throws Exception {
         CashDetailEntity searchCashDetailEntity = new CashDetailEntity();
         searchCashDetailEntity.setCashMasterId(cashMasterId);
         List<CashDetailEntity> cashDetailEntityList = cashDetailRepository.findByCashMasterId(cashMasterId);
-        if(null == cashDetailEntityList || cashDetailEntityList.size() == 0){
+        if (null == cashDetailEntityList || cashDetailEntityList.size() == 0) {
             return true; //沒有任何明細
         } else {
             return false; //有明細
@@ -275,27 +275,27 @@ public class CashServiceImp implements CashService {
 
     //使用CashVO的資料建立訂單。
     @Override
-    public List<OrderCsv> genOrderCsvListByCashVO(Long sellerCompanyId, CashVO cashVO){
-        CompanyEntity sellerCompany = companyRepository.findByCompanyId(sellerCompanyId.intValue());
-        CompanyEntity buyerCompany = companyRepository.findByCompanyId(cashVO.getCashMasterEntity().getCompanyId());
-        return genOrderCsvList(sellerCompany,buyerCompany,cashVO);
+    public List<OrderCsv> genOrderCsvListByCashVO(Long sellerCompanyId, CashVO cashVO) {
+        Company sellerCompany = companyRepository.findByCompanyId(sellerCompanyId.intValue());
+        Company buyerCompany = companyRepository.findByCompanyId(cashVO.getCashMasterEntity().getCompanyId());
+        return genOrderCsvList(sellerCompany, buyerCompany, cashVO);
     }
 
     //匯出發票Excel的資料-批次(by年月)
-    public List getInvoiceItem(String ym) throws Exception{
+    public List getInvoiceItem(String ym) throws Exception {
         CashMasterEntity searchMaster = new CashMasterEntity();
         searchMaster.setOutYm(ym);
-        List masterList =  cashDAO.getSearchEntity(CashMasterEntity.class, searchMaster);
+        List masterList = cashDAO.getSearchEntity(CashMasterEntity.class, searchMaster);
         return getInvoiceItemList(masterList);
     }
 
     //取得CashMasterEntityList
-    public List<CashVO> getCashMasterEntityList(String yearMonth) throws Exception{
+    public List<CashVO> getCashMasterEntityList(String yearMonth) throws Exception {
         List<CashVO> resultList = new ArrayList<>();
         CashMasterEntity conditionEntity = new CashMasterEntity();
         conditionEntity.setOutYm(yearMonth);
         List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.searchLikeVo(conditionEntity);
-        for(CashMasterEntity cashMasterEntity: cashMasterEntityList){
+        for (CashMasterEntity cashMasterEntity : cashMasterEntityList) {
             CashDetailEntity cashDetailEntity = new CashDetailEntity();
             cashDetailEntity.setCashMasterId(cashMasterEntity.getCashMasterId());
             List<CashDetailEntity> cashDetailEntityList = cashDetailRepository.searchLikeVo(cashDetailEntity);
@@ -309,17 +309,17 @@ public class CashServiceImp implements CashService {
 
     //取得CashMasterEntityListById
     @Override
-    public CashVO findCashVoById(Integer cashMasterId) throws Exception{
+    public CashVO findCashVoById(Integer cashMasterId) throws Exception {
         CashVO cashVO = new CashVO();
         CashMasterEntity cashMasterEntity = cashMasterRepository.findByCashMasterId(cashMasterId);
         List<CashDetailEntity> cashDetailEntityList
                 = cashDetailRepository.findByCashMasterId(cashMasterId.intValue());
-        if(cashMasterEntity!=null){
+        if (cashMasterEntity != null) {
             cashVO.setCashMasterEntity(cashMasterEntity);
         }
-        if(cashDetailEntityList.size()!=0){
+        if (cashDetailEntityList.size() != 0) {
             cashVO.setCashDetailEntityList(cashDetailEntityList);
-        }else{
+        } else {
             //不能傳null回去害別人爆。
             cashVO.setCashDetailEntityList(new ArrayList<>());
         }
@@ -327,71 +327,72 @@ public class CashServiceImp implements CashService {
     }
 
     //匯出發票Excel的資料-多筆
-    public List getInvoiceItem(String ym, String destJson) throws Exception{
+    public List getInvoiceItem(String ym, String destJson) throws Exception {
         List<CashMasterEntity> selectOutList = new ArrayList<CashMasterEntity>();
         Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CashMasterBean>>(){}.getType();
+        Type collectionType = new TypeToken<List<CashMasterBean>>() {
+        }.getType();
         List<CashMasterBean> cashMasterList = gson.fromJson(destJson, collectionType);
 
-        for(CashMasterBean masterBean:cashMasterList){
+        for (CashMasterBean masterBean : cashMasterList) {
             Integer masterId = masterBean.getCashMasterId();
-            CashMasterEntity masterEntity = (CashMasterEntity)cashDAO.getEntity(CashMasterEntity.class, masterId);
+            CashMasterEntity masterEntity = (CashMasterEntity) cashDAO.getEntity(CashMasterEntity.class, masterId);
             selectOutList.add(masterEntity);
         }
 
         return getInvoiceItemList(selectOutList);
     }
 
-    public boolean exportCashMasterBusinessLogicContinueFilter(CashMasterEntity cashMasterEntity){
+    public boolean exportCashMasterBusinessLogicContinueFilter(CashMasterEntity cashMasterEntity) {
         boolean result = false;
         Integer status = cashMasterEntity.getStatus(); //1.生效 3.出帳 4.入帳 5.佣金
-        if(status < 3){ //未出帳的帳單，不能開發票
+        if (status < 3) { //未出帳的帳單，不能開發票
             result = true;
         }
 
         //如果用戶該月要繳的錢為0元，就不匯出到excel了。
-        if(cashMasterEntity.getTaxInclusiveAmount()==null
-                || cashMasterEntity.getTaxInclusiveAmount().compareTo(BigDecimal.ZERO)==0){
+        if (cashMasterEntity.getTaxInclusiveAmount() == null
+                || cashMasterEntity.getTaxInclusiveAmount().compareTo(BigDecimal.ZERO) == 0) {
             result = true;
         }
 
         //0000301: 首次不匯出到excel(因為首次是先開發票，在由業務帶機器去裝機，所以不需要再匯出發票了。)
         String isFirst = cashMasterEntity.getIsFirst();
-        if(null!=isFirst && "1".equals(isFirst)){
+        if (null != isFirst && "1".equals(isFirst)) {
             result = true;
         }
         return result;
     }
 
-    public boolean exportCashDetailBusinessLogicContinueFilter(CashDetailEntity cashDetailEntity){
+    public boolean exportCashDetailBusinessLogicContinueFilter(CashDetailEntity cashDetailEntity) {
         boolean result = false;
         //如果該筆detail是作廢，就不要匯出至excel裡
-        if(null != cashDetailEntity.getStatus() && cashDetailEntity.getStatus() != 1){
+        if (null != cashDetailEntity.getStatus() && cashDetailEntity.getStatus() != 1) {
             result = true;
         }
         return result;
     }
 
-    public String getPackageDescriptionByCashType(CashDetailEntity cashDetailEntity){
+    public String getPackageDescriptionByCashType(CashDetailEntity cashDetailEntity) {
         String itemName = "";
-        try{
+        try {
             //找出package name
             Integer feePeriod = 0;
             String packageName = "";
 
             //只有「月租型」和「級距型」，才會有方案名稱(不管是月租or超額)。
             Integer billType = cashDetailEntity.getBillType(); //1.月租 2.級距 3.預繳
-            if(1 == billType || 2 == billType) { //也可用cashDetail的cashType來判斷，不過這裡用billType來作判斷。
+            if (1 == billType || 2 == billType) { //也可用cashDetail的cashType來判斷，不過這裡用billType來作判斷。
                 Integer packageId = cashDetailEntity.getPackageId();
                 PackageModeEntity packageModeEntity = packageModeRepository.findByPackageId(packageId);
                 Integer packageType = packageModeEntity.getPackageType();
                 Integer chargeId = packageModeEntity.getChargeId();
 
-                if(1 == packageType){//月租型
+                if (1 == packageType) {//月租型
                     ChargeModeCycleEntity cycleEntity = chargeModeCycleRepository.findByChargeId(chargeId);
                     feePeriod = cycleEntity.getFeePeriod(); //1.年繳 2.季繳
                     packageName = cycleEntity.getPackageName();
-                }else if( 2 == packageType){ //級距型
+                } else if (2 == packageType) { //級距型
                     ChargeModeGradeEntity gradeEntity = chargeModeGradeRepository.findByChargeId(chargeId);
                     feePeriod = gradeEntity.getFeePeriod();
                     packageName = gradeEntity.getPackageName();
@@ -399,11 +400,11 @@ public class CashServiceImp implements CashService {
             }
 
             //1.月租or級距 2.超額 6.預繳 7.扣抵
-            switch(cashDetailEntity.getCashType()){
+            switch (cashDetailEntity.getCashType()) {
                 case 1: //月租預繳
-                    if(1 == feePeriod){
+                    if (1 == feePeriod) {
                         itemName = packageName + "預繳"; //年繳
-                    }else{
+                    } else {
                         itemName = packageName + "預繳"; //季繳
                     }
                     break;
@@ -419,35 +420,35 @@ public class CashServiceImp implements CashService {
                 default:
                     break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return itemName;
         }
     }
 
-    public BigDecimal getTaxInclusivePrice(CashDetailEntity cashDetailEntity){
+    public BigDecimal getTaxInclusivePrice(CashDetailEntity cashDetailEntity) {
         BigDecimal taxInclusivePrice = cashDetailEntity.getTaxInclusivePrice().setScale(2, BigDecimal.ROUND_HALF_UP);
-        if((null == taxInclusivePrice) || (0 ==taxInclusivePrice.compareTo(new BigDecimal(0)))){
+        if ((null == taxInclusivePrice) || (0 == taxInclusivePrice.compareTo(new BigDecimal(0)))) {
             taxInclusivePrice = new BigDecimal(0);
         }
         return taxInclusivePrice;
     }
 
     public List<OrderCsv> genOrderCsvList(
-            CompanyEntity sellerCompany
-            , CompanyEntity buyerCompany
-            , CashVO cashVO){
+            Company sellerCompany
+            , Company buyerCompany
+            , CashVO cashVO) {
         List<OrderCsv> orderCsvList = new ArrayList<>();
-        if(!exportCashMasterBusinessLogicContinueFilter(cashVO.getCashMasterEntity())){
+        if (!exportCashMasterBusinessLogicContinueFilter(cashVO.getCashMasterEntity())) {
             //取得相關資料
-            orderCsvList = genOrderCsvEntityByCashMaster(sellerCompany,buyerCompany,cashVO);
+            orderCsvList = genOrderCsvEntityByCashMaster(sellerCompany, buyerCompany, cashVO);
         }
         return orderCsvList;
     }
 
     //匯出發票Excel的資料
-    public List getInvoiceItemList(List masterList) throws Exception{
+    public List getInvoiceItemList(List masterList) throws Exception {
         List list = new ArrayList();
 
         //masterList依master_id排序
@@ -459,11 +460,11 @@ public class CashServiceImp implements CashService {
                 });
 
         int invoiceIndex = 1;
-        for(int i=0; i<masterList.size(); i++){
-            CashMasterEntity master = (CashMasterEntity)masterList.get(i);
+        for (int i = 0; i < masterList.size(); i++) {
+            CashMasterEntity master = (CashMasterEntity) masterList.get(i);
 
             //判斷跳過條件
-            if(exportCashMasterBusinessLogicContinueFilter(master)){
+            if (exportCashMasterBusinessLogicContinueFilter(master)) {
                 continue;
             }
 
@@ -471,16 +472,16 @@ public class CashServiceImp implements CashService {
             CashDetailEntity searchCashDetailEntity = new CashDetailEntity();
             searchCashDetailEntity.setCashMasterId(masterId);
 
-            CompanyEntity companyEntity = (CompanyEntity)cashDAO.getEntity(CompanyEntity.class, master.getCompanyId());
+            Company companyEntity = (Company) cashDAO.getEntity(Company.class, master.getCompanyId());
             String businessNo = companyEntity.getBusinessNo();
 
             List<CashDetailEntity> cashDetailList = cashDAO.getSearchEntity(CashDetailEntity.class, searchCashDetailEntity);
 
             int itemIndex = 1;
-            for(CashDetailEntity detail:cashDetailList){
+            for (CashDetailEntity detail : cashDetailList) {
 
                 //判斷跳過條件
-                if(exportCashDetailBusinessLogicContinueFilter(detail)){
+                if (exportCashDetailBusinessLogicContinueFilter(detail)) {
                     continue;
                 }
 
@@ -511,19 +512,20 @@ public class CashServiceImp implements CashService {
 
     //多筆-寄帳單明細表
     @Override
-    public Integer transactionSendBillMail1(String masterIdAry) throws Exception{
+    public Integer transactionSendBillMail1(String masterIdAry) throws Exception {
         Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<CashMasterBean>>(){}.getType();
+        Type collectionType = new TypeToken<List<CashMasterBean>>() {
+        }.getType();
         List<CashMasterBean> cashMasterList = gson.fromJson(masterIdAry, collectionType);
 
         int exeCnt = 0;
         //找出所有要計算的MasterId
-        for(int i=0; i<cashMasterList.size(); i++) {
-            CashMasterBean bean = (CashMasterBean)cashMasterList.get(i);
-            Integer cashMasterId = (null == bean.getCashMasterId())?0:bean.getCashMasterId();
-            CashMasterEntity cashMasterEntity = (CashMasterEntity)cashDAO.getEntity(CashMasterEntity.class, cashMasterId);
+        for (int i = 0; i < cashMasterList.size(); i++) {
+            CashMasterBean bean = (CashMasterBean) cashMasterList.get(i);
+            Integer cashMasterId = (null == bean.getCashMasterId()) ? 0 : bean.getCashMasterId();
+            CashMasterEntity cashMasterEntity = (CashMasterEntity) cashDAO.getEntity(CashMasterEntity.class, cashMasterId);
             boolean isSend = cashDAO.sendMail(cashMasterEntity);
-            if(isSend){ //是否寄出
+            if (isSend) { //是否寄出
                 exeCnt++;//寄出
                 cashDAO.updateEmailDate(cashMasterEntity); //更新cash_master的email_sent_date(寄送email日期)
             }
@@ -533,13 +535,13 @@ public class CashServiceImp implements CashService {
 
     //輸入自行要重寄的Email(帳單明細表)
     @Override
-    public Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception{
+    public Integer reSendBillEmail(String strCashMasterId, String strReSendBillMail) throws Exception {
         int exeCnt = 0;
         //找出所有要計算的MasterId
-        Integer cashMasterId = (null == strCashMasterId)?0:Integer.parseInt(strCashMasterId);
-        CashMasterEntity  cashMasterEntity = (CashMasterEntity)cashDAO.getEntity(CashMasterEntity.class, cashMasterId);
+        Integer cashMasterId = (null == strCashMasterId) ? 0 : Integer.parseInt(strCashMasterId);
+        CashMasterEntity cashMasterEntity = (CashMasterEntity) cashDAO.getEntity(CashMasterEntity.class, cashMasterId);
         boolean isSend = cashDAO.sendMail(cashMasterEntity, strReSendBillMail);
-        if(isSend){ //是否寄出
+        if (isSend) { //是否寄出
             exeCnt++;//寄出
             cashDAO.updateEmailDate(cashMasterEntity); //更新cash_master的email_sent_date(寄送email日期)
         }
@@ -550,17 +552,17 @@ public class CashServiceImp implements CashService {
     public List<CashVO> findCashVoByOutYm(String outYm) {
         List<CashVO> cashVOList = new ArrayList<>();
         List<CashMasterEntity> cashMasterEntityList = cashMasterRepository.findByOutYm(outYm);
-        for(CashMasterEntity cashMasterEntity : cashMasterEntityList){
+        for (CashMasterEntity cashMasterEntity : cashMasterEntityList) {
             CashVO cashVO = new CashVO();
             List<CashDetailEntity> cashDetailEntityList
                     = cashDetailRepository.findByCashMasterId(cashMasterEntity.getCashMasterId());
             cashVO.setCashMasterEntity(cashMasterEntity);
-            if(cashMasterEntity!=null){
+            if (cashMasterEntity != null) {
                 cashVO.setCashMasterEntity(cashMasterEntity);
             }
-            if(cashDetailEntityList.size()!=0){
+            if (cashDetailEntityList.size() != 0) {
                 cashVO.setCashDetailEntityList(cashDetailEntityList);
-            }else{
+            } else {
                 //不能傳null回去害別人爆。
                 cashVO.setCashDetailEntityList(new ArrayList<>());
             }
@@ -570,8 +572,8 @@ public class CashServiceImp implements CashService {
     }
 
     @Override
-    public Map<String,Object> genCashDataExcelDataMap(List<CashMasterBean> cashMasterBeanList){
-        Map<String,Object> resultMap = new HashMap<>();
+    public Map<String, Object> genCashDataExcelDataMap(List<CashMasterBean> cashMasterBeanList) {
+        Map<String, Object> resultMap = new HashMap<>();
         List<String> headerList = new ArrayList<>();
         List<List<Object>> dataList = new ArrayList<>();
 
@@ -588,15 +590,15 @@ public class CashServiceImp implements CashService {
         //divide and conquer
         //先跑header的部份
         List<String> packageList = new ArrayList<>();
-        for(CashMasterBean cashMasterBean : cashMasterBeanList){
-            for(CashDetailBean cashDetailBean: cashMasterBean.getCashDetailList()){
+        for (CashMasterBean cashMasterBean : cashMasterBeanList) {
+            for (CashDetailBean cashDetailBean : cashMasterBean.getCashDetailList()) {
                 Integer chargeId = cashDetailBean.getChargeId();
                 Integer cashType = cashDetailBean.getCashType(); //1.月租 2.超額 3.代印代寄 4.加值型 5.儲值 6.預繳
                 Integer billType = cashDetailBean.getBillType(); //1.月租 2.級距
 
                 //分兩次，先加入欄位的map
-                String packageName = getPackageName(cashType,cashDetailBean.getPackageName());
-                if(!packageList.contains(packageName)){
+                String packageName = getPackageName(cashType, cashDetailBean.getPackageName());
+                if (!packageList.contains(packageName)) {
                     packageList.add(packageName);
                     //寫入header
                     headerList.add(packageName);
@@ -604,7 +606,7 @@ public class CashServiceImp implements CashService {
             }
         }
 
-        for(CashMasterBean cashMasterBean : cashMasterBeanList){
+        for (CashMasterBean cashMasterBean : cashMasterBeanList) {
             List<Object> detailValueList = new ArrayList<>();
             detailValueList.add(cashMasterBean.getBusinessNo());
             detailValueList.add(cashMasterBean.getInAmount());
@@ -616,42 +618,43 @@ public class CashServiceImp implements CashService {
             //寫value
             String currentPackageName = "";
             BigDecimal taxInclusiveAmount = BigDecimal.ZERO;
-            for(CashDetailBean cashDetailBean:cashMasterBean.getCashDetailList()){
-                currentPackageName = getPackageName(cashDetailBean.getCashType(),cashDetailBean.getPackageName());
-                taxInclusiveAmount = taxInclusiveAmount.add(cashDetailBean.getTaxInclusivePrice().setScale(0,BigDecimal.ROUND_HALF_UP));
+            for (CashDetailBean cashDetailBean : cashMasterBean.getCashDetailList()) {
+                currentPackageName = getPackageName(cashDetailBean.getCashType(), cashDetailBean.getPackageName());
+                taxInclusiveAmount = taxInclusiveAmount.add(cashDetailBean.getTaxInclusivePrice().setScale(0, BigDecimal.ROUND_HALF_UP));
             }
-            for(String packageName: packageList){
-                if(currentPackageName.equals(packageName)){
+            for (String packageName : packageList) {
+                if (currentPackageName.equals(packageName)) {
                     detailValueList.add(taxInclusiveAmount);
-                }else{
+                } else {
                     detailValueList.add(0);
                 }
             }
             dataList.add(detailValueList);
         }
-        resultMap.put("header",headerList);
-        resultMap.put("data",dataList);
+        resultMap.put("header", headerList);
+        resultMap.put("data", dataList);
         return resultMap;
     }
 
     public String getPackageName(
             Integer cashType
-            , String originalPackageName){
+            , String originalPackageName) {
         String packageName = "";
-        if(cashType == 1){ //月租
+        if (cashType == 1) { //月租
             packageName = originalPackageName;
-        }else if(cashType == 2){ //超額
-            packageName = originalPackageName+"(超額)";
-        }else  if(cashType == 6){ //預繳
-            packageName = originalPackageName+"預繳";
-        }else if(cashType == 7){ //7.扣抵
+        } else if (cashType == 2) { //超額
+            packageName = originalPackageName + "(超額)";
+        } else if (cashType == 6) { //預繳
+            packageName = originalPackageName + "預繳";
+        } else if (cashType == 7) { //7.扣抵
             packageName = originalPackageName + "扣抵";
         }
         return packageName;
     }
 
     /**
-     *  產生查詢下載的Excel報表
+     * 產生查詢下載的Excel報表
+     *
      * @param cashMasterList
      * @param tempPath
      * @return
@@ -663,10 +666,10 @@ public class CashServiceImp implements CashService {
 
         HashMap packageMap = new HashMap();
         excel.setWorkSheet(1);
-        int baseRow=2;
+        int baseRow = 2;
         int index = 0;
         int packageIndex = 8;
-        for(CashMasterBean masterBean:cashMasterList){
+        for (CashMasterBean masterBean : cashMasterList) {
             excel.copyRows(2, 21, 1, baseRow);
 
             excel.setValue(baseRow, index + 1, masterBean.getBusinessNo());
@@ -675,7 +678,7 @@ public class CashServiceImp implements CashService {
             excel.setValue(baseRow, index + 7, masterBean.getBusinessNo());
 
             List<CashDetailBean> cashDetailList = masterBean.getCashDetailList();
-            for(CashDetailBean detail: cashDetailList){
+            for (CashDetailBean detail : cashDetailList) {
                 Integer chargeId = detail.getChargeId();
                 Integer cashType = detail.getCashType(); //1.月租 2.超額 3.代印代寄 4.加值型 5.儲值 6.預繳
                 Integer billType = detail.getBillType(); //1.月租 2.級距
@@ -683,27 +686,27 @@ public class CashServiceImp implements CashService {
                 //要繳的金額(月租預繳和超額分開)
                 BigDecimal taxInclusivePrice_ = detail.getTaxInclusivePrice();
                 Integer taxInclusivePrice = 0;
-                if(taxInclusivePrice_.intValue() == 0){
+                if (taxInclusivePrice_.intValue() == 0) {
                     taxInclusivePrice = 0; //不然excel顯示的數字會0E-9
-                }else{
-                    taxInclusivePrice = taxInclusivePrice_.setScale(0,BigDecimal.ROUND_HALF_UP).intValue();
+                } else {
+                    taxInclusivePrice = taxInclusivePrice_.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
                 }
 
-                if(null == packageMap.get(chargeId+","+cashType+","+billType)){
-                    packageMap.put(chargeId+","+cashType+","+billType, packageIndex);
+                if (null == packageMap.get(chargeId + "," + cashType + "," + billType)) {
+                    packageMap.put(chargeId + "," + cashType + "," + billType, packageIndex);
                     excel.setValue(baseRow, index + packageIndex, taxInclusivePrice);
-                    if(cashType == 1){ //月租
+                    if (cashType == 1) { //月租
                         excel.setValue(1, index + packageIndex, detail.getPackageName());
-                    }else if(cashType == 2){ //超額
-                        excel.setValue(1, index + packageIndex, detail.getPackageName()+"(超額)");
-                    }else  if(cashType == 6){ //預繳
+                    } else if (cashType == 2) { //超額
+                        excel.setValue(1, index + packageIndex, detail.getPackageName() + "(超額)");
+                    } else if (cashType == 6) { //預繳
                         excel.setValue(1, index + packageIndex, "預繳");
-                    }else if(cashType == 7){ //7.扣抵
+                    } else if (cashType == 7) { //7.扣抵
                         excel.setValue(1, index + packageIndex, "扣抵");
                     }
                     packageIndex++;
-                }else{
-                    Integer packageIndexOld = (Integer)packageMap.get(chargeId + ","+cashType+","+billType);
+                } else {
+                    Integer packageIndexOld = (Integer) packageMap.get(chargeId + "," + cashType + "," + billType);
                     excel.setValue(baseRow, index + packageIndexOld, taxInclusivePrice);
                 }
             }
@@ -712,11 +715,11 @@ public class CashServiceImp implements CashService {
 
         //把沒有packagename的cell填0
         HSSFSheet sheet = excel.getSheet();
-        for(int i=2; i<baseRow; i++){
-            Row row =sheet.getRow(i-1);
-            for(int j=8; j<packageIndex; j++){
-                Cell cell = row.getCell(j-1);
-                if(!fieldUtils.isNotEmptyCell(cell)){
+        for (int i = 2; i < baseRow; i++) {
+            Row row = sheet.getRow(i - 1);
+            for (int j = 8; j < packageIndex; j++) {
+                Cell cell = row.getCell(j - 1);
+                if (!fieldUtils.isNotEmptyCell(cell)) {
                     excel.setValue(i, j, 0);
                 }
             }
@@ -732,10 +735,10 @@ public class CashServiceImp implements CashService {
         ExcelPoiWrapper excel = new ExcelPoiWrapper(tempPath);
         HashMap packageMap = new HashMap();
         excel.setWorkSheet(1);
-        int baseRow=3;
+        int baseRow = 3;
         int index = 0;
         int packageIndex = 8;
-        for(InvoiceExcelBean bean:InvoiceExcelList){
+        for (InvoiceExcelBean bean : InvoiceExcelList) {
             excel.copyRows(3, 21, 1, baseRow);
 
             excel.setValue(baseRow, index + 1, bean.getInvoiceIndex()); //發票張數
@@ -755,9 +758,9 @@ public class CashServiceImp implements CashService {
     }
 
     @Override
-    public List<InvoiceBatchRecord> genInvoiceBatchRecordList(List<InvoiceExcelBean> invoiceExcelBeanList){
+    public List<InvoiceBatchRecord> genInvoiceBatchRecordList(List<InvoiceExcelBean> invoiceExcelBeanList) {
         List<InvoiceBatchRecord> resultList = new ArrayList<>();
-        for(InvoiceExcelBean invoiceExcelBean:invoiceExcelBeanList){
+        for (InvoiceExcelBean invoiceExcelBean : invoiceExcelBeanList) {
             InvoiceBatchRecord invoiceBatchRecord = new InvoiceBatchRecord();
             invoiceBatchRecord.setInvoiceSequence(invoiceExcelBean.getInvoiceIndex());
             invoiceBatchRecord.setInvoiceDate(invoiceExcelBean.getInvoiceDate());
@@ -775,20 +778,19 @@ public class CashServiceImp implements CashService {
     }
 
     /**
-     *
      * @param sellerCompany
      * @param buyerCompany
      * @param cashVO
      * @return
      */
     public List<OrderCsv> genOrderCsvEntityByCashMaster(
-            CompanyEntity sellerCompany
-            , CompanyEntity buyerCompany
-            , CashVO cashVO){
+            Company sellerCompany
+            , Company buyerCompany
+            , CashVO cashVO) {
         List<OrderCsv> orderCsvList = new ArrayList<>();
         //產生明細項目的部份。
-        for(int i = 0; i<cashVO.getCashDetailEntityList().size();i++){
-            if(exportCashDetailBusinessLogicContinueFilter(cashVO.getCashDetailEntityList().get(i))){
+        for (int i = 0; i < cashVO.getCashDetailEntityList().size(); i++) {
+            if (exportCashDetailBusinessLogicContinueFilter(cashVO.getCashDetailEntityList().get(i))) {
                 continue;
             }
 
@@ -798,7 +800,7 @@ public class CashServiceImp implements CashService {
             //seller
             orderCsv.setBuyerIdentifier(buyerCompany.getBusinessNo());
             orderCsv.setBuyerAddress(buyerCompany.getCompanyAddress());
-            orderCsv.setBuyerEmailAddress(buyerCompany.getEmail1());
+            orderCsv.setBuyerEmailAddress(buyerCompany.getEmail_1());
             orderCsv.setBuyerName(buyerCompany.getName());
             orderCsv.setBuyerPersonInCharge(buyerCompany.getContact1());
 
@@ -806,7 +808,7 @@ public class CashServiceImp implements CashService {
             orderCsv.setSellerIdentifier(sellerCompany.getBusinessNo());
             orderCsv.setSellerName(sellerCompany.getName());
             orderCsv.setSellerAddress(sellerCompany.getCompanyAddress());
-            orderCsv.setSellerEmailAddress(sellerCompany.getEmail1());
+            orderCsv.setSellerEmailAddress(sellerCompany.getEmail_1());
             orderCsv.setSellerPersonInCharge(sellerCompany.getContact1());
 
             //預設資料
@@ -822,7 +824,7 @@ public class CashServiceImp implements CashService {
             orderCsv.setDetailUnitPrice(taxInclusivePrice);
 
             //基本設定
-            orderCsv.setDetailSequenceNumber(i+1);
+            orderCsv.setDetailSequenceNumber(i + 1);
             orderCsv.setDetailQuantity(new BigDecimal(1));
             orderCsv.setTaxRate(new Float(0.05));
             orderCsv.setDetailAmount(
@@ -831,7 +833,7 @@ public class CashServiceImp implements CashService {
             orderCsv.setTaxAmount(
                     orderCsv.getDetailAmount().subtract(
                             orderCsv.getDetailAmount().divide(
-                                    new BigDecimal(1).add(new BigDecimal(0.05)),0,BigDecimal.ROUND_HALF_UP
+                                    new BigDecimal(1).add(new BigDecimal(0.05)), 0, BigDecimal.ROUND_HALF_UP
                             )
                     )
             );

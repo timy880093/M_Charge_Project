@@ -12,7 +12,7 @@ import com.gate.utils.JsonUtils;
 import com.gate.web.exceptions.FormValidationException;
 import com.gate.web.exceptions.ReturnPathException;
 import com.gate.web.servlets.MvcBaseServlet;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.UserEntity;
 import com.gateweb.charge.repository.CompanyRepository;
 import com.gateweb.einv.exception.EinvSysException;
@@ -145,8 +145,8 @@ public class CalCycleSearchServlet extends MvcBaseServlet {
         String responseMessage = "";
         try {
             //找出所有公司
-            List<CompanyEntity> companyEntityList = companyRepository.findAll();
-            for(CompanyEntity companyEntity : companyEntityList){
+            List<Company> companyEntityList = companyRepository.findAll();
+            for(Company companyEntity : companyEntityList){
                 exeCnt += calCycleService.batchCalOverByYearMonthAndCompanyId(
                         companyEntity.getCompanyId()
                         , calYM

@@ -189,7 +189,7 @@ public class CalCycleDAO extends BaseDAO {
     }
     //用夾擠，不然會有問題，因為不包含。
     public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(Integer companyId,String calYm){
-        CompanyEntity companyEntity = companyRepository.findByCompanyId(companyId);
+        Company companyEntity = companyRepository.findByCompanyId(companyId);
         Calendar calendarFrom = timeUtils.string2Calendar("yyyyMM",calYm);
         Calendar calendarTo = timeUtils.string2Calendar("yyyyMM",calYm);
         calendarTo.add(Calendar.MONTH,1);
@@ -202,7 +202,7 @@ public class CalCycleDAO extends BaseDAO {
      * 使用InvoiceAmountSummaryReport進行計算。
      * @return
      */
-    public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(CompanyEntity companyEntity, Date fromModifyDate, Date toModifyDate){
+    public Integer calOverByCompanyWithFromInvoiceAmountSummaryReport(Company companyEntity, Date fromModifyDate, Date toModifyDate){
         List<InvoiceAmountSummaryReportEntity> invoiceAmountSummaryReportEntityList
             = invoiceAmountSummaryReportRepository.findBySellerIsAndCreateDateGreaterThanAndCreateDateLessThan(
                     companyEntity.getBusinessNo()
@@ -354,8 +354,8 @@ public class CalCycleDAO extends BaseDAO {
         }
 
         Integer cpId = billCycleEntity.getCompanyId();
-        CompanyEntity cpEntity = (CompanyEntity)getEntity(CompanyEntity.class, cpId);
-        String email = cpEntity.getEmail1();
+        Company cpEntity = (Company)getEntity(Company.class, cpId);
+        String email = cpEntity.getEmail_1();
         String cpName = cpEntity.getName();
         String yearMonth = billCycleEntity.getYearMonth();
         //方案名稱

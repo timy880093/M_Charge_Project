@@ -1,7 +1,7 @@
 package com.gateweb.charge.service;
 
 import com.gate.utils.TimeUtils;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.repository.CompanyRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,8 +47,8 @@ public class SyncInvoiceDataFacadeImplTest {
         to.add(Calendar.DATE,-2);
 
         //資料太多，分公司查詢。
-        List<CompanyEntity> companyEntityList = companyRepository.findAll();
-        for(CompanyEntity companyEntity: companyEntityList){
+        List<Company> companyEntityList = companyRepository.findAll();
+        for(Company companyEntity: companyEntityList){
             syncInvoiceDataFacade.syncInvoiceDataFromEinvDatabaseByCompany(
                     timeUtils.date2Timestamp(from.getTime())
                     , timeUtils.date2Timestamp(to.getTime())

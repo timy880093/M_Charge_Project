@@ -759,7 +759,7 @@ public class CalCycleServiceImp implements CalCycleService {
         if(null == billCycleEntity.getCashOutOverId()){
             giftVO.setIsCalculated(false); //超額已經計算的話，不能再修改贈送點數了。
         }
-        CompanyEntity cpEntity = (CompanyEntity)calCycleDAO.getEntity(CompanyEntity.class, billCycleEntity.getCompanyId());
+        Company cpEntity = (Company)calCycleDAO.getEntity(Company.class, billCycleEntity.getCompanyId());
         giftVO.setCompanyName(cpEntity.getName());
 
         return giftVO;

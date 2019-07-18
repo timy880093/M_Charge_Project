@@ -3,7 +3,7 @@ package com.gate.web.facades;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CompanyVO;
 import com.gate.web.formbeans.CompanyBean;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 
 import java.util.Map;
 

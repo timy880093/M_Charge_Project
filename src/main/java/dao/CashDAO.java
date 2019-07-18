@@ -30,7 +30,7 @@ import com.gateweb.charge.model.CashMasterEntity;
 import com.gateweb.charge.model.ChargeModeCycleAddEntity;
 import com.gateweb.charge.model.ChargeModeCycleEntity;
 import com.gateweb.charge.model.ChargeModeGradeEntity;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.DeductDetailEntity;
 import com.gateweb.charge.model.GradeEntity;
 import com.gateweb.charge.model.PackageModeEntity;
@@ -554,7 +554,7 @@ public class CashDAO extends BaseDAO {
 
             //公司名稱
             Integer companyId = cashDetailEntity.getCompanyId();
-            CompanyEntity companyEntity = (CompanyEntity)getEntity(CompanyEntity.class, companyId);
+            Company companyEntity = (Company)getEntity(Company.class, companyId);
             cashDetailVO.setCompanyName(companyEntity.getName());
 
             //CashMaster的status  1.生效 2.作廢 3.出帳 4.入帳 5.佣金
@@ -766,7 +766,7 @@ public class CashDAO extends BaseDAO {
 
             //此master的companyId的companyName和businessNo和codeName是什麼?
             Integer cpId = masterBean.getCompanyId();
-            CompanyEntity cpEntity = (CompanyEntity)getEntity(CompanyEntity.class, cpId);
+            Company cpEntity = (Company)getEntity(Company.class, cpId);
             String companyName = cpEntity.getName();
             String businessNo = cpEntity.getBusinessNo();
             String codeName = cpEntity.getCodeName();
@@ -935,8 +935,8 @@ public class CashDAO extends BaseDAO {
             } else{
                 //準備寄email.....
                 Integer cpId = cashMasterEntity.getCompanyId();
-                CompanyEntity cpEntity = (CompanyEntity)getEntity(CompanyEntity.class, cpId);
-                String email = cpEntity.getEmail1();
+                Company cpEntity = (Company)getEntity(Company.class, cpId);
+                String email = cpEntity.getEmail_1();
                 String cpName = cpEntity.getName();
                 String bankYm = cashMasterEntity.getBankYm();
 

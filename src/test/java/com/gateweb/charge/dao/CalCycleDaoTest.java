@@ -1,7 +1,7 @@
 package com.gateweb.charge.dao;
 
 import com.gate.utils.TimeUtils;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.repository.CompanyRepository;
 import dao.CalCycleDAO;
 import org.junit.Test;
@@ -35,8 +35,8 @@ public class CalCycleDaoTest {
     @Test
     public void calOverByCompanyTest(){
         List<String> messageList = new ArrayList<>();
-        List<CompanyEntity> companyEntityList = companyRepository.findAll();
-        for(CompanyEntity companyEntity: companyEntityList){
+        List<Company> companyEntityList = companyRepository.findAll();
+        for(Company companyEntity: companyEntityList){
             Integer usedCount = calCycleDAO.calOverByCompany(companyEntity.getCompanyId(),"201803");
             if(usedCount>0){
                 messageList.add(companyEntity.getName() +":"+ usedCount);
@@ -59,8 +59,8 @@ public class CalCycleDaoTest {
 //        to.add(Calendar.MONTH,1);
 
         List<String> messageList = new ArrayList<>();
-        List<CompanyEntity> companyEntityList = companyRepository.findAll();
-        for(CompanyEntity companyEntity: companyEntityList){
+        List<Company> companyEntityList = companyRepository.findAll();
+        for(Company companyEntity: companyEntityList){
             if(!companyEntity.getBusinessNo().equals("22099548")){
                 continue;
             }
@@ -89,9 +89,9 @@ public class CalCycleDaoTest {
 
     @Test
     public void calOverCompare(){
-        List<CompanyEntity> companyEntityList = companyRepository.findAll();
+        List<Company> companyEntityList = companyRepository.findAll();
         List<String> messageList = new ArrayList<>();
-        for(CompanyEntity companyEntity: companyEntityList){
+        for(Company companyEntity: companyEntityList){
             Integer usedCount1 = calCycleDAO.calOverByCompanyWithFromInvoiceAmountSummaryReport(companyEntity.getCompanyId(),"201801");
             Integer usedCount2 = calCycleDAO.calOverByCompany(companyEntity.getCompanyId(),"201801");
             if(usedCount1.compareTo(usedCount2)!=0){

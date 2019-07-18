@@ -9,10 +9,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.repository.CompanyRepository;
 import com.gateweb.charge.service.SyncCompanyDataFacade;
-import com.gateweb.einv.model.Company;
 import com.gateweb.einv.repository.EinvCompanyRepository;
 
 /**
@@ -35,10 +34,10 @@ public class SyncCompanyDataFacadeImpl implements SyncCompanyDataFacade {
      */
     @Override
     public void syncCompanyDataFromEinvDatabase() throws InvocationTargetException, IllegalAccessException {
-        List<Company> einvCompanyEntityList = einvCompanyRepository.findAll();
+        List<com.gateweb.einv.model.Company> einvCompanyEntityList = einvCompanyRepository.findAll();
 
-        for(Company company : einvCompanyEntityList){
-            CompanyEntity existsCompanyEntity = companyRepository.findByCompanyId(company.getCompanyId().intValue());
+        for(com.gateweb.einv.model.Company company : einvCompanyEntityList){
+            com.gateweb.charge.model.Company existsCompanyEntity = companyRepository.findByCompanyId(company.getCompanyId().intValue());
             if(existsCompanyEntity!=null){
                 transactionUpdateCompanyDataFromEinvDatabase(existsCompanyEntity,company);
             }else{
@@ -47,14 +46,14 @@ public class SyncCompanyDataFacadeImpl implements SyncCompanyDataFacade {
         }
     }
 
-    public void transactionUpdateCompanyDataFromEinvDatabase(CompanyEntity existsCompanyEntity, Company einvCompanyEntity) throws InvocationTargetException, IllegalAccessException {
+    public void transactionUpdateCompanyDataFromEinvDatabase(com.gateweb.charge.model.Company existsCompanyEntity, com.gateweb.einv.model.Company einvCompanyEntity) throws InvocationTargetException, IllegalAccessException {
         BeanUtils.copyProperties(existsCompanyEntity,einvCompanyEntity);
         logger.info("Update Company :" + existsCompanyEntity.getCompanyId());
         companyRepository.save(existsCompanyEntity);
     }
 
-    public void transactionInsertCompanyDataFromEinvDatabase(Company einvCompanyEntity) throws InvocationTargetException, IllegalAccessException {
-        CompanyEntity newCompanyEntity = new CompanyEntity();
+    public void transactionInsertCompanyDataFromEinvDatabase(com.gateweb.einv.model.Company einvCompanyEntity) throws InvocationTargetException, IllegalAccessException {
+        com.gateweb.charge.model.Company newCompanyEntity = new com.gateweb.charge.model.Company();
         BeanUtils.copyProperties(newCompanyEntity,einvCompanyEntity);
         logger.info("Insert Company :" + einvCompanyEntity.getCompanyId());
         companyRepository.save(newCompanyEntity);

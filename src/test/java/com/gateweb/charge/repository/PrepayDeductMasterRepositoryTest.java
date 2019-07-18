@@ -1,6 +1,6 @@
 package com.gateweb.charge.repository;
 
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.PrepayDeductMasterEntity;
 import com.google.gson.Gson;
 import org.junit.Test;
@@ -29,10 +29,10 @@ public class PrepayDeductMasterRepositoryTest {
 
     @Test
     public void findByCompanyIdTest(){
-        List<CompanyEntity> companyEntityList = companyRepository.findAll();
+        List<Company> companyEntityList = companyRepository.findAll();
 
         List<String> messageList = new ArrayList<>();
-        for(CompanyEntity companyEntity : companyEntityList){
+        for(Company companyEntity : companyEntityList){
             List<PrepayDeductMasterEntity> prepayDeductMasterEntityList
                     = prepayDeductMasterRepository.findByCompanyId(companyEntity.getCompanyId());
             for(PrepayDeductMasterEntity prepayDeductMasterEntity: prepayDeductMasterEntityList){

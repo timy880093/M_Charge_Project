@@ -20,7 +20,7 @@ import com.gateweb.charge.model.ChargeModeCycleAddEntity;
 import com.gateweb.charge.model.ChargeModeCycleEntity;
 import com.gateweb.charge.model.ChargeModeGradeEntity;
 import com.gateweb.charge.model.CommissionLogEntity;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.DealerCompanyEntity;
 import com.gateweb.charge.model.DealerEntity;
 import com.gateweb.charge.model.DeductDetailEntity;
@@ -112,14 +112,6 @@ public class ChargeFacadeImpl implements ChargeFacade {
 	 */
 	@Autowired
 	private CompanyRepository companyRepository = null;
-	
-	
-	/**
-	 * InvoiceMainUniqueRepository
-	 */
-	@Autowired
-	private InvoiceMainUniqueRepository invoiceMainUniqueRepository = null;
-	
 	
 	/**
 	 * CashDetailRepository
@@ -308,12 +300,6 @@ public class ChargeFacadeImpl implements ChargeFacade {
 		return this.companyRepository;
 	}	
 	 */
-	/**
-	 *
-	 */
-	public void setInvoiceMainUniqueRepository(InvoiceMainUniqueRepository setRepository){
-		this.invoiceMainUniqueRepository = setRepository;
-	}
 	
 	/*
 	public InvoiceMainUniqueRepository getInvoiceMainUniqueRepository(){
@@ -952,7 +938,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * Create a new record in Database.
      * @exception    ChargeSysException if something is wrong.
      */
-	public CompanyEntity save(CompanyEntity bean) {
+	public Company save(Company bean) {
 
 		logger.debug("ChargeFacadeImpl create Company  before dao save Company :  "+bean);	
 		return companyRepository.save(bean); 
@@ -963,10 +949,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * Retrieve a record from Database.
      * @param	id
      */
-	public CompanyEntity findCompanyById(
+	public Company findCompanyById(
 		java.lang.Integer companyId 
 	) {
-		Optional<CompanyEntity> data = null;
+		Optional<Company> data = null;
 		logger.debug("ChargeFacadeImpl findCompanyById begin :" 
 			+"packageId = "+ companyId
 		);	
@@ -988,10 +974,10 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * Retrieve all records from Database.
      * @exception       ChargeSysException if something is wrong.
      */
-    public List<CompanyEntity> findCompanyAll() {
+    public List<Company> findCompanyAll() {
 		logger.debug("ChargeFacadeImpl searchCompanyAll  before dao get all ");	
 
-		List<CompanyEntity> results = null;
+		List<Company> results = null;
 		results = companyRepository.findAll();
 		logger.debug("ChargeFacadeImpl searchCompanyAll   successfully.");	
 		return results;
@@ -1002,7 +988,7 @@ public class ChargeFacadeImpl implements ChargeFacade {
      * @param bean   The Object to be saved.
      * @exception    ChargeSysException if something is wrong.
      */
-    public CompanyEntity update(CompanyEntity bean) {
+    public Company update(Company bean) {
 		logger.debug("ChargeFacadeImpl update Company   before dao update : bean "+bean);	
 		return companyRepository.save(bean);
 		//log.debug("ChargeFacadeImpl update Company    successfully.");	
@@ -1024,131 +1010,8 @@ public class ChargeFacadeImpl implements ChargeFacade {
 			);
 			 
 		logger.debug("ChargeFacadeImpl deleteCompany   successfully. ");	
-	} 
-
-    /**
-     * search records from Database.
-     * @param bean   The Object search criteria
-     */
-    public List<CompanyEntity> searchBy(CompanyEntity bean) {
-		logger.debug("ChargeFacadeImpl searchWith Company   before dao searchWith : bean "+bean);	
-		List<CompanyEntity> results = null;
-		results = companyRepository.searchWithVo(bean);	
-		logger.debug("ChargeFacadeImpl searchWithCompany   successfully. ");	
-		return results;
-    }
-
-    /**
-     * search records from Database.
-     * @param bean   The Object search criteria
-     */
-    public List<CompanyEntity> searchLike(CompanyEntity bean) {
-		logger.debug("ChargeFacadeImpl searchLike Company   before dao searchLike : bean "+bean);	
-		List<CompanyEntity> results = null;
-		results = companyRepository.searchLikeVo(bean);
-		logger.debug("ChargeFacadeImpl searchLikeCompany   successfully. ");	
-		return results;
-    }
-    /**
-     * Create a new record in Database.
-     * @exception    ChargeSysException if something is wrong.
-     */
-	public InvoiceMainUniqueEntity save(InvoiceMainUniqueEntity bean) {
-
-		logger.debug("ChargeFacadeImpl create InvoiceMainUnique  before dao save InvoiceMainUnique :  "+bean);	
-		return invoiceMainUniqueRepository.save(bean); 
-		//log.debug("ChargeFacadeImpl create InvoiceMainUnique   successfully.");		
 	}
 
-    /**
-     * Retrieve a record from Database.
-     * @param	id
-     */
-	public InvoiceMainUniqueEntity findInvoiceMainUniqueById(
-					InvoiceMainUniqueEntityPK id
-	) {
-		Optional<InvoiceMainUniqueEntity> data = null;
-		logger.debug("ChargeFacadeImpl findPackageModeById begin :" 
-			+"id = "+ id
-		);	
-		try {
-			data = invoiceMainUniqueRepository.findById(id);	
-			if(data.isPresent()) {
-				return data.get();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		
-		logger.debug("ChargeFacadeImpl findPackageModeById successfully.");	
-		return null;
-	}
-
-    /**
-     * Retrieve all records from Database.
-     * @exception       ChargeSysException if something is wrong.
-     */
-    public List<InvoiceMainUniqueEntity> findInvoiceMainUniqueAll() {
-		logger.debug("ChargeFacadeImpl searchInvoiceMainUniqueAll  before dao get all ");	
-
-		List<InvoiceMainUniqueEntity> results = null;
-		results = invoiceMainUniqueRepository.findAll();
-		logger.debug("ChargeFacadeImpl searchInvoiceMainUniqueAll   successfully.");	
-		return results;
-    }
-
-    /**
-     * Update a record in Database.
-     * @param bean   The Object to be saved.
-     * @exception    ChargeSysException if something is wrong.
-     */
-    public InvoiceMainUniqueEntity update(InvoiceMainUniqueEntity bean) {
-		logger.debug("ChargeFacadeImpl update InvoiceMainUnique   before dao update : bean "+bean);	
-		return invoiceMainUniqueRepository.save(bean);
-		//log.debug("ChargeFacadeImpl update InvoiceMainUnique    successfully.");	
-
-	}
-
-    /**
-     * Delete a new record in Database.
-     */
-	public void deleteInvoiceMainUnique(
-					InvoiceMainUniqueEntityPK id	
-	) {
-
-			logger.debug("ChargeFacadeImpl deleteInvoiceMainUnique   delete :" +id
-			);
-			invoiceMainUniqueRepository.deleteById(
-							id
-			);
-			 
-		logger.debug("ChargeFacadeImpl deleteInvoiceMainUnique   successfully. ");	
-	} 
-
-    /**
-     * search records from Database.
-     * @param bean   The Object search criteria
-     */
-    public List<InvoiceMainUniqueEntity> searchBy(InvoiceMainUniqueEntity bean) {
-		logger.debug("ChargeFacadeImpl searchWith InvoiceMainUnique   before dao searchWith : bean "+bean);	
-		List<InvoiceMainUniqueEntity> results = null;
-		results = invoiceMainUniqueRepository.searchWithVo(bean);	
-		logger.debug("ChargeFacadeImpl searchWithInvoiceMainUnique   successfully. ");	
-		return results;
-    }
-
-    /**
-     * search records from Database.
-     * @param bean   The Object search criteria
-     */
-    public List<InvoiceMainUniqueEntity> searchLike(InvoiceMainUniqueEntity bean) {
-		logger.debug("ChargeFacadeImpl searchLike InvoiceMainUnique   before dao searchLike : bean "+bean);	
-		List<InvoiceMainUniqueEntity> results = null;
-		results = invoiceMainUniqueRepository.searchLikeVo(bean);
-		logger.debug("ChargeFacadeImpl searchLikeInvoiceMainUnique   successfully. ");	
-		return results;
-    }
     /**
      * Create a new record in Database.
      * @exception    ChargeSysException if something is wrong.

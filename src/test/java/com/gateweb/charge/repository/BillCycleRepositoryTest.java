@@ -2,7 +2,7 @@ package com.gateweb.charge.repository;
 
 import com.gateweb.charge.model.BillCycleEntity;
 import com.gateweb.charge.model.CashDetailEntity;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.google.gson.Gson;
 import dao.CalCycleDAO;
 import org.junit.Test;
@@ -37,8 +37,8 @@ public class BillCycleRepositoryTest {
 
     @Test
     public void findByYearMonthAndCompanyIdTest(){
-        List<CompanyEntity> companyEntityList = companyRepository.findAll();
-        for(CompanyEntity companyEntity:companyEntityList){
+        List<Company> companyEntityList = companyRepository.findAll();
+        for(Company companyEntity:companyEntityList){
             List<BillCycleEntity> billCycleEntityList = billCycleRepository.findByYearMonthIsAndCompanyIdIs("201803",companyEntity.getCompanyId());
             for(BillCycleEntity billCycleEntity : billCycleEntityList){
                 System.out.println(billCycleEntity.toString());
@@ -69,7 +69,7 @@ public class BillCycleRepositoryTest {
         for(BillCycleEntity billCycleEntity: billCycleEntityList){
             if(billCycleEntity.getStatus().equals("1")){
                 if(billCycleEntity.getYearMonth().contains("201803")||billCycleEntity.getYearMonth().contains("201804")){
-                    CompanyEntity companyEntity = companyRepository.findByCompanyId(billCycleEntity.getCompanyId());
+                    Company companyEntity = companyRepository.findByCompanyId(billCycleEntity.getCompanyId());
                     Integer usedCount = calCycleDAO.calOverByCompany(companyEntity.getCompanyId(),billCycleEntity.getYearMonth());
                     if(usedCount!=billCycleEntity.getCnt()){
                         System.out.println("Wrong:"+billCycleEntity.getBillId()+", usedCount:"+usedCount+",current cnt:"+billCycleEntity.getCnt());

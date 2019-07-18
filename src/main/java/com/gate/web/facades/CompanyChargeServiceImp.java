@@ -527,7 +527,7 @@ public class CompanyChargeServiceImp implements CompanyChargeService{
             if(packageModeEntity!=null){
                 BeanUtils.copyProperties(chargeDetailMonthViewObject,packageModeEntity);
             }
-            CompanyEntity companyEntity = companyRepository.findByCompanyId(packageModeEntity.getCompanyId());
+            Company companyEntity = companyRepository.findByCompanyId(packageModeEntity.getCompanyId());
             if(companyEntity!=null){
                 chargeDetailMonthViewObject.setCompanyName(companyEntity.getName());
                 chargeDetailMonthViewObject.setBusinessNo(companyEntity.getBusinessNo());

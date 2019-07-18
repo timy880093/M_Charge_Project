@@ -13,7 +13,7 @@ import com.gate.utils.SendEmailFileUtils;
 import com.gate.web.beans.QuerySettingVO;
 import com.gate.web.displaybeans.CompanyVO;
 import com.gate.web.formbeans.CompanyBean;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 
 import dao.CompanyDAO;
 
@@ -34,7 +34,7 @@ public class CompanyServiceImp implements CompanyService{
 
     @Override
     public Integer insertCompany(CompanyBean companyBean) throws Exception {
-        CompanyEntity companyEntity = new CompanyEntity();
+        Company companyEntity = new Company();
         BeanUtils.copyProperties(companyEntity, companyBean);
         companyDAO.saveEntity(companyEntity);
         return null;
@@ -42,7 +42,7 @@ public class CompanyServiceImp implements CompanyService{
 
     @Override
     public void updateCompany(CompanyBean companyBean) throws Exception {
-        CompanyEntity companyEntity = new CompanyEntity();
+        Company companyEntity = new Company();
 //        DateConverter dateConverter = new DateConverter();
 //        dateConverter.setPattern("yyyy/MM/dd");
         BeanUtils.copyProperties(companyEntity, companyBean);
@@ -56,7 +56,7 @@ public class CompanyServiceImp implements CompanyService{
 
     @Override
     public CompanyVO findCompanyByCompanyId(Integer companyId) throws Exception {
-        CompanyEntity companyEntity = (CompanyEntity)companyDAO.getEntity(CompanyEntity.class,companyId);
+        Company companyEntity = (Company)companyDAO.getEntity(Company.class,companyId);
         CompanyVO companyVO = new CompanyVO();
         BeanUtils.copyProperties(companyVO, companyEntity);
         Map map = companyDAO.getCreatorAndModifier(companyVO.getCreatorId(),companyVO.getModifierId());
@@ -67,7 +67,7 @@ public class CompanyServiceImp implements CompanyService{
 
     public Boolean checkIfCompanyKeyExist(Integer companyId) throws Exception{
         boolean result = true;
-        CompanyEntity companyEntity = (CompanyEntity)companyDAO.getEntity(CompanyEntity.class,companyId);
+        Company companyEntity = (Company)companyDAO.getEntity(Company.class,companyId);
         CompanyVO companyVO = new CompanyVO();
         BeanUtils.copyProperties(companyVO, companyEntity);
         if(companyVO.getCompanyKey() == null){

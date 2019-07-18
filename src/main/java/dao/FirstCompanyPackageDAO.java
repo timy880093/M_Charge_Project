@@ -14,7 +14,7 @@ import com.gate.web.beans.FirstCompanyPackageBean;
 import com.gate.web.formbeans.CompanyChargeCycleBean;
 import com.gate.web.formbeans.WarrantyBean;
 import com.gateweb.charge.model.ChargeModeCycleEntity;
-import com.gateweb.charge.model.CompanyEntity;
+import com.gateweb.charge.model.Company;
 import com.gateweb.charge.model.DealerCompanyEntity;
 import com.gateweb.charge.model.DealerEntity;
 import com.gateweb.charge.model.PackageModeEntity;
@@ -66,10 +66,10 @@ public class FirstCompanyPackageDAO extends BaseDAO {
 
             //1.找出companyId
             Integer companyId = null;
-            CompanyEntity searchCompany = new CompanyEntity();
+            Company searchCompany = new Company();
             searchCompany.setBusinessNo(businesscode);
-            List<CompanyEntity> companyList =  getSearchEntity(CompanyEntity.class, searchCompany);
-            for(CompanyEntity entity : companyList){
+            List<Company> companyList =  getSearchEntity(Company.class, searchCompany);
+            for(Company entity : companyList){
                 companyId = entity.getCompanyId();
                 companyName = entity.getName();
                 break;
