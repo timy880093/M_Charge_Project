@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="menu">
+    <ul id="menu"></ul>
+    <script type="text/javascript">
+
+        $(function () {
+            $.getJSON("/backendAdmin/menuServlet",
+                function (data) {
+                    if (data != null) {
+                        var $menu = $("#menu");
+                        $.each(data, function () {
+                            $menu.append(
+                                getMenuItem(this)
+                            );
+                        });
+                    }
+                });
+        });
+
+        var getMenuItem = function (itemData) {
+            var item;
+
+            if (itemData.children instanceof Array && itemData.children.length > 0) {
+                item = $("<li class='menu-block'><input id='" + itemData.id + "' type='checkbox' />")
+                    .append("<a href='javascript:void(0)'>" + itemData.name + '<i class="icon-arrow"></i></a>');
+
+                var subList = $("<ul class='dropdown-menu'>");
+                $.each(itemData.children, function () {
+                    subList.append(getSubMenuItem(this));
+                });
+                item.append(subList);
+            } else {
+                item = $("<li class='menu-block'>")
+                    .append("<a href='" + itemData.url + "' id='" + itemData.id + "' >" + itemData.name + "</a>");
+            }
+            return item;
+        };
+
+        var getSubMenuItem = function (itemData) {
+            var item = '';
+
+            item = $("<li>")
+                .append(
+                    $("<a>", {
+                        href: itemData.url,
+                        id: itemData.id,
+                        html: itemData.name
+                    }));
+
+
+            return item;
+        };
+
+    </script>
+
+</div>

@@ -1,0 +1,17 @@
+pipeline {
+ agent any
+ stages {
+    stage('Test') {
+        agent{
+            docker{
+              image 'maven:3.6.3-jdk-8'
+              args '-v $HOME/.m2:/root/.m2'
+              reuseNode true
+            }
+        }
+        steps {
+            sh 'mvn clean test package'
+        }
+    }
+ }
+}

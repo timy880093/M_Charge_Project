@@ -1,0 +1,1509 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/bootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image:url(/backendAdmin/images/bg.jpg); background-position:left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"> <img src="/backendAdmin/images/logo.jpg" width="200" height="127"/>
+            </a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <div>
+                <tr>
+                    <td>
+                        <table id="contentMenu" class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="left">
+                                    <div class="d-flex justify-content-start">
+                                        <span class="textstyle_06">合約列表</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-end">
+                                        <div class="form-group">
+                                            <div class="input-group-sm">
+                                                <select class="form-control" id="companyInputAutoComplete"> </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <a href="#" id="condition" name="condition" title="過濾條件" class="butbox"
+                                               data-toggle="modal"
+                                               data-target="#contractSearchConditionModal"><span>過濾條件</span></a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#" id="operation" name="operation" title="操作項目" class="butbox"
+                                               data-toggle="modal"
+                                               data-target="#operationModal">
+                                                <span>操作項目</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="#list">
+                    <td>
+                        <div class="content" title="主要區域" style=" width:100%">
+                            <div class="spacer"></div>
+                            <table id="contractDataTable" content="main" border="0" width="98%"
+                                   cellspacing="0" cellpadding="0">
+                                <thead>
+                                <tr>
+                                    <th>contractId</th>
+                                    <th>companyId</th>
+                                    <th>公司統編</th>
+                                    <th>公司名稱</th>
+                                    <th>合約名稱</th>
+                                    <th>狀態</th>
+                                    <th>裝機日</th>
+                                    <th>生效日</th>
+                                    <th>失效日</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <!-- Modal -->
+                <div class="modal fade" id="contractEditModal" tabindex="-1" role="dialog" aria-labelledby=" Label"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="contractEditModalLabel">合約內容</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="contractEditModalCompany">公司</label>
+                                        <div class="input-group">
+                                            <input id="contractEditModalCompany" type="text"
+                                                   data-bind="value:chosenCompany().name"
+                                                   class="form-control" autocomplete="off" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractEditModalPackage">方案</label>
+                                        <div class="input-group">
+                                            <input id="contractEditModalPackage" type="text"
+                                                   data-bind="value:chosenPackage().name"
+                                                   class="form-control" autocomplete="off" readonly>
+                                            <div class="input-group-append"
+                                                 data-bind="visible: contractView().isPackageEditable">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                        id="contractEditPackageSelectBtn"
+                                                        data-bind="click:contractEditViewModel.knockoutComponent.chargePackageMenuViewModel.show">
+                                                    選擇
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractEditModalNextPackage">下次續約方案</label>
+                                        <div class="input-group">
+                                            <input id="contractEditModalNextPackage" type="text"
+                                                   data-bind="value:chosenRenewPackage().name"
+                                                   class="form-control" autocomplete="off">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                        id="contractEditNextPackageSelectBtn"
+                                                        data-bind="click:contractEditViewModel.knockoutComponent.renewPackageMenuViewModel.show">
+                                                    選擇
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left" for="contractEditModalName">合約名稱</label>
+                                        <input type="text" class="form-control" id="contractEditModalName"
+                                               data-bind="value:contract().name">
+                                    </div>
+                                    <div class="form-group" data-bind="visible: contractView().isShowContractStatus">
+                                        <label for="contractEditModalStatus">合約狀態</label>
+                                        <input type="text" id="contractEditModalStatus" class="form-control"
+                                               data-bind="value:contractView().contractStatusDesc"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractEditModalStatus">自動續約</label>
+                                        <input id="contractEditModalAutoRecreateSwitch" type="checkbox">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractEditModalIsFirstContractSwitch">首次綁合約(自動出帳預繳費用)</label>
+                                        <input id="contractEditModalIsFirstContractSwitch" type="checkbox">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractEditModalFirstInvoiceDateAsEffectiveDateSwitch">以首次開立發票日期作為合約起始日</label>
+                                        <input id="contractEditModalFirstInvoiceDateAsEffectiveDateSwitch"
+                                               type="checkbox">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left" for="contractEditModalName">間隔月份</label>
+                                        <input type="number" class="form-control" id="contractEditModalPeriodMonth"
+                                               data-bind="value:contract().periodMonth,enable:contractView().isPeriodMonthEditable">
+                                    </div>
+                                    <div class="form-group" data-bind="visible:showContractPeriod">
+                                        <label for="contractEditModalEffectiveDate">合約期間</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="contractEditModalEffectiveDate"
+                                                   data-bind="enable:contractView().isEffectiveDateEditable"
+                                                   name="effectiveDate"/>
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text"> ~ </span>
+                                            </div>
+                                            <input type="text" class="input-sm form-control"
+                                                   id="contractEditModalExpirationDate"
+                                                   name="expirationDate" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractEditModalInstallationDate">裝機日</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="contractEditModalInstallationDate"
+                                                   data-bind="enable:contractView().isInstallationDateEditable"
+                                                   name="installationDate"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div id="toolbar">
+                                            <label for="packageRefChargeRulePreviewTableComponent">服務項目預覽</label>
+                                            <div class="btn-toolbar" role="toolbar"
+                                                 aria-label="Toolbar with button groups">
+                                                <div class="btn-group mr-2 btn-group-sm" role="group"
+                                                     aria-label="First group">
+                                                    <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                                            id="packageRefChargeRulePreviewCalculateCycle"
+                                                            name="packageRefChargeRulePreviewCalculateCycle"
+                                                            data-bind="click:onPreviewCalculateCycle">
+                                                        預覽計算週期
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bind="click:onPreviewChargeCycle"
+                                                            id="packageRefChargeRulePreviewChargeCycle" name="modify">
+                                                        預覽結帳週期
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="packageRefChargeRulePreviewTableComponent"></div>
+                                    </div>
+                                    <div class="form-group" hidden="hidden">
+                                        <label for="packageRefProductPreviewModalComponent">商品項目預覽</label>
+                                        <div id="packageRefProductPreviewModalComponent"></div>
+                                    </div>
+                                    <div class="form-group" hidden="hidden">
+                                        <label for="terminationClausePreviewModalComponent">終止條件列表</label>
+                                        <div id="terminationClausePreviewModalComponent"></div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                <button type="button" class="btn btn-primary" name="save"
+                                        data-bind="click:saveOrUpdateContract"> 儲存修改
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="chargeRuleModal" tabindex="-1" role="dialog"
+                     aria-labelledby="chargeRuleModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="chargeRuleModalLabel">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="chargeRuleModalSource">計費來源</label>
+                                        <input type="text" class="form-control" id="chargeRuleModalSource">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chargeRuleModalType">計費類型</label>
+                                        <input type="text" class="form-control" id="chargeRuleModalType">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chargeRuleModalGradeDataTable">計費方式</label>
+                                        <table id="chargeRuleModalGradeDataTable" border="0" width="98%" cellspacing="0"
+                                               cellpadding="0">
+                                            <thead>
+                                            <tr>
+                                                <th>層級</th>
+                                                <th>起</th>
+                                                <th>迄</th>
+                                                <th>固定價格</th>
+                                                <th>累計</th>
+                                                <th>循環級距</th>
+                                                <th>最大收費</th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chargeRuleModalCron">計費時間區間</label>
+                                        <input type="text" class="form-control" id="chargeRuleModalCron">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="packageMenuModal" tabindex="-1" role="dialog"
+                     aria-labelledby="companyMenuModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="packageMenuModalLabel">清單</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table id="packageMenuDataTable" content="optionList" border="0" width="98%"
+                                       cellspacing="0"
+                                       cellpadding="0">
+                                    <thead>
+                                    <tr>
+                                        <th>packageId</th>
+                                        <th>方案 名稱</th>
+                                        <th>children</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                <button type="button" class="btn btn-primary" id="packageMenuModalChoose"
+                                        data-dismiss="modal"
+                                        name="modifyPackage">確定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="quantityLimitViewModal" tabindex="-1" role="dialog"
+                     aria-labelledby="quantityLimitMenuModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="quantityLimitViewModalLabel">清單</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="quantityLimitName">名稱</label>
+                                    <input type="text" class="form-control"
+                                           id="quantityLimitName" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantityLimitType">類型</label>
+                                    <input type="text" class="form-control"
+                                           id="quantityLimitType" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantityLimitQuantity">數量</label>
+                                    <input type="text" class="form-control"
+                                           id="quantityLimitQuantity" readonly>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="contractSearchConditionModal" tabindex="-1" role="dialog"
+                     aria-labelledby="contractSearchConditionModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="contractSearchConditionModalLabel">過濾條件</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="contractSearchConditionModalContractStatus">合約狀態</label>
+                                        <div class="input-group">
+                                            <input id="contractSearchConditionModalContractStatus" type="text"
+                                                   class="form-control"
+                                                   data-bind="value: chosenContractStatus().name"
+                                                   autocomplete="off" readonly>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                        data-bind="click:filterEditViewModel.knockoutComponent.contractStatusSelector.show">
+                                                    選擇
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractSearchConditionModalEffectiveDateFrom">合約起始年月(起迄)</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="contractSearchConditionModalEffectiveDateFrom"
+                                                   name="contractSearchConditionModalEffectiveDateFrom"
+                                                   aria-label="from"
+                                                   data-bind="value:editEffectiveDateInputFrom"/>
+                                            <input type="text" class="input-sm form-control"
+                                                   id="contractSearchConditionModalEffectiveDateTo"
+                                                   name="contractSearchConditionModalEffectiveDateTo"
+                                                   aria-label="to"
+                                                   data-bind="value:editEffectiveDateInputTo"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractSearchConditionModalExpirationYM">合約結束年月</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="contractSearchConditionModalExpirationYM"
+                                                   name="contractSearchConditionModalExpirationYM"
+                                                   data-bind="value:editExpirationDateInput"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractSearchConditionModalAlmostExpireYM">快到期年月</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="contractSearchConditionModalAlmostExpireYM"
+                                                   name="contractSearchConditionModalAlmostExpireYM"
+                                                   data-tooltip="tooltip"
+                                                   data-placement="right"
+                                                   title="快到期年月的區間並非一般的一個月，而是一個月向前移一天的區間"
+                                                   data-bind="value:almostExpireYearMonthInput"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contractSearchConditionModalExpirationYM">顯示過期合約</label>
+                                        <input id="displayExpireSwitch" type="checkbox">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                <button type="button" class="btn btn-primary" id="applyContractSearchCondition"
+                                        data-dismiss="modal"
+                                        data-bind="click:doSearch">確定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="operationModal" tabindex="-1" role="dialog"
+                     aria-labelledby="operationModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="operationModalLabel">操作項目</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button id="contractOperationAdd" type="button"
+                                                    class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:onCreate"
+                                                    data-dismiss="modal">
+                                                新增
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:onModifyContract"
+                                                    data-dismiss="modal">
+                                                編輯
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" hidden>
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:enableContract"
+                                                    data-dismiss="modal">
+                                                啟用
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:disableContract"
+                                                    data-dismiss="modal">
+                                                停用
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" hidden>
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:cancelInitialContract"
+                                                    data-dismiss="modal">
+                                                刪除預繳費用
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind='click:downloadCurrentlyNotExpireContractReport'
+                                                    data-dismiss="modal">
+                                                產生當前啟用中合約報表(固定條件)
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="packageRefEditModal" tabindex="-1" role="dialog"
+                     aria-labelledby="packageEditModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="packageRefEditModalLabel">計費項目</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="packageRefEditModalChargeRule">項目</label>
+                                        <div class="input-group">
+                                            <input id="packageRefEditModalChargeRule" type="text"
+                                                   data-bind="value:chosenChargeRule().name"
+                                                   class="form-control" readonly>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                        data-toggle="modal" id="chargeRuleSelect"
+                                                        data-target="#chargeRuleMenuModal" name="chargeRuleSelect">選擇
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                        id="packageRefEditSaveChange" name="save" data-bind="click:onSaveChange">儲存修改
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="cyclePreviewModal" tabindex="-1" role="dialog"
+                     aria-labelledby="cyclePreviewModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cyclePreviewModalLabel">週期預覽</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <ul class="list-group" id="cyclePreviewList"
+                                        data-bind="foreach: cyclePreviewItemList">
+                                        <li id="list-group-item" class="list-group-item"
+                                            data-bind="text: periodDesc"></li>
+                                    </ul>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let contentMenuViewModel = {
+        selectedCountBadge: ko.observable(0),
+        knockoutComponent: {
+            companySelector: companySelectorInitializer('companyInputAutoComplete', function (companySelector) {
+                companySelector.chosenCompany.subscribe(function (newValue) {
+                    filterEditViewModel.chosenCompany(newValue);
+                    contractEditViewModel.chosenCompany(newValue);
+                    if (!contractEditViewModel.isShow()) {
+                        contractMainListViewModel.contractDataTable.ajax.reload();
+                    }
+                });
+                return companySelector;
+            })
+        },
+        init: function (dom) {
+            ko.applyBindings(contentMenuViewModel, dom);
+        }
+    };
+
+    let filterEditViewModel = {
+        editEffectiveDateInputFrom: ko.observable(),
+        editEffectiveDateInputTo: ko.observable(),
+        editExpirationDateInput: ko.observable(),
+        almostExpireYearMonthInput: ko.observable(),
+        chosenContractStatus: ko.observable({}),
+        chosenCompany: ko.observable({}),
+        displayExpireSwitch: undefined,
+        knockoutComponent: {
+            contractStatusSelector: dataTableOptionSelectorComponentInitializer(dataSourceModule.getContractStatus(), function (contractStatusSelector) {
+                contractStatusSelector.chosenOption.subscribe(function (newValue) {
+                    if (contractEditViewModel.isShow()) {
+                        contractEditViewModel.chosenContractStatus(newValue);
+                    }
+                    if (filterEditViewModel.isShow()) {
+                        filterEditViewModel.chosenContractStatus(newValue);
+                    }
+                });
+                return contractStatusSelector;
+            }),
+            contractSearchEffectiveDateFromPicker: initDatePicker('contractSearchConditionModalEffectiveDateFrom'),
+            contractSearchEffectiveDateToPicker: initDatePicker('contractSearchConditionModalEffectiveDateTo'),
+            calYearMonthDatePicker: initYearMonthPicker('contractSearchConditionModalExpirationYM'),
+            almostExpireYearMonthDatePicker: initYearMonthPicker('contractSearchConditionModalAlmostExpireYM'),
+            displayExpireSwitch: $('#displayExpireSwitch').bootstrapSwitch()
+        },
+        init: function (dom) {
+            ko.applyBindings(filterEditViewModel, dom);
+        },
+        condition: function () {
+            var condition = {};
+            //寫入動作無法觸發更新的條件,datepicker的觸發在寫入input之前，因此直接拿寫入input
+            if (filterEditViewModel.editEffectiveDateInputFrom()) {
+                condition.effectiveDateFrom = filterEditViewModel.editEffectiveDateInputFrom();
+            }
+            if (filterEditViewModel.editEffectiveDateInputTo()) {
+                condition.effectiveDateTo = filterEditViewModel.editEffectiveDateInputTo();
+            }
+            if (filterEditViewModel.editExpirationDateInput()) {
+                condition.expirationYM = filterEditViewModel.editExpirationDateInput();
+            }
+            if (filterEditViewModel.almostExpireYearMonthInput()) {
+                condition.almostExpireYM = filterEditViewModel.almostExpireYearMonthInput();
+            }
+            if (filterEditViewModel.displayExpireSwitch) {
+                condition.displayExpireSwitch = filterEditViewModel.displayExpireSwitch.bootstrapSwitch('state');
+            }
+            if (filterEditViewModel.chosenContractStatus()) {
+                condition.contractStatus = filterEditViewModel.chosenContractStatus().id;
+            }
+            if (filterEditViewModel.chosenCompany()) {
+                condition.companyId = filterEditViewModel.chosenCompany().companyId;
+            }
+            return condition;
+        }, doSearch: function () {
+            contractMainListViewModel.contractDataTable.ajax.reload();
+        }, isShow: function () {
+            return $('#contractSearchConditionModal').hasClass('show');
+        }
+    };
+
+    let contractMainListViewModel = {
+        chosenContract: ko.observable({}),
+        selectedContractList: new Array(),
+        contractDataTable: initServerSideProcessingContractDataTable(
+            $('#contractDataTable')
+            , serverSideProcessingContractSearchAjaxCall
+            , filterEditViewModel.condition
+            , 'contractId'
+            , function (selectedList) {
+                contentMenuViewModel.selectedCountBadge(selectedList.length);
+                if (contentMenuViewModel.selectedCountBadge() == 1) {
+                    contractMainListViewModel.chosenContract(selectedList[0]);
+                }
+                contractMainListViewModel.selectedContractList = selectedList;
+            }
+        ),
+        init: function (dom) {
+            ko.applyBindings(contractMainListViewModel, dom);
+        }
+    };
+
+    function createBlankContract() {
+        let contract = {};
+        contract.status = 'C';
+        contract.firstInvoiceDateAsEffectiveDate = false;
+        contract.isFirstContract = false;
+        contract.autoRenew = false;
+        contract.firstInvoiceDateAsEffectiveDate = false;
+        contract.allowPartialBilling = false;
+        return contract;
+    }
+
+    var operationViewModel = {
+        init: function (dom) {
+            ko.applyBindings(operationViewModel, dom);
+        },
+        onCreate: function () {
+            var selectedCompany = contentMenuViewModel.knockoutComponent.companySelector.chosenCompany();
+            if (selectedCompany.companyId) {
+                contractEditViewModel.contractView({});
+                contractEditViewModel.action('create');
+                var blankContract = createBlankContract();
+                blankContract.companyId = selectedCompany.companyId;
+                contractEditViewModel.contract(blankContract);
+                $('#contractEditModal').modal();
+            } else {
+                messageHandler({
+                    status: 'warning',
+                    message: '請先選擇公司',
+                    title: '請先選擇公司'
+                });
+            }
+        },
+        onModifyContract: function () {
+            contractEditViewModel.action('modify');
+            if (contractMainListViewModel.selectedContractList.length === 0) {
+                messageHandler({
+                    status: 'warning',
+                    message: '請先選擇資料',
+                    title: '未選擇資料'
+                });
+            } else if (contractMainListViewModel.selectedContractList.length === 1) {
+                contractEditViewModel.knockoutComponent.contractEditEffectiveDatePicker.clean();
+                contractEditViewModel.knockoutComponent.contractEditExpirationDatePicker.clean();
+                contractEditViewModel.knockoutComponent.contractEditInstallationDatePicker.clean();
+                $('#contractEditModal').modal();
+                var contractSelected = contractBackendToFrontConverter(contractMainListViewModel.selectedContractList[0]);
+                contractEditViewModel.contract(contractSelected);
+                if (contractSelected.chargePackage) {
+                    contractEditViewModel.knockoutComponent.chargePackageMenuViewModel.setById(contractSelected.chargePackage.packageId);
+                }
+                if (contractSelected.renewPackageId) {
+                    contractEditViewModel.knockoutComponent.renewPackageMenuViewModel.setById(contractSelected.renewPackageId);
+                } else {
+                    contractEditViewModel.knockoutComponent.renewPackageMenuViewModel.clear();
+                }
+            } else if (contractMainListViewModel.selectedContractList.length > 1) {
+                messageHandler({
+                    status: 'warning',
+                    message: '請只選擇一筆資料進行檢視',
+                    title: '不支援的資料筆數'
+                });
+            }
+        },
+        initialContract: function () {
+            var selectedContract = contractMainListViewModel.chosenContract();
+            if (selectedContract) {
+                initialContractAjaxCall(selectedContract.contractId, function (data) {
+                    messageHandler(data);
+                    contractMainListViewModel.contractDataTable.ajax.reload();
+                });
+            } else {
+                messageHandler({
+                    status: 'warning',
+                    message: '請先選擇資料',
+                    title: '未選擇資料'
+                });
+            }
+        },
+        enableContract: function () {
+            var selectedContract = contractMainListViewModel.chosenContract();
+            if (selectedContract) {
+                enableContractAjaxCall(selectedContract.contractId, function (data) {
+                    messageHandler(data);
+                    contractMainListViewModel.contractDataTable.ajax.reload();
+                });
+            }
+        },
+        terminateContract: function () {
+            var selectedContract = contractMainListViewModel.chosenContract();
+            if (selectedContract) {
+                confirmAjaxProcessor(function () {
+                        terminateContractAjaxCall(selectedContract.contractId, function (data) {
+                            messageHandler(data);
+                            contractMainListViewModel.contractDataTable.ajax.reload();
+                        });
+                    },
+                    '確認訊息',
+                    '終止已產生預繳費用的合約，可能造成某些未入帳的帳單或已產生的計費項目被刪除。' +
+                    '確定要執行這個操作?',
+                    'warning'
+                );
+            }
+        },
+        disableContract: function () {
+            var selectedContract = contractMainListViewModel.chosenContract();
+            if (selectedContract) {
+                confirmAjaxProcessor(function () {
+                        disableContractAjaxCall(selectedContract.contractId, function (data) {
+                            messageHandler(data);
+                            contractMainListViewModel.contractDataTable.ajax.reload();
+                        });
+                    },
+                    '確認訊息',
+                    '停用已產生預繳費用的合約，可能造成某些未入帳的帳單或已產生的計費項目被刪除。' +
+                    '確定要執行這個操作?',
+                    'warning'
+                );
+            }
+        },
+        cancelInitialContract: function () {
+            let selectedContract = contractMainListViewModel.chosenContract();
+            if (selectedContract) {
+                cancelInitialContractAjaxCall(selectedContract.contractId);
+                contractMainListViewModel.contractDataTable.ajax.reload();
+            }
+        }, isShow: function () {
+            return $('#operationModal').hasClass('show');
+        }, downloadCurrentlyNotExpireContractReport: function () {
+            downloadCurrentlyNotExpireContractReportAjax(function (response) {
+                if (response.reportBody) {
+                    var body = base64ToArrayBuffer(response.reportBody);
+                    downloadFileFromBlob(body, "currentlyNotExpireContractReport.csv");
+                }
+                messageHandler(response);
+            });
+        }
+    };
+
+    let contractEditViewModel = {
+        contractView: ko.observable({}),
+        contract: ko.observable({}),
+        chosenPackageRef: ko.observable({}),
+        chosenContractStatus: ko.observable({}),
+        chosenEffectiveDate: ko.observable({}),
+        chosenExpirationDate: ko.observable({}),
+        chosenRenewPackage: ko.observable({}),
+        chosenPackage: ko.observable({}),
+        chosenAutoRenew: ko.observable({}),
+        chosenFirstInvoiceDateAsEffectiveDate: ko.observable({}),
+        chosenFirstContract: ko.observable({}),
+        chosenAllowPartialBilling: ko.observable({}),
+        chosenInstallationDate: ko.observable({}),
+        chosenCompany: ko.observable({}),
+        packageRefAction: undefined,
+        action: ko.observable(),
+        showContractPeriod: ko.observable(),
+        knockoutComponent: {
+            packageRefChargeRuleComponent: packageRefChargeRulePreviewComponentInitializer('packageRefChargeRulePreviewTableComponent'),
+            contractEditAutoRecreateSwitch: bootstrapSwitchViewComponentInitializer('contractEditModalAutoRecreateSwitch', function (contractEditAutoRecreateSwitch) {
+                contractEditAutoRecreateSwitch.chosenValue.subscribe(function (newValue) {
+                    contractEditViewModel.chosenAutoRenew(newValue);
+                });
+                return contractEditAutoRecreateSwitch;
+            }),
+            contractEditFirstInvoiceDateAsEffectiveDateSwitch: bootstrapSwitchViewComponentInitializer('contractEditModalFirstInvoiceDateAsEffectiveDateSwitch', function (contractEditFirstInvoiceDateAsEffectiveDateSwitch) {
+                contractEditFirstInvoiceDateAsEffectiveDateSwitch.chosenValue.subscribe(function (newValue) {
+                    contractEditViewModel.chosenFirstInvoiceDateAsEffectiveDate(newValue);
+                    dynamicContractPeriodUIUpdate();
+                });
+                return contractEditFirstInvoiceDateAsEffectiveDateSwitch;
+            }),
+            contractEditIsFirstContractSwitch: bootstrapSwitchViewComponentInitializer('contractEditModalIsFirstContractSwitch', function (contractEditIsFirstContractSwitch) {
+                contractEditIsFirstContractSwitch.chosenValue.subscribe(function (newValue) {
+                    contractEditViewModel.chosenFirstContract(newValue);
+                    if (!newValue) {
+                        contractEditViewModel.knockoutComponent.contractEditFirstInvoiceDateAsEffectiveDateSwitch.setByValue(false);
+                    }
+                });
+                return contractEditIsFirstContractSwitch;
+            }),
+            contractEditEffectiveDatePicker: datePickerComponentInitializer('contractEditModalEffectiveDate', function (contractEditEffectiveDatePicker) {
+                contractEditEffectiveDatePicker.chosenDate.subscribe(function (newValue) {
+                    if (newValue instanceof Date) {
+                        contractEditViewModel.chosenEffectiveDate(newValue);
+                    } else {
+                        contractEditViewModel.knockoutComponent.contractEditExpirationDatePicker.clean();
+                    }
+                    //觸發資料檢查與自動完成
+                    contractEditViewModel.genContractExpirationDate(function (data) {
+                        if (data) {
+                            if (data.expirationDateMillis) {
+                                contractEditViewModel.knockoutComponent.contractEditExpirationDatePicker.setByValue(data.expirationDateMillis);
+                            } else {
+                                contractEditViewModel.knockoutComponent.contractEditExpirationDatePicker.clean();
+                            }
+                        } else {
+                            contractEditViewModel.knockoutComponent.contractEditExpirationDatePicker.clean();
+                        }
+                        if (data.status == 'info') {
+                            messageHandler(data);
+                        }
+                    });
+                });
+                return contractEditEffectiveDatePicker;
+            }),
+            contractEditExpirationDatePicker: datePickerComponentInitializer('contractEditModalExpirationDate', function (contractEditExpirationDatePicker) {
+                contractEditExpirationDatePicker.chosenDate.subscribe(function (newValue) {
+                    contractEditViewModel.chosenExpirationDate(newValue);
+                });
+                return contractEditExpirationDatePicker;
+            }),
+            contractEditInstallationDatePicker: datePickerComponentInitializer('contractEditModalInstallationDate', function (contractEditInstallationDatePicker) {
+                contractEditInstallationDatePicker.chosenDate.subscribe(function (newValue) {
+                    contractEditViewModel.chosenInstallationDate(newValue);
+                });
+                return contractEditInstallationDatePicker;
+            }),
+            chargePackageMenuViewModel: chargePackageMenuComponentInitializer(function (chargePackageMenuViewModel) {
+                chargePackageMenuViewModel.chosenPackage.subscribe(function (newPackage) {
+                    contractEditViewModel.chosenPackage(newPackage);
+                });
+                return chargePackageMenuViewModel;
+            }),
+            renewPackageMenuViewModel: chargePackageMenuComponentInitializer(function (renewPackageMenuViewModel) {
+                renewPackageMenuViewModel.chosenPackage.subscribe(function (newPackage) {
+                    contractEditViewModel.chosenRenewPackage(newPackage);
+                });
+                return renewPackageMenuViewModel;
+            })
+        },
+        init: function (dom) {
+            ko.applyBindings(contractEditViewModel, dom);
+        },
+        onCreatePackageRef: function () {
+            contractEditViewModel.packageRefAction = 'create';
+            $('#packageRefEditModal').modal();
+        },
+        onModifyPackageRef: function () {
+            var packageRefSelected = contractEditViewModel.knockoutComponent.packageRefChargeRulePreviewDataTable.rows('.selected').data()[0];
+            if (packageRefSelected) {
+                contractEditViewModel.packageRefAction = 'modify';
+                $('#packageRefEditModal').modal();
+            } else {
+                messageHandler({
+                    status: 'warning',
+                    message: '請先選擇資料',
+                    title: '未選擇資料'
+                });
+            }
+        },
+        genPreviewChargeIntervalReqObj: function (chargeRule) {
+            //加入合約期間
+            let cycleType = chargeRule.chargeCycleType;
+            let paidPlan = chargeRule.paidPlanId;
+            let effectiveDate = contractEditViewModel.chosenEffectiveDate();
+            let expirationDate = contractEditViewModel.chosenExpirationDate();
+            let periodMonth = contractEditViewModel.contract().periodMonth;
+            return contractEditViewModel.genPreviewIntervalReqObj(effectiveDate, expirationDate, cycleType, paidPlan, periodMonth);
+        },
+        genPreviewCalculateIntervalReqObj: function (chargeRule) {
+            //加入合約期間
+            let cycleType = chargeRule.calculateCycleType;
+            let paidPlan = chargeRule.paidPlanId;
+            let effectiveDate = contractEditViewModel.chosenEffectiveDate();
+            let expirationDate = contractEditViewModel.chosenExpirationDate();
+            let periodMonth = contractEditViewModel.contract().periodMonth;
+            return contractEditViewModel.genPreviewIntervalReqObj(effectiveDate, expirationDate, cycleType, paidPlan, periodMonth);
+        },
+        genPreviewIntervalReqObj: function (effectiveDate, expirationDate, cycleType, paidPlan, periodMonth) {
+            var requestMap = {};
+            requestMap.effectiveDateMillis = effectiveDate.getTime();
+            requestMap.expirationDateMillis = expirationDate.getTime();
+            requestMap.cycleType = cycleType;
+            requestMap.paidPlan = paidPlan;
+            requestMap.periodMonth = periodMonth;
+            return requestMap;
+        },
+        onPreviewCalculateCycle: function () {
+            var packageRefSelected = contractEditViewModel.knockoutComponent.packageRefChargeRuleComponent.getSelected()[0];
+            if (packageRefSelected) {
+                var reqObj = contractEditViewModel.genPreviewCalculateIntervalReqObj(packageRefSelected);
+                contractCyclePreview(reqObj, function (data) {
+                    $('#cyclePreviewModal').modal();
+                    if (data) {
+                        var newCyclePreviewItemList = new Array();
+                        var index = 1;
+                        data.forEach(localDateTimeObj => {
+                            var startDate = dateTimeRender(new Date(localDateTimeObj.startDateTime.iMillis));
+                            var endDate = dateTimeRender(new Date(localDateTimeObj.endDateTime.iMillis));
+                            var item = {
+                                periodDesc: index + ' - ' + startDate + ' - ' + endDate
+                            };
+                            newCyclePreviewItemList.push(item);
+                            index++;
+                        });
+                        cyclePreviewViewModel.cyclePreviewItemList(newCyclePreviewItemList);
+                    }
+                });
+            } else {
+                messageHandler({
+                    status: 'warning',
+                    message: '請先選擇資料',
+                    title: '未選擇資料'
+                });
+            }
+        },
+        onPreviewChargeCycle: function () {
+            var packageRefSelected = contractEditViewModel.knockoutComponent.packageRefChargeRuleComponent.getSelected()[0];
+            if (packageRefSelected) {
+                var reqObj = contractEditViewModel.genPreviewChargeIntervalReqObj(packageRefSelected);
+                contractCyclePreview(reqObj, function (data) {
+                    $('#cyclePreviewModal').modal();
+                    if (data) {
+                        var newCyclePreviewItemList = new Array();
+                        var index = 1;
+
+                        data.forEach(localDateTimeObj => {
+                            var startDate = dateTimeRender(new Date(localDateTimeObj.startDateTime.iMillis));
+                            var endDate = dateTimeRender(new Date(localDateTimeObj.endDateTime.iMillis));
+                            var item = {
+                                periodDesc: index + ' - ' + startDate + ' - ' + endDate
+                            };
+                            newCyclePreviewItemList.push(item);
+                            index++;
+                        });
+                        cyclePreviewViewModel.cyclePreviewItemList(newCyclePreviewItemList);
+                    }
+                });
+            } else {
+                messageHandler({
+                    status: 'warning',
+                    message: '請先選擇資料',
+                    title: '未選擇資料'
+                });
+            }
+        }, genContractExpirationDate: function (callBackFunc) {
+            //只有狀態為C的才能修改
+            if (contractEditViewModel.contract().status == 'C') {
+                if (contractEditViewModel.knockoutComponent.contractEditEffectiveDatePicker.chosenDate() instanceof Date) {
+                    let req = {
+                        effectiveDate: contractEditViewModel.knockoutComponent.contractEditEffectiveDatePicker.chosenDate().getTime(),
+                        periodMonth: contractEditViewModel.contract().periodMonth
+                    };
+                    contractGetExpirationDateAjaxCall(req, callBackFunc);
+                }
+            }
+        },
+        saveOrUpdateContract: function () {
+            let reqObj = genContractSaveOrUpdateReq();
+            saveOrUpdateContract(reqObj);
+            contractMainListViewModel.contractDataTable.ajax.reload();
+            $('#contractEditModal').modal('hide');
+        }, isShow: function () {
+            return $('#contractEditModal').hasClass('show');
+        }
+    };
+    var packageRefEditViewModel = {
+        chosenChargeRule: ko.observable({}),
+        chargeRuleName: ko.observable(),
+        init: function (dom) {
+            ko.applyBindings(packageRefEditViewModel, dom);
+        },
+        isShow: function () {
+            if ($('#packageRefEditModal').attr('class').includes('show')) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        onSaveChange: function () {
+            //抽出array
+            var currentPackageRefList = contractEditViewModel.packageRefChargeRulePreviewDataTable.rows().data().toArray();
+            if (contractEditViewModel.packageRefAction == 'create') {
+                var newPackageRef = {};
+                newPackageRef.packageRefId = new Date().getTime();
+                newPackageRef.chargeRule = packageRefEditViewModel.chosenChargeRule();
+                //檢查看是否為合法的物件
+                if (isValidObj(newPackageRef.chargeRule)) {
+                    currentPackageRefList.push(newPackageRef);
+                }
+            } else if (contractEditViewModel.packageRefAction == 'modify') {
+                //從packageRef中找出那一筆後進行更新
+                //抽出packageRefId是相同的項目進行更動。
+                if (currentPackageRefList.length > 0) {
+                    var packageRefSelected = contractEditViewModel.packageRefChargeRulePreviewDataTable.rows('.selected').data()[0];
+                    if (packageRefSelected) {
+                        //不要改到原物件，用新的
+                        newPackageRef = Object.assign({}, packageRefSelected);
+                        var targetIndex = currentPackageRefList.findIndex(
+                            packageRef => packageRef.packageRefId == packageRefSelected.packageRefId
+                        );
+                        if (targetIndex >= 0) {
+                            currentPackageRefList.splice(targetIndex, 1);
+                        }
+                        newPackageRef.chargeRule = packageRefEditViewModel.chosenChargeRule();
+                        currentPackageRefList.push(newPackageRef);
+                    }
+                }
+            }
+            contractEditViewModel.knockoutComponent.packageRefChargeRuleComponent.setData(currentPackageRefList);
+        }
+    };
+
+    var cyclePreviewViewModel = {
+        cyclePreviewItemList: ko.observableArray([]),
+        init: function (dom) {
+            ko.applyBindings(cyclePreviewViewModel, dom);
+        }
+    };
+
+    function isContractPeriodDisplay(contractIsCreatedStatus, firstInvoiceDateAsEffectiveDate) {
+        if (contractIsCreatedStatus) {
+            if (!firstInvoiceDateAsEffectiveDate) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * overwrite from template.jsp
+     */
+    function initPage() {
+        const draggablePromise = new Promise((resolve, reject) => {
+            draggableModal();
+            resolve();
+        });
+        draggablePromise
+            .then(result => initTooltip(result))
+            .then(result => initViewModel())
+            .then(result => initMenuViewModel());
+    }
+
+    function bindContractView(contract) {
+        let contractView = {};
+        let company = contentMenuViewModel.knockoutComponent.companySelector.getCompanyById(
+            contract.companyId
+        );
+        if (company) {
+            contractEditViewModel.chosenCompany(company);
+        }
+        if (contract.name) {
+            contractView.name = contract.name;
+        }
+        if (contract.status) {
+            contractView.contractStatusDesc = contractStatusNameRender(contract.status);
+        }
+        if (contract.status == 'C') {
+            contractEditViewModifierAtStatusC(contractView);
+        } else {
+            contractEditViewModifierAtOthers(contractView);
+        }
+        let action = contractEditViewModel.action();
+        let contractIsCreatedStatus = contract.status == 'C';
+        let firstInvoiceDateAsEffectiveDate = contract.firstInvoiceDateAsEffectiveDate;
+        let editActionIsCreate = action == 'create';
+        //改變顯示
+        let displayContractPeriod = isContractPeriodDisplay(
+            contractIsCreatedStatus
+            , firstInvoiceDateAsEffectiveDate
+            , editActionIsCreate);
+
+        if (displayContractPeriod) {
+            contractView.isShowContractPeriod = true;
+        }
+        if (action == 'create') {
+            contractView.isShowContractStatus = false;
+        }
+        if (action == 'modify') {
+            contractView.isCompanyVisible = true;
+        }
+        contractEditViewModel.contractView(contractView);
+    }
+
+    /**
+     * 我們以contractEditViewModel的contract做為model
+     * 因此在model更新時，我們也要更新view，任何時候的修改，都是直接改model，讓model去更新view
+     * 不要直接更動view
+     */
+    contractEditViewModel.contract.subscribe(function (contract) {
+        bindContractView(contract);
+
+        contractEditViewModel.knockoutComponent.contractEditAutoRecreateSwitch.setByValue(contract.autoRenew);
+        contractEditViewModel.knockoutComponent.contractEditFirstInvoiceDateAsEffectiveDateSwitch.setByValue(contract.firstInvoiceDateAsEffectiveDate);
+        contractEditViewModel.knockoutComponent.contractEditIsFirstContractSwitch.setByValue(contract.isFirstContract);
+
+        if (contract.effectiveDate) {
+            contractEditViewModel.knockoutComponent.contractEditEffectiveDatePicker.setByValue(contract.effectiveDate);
+        }
+        if (contract.expirationDate) {
+            contractEditViewModel.knockoutComponent.contractEditExpirationDatePicker.setByValue(contract.expirationDate);
+        }
+        if (contract.installationDate) {
+            contractEditViewModel.knockoutComponent.contractEditInstallationDatePicker.setByValue(contract.installationDate);
+        }
+
+        if (contract.renewPackageId) {
+            contractEditViewModel.knockoutComponent.renewPackageMenuViewModel.setById(contract.renewPackageId);
+        }
+        //寫入packageRefDataTable
+        if (contract.chargePackage) {
+            contractEditViewModel.chosenPackage(contract.chargePackage);
+        }
+    });
+
+    function dynamicContractPeriodUIUpdate() {
+        var action = contractEditViewModel.action();
+        var contractIsCreatedStatus = contractEditViewModel.contract().status == 'C';
+        var firstInvoiceDateAsEffectiveDate = contractEditViewModel.chosenFirstInvoiceDateAsEffectiveDate();
+        var editActionIsCreate = action == 'create';
+        var isDisplay = isContractPeriodDisplay(
+            contractIsCreatedStatus,
+            firstInvoiceDateAsEffectiveDate,
+            editActionIsCreate
+        );
+        contractEditViewModel.showContractPeriod(isDisplay);
+    }
+
+    /**
+     *合約編輯頁的switch處理
+     * */
+    function contractEditViewModifierAtStatusC(contractView) {
+        contractView.isPackageRefEditable = true;
+        contractView.isPackageEditable = true;
+        contractView.isPeriodMonthEditable = true;
+        contractView.isEffectiveDateEditable = true;
+        contractView.isInstallationDateEditable = true;
+        contractEditViewModel.knockoutComponent.contractEditFirstInvoiceDateAsEffectiveDateSwitch.enable();
+        contractEditViewModel.knockoutComponent.contractEditAutoRecreateSwitch.enable();
+        contractEditViewModel.knockoutComponent.contractEditIsFirstContractSwitch.enable();
+        contractEditViewModel.knockoutComponent.contractEditEffectiveDatePicker.enable();
+    }
+
+    function contractEditViewModifierAtOthers(contractView) {
+        contractView.isPackageRefEditable = false;
+        contractView.isPackageEditable = false;
+        contractView.isPeriodMonthEditable = false;
+        contractView.isEffectiveDateEditable = false;
+        contractView.isInstallationDateEditable = false;
+        contractEditViewModel.knockoutComponent.contractEditFirstInvoiceDateAsEffectiveDateSwitch.disable();
+        contractEditViewModel.knockoutComponent.contractEditAutoRecreateSwitch.enable();
+        contractEditViewModel.knockoutComponent.contractEditIsFirstContractSwitch.disable();
+        contractEditViewModel.knockoutComponent.contractEditEffectiveDatePicker.disable();
+    }
+
+    /**
+     * 直接對model更新
+     */
+    async function initMenuViewModel() {
+        contractEditViewModel.chosenPackage.subscribe(function (newPackage) {
+            if (newPackage) {
+                let chargeRuleArr = new Array();
+                newPackage.packageRefList.forEach(packageRef => {
+                    findChargeRuleById(packageRef.toChargeRuleId, function (result) {
+                        result.packageRefId = packageRef.packageRefId;
+                        chargeRuleArr.push(result);
+                    });
+                });
+                contractEditViewModel.knockoutComponent.packageRefChargeRuleComponent.setData(chargeRuleArr);
+            }
+        });
+    }
+
+    function initViewModel() {
+        const contractMainListViewModelInit = promiseWrapper(function () {
+            contractMainListViewModel.init(document.getElementById("contractDataTable"));
+        });
+        const filterEditViewModelInit = promiseWrapper(function () {
+            filterEditViewModel.init(document.getElementById("contractSearchConditionModal"));
+        });
+        const operationViewModelInit = promiseWrapper(function () {
+            operationViewModel.init(document.getElementById("operationModal"));
+        });
+        const contractEditViewModelInit = promiseWrapper(function () {
+            contractEditViewModel.init(document.getElementById("contractEditModal"));
+        });
+        const packageRefEditViewModelInit = promiseWrapper(function () {
+            packageRefEditViewModel.init(document.getElementById("packageRefEditModal"));
+        });
+        const cyclePreviewViewModelInit = promiseWrapper(function () {
+            cyclePreviewViewModel.init(document.getElementById("cyclePreviewModal"));
+        });
+        const contentMenuViewModelInit = promiseWrapper(function () {
+            contentMenuViewModel.init(document.getElementById("contentMenu"));
+        });
+        Promise.all([
+            contractMainListViewModelInit,
+            filterEditViewModelInit,
+            operationViewModelInit,
+            contractEditViewModelInit,
+            packageRefEditViewModelInit,
+            cyclePreviewViewModelInit,
+            contentMenuViewModelInit
+        ]);
+    }
+
+
+    function genContractSaveOrUpdateReq() {
+        let contractName = "";
+        if (contractEditViewModel.contract().name) {
+            contractName = contractEditViewModel.contract().name;
+        }
+        if (contractEditViewModel.chosenPackage().name) {
+            contractName = contractEditViewModel.chosenPackage().name;
+        }
+        let req = {
+            contractId: contractEditViewModel.contract().contractId,
+            companyId: contractEditViewModel.chosenCompany().companyId,
+            packageId: contractEditViewModel.chosenPackage().packageId,
+            contractName: contractName,
+            renewPackageId: contractEditViewModel.chosenRenewPackage().packageId,
+            autoRenew: contractEditViewModel.chosenAutoRenew(),
+            firstContract: contractEditViewModel.chosenFirstContract(),
+            firstInvoiceDateAsEffectiveDate: contractEditViewModel.chosenFirstInvoiceDateAsEffectiveDate(),
+            periodMonth: contractEditViewModel.contract().periodMonth
+        };
+        if (contractEditViewModel.chosenEffectiveDate() instanceof Date) {
+            req.effectiveDate = contractEditViewModel.chosenEffectiveDate().getTime();
+        }
+        if (contractEditViewModel.chosenExpirationDate() instanceof Date) {
+            req.expirationDate = contractEditViewModel.chosenExpirationDate().getTime();
+        }
+        if (contractEditViewModel.chosenInstallationDate() instanceof Date) {
+            req.installationDate = contractEditViewModel.chosenInstallationDate().getTime();
+        }
+        return req;
+    }
+
+    /**
+     * 從前端元件取值做成物件
+     * @param contract
+     * @returns {*}
+     */
+    function contractFrontToBackendConverter(contract) {
+        var result = Object.assign({}, contract);
+        if (contractEditViewModel.chosenEffectiveDate() instanceof Date) {
+            result.effectiveDate = contractEditViewModel.chosenEffectiveDate().getTime();
+        }
+        if (contractEditViewModel.chosenExpirationDate() instanceof Date) {
+            result.expirationDate = contractEditViewModel.chosenExpirationDate().getTime();
+        }
+        if (contractEditViewModel.chosenInstallationDate() instanceof Date) {
+            result.installationDate = contractEditViewModel.chosenInstallationDate().getTime();
+        }
+        if (contractEditViewModel.chosenPackage()) {
+            result.packageId = contractEditViewModel.chosenPackage().packageId;
+        }
+        if (contractEditViewModel.chosenRenewPackage()) {
+            result.renewPackageId = contractEditViewModel.chosenRenewPackage().packageId;
+        }
+        if (contractEditViewModel.chosenFirstContract()) {
+            result.isFirstContract = contractEditViewModel.chosenFirstContract();
+        } else {
+            result.isFirstContract = false;
+        }
+        if (contractEditViewModel.chosenFirstInvoiceDateAsEffectiveDate()) {
+            result.firstInvoiceDateAsEffectiveDate = contractEditViewModel.chosenFirstInvoiceDateAsEffectiveDate();
+        } else {
+            result.firstInvoiceDateAsEffectiveDate = false;
+        }
+        if (contractEditViewModel.chosenAutoRenew()) {
+            result.autoRenew = true;
+        } else {
+            result.autoRenew = false;
+        }
+        if (!result.name) {
+            result.name = contractEditViewModel.chosenPackage().name;
+        }
+        result.companyId = contractEditViewModel.chosenCompany().companyId;
+        result.packageId = contractEditViewModel.chosenPackage().packageId;
+        return result;
+    }
+
+    function contractBackendToFrontConverter(contract) {
+        var result = Object.assign({}, contract);
+        //修訂物件 contract過來的localDateTime對javascript不好用
+        if (contract.effectiveDate) {
+            result.effectiveDate = localDateTimeToJsDate(contract.effectiveDate);
+        }
+        if (contract.expirationDate) {
+            result.expirationDate = localDateTimeToJsDate(contract.expirationDate);
+        }
+        if (contract.installationDate) {
+            result.installationDate = localDateTimeToJsDate(contract.installationDate);
+        }
+        result.companyId = contract.company.companyId;
+        return result;
+    }
+
+    function saveOrUpdateContract(obj) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/saveOrUpdate';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = messageHandler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function cancelInitialContractAjaxCall(contractId) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/cancelInitial/' + contractId;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = messageHandler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function terminateContractAjaxCall(contractId, resolveHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/terminate/' + contractId;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = resolveHandler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function initialContractAjaxCall(contractId, resolveHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/initial/' + contractId;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = resolveHandler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function enableContractAjaxCall(contractId, resolveHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/enable/' + contractId;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = messageHandler;
+        promiseSyncAjaxCall(ajaxParam, resolveHandler);
+    }
+
+    function disableContractAjaxCall(contractId, resolveHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/disable/' + contractId;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.dataType = 'json';
+        ajaxParam.successHandler = messageHandler;
+        promiseSyncAjaxCall(ajaxParam, resolveHandler);
+    }
+
+    function contractCyclePreview(obj, resolveHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/chargeIntervalPreview';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.dataType = 'json';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = messageHandler;
+        promiseSyncAjaxCall(ajaxParam, resolveHandler);
+    }
+
+    function contractGetExpirationDateAjaxCall(obj, resolveHandler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/expirationDateFulfill';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.dataType = 'json';
+        ajaxParam.processData = 'false';
+        ajaxParam.data = JSON.stringify(obj);
+        promiseSyncAjaxCall(ajaxParam, resolveHandler);
+    }
+
+    function serverSideProcessingContractSearchAjaxCall(obj, handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/serverSideProcessingSearch';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.dataType = 'json';
+        ajaxParam.processData = 'false';
+        ajaxParam.data = JSON.stringify(obj);
+        return promiseSyncAjaxCall(ajaxParam, handler, handler);
+    }
+
+    function downloadCurrentlyNotExpireContractReportAjax(handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/downloadCurrentlyNotExpireContractReport';
+        ajaxParam.requestType = 'GET';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.successHandler = handler;
+        return asyncAjaxCall(ajaxParam, function (data, textStatus, jqXHR) {
+            handler(data);
+        });
+    }
+
+    function findChargeRuleById(id, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargeRuleManagementServlet/api/findViewById/' + id;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = handler;
+        syncAjaxCall(ajaxParam);
+    }
+</script>
+</body>
+</html>

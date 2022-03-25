@@ -14,7 +14,7 @@ public class InvoiceExcelBean {
     private Integer itemCnt; //數量
     private BigDecimal unitPrice; //單價
     private Integer taxType; //課稅別 1.應稅 2.零稅率 3.免稅 4.應稅(特種稅率)
-    private Double tax; //稅率
+    private Double taxRate; //稅率
     private String businessNo; //買方統編
 
     public Integer getInvoiceIndex() {
@@ -73,12 +73,12 @@ public class InvoiceExcelBean {
         this.taxType = taxType;
     }
 
-    public Double getTax() {
-        return tax;
+    public Double getTaxRate() {
+        return taxRate;
     }
 
-    public void setTax(Double tax) {
-        this.tax = tax;
+    public void setTaxRate(Double taxRate) {
+        this.taxRate = taxRate;
     }
 
     public String getBusinessNo() {

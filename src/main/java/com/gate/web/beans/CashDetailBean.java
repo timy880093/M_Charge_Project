@@ -1,6 +1,6 @@
 package com.gate.web.beans;
 
-import com.gateweb.charge.model.CashDetailEntity;
+import com.gateweb.orm.charge.entity.CashDetailEntity;
 
 /**
  * Created by emily on 2016/1/25.

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/bootstrapHeader.html::header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image:url(/backendAdmin/images/bg.jpg); background-position:left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"><img src="/backendAdmin/images/logo.jpg"
+                                                      width="200" height="127"/></a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html::menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <div>
+                <tr>
+                    <td>
+                        <table id='contentMenu' class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="left"><span class="textstyle_06">待結項目清單</span></td>
+                                <td>
+                                    <div class="d-flex justify-content-end">
+                                        <div class="form-group">
+                                            <div class="input-group-sm">
+                                                <select class="form-control" id="companyInputAutoComplete">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <a href="#" id="condition" name="condition" title="過濾條件" class="butbox"
+                                               data-toggle="modal"
+                                               data-target="#billingItemConditionModal"><span>過濾條件</span></a>
+                                        </div>
+                                        <div class="form-group">
+                                            <a href="#" id="operation" name="operation" title="操作項目" class="butbox"
+                                               data-toggle="modal"
+                                               data-target="#operationModal"><span>操作項目</span>
+                                                <span id='selectedBadge'
+                                                      data-bind="text:selectedCountBadge"
+                                                      class="badge"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!-- master dataTable-->
+                <tr id="#list">
+                    <td>
+                        <div class="content" title="主要區域" style=" width:100%">
+                            <div class="spacer"></div>
+                            <table id="billingItemDataTable" content="main" border="0" width="98%" cellspacing="0"
+                                   cellpadding="0">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>companyId</th>
+                                    <th>公司名稱</th>
+                                    <th>統編</th>
+                                    <th>productId</th>
+                                    <th>產品分類</th>
+                                    <th>收費類別</th>
+                                    <th>付費類別</th>
+                                    <th>數量</th>
+                                    <th>費用</th>
+                                    <th>預計出帳日期</th>
+                                    <th>起算日</th>
+                                    <th>結算日</th>
+                                    <th>計算日</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <div class="modal fade" id="billingItemEditModal" tabindex="-1" role="dialog"
+                     aria-labelledby="billingItemEditModalLabel" aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="billingItemEditModalLabel">待結項目內容</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="billingItemEditModalSourceType">來源類別</label>
+                                        <select class="custom-select" id="billingItemEditModalSourceType">
+                                            <option selected>Choose...</option>
+                                            <option value="contract">合約</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left" for="billingItemEditModalSourceName">來源名稱</label>
+                                        <input type="text" class="form-control" id="billingItemEditModalSourceName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="text-left" for="billingItemEditModalChargePlan">計費類別</label>
+                                        <input type="text" class="form-control" id="billingItemEditModalChargePlan">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="billingItemEditModalCalculateFromDate">計算區間</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="billingItemEditModalCalculateFromDate"
+                                                   name="calculateFromDate"/>
+                                            <div class="input-group-prepend input-group-append">
+                                                <span class="input-group-text"> ~ </span>
+                                            </div>
+                                            <input type="text" class="input-sm form-control"
+                                                   id="billingItemEditModalCalculateToDate"
+                                                   name="calculateToDate"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="billingItemEditModalCalculateDate">計算日期</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="billingItemEditModalCalculateDate"
+                                                   name="calculateDate"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="billingItemEditModalCount">計費數量</label>
+                                        <div class="input-group">
+                                            <input id="billingItemEditModalCount" type="text" class="form-control"
+                                                   aria-label="Amount (to the nearest dollar)">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="billingItemEditModalFee">費用</label>
+                                        <div class="input-group">
+                                            <input id="billingItemEditModalFee" type="text" class="form-control"
+                                                   aria-label="Amount (to the nearest dollar)">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                <button type="button" class="btn btn-primary" name="save" data-dismiss="modal">Save
+                                    changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="billingItemConditionModal" tabindex="-1" role="dialog"
+                     aria-labelledby="billingItemConditionModalLabel" aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="billingItemConditionModalLabel">待結項目過濾條件</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="billingItemConditionModalProductCategory">商品類別</label>
+                                        <div class="input-group">
+                                            <input id="billingItemConditionModalProductCategory" type="text"
+                                                   class="form-control"
+                                                   autocomplete="off" data-bind="value:chosenProductCategory().name"
+                                                   readonly>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                        id="modifyProductCategory"
+                                                        data-bind="click:onOpenProductCategoryMenu">選擇
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="from-group">
+                                        <label for="billingItemConditionModalYearMonthPicker">起/結算年月</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                   id="billingItemConditionModalYearMonthPicker" name="calYearMonth"
+                                                   data-bind="value:calYearMonthInput"/>
+                                        </div>
+                                    </div>
+                                    <div class="from-group">
+                                        <label for="billingItemConditionModalGwBillingRuleYearMonthPicker">關網年月出帳規則</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                   id="billingItemConditionModalGwBillingRuleYearMonthPicker"
+                                                   name="gwBillingRuleYm"
+                                                   data-html="true"
+                                                   title=""
+                                                   data-bind="value:gwBillingRuleYmInput"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-check-label" for="includeMemoSwitch">包含零元及扣抵註記</label>
+                                        <div class="input-group">
+                                            <input type="checkbox" class="form-check-input" id="includeMemoSwitch">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-check-label" for="includeBilledItemSwitch">顯示已出帳項目</label>
+                                        <div class="input-group">
+                                            <input type="checkbox" class="form-check-input"
+                                                   id="includeBilledItemSwitch">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" id="applyCondition" data-dismiss="modal"
+                                        data-bind="click:doSearch" name="searchByCondition">搜尋
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="billingModal" tabindex="-1" role="dialog"
+                     aria-labelledby="billingModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="billingModalLabel">結帳資料</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group" data-bind="visible:isCompanyVisible">
+                                    <label for="billingDataModalCompany">出帳公司</label>
+                                    <div class="input-group">
+                                        <input id="billingDataModalCompany" data-bind="value:billingCompanyName"
+                                               type="text"
+                                               class="form-control" autocomplete="off" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group" data-bind="visible:isCompanyVisible">
+                                    <label for="billingDataModalCompany">出帳公司統編</label>
+                                    <div class="input-group">
+                                        <input id="billingDataModalCompanyBusinessNo"
+                                               data-bind="value:billingCompanyBusinessNo"
+                                               type="text"
+                                               class="form-control" autocomplete="off" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group" data-bind="visible:isBillingItemVisible">
+                                    <label class="text-left" for="billingPreviewDataTable">待結項目</label>
+                                    <table id="billingPreviewDataTable" border="0" width="98%" cellspacing="0"
+                                           cellpadding="0">
+                                        <thead>
+                                        <tr>
+                                            <th>公司名稱</th>
+                                            <th>產品分類</th>
+                                            <th>收費類別</th>
+                                            <th>付費類別</th>
+                                            <th>產品名稱</th>
+                                            <th>數量</th>
+                                            <th>費用</th>
+                                            <th>起算日</th>
+                                            <th>結算日</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="billingDataModalMinimumFeeCheckSwitch">最低費用檢查(500)</label>
+                                    <input id="billingDataModalMinimumFeeCheckSwitch" type="checkbox">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="text-left" for="billingDataModalRemark">帳單備註</label>
+                                    <input type="text" class="form-control" id="billingDataModalRemark"
+                                           data-bind="value:remark">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="billYmModalYearMonthPicker">帳單年月</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="billYmModalYearMonthPicker"
+                                               name="billYearMonth" data-bind="value:billYearMonthInput"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                <button type="button" class="btn btn-primary" id="billingModalChoose"
+                                        data-dismiss="modal"
+                                        data-bind="click:outToBill" name="outToBill">確定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="calculateFeeModal" tabindex="-1" role="dialog"
+                     aria-labelledby="calculateFeeModalModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="calculateFeeModalModalLabel">計算條件</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="calculateFeeModalYearMonthPicker">依據預計出帳年月</label>
+                                        <div class="input-group">
+                                            <input type="text" class="input-sm form-control"
+                                                   id="calculateFeeModalYearMonthPicker"
+                                                   name="yearMonth" data-bind="value:calYearMonthInput"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                <button type="button" class="btn btn-primary" id="calculateFee" data-dismiss="modal"
+                                        data-bind="click:calculateFeeSubmit">確定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="operationModal" tabindex="-1" role="dialog"
+                     aria-labelledby="operationModalLabel"
+                     aria-hidden="true" data-backdrop="false">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="operationModalLabel">操作項目</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:batchBilling"
+                                                    data-dismiss="modal">
+                                                出帳(單筆/多筆(限同公司)/條件)
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:removeBillingItem" data-dismiss="modal">
+                                                刪除(單筆/多筆)
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:onCalculateFee" data-dismiss="modal">
+                                                合約費用計算(依照出帳年月)
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:onCalculateFeeAndOutToBill" data-dismiss="modal">
+                                                合約費用計算並出帳(依照出帳年月)
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                    data-bind="click:downloadToCsvByCompanyAndCondition"
+                                                    data-dismiss="modal">
+                                                依過濾條件下載
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var companySelector;
+    var productCategorySelector;
+    var billYmDatePicker;
+    let billingDataModelMinimumFeeCheckSwitch;
+
+    var contentMenuViewModel = {
+        selectedCountBadge: ko.observable(0),
+        availableCompanies: ko.observableArray(),
+        init: function (dom) {
+            ko.applyBindings(contentMenuViewModel, dom);
+        }
+    };
+
+    var filterEditViewModel = {
+        calYearMonthInput: ko.observable(),
+        gwBillingRuleYmInput: ko.observable(),
+        chosenProductCategory: ko.observable({}),
+        selectedCompany: ko.observable({}),
+        init: function (dom) {
+            filterEditViewModel.yearMonthPicker = initYearMonthPicker('billingItemConditionModalYearMonthPicker');
+            filterEditViewModel.gwBillingRuleYmPicker = initYearMonthPicker('billingItemConditionModalGwBillingRuleYearMonthPicker');
+            filterEditViewModel.includeMemoSwitch = $('#includeMemoSwitch').bootstrapSwitch();
+            filterEditViewModel.includeBilledItemSwitch = $('#includeBilledItemSwitch').bootstrapSwitch();
+            ko.applyBindings(filterEditViewModel, dom);
+        }, onOpenProductCategoryMenu: function () {
+            productCategorySelector.show();
+        },
+        doSearch: function () {
+            billingItemMainListViewModel.selectedBillingItemList = [];
+            billingItemMainListViewModel.billingItemDataTable.ajax.reload();
+        }
+    };
+
+    var billingItemMainListViewModel = {
+        billingItemDataTable: undefined,
+        chosenBillingItem: ko.observable({}),
+        selectedBillingItemList: new Array(),
+        init: function (dom) {
+            billingItemMainListViewModel.billingItemDataTable = initServerSideProcessingBillingItemDataTable(
+                $('#billingItemDataTable')
+                , serverSideProcessingBillingItemSearchAjaxCall
+                , genCondition
+                , 'billingItemId'
+                , function (selectedList) {
+                    contentMenuViewModel.selectedCountBadge(selectedList.length);
+                    if (contentMenuViewModel.selectedCountBadge() == 1) {
+                        billingItemMainListViewModel.chosenBillingItem(selectedList[0]);
+                    }
+                    billingItemMainListViewModel.selectedBillingItemList = selectedList;
+                }
+            );
+            ko.applyBindings(billingItemMainListViewModel, dom);
+        }
+    };
+
+    var operationViewModel = {
+        init: function (dom) {
+            ko.applyBindings(operationViewModel, dom);
+        },
+        batchBilling: function () {
+            var billingItemList = billingItemMainListViewModel.selectedBillingItemList;
+            if (billingItemList.length > 0) {
+                var multiCompanyCheckResult = billingItemCompanyCheck(billingItemList);
+                if (multiCompanyCheckResult) {
+                    billingPreviewViewModel.billingCompanyName(
+                        billingItemList[0].company.name
+                    );
+                    billingPreviewViewModel.billingCompanyBusinessNo(
+                        billingItemList[0].company.businessNo
+                    );
+                    billingPreviewViewModel.billingPreviewDataTable.clear();
+                    billingPreviewViewModel.billingPreviewDataTable.rows.add(billingItemList);
+                    billingPreviewViewModel.billingPreviewDataTable.draw();
+                    billingPreviewViewModel.billingType = 'multi';
+                    billingPreviewViewModel.isCompanyVisible(true);
+                    billingPreviewViewModel.isBillingItemVisible(true);
+                    $("#billingModal").modal();
+                } else {
+                    messageHandler({
+                        title: "操作失敗",
+                        status: "warning",
+                        message: "此功能不適用多公司出帳"
+                    });
+                }
+            } else {
+                let condition = genCondition();
+                if (condition.includeMemo || condition.includeBilledItem) {
+                    messageHandler({
+                        title: "操作警告",
+                        status: "warning",
+                        message: "出帳條件中包含不能出帳的條件，系統會排除這些項目，但為了確保每項資料都經過確認，請務必修正查詢條件後重試"
+                    });
+                    return;
+                } else {
+                    confirmAjaxProcessor(
+                        function () {
+                            billingPreviewViewModel.billingType = 'condition';
+                            billingPreviewViewModel.isCompanyVisible(false);
+                            billingPreviewViewModel.isBillingItemVisible(false);
+                            $("#billingModal").modal();
+                        },
+                        '確認訊息',
+                        '未選擇任何資料會使用查詢條件做為篩選並依公司各別出帳\n' +
+                        '請務必於操作前確認查詢結果\n',
+                        'warning'
+                    );
+                }
+            }
+        },
+        removeBillingItem: function () {
+            var billingItemSelected = billingItemMainListViewModel.selectedBillingItemList;
+            if (billingItemSelected) {
+                var dto = {
+                    billingItemIdList: operationViewModel.genBillingItemIdList(billingItemSelected)
+                };
+                deleteItemByList(dto, function (responseMap) {
+                    filterEditViewModel.doSearch();
+                    messageHandler({
+                        status: "success",
+                        title: "刪除成功"
+                    });
+                });
+            } else {
+                Swal.fire("warning", '', "未選擇項目");
+            }
+        },
+        genBillingItemIdList: function (selectedList) {
+            var billingItemIdList = [];
+            for (var i = 0; i <= selectedList.length; i++) {
+                if (selectedList[i]) {
+                    billingItemIdList.push(selectedList[i].billingItemId);
+                }
+            }
+            return billingItemIdList;
+        },
+        downloadToCsvByCompanyAndCondition: function () {
+            loadingAjaxProcessor(function () {
+                downloadCsvByCompanyAndConditionAjaxCall(
+                    genCondition(),
+                    function () {
+                        messageHandler({
+                            title: "下載完成",
+                            status: "success"
+                        });
+                    });
+            });
+        }, onCalculateFee: function () {
+            operationViewModel.action = "calculateFee";
+            $("#calculateFeeModal").modal();
+        }, onCalculateFeeAndOutToBill: function () {
+            operationViewModel.action = "calculateFeeAndOutToBill";
+            $("#calculateFeeModal").modal();
+        }
+    };
+    var calculateFeeViewModel = {
+        calYearMonthInput: ko.observable(),
+        init: function (dom) {
+            calculateFeeViewModel.yearMonthPicker = initYearMonthPicker('calculateFeeModalYearMonthPicker');
+            ko.applyBindings(calculateFeeViewModel, dom);
+        },
+        calculateFeeSubmit: function () {
+            let billRequest = genOutToBillRequest();
+            //他要以當前的yearMonth為gwBillingRuleYm，所以要補條件
+            billRequest.condition.gwBillingRuleYm = billRequest.condition.calFeeYearMonth;
+            if (operationViewModel.action == 'calculateFee') {
+                loadingAjaxProcessor(function () {
+                    calculateFeeByYearMonth(billRequest, function () {
+                        messageHandler({
+                            title: "計算完成",
+                            status: "success"
+                        });
+                    });
+                }, "處理中請稍候")
+            } else if (operationViewModel.action == 'calculateFeeAndOutToBill') {
+                let billRequest = genOutToBillRequest();
+                //他要以當前的yearMonth為gwBillingRuleYm，所以要補條件
+                billRequest.condition.gwBillingRuleYm = billRequest.condition.calFeeYearMonth;
+                loadingAjaxProcessor(function () {
+                    calculateContractFeeAndOutToBillAjaxCall(
+                        billRequest,
+                        function (data) {
+                            messageHandler(data);
+                            filterEditViewModel.doSearch();
+                        }
+                    );
+                }, "處理中請稍候");
+            }
+        }
+    };
+
+    var billingPreviewViewModel = {
+        billingType: '',
+        remark: ko.observable(),
+        minimumFeeCheck: ko.observable(true),
+        billingCompanyName: ko.observable(),
+        billingCompanyBusinessNo: ko.observable(),
+        billYearMonthInput: ko.observable(),
+        isCompanyVisible: ko.observable(),
+        isBillingItemVisible: ko.observable(),
+        init: function (dom) {
+            billingPreviewViewModel.billingPreviewDataTable = initConfirmBillingItemDataTable($('#billingPreviewDataTable'), {});
+            ko.applyBindings(billingPreviewViewModel, dom);
+        }
+        , outToBill: function () {
+            //根據不同的類型處理
+            var outToBillRequest = genOutToBillRequest();
+            outputFeeByConditionAjaxCall(
+                outToBillRequest,
+                function (data) {
+                    messageHandler(data);
+                    filterEditViewModel.doSearch();
+                });
+        }
+    };
+
+    function initMenuViewModel() {
+        optionSelectorInitializer('companyInputAutoComplete', dataSourceModule.getCompanyMenuItemList(), function (companySelector) {
+            companySelector.chosenOption.subscribe(function (newValue) {
+                filterEditViewModel.selectedCompany(newValue);
+                billingItemMainListViewModel.billingItemDataTable.ajax.reload();
+            });
+            this.companySelector = companySelector;
+        });
+        dataTableOptionSelectorComponentInitializer(dataSourceModule.getProductCategoryList(), function (productCategorySelector) {
+            productCategorySelector.chosenOption.subscribe(function (newValue) {
+                filterEditViewModel.chosenProductCategory(newValue);
+            });
+            this.productCategorySelector = productCategorySelector;
+        });
+        yearMonthPickerComponentInitializer('billYmModalYearMonthPicker', function (billYmDatePicker) {
+            this.billYmDatePicker = billYmDatePicker;
+        });
+        bootstrapSwitchViewComponentInitializer('billingDataModalMinimumFeeCheckSwitch', function (billingDataModelMinimumFeeCheckSwitch) {
+            billingDataModelMinimumFeeCheckSwitch.chosenValue.subscribe(function (newValue) {
+                billingPreviewViewModel.minimumFeeCheck(newValue);
+            });
+            //default value
+            billingDataModelMinimumFeeCheckSwitch.setByValue(true);
+            this.billingDataModelMinimumFeeCheckSwitch = billingDataModelMinimumFeeCheckSwitch;
+        });
+    }
+
+    function initPage() {
+        initViewModel();
+        initMenuViewModel();
+        initTooltip();
+        draggableModal();
+    }
+
+    function genOutToBillRequest() {
+        var obj = {};
+        if (billingPreviewViewModel.remark()) {
+            obj.billRemark = billingPreviewViewModel.remark();
+        }
+        if (billingPreviewViewModel.billYearMonthInput()) {
+            obj.billYm = billingPreviewViewModel.billYearMonthInput().replaceAll('/', '');
+        }
+        obj.minimumFeeCheck = billingPreviewViewModel.minimumFeeCheck();
+        obj.condition = genCondition();
+        return obj;
+    }
+
+    function genCondition() {
+        var condition = {};
+        try {
+            if (filterEditViewModel.calYearMonthInput()) {
+                condition.calYearMonth = filterEditViewModel.calYearMonthInput();
+            }
+            if (filterEditViewModel.gwBillingRuleYmInput()) {
+                condition.gwBillingRuleYm = filterEditViewModel.gwBillingRuleYmInput();
+            }
+            if (filterEditViewModel.selectedCompany()) {
+                condition.companyId = filterEditViewModel.selectedCompany().id;
+            }
+            if (filterEditViewModel.chosenProductCategory()) {
+                condition.productCategoryId = filterEditViewModel.chosenProductCategory().id;
+            }
+            if (billingItemMainListViewModel.selectedBillingItemList.length > 0) {
+                var billingDataList = billingPreviewViewModel.billingPreviewDataTable.rows().data().toArray();
+                var billingItemIdList = "";
+                billingDataList.forEach(billingItem => {
+                    billingItemIdList = billingItemIdList + billingItem.billingItemId + ",";
+                });
+                condition.billingItemIdList = billingItemIdList;
+            }
+            if (calculateFeeViewModel.calYearMonthInput) {
+                condition.calFeeYearMonth = calculateFeeViewModel.calYearMonthInput();
+            }
+            condition.includeMemo = filterEditViewModel.includeMemoSwitch.bootstrapSwitch('state');
+            condition.includeBilledItem = filterEditViewModel.includeBilledItemSwitch.bootstrapSwitch('state');
+        } catch (err) {
+            console.log(err);
+        }
+        return condition;
+    }
+
+    function initViewModel() {
+        contentMenuViewModel.init(document.getElementById("contentMenu"));
+        filterEditViewModel.init(document.getElementById("billingItemConditionModal"));
+        billingItemMainListViewModel.init(document.getElementById("billingItemDataTable"));
+        operationViewModel.init(document.getElementById("operationModal"));
+        billingPreviewViewModel.init(document.getElementById("billingModal"));
+        calculateFeeViewModel.init(document.getElementById("calculateFeeModal"));
+    }
+
+    function outToBill(obj) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billingItemManagementServlet/api/batch/outToBill';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.dataType = 'json';
+        ajaxParam.processData = 'false';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = messageHandler;
+        return promiseSyncAjaxCall(ajaxParam, messageHandler, messageHandler);
+    }
+
+    function deleteItemByList(obj, resolveCallBack, rejectCallBack) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billingItemManagementServlet/api/batch/deleteBillingItem';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.dataType = 'json';
+        ajaxParam.data = JSON.stringify(obj);
+        return promiseSyncAjaxCall(ajaxParam, resolveCallBack, rejectCallBack);
+    }
+
+    function calculateFeeByYearMonth(obj, handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billingItemManagementServlet/api/calculateByParameter';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.dataType = 'json';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = handler;
+        return asyncAjaxCall(ajaxParam, handler, handler);
+    }
+
+    function outputFeeByConditionAjaxCall(obj, handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billingItemManagementServlet/api/outputFeeByCondition';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.dataType = 'json';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = handler;
+        return promiseSyncAjaxCall(ajaxParam, handler, handler);
+    }
+
+    function calculateContractFeeAndOutToBillAjaxCall(obj, handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billingItemManagementServlet/api/calculateContractFeeAndOutToBill';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.dataType = 'json';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = handler;
+        return asyncAjaxCall(ajaxParam, handler, handler);
+    }
+
+    function downloadCsvByCompanyAndConditionAjaxCall(obj, handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billingItemManagementServlet/api/downloadCsvByCompanyAndCondition';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.processData = 'false';
+        ajaxParam.contentType = 'application/text';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = handler;
+        return asyncAjaxCall(ajaxParam, function (data, textStatus, jqXHR) {
+            var body = base64ToArrayBuffer(data);
+            downloadFileFromBlob(body, "billingItemReport.csv");
+            handler();
+        });
+    }
+
+    function billingItemCompanyCheck(selectedList) {
+        var companyIdSet = new Set();
+        for (var i = 0; i <= selectedList.length; i++) {
+            if (selectedList[i]) {
+                companyIdSet.add(selectedList[i].company.companyId);
+            }
+        }
+        if (companyIdSet.size == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

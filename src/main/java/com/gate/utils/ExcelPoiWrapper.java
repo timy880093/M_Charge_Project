@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 public class ExcelPoiWrapper {
@@ -724,10 +725,10 @@ public class ExcelPoiWrapper {
 
 		HSSFCellStyle style = copyStyle(rowNo, colNo);
 
-		style.setBorderLeft(HSSFCellStyle.BORDER_NONE);
-		style.setBorderRight(HSSFCellStyle.BORDER_NONE);
-		style.setBorderTop(HSSFCellStyle.BORDER_NONE);
-		style.setBorderBottom(HSSFCellStyle.BORDER_NONE);
+		style.setBorderLeft(CellStyle.BORDER_NONE);
+		style.setBorderRight(CellStyle.BORDER_NONE);
+		style.setBorderTop(CellStyle.BORDER_NONE);
+		style.setBorderBottom(CellStyle.BORDER_NONE);
 
 		String valOct = Integer.toBinaryString(linePos);
 		for (int i = 0; i < valOct.length(); i++) {
@@ -735,20 +736,20 @@ public class ExcelPoiWrapper {
 			int pos = valOct.length() - i - 1;
 			String oneStr = valOct.substring(pos, pos + 1);
 
-			short keinsen = HSSFCellStyle.BORDER_THIN;
+			short keinsen = CellStyle.BORDER_THIN;
 
 			switch (lineType) {
 			case 0:
-				keinsen = HSSFCellStyle.BORDER_DOTTED;
+				keinsen = CellStyle.BORDER_DOTTED;
 				break;
 			case 1:
-				keinsen = HSSFCellStyle.BORDER_THIN;
+				keinsen = CellStyle.BORDER_THIN;
 				break;
 			case 2:
-				keinsen = HSSFCellStyle.BORDER_DOUBLE;
+				keinsen = CellStyle.BORDER_DOUBLE;
 				break;
 			case 3:
-				keinsen = HSSFCellStyle.BORDER_THICK;
+				keinsen = CellStyle.BORDER_THICK;
 				break;
 			default:
 				break;
@@ -828,20 +829,20 @@ public class ExcelPoiWrapper {
 
 		switch (alignType) {
 		case ALIGIN_LEFT:
-			style.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			style.setAlignment(CellStyle.ALIGN_LEFT);
+			style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 			break;
 		case ALIGIN_RIGHT:
-			style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			style.setAlignment(CellStyle.ALIGN_RIGHT);
+			style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 			break;
 		case ALIGIN_CENTER:
-			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			style.setAlignment(CellStyle.ALIGN_CENTER);
+			style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 			break;
 		case ALIGIN_VERTICAL:
-			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-			style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+			style.setAlignment(CellStyle.ALIGN_CENTER);
+			style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 			style.setWrapText(true);
 			break;
 		default:

@@ -42,7 +42,6 @@ public class CustomBeanUtilsBean {
             Long defaultLongValue = null;
             java.sql.Date defaultSqlDateValue = null;
 
-
             Converter converter = new DateConverter(defaultValue);
             Converter sqlTimestampConverter = new SqlTimestampConverter(defaultTimestampValue);
             Converter bigDecimalConverter = new BigDecimalConverter(defaultBigDecimalValue);
@@ -58,7 +57,6 @@ public class CustomBeanUtilsBean {
             Converter longConverter = new LongConverter(defaultLongValue);
             //2014/7/14 added
             Converter sqlDateConverter = new SqlDateConverter(defaultSqlDateValue);
-
 
             beanUtilsBean = BeanUtilsBean.getInstance();
             //先re-establish

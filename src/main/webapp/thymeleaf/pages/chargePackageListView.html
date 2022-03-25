@@ -1,0 +1,400 @@
+<!DOCTYPE HTML>
+<html>
+<head th:replace="/fragments/bootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image: url(/backendAdmin/images/bg.jpg); background-position: left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet">
+                <img src="/backendAdmin/images/logo.jpg" width="200" height="127"/>
+            </a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <tr>
+                <td>
+                    <table id='contentMenu' class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><span class="textstyle_06">收費方案管理</span></td>
+                            <td align="right">
+                <span class="select_div">
+                    <a href="#" id="operation" name="operation" title="操作項目" class="butbox" data-toggle="modal"
+                       data-target="#operationModal"><span>操作項目</span></a>
+                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr id="#list">
+                <td>
+                    <div class="content" title="主要區域" style=" width:100%">
+                        <div class="spacer"></div>
+                        <table id="chargePackageDataTable" content="main"
+                               border="0" width="98%" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>方案名稱</th>
+                                <th>enabled</th>
+                                <th>啟用</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <div class="modal fade" id="packageEditModal" tabindex="-1" role="dialog"
+                 aria-labelledby="packageEditModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="packageEditModalLabel">方案</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input id="packageEditModalFunction" type="text"
+                                   class="form-control" hidden>
+                            <div class="form-group">
+                                <label for="packageEditModalName">方案名稱</label>
+                                <div class="input-group">
+                                    <input id="packageEditModalName" type="text" class="form-control"
+                                           data-bind="value:name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="packageEditModalStatus">啟用</label>
+                                <div class="input-group">
+                                    <input id="packageEditModalStatus" type="checkbox">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="packageRefChargeRulePreviewDataTable">服務項目預覽</label>
+                                <div id="toolbar">
+                                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                        <div class="btn-group mr-2 btn-group-sm" role="group" aria-label="First group">
+                                            <button type="button" class="btn btn-secondary"
+                                                    id="packageRefChargeRuleInsert" name="packageRefChargeRuleInsert">
+                                                新增計費項目
+                                            </button>
+                                            <button type="button" class="btn btn-secondary"
+                                                    onclick="packageViewModel.deletePackageRef()"
+                                                    name="delete" id="packageRefChargeRuleDelete">刪除
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table id="packageRefChargeRulePreviewDataTable" content="optionList" border="0"
+                                       width="98%" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                    <tr>
+                                        <th>packageRefId</th>
+                                        <th>自訂分類</th>
+                                        <th>項目名稱</th>
+                                        <th>級距名稱</th>
+                                        <th>繳費類別</th>
+                                        <th>計費來源</th>
+                                        <th>計算週期</th>
+                                        <th>帳期</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="cycleEditModalSaveChange"
+                                    onclick="packageViewModel.confirmPackageEditViewMode()"
+                                    name="save">儲存修改
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="operationModal" tabindex="-1" role="dialog"
+                 aria-labelledby="operationModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="operationModalLabel">操作項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-target="#packageEditModal"
+                                                data-toggle="modal"
+                                                onclick="operationViewModel.onCreatePackage()"
+                                                data-dismiss="modal">
+                                            新增方案
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                onclick="operationViewModel.onModifyPackage()"
+                                                data-dismiss="modal">
+                                            修改方案
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                onclick="operationViewModel.deletePackage()"
+                                                data-dismiss="modal">
+                                            刪除方案
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let packageViewModel = {
+        packageListDataTable: initChargePackageDataTable($('#chargePackageDataTable'), dataSourceModule.getPackageList()),
+        packageRefChargeRulePreviewDataTable: initPackageRefChargeRulePreviewDataTable($('#packageRefChargeRulePreviewDataTable'), {}),
+        chargeRuleMenuViewModel: undefined,
+        packageEditViewModel: {
+            name: ko.observable(),
+            enabled: ko.observable(),
+            packageRefList: ko.observable([]),
+        },
+        packageStatusSwitchViewModel: undefined,
+        getChosenPackage: function () {
+            if (packageViewModel.packageListDataTable.rows('.selected').data().length == 1) {
+                return packageViewModel.packageListDataTable.rows('.selected').data()[0];
+            }
+        },
+        reloadPackageListDatatable: function () {
+            packageViewModel.packageListDataTable = initChargePackageDataTable($('#chargePackageDataTable'), dataSourceModule.getPackageList());
+        },
+        deselectPackageListDatatable: function () {
+            packageViewModel.packageListDataTable.rows().deselect();
+        },
+        initPackageRefChargeRulePreviewDataTable: function () {
+            packageViewModel.packageRefChargeRulePreviewDataTable = initPackageRefChargeRulePreviewDataTable($('#packageRefChargeRulePreviewDataTable'), {});
+        },
+        cleanPackageEditViewModel: function () {
+            packageViewModel.packageEditViewModel.name('');
+            packageViewModel.packageEditViewModel.enabled('');
+            packageViewModel.packageEditViewModel.packageRefList([]);
+            packageViewModel.packageRefChargeRulePreviewDataTable.clear();
+            packageViewModel.packageRefChargeRulePreviewDataTable.draw();
+        },
+        refreshPackageEditViewModel: function () {
+            packageViewModel.packageRefChargeRulePreviewDataTable.clear();
+            let chargeRuleArr = new Array();
+            packageViewModel.packageEditViewModel.packageRefList().forEach(element => {
+                findChargeRuleById(element.toChargeRuleId, function (result) {
+                    result.packageRefId = element.packageRefId;
+                    chargeRuleArr.push(result);
+                });
+            });
+            packageViewModel.packageRefChargeRulePreviewDataTable.rows.add(chargeRuleArr);
+            packageViewModel.packageRefChargeRulePreviewDataTable.draw();
+        }, addNewChargeRule: function (chargeRule) {
+            let packageRef = {
+                toChargeRuleId: chargeRule.chargeRuleId,
+                packageRefId: Date.now()
+            };
+            packageViewModel.packageEditViewModel.packageRefList().push(packageRef);
+            packageViewModel.refreshPackageEditViewModel();
+        }, deletePackageRef: function () {
+            let chosenPackageRef = packageViewModel.getChosenPackageRef();
+            if (chosenPackageRef) {
+                let newPackageRefList = packageViewModel.packageEditViewModel.packageRefList().filter(packageRef => {
+                    return packageRef.packageRefId != chosenPackageRef.packageRefId;
+                });
+                packageViewModel.packageEditViewModel.packageRefList(newPackageRefList);
+            }
+            packageViewModel.refreshPackageEditViewModel();
+        }, getPackageModel: function () {
+            const chosenPackage = packageViewModel.getChosenPackage();
+            let result = {};
+            if (chosenPackage) {
+                result.packageId = chosenPackage.packageId;
+            }
+            result.name = packageViewModel.packageEditViewModel.name();
+            result.enabled = packageViewModel.packageStatusSwitchViewModel.chosenValue();
+            let packageRefList = new Array();
+            packageViewModel.packageEditViewModel.packageRefList().forEach(packageRef => {
+                packageRefList.push(packageRef);
+            });
+            result.packageRefList = packageRefList;
+            return result;
+        }, confirmPackageEditViewMode: function () {
+            const packageModel = packageViewModel.getPackageModel();
+            if (packageModel) {
+                saveOrUpdateChargePackage(packageModel, function (data) {
+                    messageHandler(data);
+                    packageViewModel.reloadPackageListDatatable();
+                    packageViewModel.hideModal();
+                });
+            }
+        }, getChosenPackageRef: function () {
+            if (packageViewModel.packageRefChargeRulePreviewDataTable.rows('.selected').data().length == 1) {
+                return packageViewModel.packageRefChargeRulePreviewDataTable.rows('.selected').data()[0];
+            }
+        }, hideModal: function () {
+            $('#packageEditModal').modal('hide');
+        }
+    };
+
+    let operationViewModel = {
+        action: ko.observable(),
+        init: function (dom) {
+            ko.applyBindings(operationViewModel, dom);
+        },
+        onCreatePackage: function () {
+            operationViewModel.action('create');
+            packageViewModel.cleanPackageEditViewModel();
+            packageViewModel.deselectPackageListDatatable();
+        }, onModifyPackage: function () {
+            operationViewModel.action('modify');
+            packageViewModel.cleanPackageEditViewModel();
+            //把選擇的資料刷進viewModel
+            const selectedPackage = packageViewModel.getChosenPackage();
+            if (selectedPackage) {
+                packageViewModel.packageEditViewModel.name(selectedPackage.name);
+                packageViewModel.packageEditViewModel.packageRefList(selectedPackage.packageRefList);
+                packageViewModel.refreshPackageEditViewModel();
+                packageViewModel.packageStatusSwitchViewModel.setByValue(selectedPackage.enabled);
+                $('#packageEditModal').modal('show');
+            } else {
+                messageHandler({
+                    title: "未選擇資料",
+                    status: "warning",
+                    message: "請先選擇資料再進行操作"
+                });
+            }
+        }, deletePackage: function () {
+            const selectedPackage = packageViewModel.getChosenPackage();
+            if (selectedPackage) {
+                deletePackageById(selectedPackage.packageId, function (data) {
+                    messageHandler(data);
+                    packageViewModel.reloadPackageListDatatable();
+                });
+            }
+        }
+    };
+
+    function initComponentViewModel() {
+        chargeRuleMenuViewComponentInitializer(function (chargeRuleMenuViewModel) {
+            $('#packageRefChargeRuleInsert').click(function () {
+                chargeRuleMenuViewModel.show();
+            });
+            chargeRuleMenuViewModel.chosenChargeRule.subscribe(function (newValue) {
+                packageViewModel.addNewChargeRule(newValue);
+                packageViewModel.refreshPackageEditViewModel();
+            });
+            packageViewModel.chargeRuleMenuViewModel = chargeRuleMenuViewModel;
+        });
+        bootstrapSwitchViewComponentInitializer('packageEditModalStatus', function (packageStatusSwitchViewModel) {
+            packageStatusSwitchViewModel.chosenValue.subscribe(function (newValue) {
+                packageViewModel.packageEditViewModel.enabled(newValue);
+            });
+            packageViewModel.packageStatusSwitchViewModel = packageStatusSwitchViewModel;
+        });
+    }
+
+    function initViewModel() {
+        ko.applyBindings(packageViewModel.packageEditViewModel, document.getElementById("packageEditModal"));
+        operationViewModel.init(document.getElementById("operationModal"))
+    }
+
+    function initPage() {
+        initComponentViewModel();
+        initViewModel();
+        draggableModal();
+    }
+
+    function saveOrUpdateChargePackage(obj, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargePackageManagementServlet/api/saveOrUpdate';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.dataType = 'json';
+        ajaxParam.processData = 'false';
+        ajaxParam.data = JSON.stringify(obj);
+        return promiseSyncAjaxCall(ajaxParam, handler, handler);
+    }
+
+    function deletePackageById(id, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargePackageManagementServlet/api/delete/' + id;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = handler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function findChargeRuleById(id, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargeRuleManagementServlet/api/findViewById/' + id;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = handler;
+        syncAjaxCall(ajaxParam);
+    }
+
+</script>
+</body>
+</html>

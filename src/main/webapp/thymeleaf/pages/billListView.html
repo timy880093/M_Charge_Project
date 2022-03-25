@@ -1,0 +1,990 @@
+<!DOCTYPE HTML>
+<html>
+<head th:replace="/fragments/bootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image: url(/backendAdmin/images/bg.jpg); background-position: left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"><img src="/backendAdmin/images/logo.jpg"
+                                                      width="200" height="127"/></a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <tr>
+                <td>
+                    <table id='contentMenu' class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><span class="textstyle_06">帳單管理</span></td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <div class="form-group">
+                                        <div class="input-group-sm">
+                                            <select class="form-control" id="companyInputAutoComplete">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="condition" name="condition" title="過濾條件" class="butbox"
+                                           data-toggle="modal"
+                                           data-target="#billSearchConditionModal"><span>過濾條件</span></a>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="operation" name="operation" title="操作項目" class="butbox"
+                                           data-toggle="modal"
+                                           data-target="#billOperationModal"><span>操作項目</span>
+                                            <span id='selectedBadge' class="badge"
+                                                  data-bind="text:selectedCountBadge"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- master dataTable-->
+            <tr id="#list">
+                <td>
+                    <div class="content" title="主要區域" style=" width:100%">
+                        <div class="spacer"></div>
+                        <table id="billDataTable" content="main" border="0" width="98%"
+                               cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>全選</th>
+                                <th>id</th>
+                                <th>companyId</th>
+                                <th>公司名稱</th>
+                                <th>公司統編</th>
+                                <th>帳單狀態</th>
+                                <th>繳費通知信</th>
+                                <th>入帳日期</th>
+                                <th>未稅價</th>
+                                <th>含稅價</th>
+                                <th>建立日期</th>
+                                <th>帳單年月</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            <div class="modal fade" id="billDetailModal" tabindex="-1" role="dialog"
+                 aria-labelledby="billDetailModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="billDetailModalLabel">帳單細節</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="billDetailModalBillStatus">帳單狀態</label>
+                                    <div class="input-group">
+                                        <input id="billDetailModalBillStatus" type="text" class="form-control"
+                                               data-bind="value:billStatusDesc"
+                                               autocomplete="off" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billDetailModalBusinessTaxRate">營業稅率</label>
+                                    <div class="input-group">
+                                        <input id="billDetailModalBusinessTaxRate" type="text" class="form-control"
+                                               data-bind="value:chosenBill().taxRate"
+                                               autocomplete="off" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billDetailModalBusinessTaxRate">營業稅額</label>
+                                    <div class="input-group">
+                                        <input id="billDetailModalBusinessTaxAmount" type="text" class="form-control"
+                                               data-bind="value:chosenBill().taxAmount"
+                                               autocomplete="off" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billDetailModalBillYm">帳單年月</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="billDetailModalBillYm"
+                                               name="billiYm" data-bind="value:chosenBill().billYm" readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billDetailModalOutDate">出帳日期</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="billDetailModalOutDate"
+                                               name="outDate" data-bind="value:outDateDesc" readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billRemark">出帳備註</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="billRemark"
+                                               data-bind="value:chosenBill().billRemark"
+                                               name="billRemark" readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billDetailModalTaxExcludedAmount">未稅金額</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control"
+                                               id="billDetailModalTaxExcludedAmount"
+                                               name="taxExcludedAmount" data-bind="value:chosenBill().taxExcludedAmount"
+                                               readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billDetailModalTaxExcludedAmount">含稅金額</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control"
+                                               id="billDetailModalTaxIncludedAmount"
+                                               name="taxIncludedAmount" data-bind="value:chosenBill().taxIncludedAmount"
+                                               readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billingItemDataTable">結帳項目清單</label>
+                                    <table id="billingItemDataTable" border="0" width="98%" cellspacing="0"
+                                           cellpadding="0" content="optionList">
+                                        <thead>
+                                        <tr>
+                                            <th>編號</th>
+                                            <th>分類</th>
+                                            <th>收費方式</th>
+                                            <th>計費時機</th>
+                                            <th>產品名稱</th>
+                                            <th>預計出帳日</th>
+                                            <th>計費起始日</th>
+                                            <th>計費截止日</th>
+                                            <th>數量</th>
+                                            <th>未稅總額</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label for="deductHistoryDataTable">扣抵項目清單</label>
+                                    <table id="deductHistoryDataTable" border="0" width="98%" cellspacing="0"
+                                           cellpadding="0" content="optionList">
+                                        <thead>
+                                        <tr>
+                                            <th>扣抵代號</th>
+                                            <th>扣抵對象代號</th>
+                                            <th>扣抵金額</th>
+                                            <th>扣抵日期</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paidDate">入帳日</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="paidDate"
+                                               data-bind="value: paidDateDesc"
+                                               name="paidDate" readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentMethod">付款方式</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="paymentMethod"
+                                               data-bind="value:chosenBill().paymentMethod"
+                                               name="paymentMethod" readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentRemark">入帳備註</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="paymentRemark"
+                                               data-bind="value:chosenBill().paymentRemark"
+                                               name="paymentRemark" readonly/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="customizeMailContentModal" tabindex="-1" role="dialog"
+                 aria-labelledby="customizeMailContentModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="customizeMailContentModalLabel">自訂mail內容</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group" data-bind="visible:show().emailRecipient">
+                                    <label for="emailRecipient">Email</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="emailRecipient"
+                                               name="emailRecipient" data-bind="value:emailRecipient"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" data-bind="visible:show().correction">
+                                    <label class="form-check-label" for="isCorrectionMail">內容更正信</label>
+                                    <div class="input-group">
+                                        <input type="checkbox" class="form-check-input" id="isCorrectionMail">
+                                    </div>
+                                </div>
+                                <div class="form-group" data-bind="visible:show().extraNoticeMessage">
+                                    <label class="form-check-label" for="extraNoticeMessage">自訂提醒訊息</label>
+                                    <div class="input-group">
+                                        <textarea type="text" class="form-control" id="extraNoticeMessage"
+                                                  name="extraNoticeMessage" data-bind="value:extraNoticeMessage">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="confirmEmailRecipient"
+                                    data-dismiss="modal"
+                                    data-bind="click:sendEmail">確認
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="billSearchConditionModal" tabindex="-1" role="dialog"
+                 aria-labelledby="billSearchConditionModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="billSearchConditionModalLabel">過濾條件</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="billSearchConditionModalOutYearMonth">出帳年月</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control"
+                                               id="billSearchConditionModalOutYearMonth"
+                                               name="billSearchConditionModalOutYearMonth"
+                                               data-bind="value:outYearMonthInput"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label for="billSearchConditionModalCalYearMonth">計費項目年月</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control"
+                                               id="billSearchConditionModalCalYearMonth"
+                                               name="billSearchConditionModalCalYearMonth"
+                                               data-bind="value:calYearMonthInput"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billSearchConditionModalBillStatus">帳單狀態</label>
+                                    <div class="input-group">
+                                        <input id="billSearchConditionModalBillStatus" type="text" class="form-control"
+                                               data-bind="value:chosenBillStatus().name"
+                                               autocomplete="off" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-bind="click:onOpenBillStatusMenu">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="applyBillSearchCondition"
+                                    data-dismiss="modal"
+                                    data-bind="click:doSearch">搜尋
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="billOperationModal" tabindex="-1" role="dialog"
+                 aria-labelledby="billOperationModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="billOperationModalLabel">操作項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:viewDetail'
+                                                data-dismiss="modal">
+                                            檢視帳單
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:sendPaymentRequestEmail' data-dismiss="modal">
+                                            寄送繳費通知(單筆/多筆/條件-公司收件人)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:resendPaymentRequestEmail' data-dismiss="modal">
+                                            重新寄送繳費通知(單筆-指定收信人)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:downloadScsbConvenientStoreReport'
+                                                data-dismiss="modal">
+                                            產生上海銀行便利商店報表(單筆/多筆/條件)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:onOpenPayInfoModal' data-dismiss="modal">入帳(單筆)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:cancelPayment' data-dismiss="modal">取消入帳(單筆)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:cancelBill' data-dismiss="modal">刪除帳單(單筆)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:downloadInvoiceImportReport' data-dismiss="modal">
+                                            產生發票匯入資料(單筆/多筆/條件)
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="billPayInfoModal" tabindex="-1" role="dialog"
+                 aria-labelledby="billPayInfoModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="billPayInfoModalLabel">入帳資訊填寫</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="billPayInfoModalPaidDate">入帳日期</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="billPayInfoModalPaidDate"
+                                               name="billPayInfoModalPaidDate"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billPayInfoModalActualReceived">入帳金額</label>
+                                    <div class="input-group">
+                                        <input id="billPayInfoModalActualReceived" data-bind="value:payAmount"
+                                               type="number"
+                                               class="form-control" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billPayInfoModalBankCode">付款方式</label>
+                                    <div class="input-group">
+                                        <input id="billPayInfoModalBankCode" type="text" class="form-control"
+                                               autocomplete="off"
+                                               data-bind="value:chosenPaymentMethod().id"
+                                               readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-bind="click:openBankCodeList">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billPayInfoModalPaymentRemark">入帳備註</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control"
+                                               id="billPayInfoModalPaymentRemark"
+                                               name="billSearchConditionModalPaymentRemark"
+                                               data-bind="value:paymentRemark"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="applyPayment" data-dismiss="modal"
+                                    data-bind="click:markAsPaid">入帳
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function initPage() {
+    }
+
+    let billMainListViewModel = {
+        billDataTable: undefined,
+        selectedBillList: new Array(),
+        init: function (dom) {
+            billMainListViewModel.billDataTable = initServerSideProcessingBillDataTable(
+                $('#billDataTable')
+                , dataSourceModule.serverSideProcessingBillSearchAjaxCall
+                , filterEditViewModel.condition
+                , 'billId'
+                , function (selectedList) {
+                    contentMenuViewModel.selectedCountBadge(selectedList.length);
+                    if (contentMenuViewModel.selectedCountBadge() == 1) {
+                        billDetailViewModel.chosenBill(selectedList[0]);
+                    }
+                    billMainListViewModel.selectedBillList = selectedList;
+                }
+            );
+            ko.applyBindings(billMainListViewModel, dom);
+        }
+    };
+
+    let filterEditViewModel = {
+        outYearMonthInput: ko.observable(),
+        calYearMonthInput: ko.observable(),
+        chosenBillStatus: ko.observable({}),
+        chosenCompany: ko.observable({}),
+        knockoutComponent: {
+            billStatusSelector: dataTableOptionSelectorComponentInitializer(dataSourceModule.getBillStatusList(), function (billStatusSelector) {
+                billStatusSelector.chosenOption.subscribe(function (newValue) {
+                    filterEditViewModel.chosenBillStatus(newValue);
+                });
+                return billStatusSelector;
+            })
+        },
+        init: function (dom) {
+            filterEditViewModel.outYearMonthPicker = initYearMonthPicker('billSearchConditionModalOutYearMonth');
+            filterEditViewModel.calYearMonthPicker = initYearMonthPicker('billSearchConditionModalCalYearMonth');
+            ko.applyBindings(filterEditViewModel, dom);
+        },
+        condition: function () {
+            var condition = {};
+            try {
+                if (filterEditViewModel.calYearMonthInput()) {
+                    condition.calYearMonth = filterEditViewModel.calYearMonthInput();
+                }
+                if (filterEditViewModel.outYearMonthInput()) {
+                    condition.outYearMonth = filterEditViewModel.outYearMonthInput();
+                }
+                if (filterEditViewModel.chosenCompany()) {
+                    condition.companyId = filterEditViewModel.chosenCompany().id;
+                }
+                if (filterEditViewModel.chosenBillStatus()) {
+                    condition.billStatus = filterEditViewModel.chosenBillStatus().id;
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            return condition;
+        },
+        onOpenBillStatusMenu: function () {
+            filterEditViewModel.knockoutComponent.billStatusSelector.show();
+        },
+        doSearch: function () {
+            billMainListViewModel.selectedBillList = [];
+            contentMenuViewModel.selectedCountBadge(billMainListViewModel.selectedBillList);
+            billMainListViewModel.billDataTable.ajax.reload();
+        }
+    };
+
+    let contentMenuViewModel = {
+        selectedCountBadge: ko.observable(0),
+        availableCompanies: ko.observableArray(),
+        selectedCompany: ko.observable(),
+        knockoutComponent: {
+            companySelector: optionSelectorInitializer('companyInputAutoComplete', dataSourceModule.getCompanyMenuItemList(), function (companySelector) {
+                companySelector.chosenOption.subscribe(function (newValue) {
+                    filterEditViewModel.chosenCompany(newValue);
+                    billMainListViewModel.billDataTable.ajax.reload();
+                });
+                return companySelector;
+            })
+        },
+        init: function (dom) {
+            ko.applyBindings(contentMenuViewModel, dom);
+        }
+    };
+
+    let operationViewModel = {
+        init: function (dom) {
+            ko.applyBindings(operationViewModel, dom);
+        },
+        viewDetail: function () {
+            if (billMainListViewModel.selectedBillList.length == 0) {
+                messageHandler({
+                    title: "未選擇資料",
+                    status: "warning",
+                    message: "請先選擇資料再進行操作"
+                });
+            } else if (billMainListViewModel.selectedBillList.length == 1) {
+                billDetailViewModel.chosenBill(billMainListViewModel.selectedBillList[0]);
+                billDetailViewModel.billStatusDesc(billStatusNameRender(billMainListViewModel.selectedBillList[0].billStatus));
+                billDetailViewModel.outDateDesc(dateTimeRender(billMainListViewModel.selectedBillList[0].createDate));
+                billDetailViewModel.paidDateDesc(dateTimeRender(billMainListViewModel.selectedBillList[0].paidDate));
+                billDetailViewModel.billingItemDataTable.clear();
+                billDetailViewModel.deductHistoryDataTable.clear();
+                billDetailViewModel.billingItemDataTable.rows.add(billMainListViewModel.selectedBillList[0].billingItemList);
+                //在這個情境下正向金額不重要
+                let deductHistoryList = billMainListViewModel.selectedBillList[0].deductHistoryList.filter(deductHistory => {
+                    if (deductHistory.deductBillingItemId) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                billDetailViewModel.deductHistoryDataTable.rows.add(deductHistoryList);
+                billDetailViewModel.billingItemDataTable.draw();
+                billDetailViewModel.deductHistoryDataTable.draw();
+                $('#billDetailModal').modal();
+            } else if (billMainListViewModel.selectedBillList.length > 1) {
+                messageHandler({
+                    title: "操作失敗",
+                    status: "warning",
+                    message: "無法多帳單檢視"
+                });
+            } else {
+                billDetailViewModel.chosenBill('');
+            }
+        },
+        genOperationObject: function () {
+            let customObj = customizeMailContentViewModel.getCustomProperty();
+            if (billMainListViewModel.selectedBillList.length > 0) {
+                let idList = selectedArrayToIdList(billMainListViewModel.selectedBillList, 'billId');
+                return genOperationObj('', idList, customObj);
+            } else {
+                return genOperationObj(
+                    filterEditViewModel.condition(),
+                    '',
+                    customObj);
+            }
+        },
+        sendPaymentRequestEmail: function () {
+            customizeMailContentViewModel.extraNoticeMessageOnly();
+            $('#customizeMailContentModal').modal();
+        },
+        resendPaymentRequestEmail: function () {
+            if (billMainListViewModel.selectedBillList.length == 1) {
+                customizeMailContentViewModel.generalShow();
+                $('#customizeMailContentModal').modal();
+            } else {
+                messageHandler({
+                    title: "錯誤的資料筆數",
+                    status: "warning",
+                    message: "此功能只允許選擇一筆資料進行操作"
+                });
+            }
+        },
+        onOpenPayInfoModal: function () {
+            if (billMainListViewModel.selectedBillList.length == 1) {
+                $("#billPayInfoModal").modal();
+                billPayInfoViewModel.clean();
+            } else {
+                messageHandler({
+                    title: "操作失敗",
+                    status: "warning",
+                    message: "此功能無法多筆操作"
+                });
+            }
+        },
+        downloadScsbConvenientStoreReport: function () {
+            let operationObj = operationViewModel.genOperationObject();
+            if (operationObj) {
+                loadingAjaxProcessor(function () {
+                    downloadConvenientStoreReportAjax(operationObj, function (response) {
+                        if (response.reportBody) {
+                            var body = base64ToArrayBuffer(response.reportBody);
+                            downloadFileFromBlob(body, "billConvenientStoreReport.xls");
+                        }
+                        messageHandler(response);
+                    });
+                }, '處理中請稍候');
+            } else {
+                messageHandler({
+                    title: "參數錯誤",
+                    status: "warning",
+                    message: "請先選擇一筆資料再進行操作"
+                });
+            }
+        },
+        downloadInvoiceImportReport: function () {
+            let operationObj = operationViewModel.genOperationObject();
+            if (operationObj) {
+                loadingAjaxProcessor(function () {
+                    downloadInvoiceImportReportAjax(
+                        operationObj,
+                        function (response) {
+                            if (response.reportBody) {
+                                let body = base64ToArrayBuffer(response.reportBody);
+                                downloadFileFromBlob(body, "invoiceImportReport.xls");
+                            }
+                            messageHandler(response);
+                        });
+                }, '處理中請稍候');
+            } else {
+                messageHandler({
+                    title: "參數錯誤",
+                    status: "warning",
+                    message: "請先選擇一筆資料再進行操作"
+                });
+            }
+        },
+        cancelBill: function () {
+            var billMenuTableSelected = billMainListViewModel.selectedBillList;
+            if (billMenuTableSelected.length == 1) {
+                cancelBill(billMenuTableSelected[0].billId, function (responseData) {
+                    messageHandler(responseData);
+                    filterEditViewModel.doSearch();
+                });
+            } else {
+                messageHandler({
+                    title: "未選擇一筆資料",
+                    status: "warning",
+                    message: "請先選擇一筆資料再進行操作"
+                });
+            }
+        },
+        cancelPayment: function () {
+            var billMenuTableSelected = billMainListViewModel.selectedBillList;
+            if (billMenuTableSelected.length == 1) {
+                cancelPayment(billMenuTableSelected[0].billId, function (responseData) {
+                    messageHandler(responseData);
+                    filterEditViewModel.doSearch();
+                });
+            } else {
+                messageHandler({
+                    title: "未選擇一筆資料",
+                    status: "warning",
+                    message: "請先選擇一筆資料再進行操作"
+                });
+            }
+        }
+    };
+
+    let customizeMailContentViewModel = {
+        emailRecipient: ko.observable(),
+        isCorrection: ko.observable(),
+        isCorrectionSwitch: ko.observable(),
+        extraNoticeMessage: ko.observable(),
+        show: ko.observable({
+            emailRecipient: false,
+            correction: false,
+            extraNoticeMessage: false
+        }),
+        init: function (dom) {
+            customizeMailContentViewModel.isCorrectionSwitch = $('#isCorrectionMail').bootstrapSwitch();
+            ko.applyBindings(customizeMailContentViewModel, dom);
+        },
+        generalShow: function () {
+            customizeMailContentViewModel.show({
+                emailRecipient: true,
+                correction: true,
+                extraNoticeMessage: true
+            })
+        },
+        extraNoticeMessageOnly: function () {
+            customizeMailContentViewModel.show({
+                emailRecipient: false,
+                correction: false,
+                extraNoticeMessage: true
+            });
+        },
+        cleanCustomProperty: function () {
+            customizeMailContentViewModel.extraNoticeMessage("");
+            customizeMailContentViewModel.emailRecipient("");
+            customizeMailContentViewModel.isCorrectionSwitch.bootstrapSwitch('state', false);
+        },
+        getCustomProperty: function () {
+            let extraNoticeMessage = customizeMailContentViewModel.extraNoticeMessage();
+            let recipient = customizeMailContentViewModel.emailRecipient();
+            let isCorrection = customizeMailContentViewModel.isCorrectionSwitch.bootstrapSwitch('state');
+            return {
+                recipient: recipient,
+                correction: isCorrection,
+                extraNoticeMessage: extraNoticeMessage
+            };
+        },
+        sendEmail: function () {
+            let operationObj = operationViewModel.genOperationObject();
+            if (operationObj) {
+                let noticeMsg = '';
+                if (operationObj.idList == '') {
+                    noticeMsg = '未選擇任何資料會使用查詢條件做為篩選寄出通知信\n請務必於操作前確認查詢結果';
+                } else {
+                    noticeMsg = '將寄送' + billMainListViewModel.selectedBillList.length + "筆";
+                }
+                confirmAjaxProcessor(function () {
+                        loadingAjaxProcessor(function () {
+                            sendPaymentReminderEmailAjax(
+                                operationObj
+                                , function (response) {
+                                    messageHandler(response);
+                                }
+                            );
+                        }, '處理中請稍候');
+                    },
+                    '確認訊息',
+                    noticeMsg,
+                    'warning'
+                );
+                customizeMailContentViewModel.cleanCustomProperty();
+            }
+
+        }
+    };
+
+    let billDetailViewModel = {
+        billStatusDesc: ko.observable(),
+        outDateDesc: ko.observable(),
+        chosenBill: ko.observable({}),
+        paidDateDesc: ko.observable(),
+        init: function (dom) {
+            billDetailViewModel.billingItemDataTable = initBillingPreviewDataTable($('#billingItemDataTable'), {});
+            billDetailViewModel.deductHistoryDataTable = initDeductHistoryPreviewDataTable($('#deductHistoryDataTable'), {});
+            ko.applyBindings(billDetailViewModel, dom);
+        }
+    };
+
+    let billPayInfoViewModel = {
+        payTimestamp: ko.observable(),
+        payAmount: ko.observable(),
+        paymentRemark: ko.observable(),
+        chosenPaymentMethod: ko.observable({}),
+        chosenBillStatus: ko.observable({}),
+        knockoutComponent: {
+            billPaidDatePicker: datePickerComponentInitializer('billPayInfoModalPaidDate', function (billPaidDatePicker) {
+                billPaidDatePicker.chosenDate.subscribe(function (newValue) {
+                    billPayInfoViewModel.payTimestamp(newValue);
+                });
+                return billPaidDatePicker;
+            }),
+            paymentMethodSelector: dataTableOptionSelectorComponentInitializer(dataSourceModule.getPaymentMethod(), function (paymentMethodSelector) {
+                paymentMethodSelector.chosenOption.subscribe(function (newValue) {
+                    billPayInfoViewModel.chosenPaymentMethod(newValue);
+                });
+                return paymentMethodSelector;
+            })
+        },
+        init: function (dom) {
+            ko.applyBindings(billPayInfoViewModel, dom);
+        },
+        clean: function () {
+            billPayInfoViewModel.knockoutComponent.billPaidDatePicker.clean();
+            billPayInfoViewModel.payAmount('');
+            billPayInfoViewModel.paymentRemark('');
+            billPayInfoViewModel.knockoutComponent.paymentMethodSelector.clean();
+        },
+        payInfo: function () {
+            var data = {};
+            if (billPayInfoViewModel.payTimestamp() && billPayInfoViewModel.payTimestamp() instanceof Date) {
+                data.payTimestamp = billPayInfoViewModel.payTimestamp().getTime();
+            }
+            if (billPayInfoViewModel.payAmount()) {
+                data.payAmount = billPayInfoViewModel.payAmount();
+            }
+            if (billPayInfoViewModel.paymentRemark()) {
+                data.paymentRemark = billPayInfoViewModel.paymentRemark();
+            }
+            if (billPayInfoViewModel.chosenPaymentMethod()) {
+                data.paymentMethod = billPayInfoViewModel.chosenPaymentMethod().id;
+            }
+            return data;
+        },
+        markAsPaid: function () {
+            var data = billPayInfoViewModel.payInfo();
+            data.billId = billMainListViewModel.selectedBillList[0].billId;
+            markAsPaid(data, function (responseData) {
+                messageHandler(responseData);
+                billMainListViewModel.billDataTable.ajax.reload();
+                //清掉日期
+
+            });
+        }, openBankCodeList: function () {
+            billPayInfoViewModel.knockoutComponent.paymentMethodSelector.show();
+        }
+    };
+
+    function initViewModel() {
+        contentMenuViewModel.init(document.getElementById("contentMenu"));
+        billMainListViewModel.init(document.getElementById("billDataTable"));
+        filterEditViewModel.init(document.getElementById("billSearchConditionModal"));
+        billDetailViewModel.init(document.getElementById("billDetailModal"));
+        operationViewModel.init(document.getElementById("billOperationModal"));
+        customizeMailContentViewModel.init(document.getElementById("customizeMailContentModal"));
+        billPayInfoViewModel.init(document.getElementById("billPayInfoModal"));
+    }
+
+    function initPage() {
+        const initViewModelPromise = new Promise(() => {
+            initViewModel();
+        });
+        const initToolTipsPromise = new Promise(() => {
+            initTooltip();
+        });
+        const initDraggableModalPromise = new Promise(() => {
+            draggableModal();
+        });
+        return Promise.all([
+            initViewModelPromise,
+            initToolTipsPromise,
+            initDraggableModalPromise
+        ]);
+    }
+
+    function markAsPaid(data, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/api/markAsPaid';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.data = JSON.stringify(data);
+        ajaxParam.successHandler = handler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function cancelBill(billId, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/api/cancel/' + billId;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = handler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function cancelPayment(billId, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/api/cancelPayment/' + billId;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = handler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function sendPaymentReminderEmailAjax(data, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/sendPaymentRequestEmail';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.data = JSON.stringify(data);
+        ajaxParam.successHandler = handler;
+        asyncAjaxCall(ajaxParam, handler);
+    }
+
+    function downloadConvenientStoreReportAjax(operationObj, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/downloadConvenientStoreReport';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.data = JSON.stringify(operationObj);
+        return asyncAjaxCall(ajaxParam, function (data, textStatus, jqXHR) {
+            handler(data);
+        });
+    }
+
+    function downloadInvoiceImportReportAjax(operationObj, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/downloadInvoiceImportReport';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.data = JSON.stringify(operationObj);
+        return asyncAjaxCall(ajaxParam, function (data, textStatus, jqXHR) {
+            handler(data);
+        });
+    }
+
+</script>
+</body>
+</html>

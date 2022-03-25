@@ -1,64 +1,64 @@
 package com.gate.web.facades;
 
-import java.util.Map;
-
-import org.apache.commons.beanutils.BeanUtils;
+import com.gateweb.charge.exception.InvalidUserException;
+import com.gateweb.charge.model.nonMapped.CallerInfo;
+import com.gateweb.charge.security.ChargeUserPrinciple;
+import com.gateweb.orm.charge.entity.ChargeUser;
+import com.gateweb.orm.charge.entity.Company;
+import com.gateweb.orm.charge.repository.ChargeUserRepository;
+import com.gateweb.orm.charge.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.UserVO;
-import com.gate.web.formbeans.UserBean;
-import com.gateweb.charge.model.UserEntity;
-
-import dao.UserDAO;
+import java.util.Optional;
 
 /**
  * Created by simon on 2014/7/11.
  */
 @Service("userService")
-public class UserServiceImp implements UserService{
-	
-	@Autowired
-    UserDAO userDAO;
+public class UserServiceImp implements UserService {
+
+    @Autowired
+    ChargeUserRepository userRepository;
+
+    @Autowired
+    CompanyRepository companyRepository;
 
     @Override
-    public Integer insertUser(UserBean userBean) throws Exception {
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userEntity, userBean);
-        userDAO.saveEntity(userEntity);
-        return null;
-    }
-
-    @Override
-    public void updateUser(UserBean userBean) throws Exception {
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userEntity, userBean);
-        userDAO.updateEntity(userEntity, userEntity.getUserId());
-    }
-
-    @Override
-    public void deleteUser(Integer userId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public Optional<CallerInfo> getCallerInfoByUserId(Long userId) {
+        CallerInfo result = null;
+        Optional<ChargeUser> userEntityOptional = userRepository.findById(userId.intValue());
+        Optional<Company> companyOptional = companyRepository.findById(userEntityOptional.get().getCompanyId().intValue());
+        if (userEntityOptional.isPresent() && companyOptional.isPresent()) {
+            CallerInfo callerInfo = new CallerInfo();
+            callerInfo.setCompany(companyOptional.get());
+            callerInfo.setUserEntity(userEntityOptional.get());
+            result = callerInfo;
+        }
+        return Optional.ofNullable(result);
     }
 
     @Override
-    public UserVO findUserByUserId(Integer userId) throws Exception {
-        UserEntity userEntity = (UserEntity) userDAO.getEntity(UserEntity.class,userId);
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(userVO, userEntity);
-        return userVO;
+    public Optional<CallerInfo> getCallerInfoByChargeUser(ChargeUser chargeUser) {
+        CallerInfo result = null;
+        Optional<Company> companyOptional = companyRepository.findById(chargeUser.getCompanyId().intValue());
+        if (companyOptional.isPresent()) {
+            CallerInfo callerInfo = new CallerInfo();
+            callerInfo.setCompany(companyOptional.get());
+            callerInfo.setUserEntity(chargeUser);
+            result = callerInfo;
+        }
+        return Optional.ofNullable(result);
     }
 
-    @Override
-    public Map getUserList(QuerySettingVO querySettingVO, Map otherMap) throws Exception {
-        Integer companyId = null;
-        Map returnMap = userDAO.getUserList(querySettingVO, companyId);
-        return returnMap;
+    public CallerInfo getCallerInfoByAuthentication(Authentication authentication) throws InvalidUserException {
+        ChargeUserPrinciple chargeUserPrinciple = (ChargeUserPrinciple) authentication.getPrincipal();
+        Optional<CallerInfo> callerInfoOptional = getCallerInfoByUserId(chargeUserPrinciple.getUserInstance().getUserId().longValue());
+        if (callerInfoOptional.isPresent()) {
+            return callerInfoOptional.get();
+        } else {
+            throw new InvalidUserException();
+        }
     }
-
-    public Boolean checkAccount(String account,String userId) throws Exception {
-        return userDAO.checkAccount(account, userId);
-    }
-
 }

@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.gateweb</groupId>
     <artifactId>chargeproject</artifactId>
-    <version>1.0</version>
+    <version>1.36.8-SNAPSHOT</version>
     <packaging>war</packaging>
     <repositories>
         <repository>
-            <id>nexus21</id>
+            <id>nexus-release</id>
             <name>local private nexus</name>
-            <url>http://search.gwis.com.tw/nexus/content/groups/public/</url>
+            <url>http://test3.gwis.com.tw/nexus/content/groups/public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -19,9 +19,9 @@
             </snapshots>
         </repository>
         <repository>
-            <id>nexus11</id>
+            <id>nexus-snapshot</id>
             <name>local private nexus snapshot</name>
-            <url>http://search.gwis.com.tw/nexus/content/repositories/snapshots/</url>
+            <url>http://test3.gwis.com.tw/nexus/content/repositories/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -30,31 +30,31 @@
             </snapshots>
         </repository>
         <repository>
-            <id>nexus_third</id>
+            <id>nexus-third</id>
             <name>local third party</name>
-            <url>http://search.gwis.com.tw/nexus/content/repositories/thirdparty/</url>
+            <url>http://test3.gwis.com.tw/nexus/content/repositories/thirdparty/</url>
         </repository>
     </repositories>
     <!--設定環境變數 -->
     <properties>
         <!--設定project name-->
-        <project.name>b2b</project.name>
+        <project.name>charge_project</project.name>
         <!--設定所有library版本-->
         <java.version>1.8</java.version>
         <log4j.version>2.10.0</log4j.version>
         <jaxen.version>1.1.6</jaxen.version>
         <hibernate.version>5.2.12.Final</hibernate.version>
         <hibernate-validator.version>5.4.2.Final</hibernate-validator.version>
-        <spring.version>5.0.1.RELEASE</spring.version>
-        <commons.lang3.version>3.6</commons.lang3.version>
+        <spring.version>5.0.4.RELEASE</spring.version>
+        <commons.collections.version>4.2</commons.collections.version>
+        <commons.lang3.version>3.9</commons.lang3.version>
         <commons.io.version>2.5</commons.io.version>
-        <commons.beanutils.version>1.9.3</commons.beanutils.version>
+        <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.codec.version>1.10</commons.codec.version>
-        <commons.lang.version>2.6</commons.lang.version>
         <commons.email.version>1.4</commons.email.version>
         <commons.httpcomponents.version>4.5.3</commons.httpcomponents.version>
-        <javax.validation.version>2.0.0.Final</javax.validation.version>
-        <quartz.version>2.3.0</quartz.version>
+        <javax.validation.version>2.0.1.Final</javax.validation.version>
+        <quartz.version>2.3.1</quartz.version>
         <jsr311.api.version>1.1.1</jsr311.api.version>
         <ws.rs.api.version>2.0.1</ws.rs.api.version>
         <jersey.guava.version>2.22.4</jersey.guava.version>
@@ -64,9 +64,9 @@
         <xmlbeans.version>2.6.0</xmlbeans.version>
         <itext.pdf.version>5.5.11</itext.pdf.version>
         <mail.version>1.5.0-b01</mail.version>
-        <jdom.version>1.1.3</jdom.version><!--can't upgrade v2 , because dependency.-->
+        <jdom.version>1.1.3</jdom.version>        <!--can't upgrade v2 , because dependency.-->
         <postgresql.jdbc.version>42.1.4</postgresql.jdbc.version>
-        <aspectj.relation.version>1.8.10</aspectj.relation.version>
+        <aspectj.relation.version>1.8.7</aspectj.relation.version>
         <j2ee.version>7.0</j2ee.version>
         <gson.version>2.8.1</gson.version>
         <commons.net.version>3.6</commons.net.version>
@@ -86,7 +86,7 @@
         <!--  -->
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
         <joda.version>2.9.9</joda.version>
-        <spring-data-jpa.version>2.0.1.RELEASE</spring-data-jpa.version>
+        <spring-data-jpa.version>2.0.13.RELEASE</spring-data-jpa.version>
         <querydsl.version>4.1.4</querydsl.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
         <jstl.version>1.2</jstl.version>
@@ -104,6 +104,12 @@
         <cors-filter.version>2.5</cors-filter.version>
         <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
         <apache.http.client.version>4.5.5</apache.http.client.version>
+        <orika.version>1.5.2</orika.version>
+        <spring.boot.version>2.2.2</spring.boot.version>
+        <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     </properties>
     <dependencies>
@@ -215,13 +221,6 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-        <!-- <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>${spring.version}</version>
-        </dependency> -->
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
@@ -230,6 +229,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
@@ -243,12 +247,6 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
-        <!-- tell Slf4j using Log4j2 -->
-        <!-- <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
-        </dependency> -->
         <!-- tell commons logging using Log4j2 -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -302,12 +300,6 @@
             <artifactId>commons-codec</artifactId>
             <version>${commons.codec.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons.lang.version}</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -334,12 +326,6 @@
             <version>${quartz.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.bundles.repackaged/jersey-guava -->
-        <!--  <dependency>
-             <groupId>org.glassfish.jersey.bundles.repackaged</groupId>
-             <artifactId>jersey-guava</artifactId>
-             <version>${jersey.guava.version}</version>
-         </dependency> -->
         <!-- https://mvnrepository.com/artifact/net.sf.opencsv/opencsv -->
         <dependency>
             <groupId>com.opencsv</groupId>
@@ -453,30 +439,12 @@
             <artifactId>jta</artifactId>
             <version>${jta.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common -->
-        <!-- <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-common</artifactId>
-            <version>${jersey-common.version}</version>
-        </dependency> -->
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4.relation.version}</version>
-        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons.lang3.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
-        <!--  <dependency>
-             <groupId>com.google.collections</groupId>
-             <artifactId>google-collections</artifactId>
-             <version>${google-collections.version}</version>
-         </dependency> -->
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -519,11 +487,6 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.jxls</groupId>
             <artifactId>jxls</artifactId>
             <version>${jxls.version}</version>
@@ -546,23 +509,92 @@
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${apache.http.client.version}</version>
-        </dependency>
+        <!-- freemarker -->
+        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>${freemarker.version}</version>
+        </dependency>
+        <!--collection utils-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${commons.collections.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1-jre</version>
+        </dependency>
+
+        <!--bean validation-->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.13.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>3.0.11.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+            <version>3.0.11.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-java8time</artifactId>
+            <version>3.0.4.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/biz.paluch.logging/logstash-gelf -->
+        <dependency>
+            <groupId>biz.paluch.logging</groupId>
+            <artifactId>logstash-gelf</artifactId>
+            <version>1.14.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.4</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
 
     <!--執行build的工作 -->
     <build>
-        <finalName>${project.name}</finalName>
+        <!-- <finalName>${project.name}</finalName> -->
+        <finalName>ROOT</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
@@ -612,6 +644,10 @@
                     <username>tomcat</username>
                     <password>77183770</password>
                     <path>/</path>
+                    <excludes>
+                        <exclude>src/test/java</exclude>
+                        <exclude>**/selenium-*.jar</exclude>
+                    </excludes>
                     <update>true</update>
                 </configuration>
             </plugin>
@@ -627,6 +663,25 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
                             <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 加入產生的class讓compile的時候可以運作 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/java</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>
@@ -659,6 +714,13 @@
                     <target>1.8</target>
                     <meminitial>128m</meminitial>
                     <maxmem>512m</maxmem>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -668,13 +730,16 @@
                 <!--if eclipse have problem , using 2.6 -->
                 <!--<version>3.0.0</version> -->
                 <configuration>
-                    <failOnMissingWebXml>true</failOnMissingWebXml>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>
+                        WEB-INF/lib/selenium-*.jar,
+                    </packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
-                <version>3.11.10</version>
+                <version>3.13.1</version>
 
                 <!-- The plugin should hook into the generate goal -->
                 <executions>
@@ -709,7 +774,12 @@
                     <generator>
                         <database>
                             <includes>.*</includes>
-                            <excludes></excludes>
+                            <excludes>
+                                invoice_main.*
+                                | invoice_sync_relation.*
+                                | invoice_details.*
+                                | allowance_amount_summary_report
+                            </excludes>
                             <!-- In case your database supports catalogs, e.g. SQL Server:
                             <inputCatalog>public</inputCatalog>
                             -->
@@ -729,6 +799,42 @@
                     </generator>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <skipTests>false</skipTests>
+                    <includes>
+                        <include>unitTest/*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.8</version>
+                <configuration>
+                    <complianceLevel>1.8</complianceLevel>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <verbose>true</verbose>
+                    <Xlint>ignore</Xlint>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- use this goal to weave all your main classes -->
+                            <goal>compile</goal>
+                            <!-- use this goal to weave all your test classes -->
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
     <profiles>
@@ -742,7 +848,21 @@
                 <jooq.jdbc.url>jdbc:postgresql://127.0.0.1:5432/charge_db</jooq.jdbc.url>
                 <jooq.jdbc.user>postgres</jooq.jdbc.user>
                 <jooq.jdbc.password>postgres</jooq.jdbc.password>
-                <tomcat.deploy.url>http://192.168.1.222:9070/manager/text</tomcat.deploy.url>
+                <tomcat.deploy.url>http://127.0.0.1:8080/manager/text</tomcat.deploy.url>
+                <skip.jooq.generate>true</skip.jooq.generate>
+            </properties>
+        </profile>
+        <profile>
+            <id>uat</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <jooq.jdbc.driver>org.postgresql.Driver</jooq.jdbc.driver>
+                <jooq.jdbc.url>jdbc:postgresql://192.168.100.208:5432/charge_db_uat</jooq.jdbc.url>
+                <jooq.jdbc.user>postgres</jooq.jdbc.user>
+                <jooq.jdbc.password>postgres</jooq.jdbc.password>
+                <tomcat.deploy.url>http://192.168.100.222:9070/manager/text</tomcat.deploy.url>
                 <skip.jooq.generate>true</skip.jooq.generate>
             </properties>
         </profile>
@@ -750,10 +870,10 @@
             <id>production-charge-db</id>
             <properties>
                 <jooq.jdbc.driver>org.postgresql.Driver</jooq.jdbc.driver>
-                <jooq.jdbc.url>jdbc:postgresql://192.168.1.208:5432/charge_db</jooq.jdbc.url>
+                <jooq.jdbc.url>jdbc:postgresql://35.229.211.226:5432/charge_db_prod</jooq.jdbc.url>
                 <jooq.jdbc.user>gateweb</jooq.jdbc.user>
                 <jooq.jdbc.password>77183770</jooq.jdbc.password>
-                <tomcat.deploy.url>http://192.168.1.222:8080/manager/text</tomcat.deploy.url>
+                <tomcat.deploy.url>http://192.168.100.222:8080/manager/text</tomcat.deploy.url>
                 <skip.jooq.generate>true</skip.jooq.generate>
             </properties>
         </profile>
@@ -761,10 +881,10 @@
             <id>production-receipt-db</id>
             <properties>
                 <jooq.jdbc.driver>org.postgresql.Driver</jooq.jdbc.driver>
-                <jooq.jdbc.url>jdbc:postgresql://35.221.135.164:5432/receipt_db_prod</jooq.jdbc.url>
-                <jooq.jdbc.user>postgres</jooq.jdbc.user>
+                <jooq.jdbc.url>jdbc:postgresql://35.221.135.164:5432/receipt_db</jooq.jdbc.url>
+                <jooq.jdbc.user>gateweb</jooq.jdbc.user>
                 <jooq.jdbc.password>gateweb87734300</jooq.jdbc.password>
-                <tomcat.deploy.url>http://192.168.1.222:8080/manager/text</tomcat.deploy.url>
+                <tomcat.deploy.url>http://192.168.100.222:8080/manager/text</tomcat.deploy.url>
                 <skip.jooq.generate>true</skip.jooq.generate>
             </properties>
         </profile>

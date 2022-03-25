@@ -1,0 +1,45 @@
+.btn-group, .dropdown-toggle{
+    font-size: 14px;
+}
+
+.content {
+    font-family: "微軟正黑體", "新細明體";
+}
+
+.content input[type=search] {
+    -webkit-appearance: textfield;
+}
+
+table[content="main"] tbody tr {
+    background-color: #f9f9f9; !important;
+}
+
+table[content="main"] tbody th {
+    font-size: medium;
+}
+
+table[content="main"] tbody td {
+    font-size: small;
+}
+
+table[content="optionList"] tbody th {
+    font-size: medium;
+}
+
+table[content="optionList"] tbody td {
+    font-size: small;
+}
+
+
+div .modal {
+    font-family: "微軟正黑體", "新細明體";
+}
+
+a.butbox {
+    font-size: small;
+}
+
+.dataTables_length, .dataTables_info, .dataTables_paginate, .dataTables_filter {
+    font-size: small;
+}
+

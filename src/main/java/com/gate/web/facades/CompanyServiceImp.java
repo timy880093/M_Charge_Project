@@ -1,104 +1,54 @@
 package com.gate.web.facades;
 
-import java.util.Map;
-
-import com.gateweb.charge.repository.CompanyRepository;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import com.gateweb.orm.charge.entity.Company;
+import com.gateweb.orm.charge.repository.CompanyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gate.utils.SendEmailFileUtils;
-import com.gate.web.beans.QuerySettingVO;
-import com.gate.web.displaybeans.CompanyVO;
-import com.gate.web.formbeans.CompanyBean;
-import com.gateweb.charge.model.Company;
-
-import dao.CompanyDAO;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by simon on 2014/7/11.
  */
 
 @Service("companyService")
-public class CompanyServiceImp implements CompanyService{
+public class CompanyServiceImp implements CompanyService {
 
-	private static Logger logger = LogManager.getLogger(CompanyServiceImp.class);
-	
-	@Autowired
-    CompanyDAO companyDAO;
+    private static Logger logger = LoggerFactory.getLogger(CompanyServiceImp.class);
 
     @Autowired
     CompanyRepository companyRepository;
 
     @Override
-    public Integer insertCompany(CompanyBean companyBean) throws Exception {
-        Company companyEntity = new Company();
-        BeanUtils.copyProperties(companyEntity, companyBean);
-        companyDAO.saveEntity(companyEntity);
-        return null;
-    }
-
-    @Override
-    public void updateCompany(CompanyBean companyBean) throws Exception {
-        Company companyEntity = new Company();
-//        DateConverter dateConverter = new DateConverter();
-//        dateConverter.setPattern("yyyy/MM/dd");
-        BeanUtils.copyProperties(companyEntity, companyBean);
-        companyDAO.updateEntity(companyEntity, companyEntity.getCompanyId());
-    }
-
-    @Override
-    public void deleteCompany(Integer companyId) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public CompanyVO findCompanyByCompanyId(Integer companyId) throws Exception {
-        Company companyEntity = (Company)companyDAO.getEntity(Company.class,companyId);
-        CompanyVO companyVO = new CompanyVO();
-        BeanUtils.copyProperties(companyVO, companyEntity);
-        Map map = companyDAO.getCreatorAndModifier(companyVO.getCreatorId(),companyVO.getModifierId());
-        companyVO.setCreator((String) map.get("creator"));
-        companyVO.setModifier((String) map.get("modifier"));
-        return companyVO;
-    }
-
-    public Boolean checkIfCompanyKeyExist(Integer companyId) throws Exception{
-        boolean result = true;
-        Company companyEntity = (Company)companyDAO.getEntity(Company.class,companyId);
-        CompanyVO companyVO = new CompanyVO();
-        BeanUtils.copyProperties(companyVO, companyEntity);
-        if(companyVO.getCompanyKey() == null){
-            result = false;
-        }else{
-            return true;
+    public Set<String> getBillableBusinessNo() {
+        Set<String> result = new HashSet<>();
+        try {
+            Set<String> contractBillableBusinessNo = companyRepository.findBillableBusinessNoByContract();
+            result.addAll(contractBillableBusinessNo);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+        try {
+            Set<String> billCycleBillableBusinessNo = companyRepository.findBillableBusinessNoByBillCycle();
+            result.addAll(billCycleBillableBusinessNo);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
         }
         return result;
     }
 
-
     @Override
-    public Map getCompanyList(QuerySettingVO querySettingVO) throws Exception {
-        Map returnMap = companyDAO.getCompanyList(querySettingVO);
-        return returnMap;
+    public Set<Company> getBillableCompany() {
+        Set<Company> resultSet = new HashSet<>();
+        try {
+            Set<Company> contractBillableCompany = new HashSet<>(companyRepository.findBillableCompanyByContract());
+            resultSet.addAll(contractBillableCompany);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+        return resultSet;
     }
-
-//    public Map continuePackage(String almostOut) throws Exception{
-//        return companyDAO.continuePackage(almostOut);
-//    }
-
-    public Boolean checkBusinessNo(String businessNo,String companyId) throws Exception {
-        return companyDAO.checkBusinessNo(businessNo,companyId);
-    }
-
-    public Map getCompanyByBusinessNo(String businessNo) throws Exception {
-        return companyDAO.getCompanyByBusinesNo(businessNo);
-    }
-
-    public Map getCompanyInfoByCompanyId(Integer companyId) throws Exception {
-        return companyDAO.getCompanyInfo(companyId);
-    }
-
 }

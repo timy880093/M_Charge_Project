@@ -42,7 +42,7 @@ public class LogOutServlet extends HttpServlet {
         session.invalidate();
 //        out.println("<font color=red><b>You have been successfully logged out</b></font>");
 //        out.println("<font color=green><b>Login again</b></font>");
-        response.sendRedirect("/backendAdmin/loginServlet");
+        response.sendRedirect("/backendAdmin/indexServlet");
 //        ServletContext context= getServletContext();
 //
 //        RequestDispatcher rd= context.getRequestDispatcher("/backendAdmin/template/template.jsp");
