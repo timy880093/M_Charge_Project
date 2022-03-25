@@ -2,7 +2,7 @@ package com.gate.web.beans;
 
 import java.util.List;
 
-import com.gateweb.charge.model.CashMasterEntity;
+import com.gateweb.orm.charge.entity.CashMasterEntity;
 
 /**
  * Created by emily on 2016/1/18.

@@ -1,0 +1,366 @@
+<!DOCTYPE HTML>
+<html>
+<head th:replace="/fragments/bootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image: url(/backendAdmin/images/bg.jpg); background-position: left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"><img src="/backendAdmin/images/logo.jpg"
+                                                                                   width="200" height="127"/></a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <tr>
+                <td>
+                    <table id='contentMenu' class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><span class="textstyle_06">資料來源檢視</span></td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <div class="form-group">
+                                        <div class="input-group-sm">
+                                            <select class="form-control"
+                                                    id="companyInputAutoComplete"
+                                                    data-bind="
+                                        options: availableCompanies,
+                                        optionsText:'name',
+                                        optionsValue:'id',
+                                         value: selectedCompany,
+                                         optionsCaption: 'Choose...'"
+                                            >
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="condition" name="condition" title="過濾條件" class="butbox" data-toggle="modal"
+                                           data-target="#chargeSourceFilterModal"><span>過濾條件</span></a>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="operation" name="operation" title="操作項目" class="butbox" data-toggle="modal"
+                                           data-target="#chargeSourceOperationModal"><span>操作項目</span>
+                                            <span id='selectedBadge' class="badge" data-bind="text:selectedCountBadge"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- master dataTable-->
+            <tr id="#list">
+                <td>
+                    <div class="content" title="主要區域" style=" width:100%">
+                        <div class="spacer"></div>
+                        <table id="chargeSourceDataTable" content="main" border="0" width="98%"
+                               cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>公司統編</th>
+                                <th>發票日期</th>
+                                <th>原資料計數</th>
+                                <th>中介資料計數</th>
+                                <th>差值</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            <div class="modal fade" id="chargeSourceFilterModal" tabindex="-1" role="dialog"
+                 aria-labelledby="chargeSourceFilterModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="chargeSourceFilterModalLabel">過濾條件</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="chargeSourceFilterYearMonth">年月</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="chargeSourceFilterYearMonth"
+                                               name="chargeSourceFilterYearMonth" data-bind="value:yearMonthInput"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="chargeSourceFilterDiffOnlySwitch">只顯示不同的記錄</label>
+                                    <div class="input-group">
+                                        <input id="chargeSourceFilterDiffOnlySwitch" type="checkbox">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="applyBillSearchCondition" data-dismiss="modal"
+                                    data-bind="click:doSearch">搜尋
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="chargeSourceOperationModal" tabindex="-1" role="dialog"
+                 aria-labelledby="chargeSourceOperationModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="chargeSourceOperationModalLabel">操作項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:recalculateByCondition'
+                                                data-dismiss="modal">
+                                            根據條件重新計算指定年月資料
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:downloadInvoiceCountDiffCsvByCondition'
+                                                data-dismiss="modal">
+                                            根據條件下載指定年月的資料(.csv)
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let dataSourceMainListViewModel = {
+        chargeSourceDataTable: undefined,
+        selectedBillList: new Array(),
+        init: function (dom) {
+            dataSourceMainListViewModel.chargeSourceDataTable = initChargeSourceDataTable(
+                $('#chargeSourceDataTable')
+                , {}
+            );
+            dataSourceModule.getRegenTaskMap(function (data) {
+                if (Object.keys(data).length > 0) {
+                    var msg = "開始時間:" + Object.keys(data)[0];
+                    messageHandler({
+                        title: "排程執行中",
+                        status: "info",
+                        message: msg
+                    });
+                } else {
+                    messageHandler({
+                        title: "排程執行結束",
+                        status: "info"
+                    });
+                }
+            });
+            ko.applyBindings(dataSourceMainListViewModel, dom);
+        },
+        reload: function () {
+            loadingAjaxProcessor(
+                function () {
+                    dataSourceModule.findInvoiceDataSourceReport(
+                        filterEditViewModel.condition(),
+                        function (data) {
+                            dataSourceMainListViewModel.chargeSourceDataTable.clear();
+                            dataSourceMainListViewModel.chargeSourceDataTable.rows.add(data); // Add new data
+                            dataSourceMainListViewModel.chargeSourceDataTable.draw();
+                            Swal.close();
+                        }
+                    )
+                }
+                , "處理中請稍候"
+            );
+        }
+    };
+
+    var filterEditViewModel = {
+        yearMonthInput: ko.observable(),
+        chosenBillStatus: ko.observable({}),
+        diffOnly: ko.observable(),
+        init: function (dom) {
+            filterEditViewModel.yearMonthPicker = initYearMonthPicker('chargeSourceFilterYearMonth');
+            filterEditViewModel.diffOnlySwitch = $('#chargeSourceFilterDiffOnlySwitch').bootstrapSwitch({
+                onSwitchChange: function (event, state) {
+                    filterEditViewModel.diffOnly(state);
+                }
+            });
+            ko.applyBindings(filterEditViewModel, dom);
+        },
+        condition: function () {
+            var condition = {};
+            try {
+                if (filterEditViewModel.yearMonthInput()) {
+                    condition.yearMonth = filterEditViewModel.yearMonthInput();
+                }
+                if (contentMenuViewModel.selectedCompany()) {
+                    condition.companyId = contentMenuViewModel.selectedCompany();
+                }
+                if (filterEditViewModel.diffOnly()) {
+                    condition.diffOnly = filterEditViewModel.diffOnly();
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            return condition;
+        },
+        doSearch: function () {
+            dataSourceMainListViewModel.reload();
+        }
+    };
+
+    var contentMenuViewModel = {
+        selectedCountBadge: ko.observable(0),
+        availableCompanies: ko.observableArray(),
+        selectedCompany: ko.observable(),
+        init: function (dom) {
+            /*
+            這個selected input其實是由knockout.js與select2共同協作的
+            由knockout.js binding公司的資料給select，再由select2會將已存在的選項改為可以打字搜尋的樣式
+            再由knockout.js把選擇的值binding回來，整個流程的code只有10幾行，很划算
+             */
+            ko.applyBindings(contentMenuViewModel, dom);
+            var companySelect2DataList = new Array();
+            dataSourceModule.getBillableCompanyList().forEach(company => {
+                companySelect2DataList.push(company);
+            });
+            contentMenuViewModel.availableCompanies(companySelect2DataList);
+            $('#companyInputAutoComplete').select2();
+            $('#companyInputAutoComplete').on('select2:select', function (e) {
+                dataSourceMainListViewModel.reload();
+            });
+        }
+    };
+
+    var operationViewModel = {
+        init: function (dom) {
+            ko.applyBindings(operationViewModel, dom);
+        },
+        recalculateByCondition: function () {
+            confirmAjaxProcessor(
+                function () {
+                    dataSourceModule.recalculateIasrByCondition(
+                        filterEditViewModel.condition(),
+                        function (responseMap) {
+                            messageHandler(responseMap);
+                        }
+                    );
+                },
+                "注意",
+                "這個操作將會刪除指定條件下的資料並重新產生，確定要執行這個操作?",
+                "warning")
+        },
+        downloadInvoiceCountDiffCsvByCondition: function () {
+            confirmAjaxProcessor(function () {
+                    loadingAjaxProcessor(function () {
+                        downloadInvoiceCountDiffCsvByConditionAjax(filterEditViewModel.condition(), function (response) {
+                            if (response.reportBody) {
+                                var body = base64ToArrayBuffer(response.reportBody);
+                                downloadFileFromBlob(body, "invoiceCountDiffReport.csv");
+                            }
+                            messageHandler(response);
+                        });
+                    }, '處理中請稍候')
+                },
+                "注意",
+                "下載需要一段時間，確定要執行這個操作?",
+                "warning"
+            );
+        },
+    };
+
+    function initViewModel() {
+        contentMenuViewModel.init(document.getElementById("contentMenu"));
+        dataSourceMainListViewModel.init(document.getElementById("chargeSourceDataTable"));
+        filterEditViewModel.init(document.getElementById("chargeSourceFilterModal"));
+        operationViewModel.init(document.getElementById("chargeSourceOperationModal"));
+    }
+
+    function initMenuTemplate() {
+        return Promise.all([]);
+    }
+
+    function initPage() {
+        const promiseMenuTemplateInit = initMenuTemplate();
+        promiseMenuTemplateInit
+            .then(result => draggableModal(result))
+            .then(result => initTooltip(result))
+            .then(result => initViewModel());
+    }
+
+    function downloadInvoiceCountDiffCsvByConditionAjax(data, handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargeSourceManagementServlet/api/downloadInvoiceCountDiffCsvByCondition';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.data = JSON.stringify(data);
+        ajaxParam.successHandler = handler;
+        asyncAjaxCall(ajaxParam, function (data, textStatus, jqXHR) {
+            handler(data);
+        });
+    }
+
+
+</script>
+</body>
+</html>

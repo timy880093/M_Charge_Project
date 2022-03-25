@@ -1,0 +1,32 @@
+<div class="modal fade" id="deductStatusMenuModal" tabIndex="-1" role="dialog"
+     aria-labelledby="deductStatusMenuModalLabel"
+     aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deductStatusMenuModalLabel">扣抵狀態清單</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="deductStatusMenuDataTable" content="optionList" border="0" width="98%" cellSpacing="0"
+                       cellPadding="0">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>扣抵狀態</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary" id="deductStatusMenuModalChoose"
+                        data-dismiss="modal"
+                        name="deductStatusMenuSelect" data-bind="click:onConfirm">確定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

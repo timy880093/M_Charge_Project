@@ -1,0 +1,579 @@
+<!DOCTYPE HTML>
+<html>
+<head th:replace="/fragments/bootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image: url(/backendAdmin/images/bg.jpg); background-position: left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"><img src="/backendAdmin/images/logo.jpg"
+                                                      width="200" height="127"/></a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <tr>
+                <td>
+                    <table class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><span class="textstyle_06">計費項目管理</span></td>
+                            <td align="right">
+                <span class="select_div">
+                    <a href="#" id="operation" name="operation" title="操作項目" class="butbox" data-toggle="modal"
+                       data-target="#operationModal"><span>操作項目</span></a>
+                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- master dataTable-->
+            <tr id="#list">
+                <td>
+                    <div class="content" title="主要區域" style=" width:100%">
+                        <div class="spacer"></div>
+                        <table id="chargeRuleDataTable" content="main" border="0" width="98%" cellspacing="0"
+                               cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>項目名稱</th>
+                                <th>級距名稱</th>
+                                <th>狀態</th>
+                                <th>繳費類別</th>
+                                <th>計費來源</th>
+                                <th>計算區間</th>
+                                <th>收費區間</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <!--master edit modal-->
+            <div class="modal fade" id="ruleEditModal" tabindex="-1" role="dialog"
+                 aria-labelledby="ruleEditModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ruleEditModalLabel">計費項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="ruleEditModalName">項目名稱</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalName"
+                                               data-bind="value:chosenChargeRule().chargeRuleName"
+                                               type="text"
+                                               class="form-control" aria-label="Amount (to the nearest dollar)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalProductCategory">產品分類</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalProductCategory"
+                                               data-bind="value:chosenProductCategory().name"
+                                               type="text"
+                                               class="form-control" aria-label="" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    name="modifyProductCategory"
+                                                    data-bind="click:chargeRuleEditViewModel.knockoutComponent.productCategorySelector.show"
+                                                    id="modifyProductCategory">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalPaidPlan">繳費類別</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalPaidPlan"
+                                               data-bind="value:chosenPaidPlan().name"
+                                               type="text"
+                                               class="form-control" aria-label="" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary"
+                                                    type="button"
+                                                    name="modifyPaidPlan"
+                                                    data-bind="click:chargeRuleEditViewModel.knockoutComponent.paidPlanSelector.show"
+                                                    id="modifyPaidPlan">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalStatus">狀態</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalStatus" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalAccumulation">每層累計</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalAccumulation" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalCirculation">循環級距</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalCirculation" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalChargeByRemainingCount">以張計費</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalChargeByRemainingCount" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalSource">計費來源</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalSource" type="text"
+                                               class="form-control" aria-label="請選擇計費來源"
+                                               data-bind="value:chosenChargeBase().name" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-bind="click:chargeRuleEditViewModel.knockoutComponent.chargeBaseTypeSelector.show"
+                                                    name="modifyChargeBase" id="modifyChargeBase">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalGrade">級距</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalGrade" type="text"
+                                               data-bind="value:chosenGrade().name" class="form-control"
+                                               aria-label="請選擇級距" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-toggle="collapse"
+                                                    data-target="#modeGradeDetail" aria-expanded="false"
+                                                    aria-controls="modeGradeDetail">級距表
+                                            </button>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    id="modifyGrade" name="modifyGrade">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="modeGradeDetail">
+                                        <div class="card card-body border-0">
+                                            <table id="modeGradeDetailDataTable" border="0" width="98%" cellspacing="0"
+                                                   cellpadding="0" content="optionList">
+                                                <thead>
+                                                <tr>
+                                                    <th>id</th>
+                                                    <th>層級</th>
+                                                    <th>起</th>
+                                                    <th>迄</th>
+                                                    <th>固定價格</th>
+                                                    <th>單張價格</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalCalculateCycle">計算區間</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalCalculateCycle" type="text"
+                                               class="form-control"
+                                               aria-label="請選擇計算區間描述"
+                                               data-tooltip="tooltip"
+                                               data-placement="top"
+                                               data-html="true"
+                                               title="<p>計算週期是為了區別產生費用時，不同來源的最小日期區間而設立的</p>
+                                          <p>符合計算週期並不一定符合收費週期</p>
+                                          <p>因此，只有在結帳週期前的計算週期會被計算並產生費用</p>
+                                          <p>以月租季繳週期為例，季繳為每三個月收費，但每個月都計費</p>"
+                                               data-bind="value:chosenCalculateCycle().name" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-bind="click:chargeRuleEditViewModel.knockoutComponent.calculateCycleMenuViewModel.show"
+                                                    name="modifyCalculateCycle" id="modifyCalculateCycle">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ruleEditModalChargeCycle">收費週期</label>
+                                    <div class="input-group">
+                                        <input id="ruleEditModalChargeCycle" type="text"
+                                               class="form-control" aria-label="請選擇結帳週期描述"
+                                               data-tooltip="tooltip"
+                                               data-placement="top"
+                                               data-html="true"
+                                               title="<p>結帳週期是為了區別不同費用請款週期而設立的</p>
+                                          <p>當前日期大於結帳週期的計費項目都應該產生費用</p>
+                                          <p>預繳週期項目及後繳中的設定通常不會相同</p>
+                                          <p>預繳週期類在初始化時就會產生所有項目</p>
+                                          <p>而後繳類型的項目，則只會在當前日期大於結帳週期時產生費用</p>"
+                                               data-bind="value:chosenChargeCycle().name" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    id="modifyChargeCycle"
+                                                    data-bind="click:chargeRuleEditViewModel.knockoutComponent.chargeCycleMenuViewModel.show"
+                                                    name="modifyChargeCycle">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="ruleEditModalSaveChange"
+                                    data-dismiss="modal"
+                                    data-bind="click:onConfirm" name="save">確定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="operationModal" tabindex="-1" role="dialog"
+                 aria-labelledby="operationModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="operationModalLabel">操作項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:onOpenCreateModal'
+                                                data-dismiss="modal">
+                                            新增
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:onOpenModifyModal'
+                                                data-dismiss="modal">
+                                            修改
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind="click:onDelete"
+                                                data-dismiss="modal">
+                                            刪除
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let chargeRuleEditViewModel = {
+        chosenCalculateCycle: ko.observable({}),
+        chosenChargeCycle: ko.observable({}),
+        chosenPaidPlan: ko.observable({}),
+        chosenProductCategory: ko.observable({}),
+        chosenGrade: ko.observable({}),
+        chosenChargeBase: ko.observable({}),
+        chosenEnabled: ko.observable(false),
+        chosenChargeRule: ko.observable({}),
+        chosenAccumulation: ko.observable(false),
+        chosenCirculation: ko.observable(false),
+        chosenChargeByRemainingCount: ko.observable(false),
+        knockoutComponent: {
+            gradeMenuViewModel: gradeMenuViewComponentInitializer(function (gradeMenuViewModel) {
+                $('#modifyGrade').click(function () {
+                    gradeMenuViewModel.show();
+                });
+                gradeMenuViewModel.gradeDetailTable = initChildrenGradeDataTable($('#modeGradeDetailDataTable'), {});
+                gradeMenuViewModel.chosenGrade.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenGrade(newValue);
+                    if (newValue.children) {
+                        gradeMenuViewModel.gradeDetailTable.clear();
+                        gradeMenuViewModel.gradeDetailTable.rows.add(newValue.children);
+                        gradeMenuViewModel.gradeDetailTable.draw();
+                    }
+                });
+                return gradeMenuViewModel;
+            }),
+            chargeCycleMenuViewModel: chargeCycleMenuComponentInitializer(function (chargeCycleMenuViewModel) {
+                chargeCycleMenuViewModel.chosenCycle.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenChargeCycle(newValue);
+                });
+                return chargeCycleMenuViewModel;
+            }),
+            calculateCycleMenuViewModel: calculateCycleMenuComponentInitializer(function (calculateCycleMenuViewModel) {
+                calculateCycleMenuViewModel.chosenCycle.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenCalculateCycle(newValue);
+                });
+                return calculateCycleMenuViewModel;
+            }),
+            chargeRuleStatusSwitchViewModel: bootstrapSwitchViewComponentInitializer('ruleEditModalStatus', function (chargeRuleStatusSwitchViewModel) {
+                chargeRuleStatusSwitchViewModel.chosenValue.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenEnabled(newValue);
+                });
+                return chargeRuleStatusSwitchViewModel;
+            }),
+            chargeRuleAccumulationSwitchViewModel: bootstrapSwitchViewComponentInitializer('ruleEditModalAccumulation', function (chargeRuleAccumulationSwitchViewModel) {
+                chargeRuleAccumulationSwitchViewModel.chosenValue.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenAccumulation(newValue);
+                });
+                return chargeRuleAccumulationSwitchViewModel;
+            }),
+            chargeRuleCirculationSwitchViewModel: bootstrapSwitchViewComponentInitializer('ruleEditModalCirculation', function (chargeRuleCirculationSwitchViewModel) {
+                chargeRuleCirculationSwitchViewModel.chosenValue.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenCirculation(newValue);
+                });
+                return chargeRuleCirculationSwitchViewModel;
+            }),
+            chargeRuleChargeByRemainingCountSwitchViewModel: bootstrapSwitchViewComponentInitializer('ruleEditModalChargeByRemainingCount', function (chargeRuleChargeByRemainingCountSwitchViewModel) {
+                chargeRuleChargeByRemainingCountSwitchViewModel.chosenValue.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenChargeByRemainingCount(newValue);
+                });
+                return chargeRuleChargeByRemainingCountSwitchViewModel;
+            }),
+            productCategorySelector: dataTableOptionSelectorComponentInitializer(dataSourceModule.getProductCategoryList(), function (productCategorySelector) {
+                productCategorySelector.chosenOption.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenProductCategory(newValue);
+                });
+                return productCategorySelector;
+            }),
+            chargeBaseTypeSelector: dataTableOptionSelectorComponentInitializer(dataSourceModule.getChargeBaseTypeList(), function (chargeBaseTypeSelector) {
+                chargeBaseTypeSelector.chosenOption.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenChargeBase(newValue);
+                });
+                return chargeBaseTypeSelector;
+            }),
+            paidPlanSelector: dataTableOptionSelectorComponentInitializer(dataSourceModule.getPaidPlanList(), function (paidPlanSelector) {
+                paidPlanSelector.chosenOption.subscribe(function (newValue) {
+                    chargeRuleEditViewModel.chosenPaidPlan(newValue);
+                });
+                return paidPlanSelector;
+            })
+        },
+        init: function (dom) {
+            ko.applyBindings(chargeRuleEditViewModel, dom);
+        },
+        loadSelectedChargeRule: function (chargeRule) {
+            if (chargeRule) {
+                chargeRuleEditViewModel.chosenChargeRule(chargeRule);
+                if (chargeRule.productCategoryId) {
+                    chargeRuleEditViewModel.knockoutComponent.productCategorySelector.setById(chargeRule.productCategoryId);
+                }
+                if (chargeRule.calculateCycleType) {
+                    chargeRuleEditViewModel.knockoutComponent.calculateCycleMenuViewModel.setById(chargeRule.calculateCycleType);
+                }
+                if (chargeRule.chargeCycleType) {
+                    chargeRuleEditViewModel.knockoutComponent.chargeCycleMenuViewModel.setById(chargeRule.chargeCycleType);
+                }
+                if (chargeRule.chargeBaseType) {
+                    chargeRuleEditViewModel.knockoutComponent.chargeBaseTypeSelector.setById(chargeRule.chargeBaseType);
+                }
+                if (chargeRule.paidPlanId) {
+                    chargeRuleEditViewModel.knockoutComponent.paidPlanSelector.setById(chargeRule.paidPlanId);
+                }
+                if (chargeRule.rootGradeId) {
+                    this.knockoutComponent.gradeMenuViewModel.setById(chargeRule.rootGradeId);
+                }
+                chargeRuleEditViewModel.knockoutComponent.chargeRuleStatusSwitchViewModel.setByValue(chargeRule.enabled);
+                chargeRuleEditViewModel.knockoutComponent.chargeRuleAccumulationSwitchViewModel.setByValue(chargeRule.accumulation);
+                chargeRuleEditViewModel.knockoutComponent.chargeRuleCirculationSwitchViewModel.setByValue(chargeRule.circulation);
+                chargeRuleEditViewModel.knockoutComponent.chargeRuleChargeByRemainingCountSwitchViewModel.setByValue(chargeRule.chargeByRemainingCount);
+            }
+        },
+        toModelObj: function () {
+            var chargeRuleModel = {};
+            if (chargeRuleEditViewModel.chosenChargeRule()) {
+                if (chargeRuleEditViewModel.chosenChargeRule().chargeRuleId) {
+                    chargeRuleModel.chargeRuleId = chargeRuleEditViewModel.chosenChargeRule().chargeRuleId;
+                }
+                if (chargeRuleEditViewModel.chosenChargeRule().chargeRuleName) {
+                    chargeRuleModel.name = chargeRuleEditViewModel.chosenChargeRule().chargeRuleName;
+                }
+            }
+            if (chargeRuleEditViewModel.chosenProductCategory()) {
+                chargeRuleModel.productCategoryId = chargeRuleEditViewModel.chosenProductCategory().id;
+            }
+            if (chargeRuleEditViewModel.chosenPaidPlan()) {
+                chargeRuleModel.paidPlan = chargeRuleEditViewModel.chosenPaidPlan().id;
+            }
+            if (chargeRuleEditViewModel.chosenChargeBase()) {
+                chargeRuleModel.chargeBaseType = chargeRuleEditViewModel.chosenChargeBase().id;
+            }
+            if (chargeRuleEditViewModel.chosenGrade()) {
+                chargeRuleModel.gradeId = chargeRuleEditViewModel.chosenGrade().gradeId;
+            }
+            if (chargeRuleEditViewModel.knockoutComponent.chargeCycleMenuViewModel.chosenCycle()) {
+                chargeRuleModel.chargeCycleType
+                    = chargeRuleEditViewModel.knockoutComponent.chargeCycleMenuViewModel.chosenCycle().id;
+            }
+            if (chargeRuleEditViewModel.knockoutComponent.calculateCycleMenuViewModel.chosenCycle()) {
+                chargeRuleModel.calculateCycleType
+                    = chargeRuleEditViewModel.knockoutComponent.calculateCycleMenuViewModel.chosenCycle().id;
+            }
+            if (chargeRuleEditViewModel.chosenChargeByRemainingCount()) {
+                chargeRuleModel.chargeByRemainingCount = chargeRuleEditViewModel.chosenChargeByRemainingCount();
+            }
+            chargeRuleModel.enabled = chargeRuleEditViewModel.chosenEnabled();
+            chargeRuleModel.accumulation = chargeRuleEditViewModel.chosenAccumulation();
+            chargeRuleModel.circulation = chargeRuleEditViewModel.chosenCirculation();
+            return chargeRuleModel;
+        },
+        onConfirm: function () {
+            var obj = chargeRuleEditViewModel.toModelObj();
+            saveOrUpdateChargeModeAjax(obj, function (data) {
+                messageHandler(data);
+                chargeRuleMainListViewModel.reload();
+            });
+        },
+        clean: function () {
+            chargeRuleEditViewModel.chosenChargeRule({});
+            chargeRuleEditViewModel.knockoutComponent.productCategorySelector.chosenOption({});
+            chargeRuleEditViewModel.knockoutComponent.paidPlanSelector.chosenOption({});
+            chargeRuleEditViewModel.knockoutComponent.chargeBaseTypeSelector.chosenOption({});
+            chargeRuleEditViewModel.knockoutComponent.calculateCycleMenuViewModel.chosenCycle({});
+            chargeRuleEditViewModel.knockoutComponent.chargeCycleMenuViewModel.chosenCycle({});
+            chargeRuleEditViewModel.knockoutComponent.chargeRuleStatusSwitchViewModel.chosenValue(false);
+            this.knockoutComponent.gradeMenuViewModel.chosenGrade({});
+        }
+    };
+
+    let chargeRuleMainListViewModel = {
+        init: function (dom) {
+            chargeRuleMainListViewModel.reload();
+            ko.applyBindings(chargeRuleMainListViewModel, dom);
+        }, reload: function () {
+            chargeRuleMainListViewModel.chargeRuleDataTable = initChargeRuleDataTable($('#chargeRuleDataTable'), dataSourceModule.getChargeRuleList());
+        }
+    };
+
+    let operationModel = {
+        init: function (dom) {
+            ko.applyBindings(operationModel, dom);
+        },
+        onOpenCreateModal: function () {
+            chargeRuleEditViewModel.clean();
+            chargeRuleEditViewModel.operation = 'create';
+            $('#ruleEditModal').modal();
+        },
+        onOpenModifyModal: function () {
+            var chargeRuleSelected = chargeRuleMainListViewModel.chargeRuleDataTable.rows('.selected').data()[0];
+            if (chargeRuleSelected) {
+                chargeRuleEditViewModel.operation = 'modify';
+                $('#ruleEditModal').modal();
+                chargeRuleEditViewModel.loadSelectedChargeRule(chargeRuleSelected);
+            } else {
+                messageHandler({
+                    title: "未選擇資料",
+                    status: "warning",
+                    message: "請先選擇資料再進行操作"
+                });
+            }
+        }, onDelete: function () {
+            var chargeRuleSelected = chargeRuleMainListViewModel.chargeRuleDataTable.rows('.selected').data()[0];
+            if (chargeRuleSelected) {
+                chargeRuleEditViewModel.loadSelectedChargeRule(chargeRuleSelected);
+                deleteChargeRuleAjax(chargeRuleEditViewModel.chosenChargeRule().chargeRuleId, function (data) {
+                    messageHandler(data);
+                    chargeRuleMainListViewModel.reload();
+                });
+            }
+        }
+    };
+
+    function initViewModel() {
+        chargeRuleEditViewModel.init(document.getElementById("ruleEditModal"));
+        chargeRuleMainListViewModel.init(document.getElementById("chargeRuleDataTable"));
+        operationModel.init(document.getElementById("operationModal"));
+    }
+
+    function initPage() {
+        initViewModel();
+        draggableModal();
+        initTooltip();
+    }
+
+    function saveOrUpdateChargeModeAjax(obj, messageHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargeRuleManagementServlet/api/saveOrUpdate';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.dataType = 'json';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = messageHandler;
+        return promiseSyncAjaxCall(ajaxParam, messageHandler, messageHandler);
+    }
+
+    function deleteChargeRuleAjax(chargeRuleId, resolveHandler, rejectHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargeRuleManagementServlet/api/delete/' + chargeRuleId;
+        ajaxParam.requestType = 'GET';
+        promiseSyncAjaxCall(ajaxParam, resolveHandler, rejectHandler);
+    }
+
+</script>
+</body>
+</html>

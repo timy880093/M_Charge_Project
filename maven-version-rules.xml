@@ -1,0 +1,10 @@
+<ruleset comparisonMethod="maven"
+         xmlns="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0 http://mojo.codehaus.org/versions-maven-plugin/xsd/rule-2.0.0.xsd">
+    <rules>
+        <rule groupId="*.maven" comparisonMethod="mercury"/>
+        <rule groupId="com.gateweb" comparisonMethod="numeric"/>
+        <rule groupId="com.gateweb.maven" comparisonMethod="maven"/>
+        <rule groupId="com.gateweb.maven" artifactId="old-maven-plugin" comparisonMethod="mercury"/>
+    </rules>
+</ruleset>

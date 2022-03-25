@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- status : 这个用于设置log4j2自身内部的信息输出,可以不设置,当设置成trace时,会看到log4j2内部各种详细输出 ,默认OFF
-	monitorInterval : Log4j能够自动检测修改配置文件和重新配置本身, 设置间隔秒数。 
-	%d{yyyy-MM-dd HH:mm:ss, SSS} : 日志生产时间 
-    %p : 日志输出格式 
-    %c : logger的名称  
-    %m : 日志内容，即 logger.info("message") 
-    %n : 换行符 
-    %C : Java类名 
-    %L : 日志输出所在行数 
-    %M : 日志输出所在方法名 
-    hostName : 本地机器名 hostAddress : 本地ip地址 
--->
 <Configuration status="WARN" monitorInterval="30">
     <Properties>
-        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --[%15.15t] %-30.30c{1.} : %m%n%ex</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --[%15.15t] %-30.30c{1.} : %m%n%ex
+        </Property>
         <property name="LOG_HOME">logs</property>
-        <property name="FILE_NAME">charge</property>    
+        <property name="FILE_NAME">charge</property>
     </Properties>
     <Appenders>
+        <Gelf name="gelf" host="udp:34.80.231.41" port="12201" version="1.0" extractStackTrace="true"
+              filterStackTrace="true" mdcProfiling="true" includeFullMdc="true" maximumMessageSize="8192"
+              originHost="ChargeSystemProdLog" additionalFieldTypes="fieldName1=String,fieldName2=Double,fieldName3=Long"
+              ignoreExceptions="true">
+            <Field name="timestamp" pattern="%d{dd MMM yyyy HH:mm:ss,SSS}" />
+            <Field name="level" pattern="%level" />
+            <Field name="simpleClassName" pattern="%C{1}" />
+            <Field name="className" pattern="%C" />
+            <Field name="server" pattern="%host" />
+            <Field name="server.fqdn" pattern="%host{fqdn}" />
+            <Field name="fieldName2" literal="fieldValue2" /> <!-- This is a static field -->
+            <Field name="mdcField2" mdc="mdcField2" /> <!-- This is a field using MDC -->
+            <DynamicMdcFields regex="mdc.*" />
+            <DynamicMdcFields regex="(mdc|MDC)fields" />
+            <DynamicMdcFieldType regex="my_field.*" type="String" />
+        </Gelf>
+
         <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <File name="FILE" fileName="${LOG_HOME}/logfile_fileMode.log" append="true">
+        <RollingRandomAccessFile name="CHA_PROJECT"
+                                 fileName="${LOG_HOME}/${FILE_NAME}.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+
             <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
-        </File>
-        <RollingRandomAccessFile name="CHA_PROJECT" 
-            fileName="${LOG_HOME}/${FILE_NAME}.log" 
-            filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
-            
-            <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n" />
             <Policies>
-                <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="10 MB" />
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="20" />
+            <DefaultRolloverStrategy max="20"/>
         </RollingRandomAccessFile>
         <RollingFile name="springframework"
                      fileName="logs/springframework.log"
@@ -42,46 +45,47 @@
                 <pattern>%-5p | %d{yyyy-MM-dd HH:mm:ss} | %C{10} (%F:%L) - %m%n</pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="100 MB" />
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="30" />
+            <DefaultRolloverStrategy max="30"/>
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="com.gate" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-            <AppenderRef ref="CHA_PROJECT" />
+        <Logger name="com.gate" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="CHA_PROJECT"/>
+            <AppenderRef ref="gelf"/>
         </Logger>
         <Logger name="dao" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-            <AppenderRef ref="CHA_PROJECT" />
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="CHA_PROJECT"/>
+            <AppenderRef ref="gelf"/>
         </Logger>
-        <Logger name="com.gateweb" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-            <AppenderRef ref="CHA_PROJECT" />
+        <Logger name="com.gateweb" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="CHA_PROJECT"/>
+            <AppenderRef ref="gelf"/>
         </Logger>
-        <logger name="com.einvoices.aop.AspectLog" level="error" additivity="false">
-            <AppenderRef ref="CHA_PROJECT" />
-        </logger>
         <logger name="org.springframework" level="error" additivity="false">
-            <AppenderRef ref="springframework" />
-            <AppenderRef ref="CHA_PROJECT" />
+            <AppenderRef ref="springframework"/>
+            <AppenderRef ref="CHA_PROJECT"/>
         </logger>
         <logger name="org.springframework.transaction" level="error" additivity="false">
-            <AppenderRef ref="springframework" />
-            <AppenderRef ref="CHA_PROJECT" />
+            <AppenderRef ref="springframework"/>
+            <AppenderRef ref="CHA_PROJECT"/>
         </logger>
         <logger name="org.springframework.transaction.interceptor" level="error" additivity="false">
-            <AppenderRef ref="springframework" />
-            <AppenderRef ref="CHA_PROJECT" />
+            <AppenderRef ref="springframework"/>
+            <AppenderRef ref="CHA_PROJECT"/>
         </logger>
-        <logger name="org.springframework.orm.jpa.JpaTransactionManage" level="error" additivity="false">
-            <AppenderRef ref="springframework" />
-            <AppenderRef ref="CHA_PROJECT" />
+        <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="error" additivity="false">
+            <AppenderRef ref="springframework"/>
+            <AppenderRef ref="CHA_PROJECT"/>
         </logger>
-        <Root level="ERROR">
-            <AppenderRef ref="ConsoleAppender" />
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="gelf"/>
         </Root>
     </Loggers>
 </Configuration>

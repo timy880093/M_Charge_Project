@@ -1,5 +1,3 @@
-/.idea
-/target/classes/META-INF
-/target/classes/Prod(192.168.1.206)/src
-/target/classes/Prod(192.168.1.206)/tempFile
-/target
+.idea
+logs
+target

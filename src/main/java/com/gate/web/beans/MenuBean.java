@@ -6,15 +6,24 @@ import java.util.List;
  * Created with IntelliJ IDEA.
  * User: good504
  * Date: 2014/8/8
- * Time: 上午 11:22
+ * Time: AM 11:22
  * To change this template use File | Settings | File Templates.
  */
 public class MenuBean {
+    private String id;
     private String name;
     private String url;
     private String enable;
     private String pop;
     private List<MenuBean> children;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

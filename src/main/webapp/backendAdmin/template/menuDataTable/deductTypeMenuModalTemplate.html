@@ -1,0 +1,32 @@
+<div class="modal fade" id="deductTypeMenuModal" tabIndex="-1" role="dialog"
+     aria-labelledby="deductTypeMenuModalLabel"
+     aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deductTypeMenuModalLabel">扣抵類型清單</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="deductTypeMenuDataTable" content="optionList" border="0" width="98%" cellSpacing="0"
+                       cellPadding="0">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>扣抵分類</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary" id="deductTypeMenuModalChoose"
+                        data-dismiss="modal"
+                        name="deductTypeMenuSelect" data-bind="click:onConfirm">確定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

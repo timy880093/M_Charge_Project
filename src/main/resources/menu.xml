@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu-define>
     <role id="100" name="帳務管理者">
-        <menu name="收費方案列表" url="/backendAdmin/chargeSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="經銷商方案列表" url="/backendAdmin/dealerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="設定用戶收費列表" url="/backendAdmin/companySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="月租超額計算" url="/backendAdmin/calCycleSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="出/入帳管理" url="/backendAdmin/cashSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="佣金計算管理" url="/backendAdmin/commissionLogSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="介紹裝機公司匯出" url="/backendAdmin/brokerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="匯入用戶第一次綁合約的資料" url="/backendAdmin/firstCompanyPackageServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="機器保固" url="/backendAdmin/warrantySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="預用金管理" url="/backendAdmin/prepayDeductSearchServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="billingItem_menu" name="待結清單列表" url="/backendAdmin/billingItemManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="contract_menu" name="合約管理" url="/backendAdmin/contractManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="newGrade_menu" name="級距管理" url="/backendAdmin/newGradeManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="chargeRule_menu" name="計費規則管理" url="/backendAdmin/chargeRuleManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="chargePackage_menu" name="計費方案管理" url="/backendAdmin/chargePackageManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="deduct_menu" name="預繳與扣抵列表" url="/backendAdmin/deductManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="bill_menu" name="帳單管理" url="/backendAdmin/billManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+<!--        <menu id="product_menu" name="商品管理" url="/backendAdmin/productManagementServlet?sessionClean=Y" enable="true" pop="true"/>-->
+        <menu id="chargeSource_menu" name="資料來源檢視" url="/backendAdmin/chargeSourceManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="invoiceRemainingView_menu" name="以張計費張數檢視" url="/backendAdmin/invoiceRemainingViewServlet?sessionClean=Y" enable="true" pop="true"/>
     </role>
     <role id="600" name="帳務管理者">
-        <menu name="收費方案列表" url="/backendAdmin/chargeSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="經銷商方案列表" url="/backendAdmin/dealerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="設定用戶收費列表" url="/backendAdmin/companySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="月租超額計算" url="/backendAdmin/calCycleSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="出/入帳管理" url="/backendAdmin/cashSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="佣金計算管理" url="/backendAdmin/commissionLogSearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="介紹裝機公司匯出" url="/backendAdmin/brokerCompanySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="匯入用戶第一次綁合約的資料" url="/backendAdmin/firstCompanyPackageServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="機器保固" url="/backendAdmin/warrantySearchServlet?sessionClean=Y" enable="true" pop="true"/>
-        <menu name="預用金管理" url="/backendAdmin/prepayDeductSearchServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="billingItem_menu" name="待結清單列表" url="/backendAdmin/billingItemManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="contract_menu" name="合約管理" url="/backendAdmin/contractManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="newGrade_menu" name="級距管理" url="/backendAdmin/newGradeManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="chargeRule_menu" name="計費規則管理" url="/backendAdmin/chargeRuleManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="chargePackage_menu" name="計費方案管理" url="/backendAdmin/chargePackageManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="deduct_menu" name="預繳與扣抵列表" url="/backendAdmin/deductManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="bill_menu" name="帳單管理" url="/backendAdmin/billManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+<!--        <menu id="product_menu" name="商品管理" url="/backendAdmin/productManagementServlet?sessionClean=Y" enable="true" pop="true"/>-->
+        <menu id="chargeSource_menu" name="資料來源檢視" url="/backendAdmin/chargeSourceManagementServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="invoiceRemainingView_menu" name="以張計費張數檢視" url="/backendAdmin/invoiceRemainingViewServlet?sessionClean=Y" enable="true" pop="true"/>
     </role>
 </menu-define>

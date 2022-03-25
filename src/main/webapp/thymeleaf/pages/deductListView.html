@@ -1,0 +1,645 @@
+<!DOCTYPE HTML>
+<html>
+<head th:replace="/fragments/bootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image: url(/backendAdmin/images/bg.jpg); background-position: left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"><img src="/backendAdmin/images/logo.jpg"
+                                                      width="200" height="127"/></a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <tr>
+                <td>
+                    <table id='contentMenu' class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><span class="textstyle_06">預繳扣抵</span></td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <div class="form-group">
+                                        <div class="input-group-sm">
+                                            <select class="form-control"
+                                                    id="companyInputAutoComplete"
+                                                    data-bind="
+                                        options: availableCompanies,
+                                        optionsText:'desc',
+                                        optionsValue:'id',
+                                         value: selectedCompany,
+                                         optionsCaption: 'Choose...'"
+                                            >
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="condition" name="condition" title="過濾條件" class="butbox"
+                                           data-toggle="modal"
+                                           data-target="#deductConditionModal"><span>過濾條件</span></a>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="operation" name="operation" title="操作項目" class="butbox"
+                                           data-toggle="modal" data-target="#operationModal"><span>操作項目</span></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- master dataTable-->
+            <tr id="#list">
+                <td>
+                    <div class="content" title="主要區域" style=" width:100%">
+                        <div class="spacer"></div>
+                        <table id="deductDataTable" content="main" border="0"
+                               width="98%"
+                               cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>companyId</th>
+                                <th>公司名稱</th>
+                                <th>公司統編</th>
+                                <th>狀態</th>
+                                <th>類別</th>
+                                <th>購買額度</th>
+                                <th>剩餘額度</th>
+                                <th>售價</th>
+                                <th>生效日</th>
+                                <th>失效日</th>
+                                <th>購買日</th>
+                                <th>修改日</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            <div class="modal fade" id="priceBaseDeductPurchaseModal" tabindex="-1" role="dialog"
+                 aria-labelledby="priceBaseDeductPurchaseModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="priceBaseDeductPurchaseModalLabel">預繳扣抵內容</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="priceBaseDeductPurchaseModalCompany">公司</label>
+                                    <div class="input-group">
+                                        <input id="priceBaseDeductPurchaseModalCompany" type="text" class="form-control"
+                                               autocomplete="off" data-bind="value:chosenCompany().name" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="priceBaseDeductPurchaseModalProductCategory">商品類別</label>
+                                    <div class="input-group">
+                                        <input id="priceBaseDeductPurchaseModalProductCategory" type="text"
+                                               class="form-control"
+                                               autocomplete="off" data-bind="value:chosenTargetProductCategory().name"
+                                               readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-bind="click:onOpenTargetProductCategoryMenu">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contractDeductPurchaseModalDeductAmount">額度</label>
+                                    <div class="input-group">
+                                        <input id="contractDeductPurchaseModalDeductAmount" data-bind="value:quota"
+                                               type="number"
+                                               class="form-control" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contractDeductPurchaseModalDeductSalesPrice">售價</label>
+                                    <div class="input-group">
+                                        <input id="contractDeductPurchaseModalDeductSalesPrice"
+                                               data-bind="value:salesAmount"
+                                               type="number"
+                                               class="form-control" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="billPayInfoModalPaidDate">入帳日期</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control" id="billPayInfoModalPaidDate"
+                                               name="billPayInfoModalPaidDate"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="priceBaseDeductPurchaseModalPayMethod">付款方式</label>
+                                    <div class="input-group">
+                                        <input id="priceBaseDeductPurchaseModalPayMethod" type="text"
+                                               class="form-control"
+                                               autocomplete="off"
+                                               data-bind="value:chosenPaymentMethod().id"
+                                               readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-bind="click:openBankCodeList">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="priceBaseDeductPurchaseModalPaymentRemark">入帳備註</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control"
+                                               id="priceBaseDeductPurchaseModalPaymentRemark"
+                                               name="priceBaseDeductPurchaseModalPaymentRemark"
+                                               data-bind="value:paymentRemark"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" data-bind="click:priceBaseDeductPurchase"
+                                    name="save"
+                                    data-dismiss="modal">新增扣抵
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deductHistoryModal" tabindex="-1" role="dialog"
+                 aria-labelledby="deductFilterModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deductHistoryModalLabel">清單</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="deductHistoryDataTable" content="optionList" border="0" width="98%"
+                                   cellspacing="0"
+                                   cellpadding="0">
+                                <thead>
+                                <tr>
+                                    <th>historyId</th>
+                                    <th>品項名稱</th>
+                                    <th>數量/金額</th>
+                                    <th>建立日期</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="deductHistoryModalChoose"
+                                    data-dismiss="modal"
+                                    name="deductHistoryConfirm">確定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deductConditionModal" tabindex="-1" role="dialog"
+                 aria-labelledby="deductConditionModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deductConditionModalLabel">預繳與扣抵過濾條件</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="deductConditionModalTargetProductCategory">扣抵類別</label>
+                                    <div class="input-group">
+                                        <input id="deductConditionModalTargetProductCategory" type="text"
+                                               class="form-control" autocomplete="off"
+                                               data-bind="value:chosenTargetProductCategory().name" readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    id="modifyProductCategory"
+                                                    data-bind="click:onOpenTargetProductCategoryMenu">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="deductConditionModalDeductStatus">扣抵狀態</label>
+                                    <div class="input-group">
+                                        <input id="deductConditionModalDeductStatus" type="text"
+                                               class="form-control" autocomplete="off"
+                                               data-bind="value:chosenDeductStatus().description"
+                                               readonly>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" data-toggle="modal"
+                                                    data-target="#deductStatusMenuModal">選擇
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="applyCondition" data-dismiss="modal"
+                                    data-bind="click:doSearch" name="searchByCondition">搜尋
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="operationModal" tabindex="-1" role="dialog"
+                 aria-labelledby="operationModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="operationModalLabel">操作項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind="click:openDeductHistoryModal"
+                                                data-dismiss="modal">
+                                            檢視扣抵記錄
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind="click:openPriceBaseDeductPurchaseModal"
+                                                data-dismiss="modal">
+                                            根據公司建立扣抵/預繳
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind="click:removeDeduct"
+                                                data-dismiss="modal">
+                                            刪除
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="deductTypeMenuModalComponent"></div>
+            <div id="deductStatusMenuModalComponent"></div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var targetProductCategorySelector;
+    var paymentMethodSelector;
+
+    var contentMenuViewModel = {
+        selectedCountBadge: ko.observable(0),
+        availableCompanies: ko.observableArray(),
+        selectedCompany: ko.observable(),
+        init: function (dom) {
+            ko.applyBindings(contentMenuViewModel, dom);
+        }
+    };
+
+    var deductMainListViewModel = {
+        deductDataTable: undefined,
+        selectedDeductList: new Array(),
+        init: function (dom) {
+            deductMainListViewModel.deductDataTable = initServerSideProcessingDeductDataTable(
+                $('#deductDataTable')
+                , dataSourceModule.serverSideProcessingDeductSearchAjaxCall
+                , filterEditViewModel.condition
+                , 'deductId'
+                , function (selectedList) {
+                    contentMenuViewModel.selectedCountBadge(selectedList.length);
+                    if (contentMenuViewModel.selectedCountBadge() == 1) {
+
+                    }
+                    deductMainListViewModel.selectedDeductList = selectedList;
+                }
+            );
+            ko.applyBindings(deductMainListViewModel, dom);
+        }
+    };
+
+    var filterEditViewModel = {
+        chosenDeductStatus: ko.observable({}),
+        chosenDeductType: ko.observable({}),
+        chosenTargetProductCategory: ko.observable({}),
+        chosenCompany: ko.observable({}),
+        init: function (dom) {
+            ko.applyBindings(filterEditViewModel, dom);
+        },
+        condition: function () {
+            var condition = {};
+            try {
+                if (filterEditViewModel.chosenCompany()) {
+                    condition.companyId = filterEditViewModel.chosenCompany().id;
+                }
+                if (filterEditViewModel.chosenDeductType()) {
+                    condition.deductType = filterEditViewModel.chosenDeductType().value;
+                }
+                if (filterEditViewModel.chosenDeductStatus()) {
+                    condition.deductStatus = filterEditViewModel.chosenDeductStatus().value;
+                }
+                if (filterEditViewModel.chosenTargetProductCategory()) {
+                    condition.targetProductCategoryId = filterEditViewModel.chosenTargetProductCategory().id;
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            return condition;
+        },
+        onOpenTargetProductCategoryMenu: function () {
+            targetProductCategorySelector.show();
+        },
+        isShow: function () {
+            return $('#deductConditionModal').hasClass('show');
+        },
+        doSearch: function () {
+            deductMainListViewModel.selectedBillList = [];
+            deductMainListViewModel.deductDataTable.ajax.reload();
+        }
+    };
+
+    var operationViewModel = {
+        init: function (dom) {
+            ko.applyBindings(operationViewModel, dom);
+        },
+        openPriceBaseDeductPurchaseModal: function () {
+            if (filterEditViewModel.chosenCompany().id) {
+                $('#priceBaseDeductPurchaseModal').modal();
+                priceBaseDeductPurchaseViewModel.chosenCompany(filterEditViewModel.chosenCompany());
+            } else {
+                messageHandler({
+                    title: "未選擇公司",
+                    status: "warning",
+                    message: "請先選擇公司再進行操作"
+                });
+            }
+        },
+        openDeductHistoryModal: function () {
+            let selectedList = deductMainListViewModel.selectedDeductList;
+            deductHistoryViewModel.deductHistoryDataTable.clear();
+            if (selectedList.length == 1) {
+                deductHistoryViewModel.deductHistoryDataTable.rows.add(selectedList[0].deductHistoryList);
+                $('#deductHistoryModal').modal();
+            } else if (selectedList.length == 0) {
+                messageHandler({
+                    title: "未選擇資料",
+                    status: "warning",
+                    message: "請先選擇資料再進行操作"
+                });
+            } else if (selectedList.length > 1) {
+                messageHandler({
+                    title: "無法多筆檢視",
+                    status: "warning",
+                    message: "請選擇正確的資料筆數"
+                });
+            }
+            deductHistoryViewModel.deductHistoryDataTable.draw();
+        }, removeDeduct: function () {
+
+        }
+    };
+
+    var deductTypeMenuViewModel = {
+        init: function (dom) {
+            deductTypeMenuViewModel.deductTypeMenuTable = initEnumMenuDataTable(
+                $('#deductTypeMenuDataTable')
+                , dataSourceModule.getDeductTypeList()
+                , deductTypeRender
+            );
+            ko.applyBindings(deductTypeMenuViewModel, dom);
+        },
+        onConfirm: function () {
+            var deductTypeSelected = deductTypeMenuViewModel.deductTypeMenuTable.rows('.selected').data()[0];
+            if (deductTypeSelected) {
+                filterEditViewModel.chosenDeductType(deductTypeSelected);
+            } else {
+                filterEditViewModel.chosenDeductType('');
+            }
+        }
+    };
+
+    var deductStatusMenuViewModel = {
+        init: function (dom) {
+            deductStatusMenuViewModel.deductStatusMenuTable =
+                deductStatusMenuViewModel.deductStatusMenuTable = initEnumMenuDataTable(
+                    $('#deductStatusMenuDataTable')
+                    , dataSourceModule.getDeductStatusList()
+                    , deductStatusRender
+                );
+            ko.applyBindings(deductStatusMenuViewModel, dom);
+        },
+        onConfirm: function () {
+            var deductStatusSelected = deductStatusMenuViewModel.deductStatusMenuTable.rows('.selected').data()[0];
+            if (deductStatusSelected) {
+                filterEditViewModel.chosenDeductStatus(deductStatusSelected);
+            } else {
+                filterEditViewModel.chosenDeductStatus('');
+            }
+        }
+    };
+
+    var priceBaseDeductPurchaseViewModel = {
+        chosenCompany: ko.observable({}),
+        chosenTargetProductCategory: ko.observable({}),
+        quota: ko.observable(),
+        chosenPaymentMethod: ko.observable({}),
+        salesAmount: ko.observable(),
+        paymentRemark: ko.observable(),
+        payDateMillis: ko.observable(),
+        init: function (dom) {
+            ko.applyBindings(priceBaseDeductPurchaseViewModel, dom);
+        },
+        priceBaseDeductPurchase: function () {
+            //組合物件
+            var reqObj = {};
+            reqObj.companyId = priceBaseDeductPurchaseViewModel.chosenCompany().id;
+            reqObj.targetProductCategoryId = priceBaseDeductPurchaseViewModel.chosenTargetProductCategory().id;
+            reqObj.quota = priceBaseDeductPurchaseViewModel.quota();
+            reqObj.salesPrice = priceBaseDeductPurchaseViewModel.salesAmount();
+            reqObj.paymentMethod = priceBaseDeductPurchaseViewModel.chosenPaymentMethod().id;
+            reqObj.payDateMillis = priceBaseDeductPurchaseViewModel.payDateMillis().getTime();
+            reqObj.paymentRemark = priceBaseDeductPurchaseViewModel.paymentRemark();
+            priceBaseDeductPurchaseAjax(function (response) {
+                messageHandler(response);
+                filterEditViewModel.doSearch();
+            }, reqObj);
+        }, isShow: function () {
+            return $('#priceBaseDeductPurchaseModal').hasClass('show');
+        }, onOpenTargetProductCategoryMenu: function () {
+            targetProductCategorySelector.show();
+        }, openBankCodeList: function () {
+            paymentMethodSelector.show();
+        }
+    };
+
+    var deductHistoryViewModel = {
+        init: function (dom) {
+            deductHistoryViewModel.deductHistoryDataTable = initDeductHistoryDataTable($('#deductHistoryDataTable'), {});
+            ko.applyBindings(deductHistoryViewModel, dom);
+        }
+    };
+
+    function initMenuTemplate() {
+        const deductTypeMenuModalComponentInit = new Promise((resolve, reject) => {
+            $("#deductTypeMenuModalComponent").load("template/menuDataTable/deductTypeMenuModalTemplate.html", function (data) {
+                return resolve(data);
+            });
+        });
+        const deductStatusMenuModalComponentInit = new Promise((resolve, reject) => {
+            $("#deductStatusMenuModalComponent").load("template/menuDataTable/deductStatusMenuModalTemplate.html", function (data) {
+                return resolve(data);
+            });
+        });
+        return Promise.all([
+            deductTypeMenuModalComponentInit
+            , deductStatusMenuModalComponentInit
+        ]);
+    }
+
+    function initMenuViewModel() {
+        dataTableOptionSelectorComponentInitializer(dataSourceModule.getPaymentMethod(), function (paymentMethodSelector) {
+            paymentMethodSelector.chosenOption.subscribe(function (newValue) {
+                priceBaseDeductPurchaseViewModel.chosenPaymentMethod(newValue);
+            });
+            this.paymentMethodSelector = paymentMethodSelector;
+        });
+        datePickerComponentInitializer('billPayInfoModalPaidDate', function (billPaidDatePicker) {
+            billPaidDatePicker.chosenDate.subscribe(function (newValue) {
+                priceBaseDeductPurchaseViewModel.payDateMillis(newValue);
+            });
+            this.billPaidDatePicker = billPaidDatePicker;
+        });
+        optionSelectorInitializer('companyInputAutoComplete', dataSourceModule.getCompanyMenuItemList(), function (companySelector) {
+            companySelector.chosenOption.subscribe(function (newValue) {
+                filterEditViewModel.chosenCompany(newValue);
+                deductMainListViewModel.deductDataTable.ajax.reload();
+            });
+            this.companySelector = companySelector;
+        });
+        dataTableOptionSelectorComponentInitializer(dataSourceModule.getProductCategoryList(), function (targetProductCategorySelector) {
+            targetProductCategorySelector.chosenOption.subscribe(function (newValue) {
+                if (filterEditViewModel.isShow()) {
+                    filterEditViewModel.chosenTargetProductCategory(newValue);
+                }
+                if (priceBaseDeductPurchaseViewModel.isShow()) {
+                    priceBaseDeductPurchaseViewModel.chosenTargetProductCategory(newValue);
+                }
+            });
+            this.targetProductCategorySelector = targetProductCategorySelector;
+        });
+
+    }
+
+    function initPage() {
+        const promiseMenuTemplateInit = initMenuTemplate();
+        promiseMenuTemplateInit
+            .then(result => draggableModal(result))
+            .then(result => initViewModel())
+            .then(result => initMenuViewModel());
+    }
+
+    function initViewModel() {
+        contentMenuViewModel.init(document.getElementById("contentMenu"));
+        deductMainListViewModel.init(document.getElementById("deductDataTable"));
+        filterEditViewModel.init(document.getElementById("deductConditionModal"));
+        deductTypeMenuViewModel.init(document.getElementById("deductTypeMenuModalComponent"));
+        deductStatusMenuViewModel.init(document.getElementById("deductStatusMenuModalComponent"));
+        priceBaseDeductPurchaseViewModel.init(document.getElementById("priceBaseDeductPurchaseModal"));
+        operationViewModel.init(document.getElementById("operationModal"));
+        deductHistoryViewModel.init(document.getElementById("deductHistoryModal"));
+    }
+
+    function priceBaseDeductPurchaseAjax(messageHandler, obj) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/deductManagementServlet/api/priceBaseDeductPurchase';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = messageHandler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function createDeduct(messageHandler, obj) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/deductManagementServlet/api/createDeduct';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = messageHandler;
+        syncAjaxCall(ajaxParam);
+    }
+
+</script>
+</body>
+</html>

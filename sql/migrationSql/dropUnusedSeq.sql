@@ -1,0 +1,2 @@
+DROP SEQUENCE allowance_amount_summary_report_id_seq;
+

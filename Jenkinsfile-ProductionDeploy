@@ -1,0 +1,17 @@
+pipeline {
+ agent any
+ stages {
+    stage('Deploy') {
+        agent{
+            docker{
+              image 'maven:3.6.3-jdk-8'
+              args '-v $HOME/.m2:/root/.m2'
+              reuseNode true
+            }
+        }
+        steps {
+            sh 'mvn clean package org.apache.tomcat.maven:tomcat7-maven-plugin:2.2:deploy -P production-charge-db'
+        }
+    }
+ }
+}

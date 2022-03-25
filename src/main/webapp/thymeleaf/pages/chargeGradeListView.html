@@ -1,0 +1,560 @@
+<!DOCTYPE HTML>
+<html>
+<head th:replace="/fragments/bootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image: url(/backendAdmin/images/bg.jpg); background-position: left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"><img src="/backendAdmin/images/logo.jpg"
+                                                      width="200" height="127"/></a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <tr>
+                <td>
+                    <table class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><span class="textstyle_06">收費級距管理</span></td>
+                            <td align="right">
+                                <a href="#" id="operation" name="operation" title="操作項目" class="butbox"
+                                   data-toggle="modal"
+                                   data-target="#operationModal"><span>操作項目</span></a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr id="#list">
+                <td>
+                    <div class="content" title="主要區域" style=" width:100%">
+                        <div class="spacer"></div>
+                        <table id="rootGradeDataTable" content="main" border="0" width="98%" cellspacing="0"
+                               cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th>rootId</th>
+                                <th>級距名稱</th>
+                                <th>狀態</th>
+                                <th>gradeList</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <!-- Modal -->
+            <div class="modal fade" id="rootGradeEditModal" tabindex="-1" role="dialog"
+                 aria-labelledby="rootGradeEditModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="rootGradeEditModalLabel">級距表</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="rootGradeEditModalName">級距名稱</label>
+                                    <div class="input-group">
+                                        <input id="rootGradeEditModalName" data-bind="value:chosenGrade().name"
+                                               type="text"
+                                               class="form-control" aria-label="Amount (to the nearest dollar)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="rootGradeEditModalStatus">級距狀態</label>
+                                    <div class="input-group">
+                                        <input id="rootGradeEditModalStatus" type="checkbox">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="childrenGradeDataTable">級距表</label>
+                                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                        <div class="btn-group mr-2 btn-group-sm" role="group" aria-label="First group">
+                                            <button type="button" class="btn btn-secondary"
+                                                    id="newGradeMasterEditModalGradeDataTableInsert" name="create"
+                                                    onclick="gradeViewModel.createChildrenGrade()">
+                                                新增
+                                            </button>
+                                            <button type="button" class="btn btn-secondary"
+                                                    id="newGradeMasterEditModalGradeDataTableUpdate"
+                                                    onclick="gradeViewModel.modifyChildrenGrade()"
+                                                    name="modify">編輯
+                                            </button>
+                                            <button type="button" class="btn btn-secondary"
+                                                    onclick="gradeViewModel.deleteChildrenGrade()"
+                                                    name="delete" id="newGradeMasterEditModalGradeDataTableDelete">刪除
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <table id="childrenGradeDataTable" border="0" width="98%" cellspacing="0"
+                                           cellpadding="0">
+                                        <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>層級</th>
+                                            <th>起</th>
+                                            <th>迄</th>
+                                            <th>固定價格</th>
+                                            <th>單張價格</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="newGradeMasterEditModalSaveChange"
+                                    name="save"
+                                    onclick="gradeViewModel.onConfirm()">
+                                儲存修改
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="childrenGradeEditModal" tabindex="-1" role="dialog"
+                 aria-labelledby="childrenGradeEditModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="childrenGradeEditModalLabel">級距</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input id="childrenGradeEditModalFunction" type="text"
+                                   class="form-control" hidden>
+                            <form>
+                                <div class="form-group">
+                                    <label for="childrenGradeEditModalCntStart">張數區間起</label>
+                                    <div class="input-group">
+                                        <input id="childrenGradeEditModalCntStart" type="text"
+                                               data-bind="value:cntStart"
+                                               class="form-control" aria-label="Amount (to the nearest dollar)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="childrenGradeEditModalCntEnd">張數區間迄</label>
+                                    <div class="input-group">
+                                        <input id="childrenGradeEditModalCntEnd" type="text"
+                                               data-bind="value:cntEnd"
+                                               class="form-control" aria-label="Amount (to the nearest dollar)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newGradeSlaveEditModalFixPrice">固定價格</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input id="newGradeSlaveEditModalFixPrice"
+                                               data-bind="value:fixPrice"
+                                               type="text"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newGradeSlaveEditModalUnitPrice">每張價格</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">$</span>
+                                        </div>
+                                        <input id="newGradeSlaveEditModalUnitPrice"
+                                               data-bind="value:unitPrice"
+                                               type="text"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="newGradeSlaveEditModalSaveChange"
+                                    data-dismiss="modal"
+                                    onclick="childrenGradeViewModel.confirmChildrenGradeEditViewModel()" name="save">
+                                儲存修改
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="operationModal" tabindex="-1" role="dialog"
+                 aria-labelledby="operationModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="operationModalLabel">操作項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                onclick="operationViewModel.onCreateGrade()"
+                                                data-dismiss="modal">
+                                            新增
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                onclick="operationViewModel.onModifyGrade()"
+                                                data-dismiss="modal">
+                                            修改
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                onclick="operationViewModel.onDelete()"
+                                                data-dismiss="modal">
+                                            刪除
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="invisible" id="accumulationDescriptor">
+                <p>標記為每層累計的級距會保留每一層級距的費用到總計中</p>
+                <p>非累計級距的結果總計只會是該層級距的費用而已</p>
+            </div>
+
+            <div class="invisible" id="maximumChargeDescriptor">
+                <p>最大收費的範圍只在級距中，與其它計費項目的級距沒有相關</p>
+                <p>因此，在訂立最大收費時務必同時考量其它計費項目的影響</p>
+                <p></p>
+                <p>例如：與客戶的約定中，每月費用不會超過八百，其八百包含月租與級距</p>
+                <p>又因為其月租為每月兩百，所以其超額最大收費應訂於600，並確認除了月租以外沒有其它收費項目</p>
+            </div>
+
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function createBlankGrade() {
+        let grade = {};
+        grade.status = true;
+        grade.name = '';
+        grade.children = new Array();
+        return grade;
+    }
+
+    let gradeViewModel = {
+        gradeEditViewModel: {
+            chosenGrade: ko.observable({})
+        },
+        gradeStatusSwitchViewModel: undefined,
+        childrenGradeDataTable: initChildrenGradeDataTable($('#childrenGradeDataTable'), {}),
+        cleanGradeEditViewModel: function () {
+            gradeViewModel.childrenGradeDataTable.clear();
+            gradeViewModel.childrenGradeDataTable.draw();
+        }, refreshGradeEditViewModel: function () {
+            gradeViewModel.childrenGradeDataTable.clear();
+            gradeViewModel.childrenGradeDataTable.rows.add(
+                gradeViewModel.gradeEditViewModel.chosenGrade().children
+            );
+            gradeViewModel.childrenGradeDataTable.draw();
+        }, deleteChildrenGrade: function () {
+            let chosenChildrenGrade = gradeViewModel.getChosenChildrenGrade();
+            if (chosenChildrenGrade) {
+                let newChildrenList = gradeViewModel.gradeEditViewModel.chosenGrade().children.filter(grade => {
+                    return grade.gradeId != chosenChildrenGrade.gradeId;
+                });
+                let newGrade = gradeViewModel.gradeEditViewModel.chosenGrade();
+                recodeLevel(newChildrenList);
+                newGrade.children = newChildrenList;
+                gradeViewModel.gradeEditViewModel.chosenGrade(newGrade);
+                gradeViewModel.refreshGradeEditViewModel();
+            }
+        }
+        , replaceChildrenGrade: function (newChildrenGrade) {
+            if (newChildrenGrade) {
+                let newChildrenList = gradeViewModel.gradeEditViewModel.chosenGrade().children.filter(grade => {
+                    return grade.gradeId != newChildrenGrade.gradeId;
+                });
+                newChildrenList.push(newChildrenGrade);
+                let newGrade = gradeViewModel.gradeEditViewModel.chosenGrade();
+                recodeLevel(newChildrenList);
+                newGrade.children = newChildrenList;
+                gradeViewModel.gradeEditViewModel.chosenGrade(newGrade);
+                gradeViewModel.refreshGradeEditViewModel();
+            }
+        }, createChildrenGrade: function () {
+            childrenGradeViewModel.cleanChildrenGradeEditView();
+            childrenGradeViewModel.showChildrenGradeEditView();
+        }, modifyChildrenGrade: function () {
+            childrenGradeViewModel.cleanChildrenGradeEditView();
+            childrenGradeViewModel.showChildrenGradeEditView();
+            let chosenChildrenGrade = gradeViewModel.getChosenChildrenGrade();
+            if (chosenChildrenGrade) {
+                childrenGradeViewModel.loadChildrenGradeEditView(chosenChildrenGrade);
+            }
+        }, getChosenChildrenGrade: function () {
+            if (gradeViewModel.childrenGradeDataTable.rows('.selected').data().length == 1) {
+                return gradeViewModel.childrenGradeDataTable.rows('.selected').data()[0];
+            }
+        }, onConfirm: function () {
+            let dto = gradeViewModel.gradeEditViewModel.chosenGrade();
+            dto.childrenGradeList = dto.children;
+            saveOrUpdateNewGradeByObject(dto, function (data) {
+                messageHandler(data);
+                operationViewModel.refreshDataTable();
+                gradeViewModel.hideGradeEditView();
+            });
+        }, showGradeEditView: function () {
+            $('#rootGradeEditModal').modal('show');
+        }, hideGradeEditView: function () {
+            $('#rootGradeEditModal').modal('hide');
+        }
+    };
+
+    var operationViewModel = {
+        init: function (dom) {
+            operationViewModel.rootGradeDataTable = initRootGradeDataTable(
+                $('#rootGradeDataTable'), dataSourceModule.getRootGradeList()
+            );
+            ko.applyBindings(operationViewModel, dom);
+        }, onCreateGrade: function () {
+            gradeViewModel.gradeEditViewModel.chosenGrade(createBlankGrade());
+            gradeViewModel.cleanGradeEditViewModel();
+            gradeViewModel.gradeStatusSwitchViewModel.setByValue(true);
+            gradeViewModel.showGradeEditView();
+        }, onModifyGrade: function () {
+            var chosenGrade = operationViewModel.getChosenGrade();
+            if (chosenGrade) {
+                gradeViewModel.cleanGradeEditViewModel();
+                gradeViewModel.gradeStatusSwitchViewModel.setByValue(chosenGrade.enabled);
+                gradeViewModel.gradeEditViewModel.chosenGrade(chosenGrade);
+                gradeViewModel.refreshGradeEditViewModel();
+                gradeViewModel.showGradeEditView();
+            } else {
+                messageHandler({
+                    status: 'warning',
+                    message: '請先選擇資料',
+                    title: '請先選擇資料'
+                });
+            }
+        }, onDelete: function () {
+            var chosenGrade = operationViewModel.getChosenGrade();
+            if (chosenGrade) {
+                deleteNewGradeByGradeId(chosenGrade.gradeId, function (data) {
+                    messageHandler(data);
+                    operationViewModel.refreshDataTable();
+                });
+            }
+        }, getChosenGrade: function () {
+            if (operationViewModel.rootGradeDataTable.rows('.selected').data().length == 1) {
+                let replica = Object.assign(
+                    {},
+                    operationViewModel.rootGradeDataTable.rows('.selected').data()[0]
+                );
+                return replica;
+            }
+        }, refreshDataTable: function () {
+            operationViewModel.rootGradeDataTable.clear();
+            operationViewModel.rootGradeDataTable.rows.add(dataSourceModule.getRootGradeList());
+            operationViewModel.rootGradeDataTable.draw();
+        }
+    };
+
+    let childrenGradeViewModel = {
+        childrenGradeEditViewModel: {
+            gradeId: ko.observable(),
+            name: ko.observable(),
+            rootId: ko.observable(),
+            level: ko.observable(),
+            enable: ko.observable(),
+            cntStart: ko.observable(),
+            cntEnd: ko.observable(),
+            fixPrice: ko.observable(),
+            unitPrice: ko.observable()
+        },
+        showChildrenGradeEditView: function () {
+            $('#childrenGradeEditModal').modal('show');
+        },
+        hideChildrenGradeEditView: function () {
+            $('#childrenGradeEditModal').modal('hide');
+        },
+        cleanChildrenGradeEditView: function () {
+            childrenGradeViewModel.childrenGradeEditViewModel.gradeId(undefined);
+            childrenGradeViewModel.childrenGradeEditViewModel.name(undefined);
+            childrenGradeViewModel.childrenGradeEditViewModel.rootId(undefined)
+            childrenGradeViewModel.childrenGradeEditViewModel.level(undefined);
+            childrenGradeViewModel.childrenGradeEditViewModel.enable(undefined);
+            childrenGradeViewModel.childrenGradeEditViewModel.cntStart(undefined);
+            childrenGradeViewModel.childrenGradeEditViewModel.cntEnd(undefined);
+            childrenGradeViewModel.childrenGradeEditViewModel.fixPrice(undefined);
+            childrenGradeViewModel.childrenGradeEditViewModel.unitPrice(undefined);
+        },
+        loadChildrenGradeEditView: function (childrenGrade) {
+            childrenGradeViewModel.childrenGradeEditViewModel.gradeId(childrenGrade.gradeId);
+            childrenGradeViewModel.childrenGradeEditViewModel.name(childrenGrade.name);
+            childrenGradeViewModel.childrenGradeEditViewModel.rootId(childrenGrade.rootId);
+            childrenGradeViewModel.childrenGradeEditViewModel.level(childrenGrade.level);
+            childrenGradeViewModel.childrenGradeEditViewModel.enable(childrenGrade.enable);
+            childrenGradeViewModel.childrenGradeEditViewModel.cntStart(childrenGrade.cntStart);
+            childrenGradeViewModel.childrenGradeEditViewModel.cntEnd(childrenGrade.cntEnd);
+            childrenGradeViewModel.childrenGradeEditViewModel.fixPrice(childrenGrade.fixPrice);
+            childrenGradeViewModel.childrenGradeEditViewModel.unitPrice(childrenGrade.unitPrice);
+        },
+        confirmChildrenGradeEditViewModel: function () {
+            if (!childrenGradeViewModel.childrenGradeEditViewModel.gradeId()) {
+                let gradeId = Date.now();
+                childrenGradeViewModel.childrenGradeEditViewModel.gradeId(gradeId);
+            }
+            let newChildren = ko.toJS(childrenGradeViewModel.childrenGradeEditViewModel);
+            gradeViewModel.replaceChildrenGrade(newChildren);
+            childrenGradeViewModel.hideChildrenGradeEditView();
+        }
+    }
+
+    function initComponentViewModel() {
+        bootstrapSwitchViewComponentInitializer('rootGradeEditModalStatus', function (gradeStatusSwitchViewModel) {
+            gradeStatusSwitchViewModel.chosenValue.subscribe(function (newValue) {
+                var newChosenGrade = gradeViewModel.gradeEditViewModel.chosenGrade();
+                newChosenGrade.enabled = newValue;
+                gradeViewModel.gradeEditViewModel.chosenGrade(newChosenGrade);
+            });
+            gradeViewModel.gradeStatusSwitchViewModel = gradeStatusSwitchViewModel;
+        });
+        childrenGradeViewModel.childrenGradeEditViewModel.fixPrice.subscribe(function (newFixPrice) {
+            unitPriceAndFixPriceExclusiveCheck(undefined, newFixPrice);
+        });
+        childrenGradeViewModel.childrenGradeEditViewModel.unitPrice.subscribe(function (newUnitPrice) {
+            unitPriceAndFixPriceExclusiveCheck(newUnitPrice, undefined);
+        });
+    }
+
+    function unitPriceAndFixPriceExclusiveCheck(unitPrice, fixPrice) {
+        if (fixPrice) {
+            childrenGradeViewModel.childrenGradeEditViewModel.unitPrice(undefined);
+            $('#newGradeSlaveEditModalUnitPrice').prop('disabled', true);
+            $('#newGradeSlaveEditModalFixPrice').prop('disabled', false);
+        } else if (unitPrice) {
+            childrenGradeViewModel.childrenGradeEditViewModel.fixPrice(undefined);
+            $('#newGradeSlaveEditModalUnitPrice').prop('disabled', false);
+            $('#newGradeSlaveEditModalFixPrice').prop('disabled', true);
+        } else {
+            $('#newGradeSlaveEditModalUnitPrice').prop('disabled', false);
+            $('#newGradeSlaveEditModalFixPrice').prop('disabled', false);
+        }
+    }
+
+    function initViewModel() {
+        ko.applyBindings(gradeViewModel.gradeEditViewModel, document.getElementById("rootGradeEditModal"));
+        // gradeEditViewModel.init(document.getElementById("rootGradeEditModal"));
+        operationViewModel.init(document.getElementById("operationModal"));
+        ko.applyBindings(childrenGradeViewModel.childrenGradeEditViewModel, document.getElementById("childrenGradeEditModal"));
+    }
+
+    /**
+     * overwrite from template.jsp
+     */
+    function initPage() {
+        initComponentViewModel();
+        initViewModel();
+        draggableModal();
+    }
+
+    function compare(a, b) {
+        if (a.level < b.level) {
+            return -1;
+        }
+        if (a.level > b.level) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function recodeLevel(newChildren) {
+        //重新填入新的level
+        var newLevel = 0;
+        newChildren.sort(compare);
+        newChildren.forEach(function (element) {
+            element.level = newLevel++;
+        });
+    }
+
+    function deleteNewGradeByGradeId(id, handler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/newGradeManagementServlet?method=delete&rootId=' + id;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.successHandler = handler;
+        syncAjaxCall(ajaxParam);
+    }
+
+    function saveOrUpdateNewGradeByObject(obj, successHandler) {
+        var ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/newGradeManagementServlet/api/saveOrUpdate';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.processData = 'false';
+        ajaxParam.dataType = 'json';
+        ajaxParam.data = JSON.stringify(obj);
+        ajaxParam.successHandler = successHandler;
+        return promiseSyncAjaxCall(ajaxParam, successHandler, successHandler);
+    }
+
+</script>
+
+</body>
+</html>

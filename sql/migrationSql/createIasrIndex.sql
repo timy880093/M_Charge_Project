@@ -1,0 +1,2 @@
+CREATE INDEX idx_iasr_seller ON invoice_amount_summary_report(seller);
+CREATE INDEX idx_iasr_invoice_date ON invoice_amount_summary_report(invoice_date);
