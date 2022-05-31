@@ -21,6 +21,10 @@ import java.util.Map;
  */
 public class DslCommonComponent {
 
+    public static String entityPathAsConstants(Path enumPath) {
+        return enumPath.getMetadata().getElement().toString();
+    }
+
     public void orderByPath(QueryBase queryBase, Path path, String direction) {
         ComparableExpressionBase comparableExpressionBase = (ComparableExpressionBase) path;
         if (direction.toUpperCase().equals("ASC")) {

@@ -1,18 +1,17 @@
 package com.gateweb.charge.service.impl;
 
-import com.gateweb.charge.deduct.builder.DeductHistoryBuilder;
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.deduct.builder.DeductHistoryBuilder;
 import com.gateweb.charge.deduct.component.DeductibleAmountComponent;
 import com.gateweb.charge.deduct.component.DeductibleItemFilterComponent;
 import com.gateweb.charge.deduct.component.PurchaseDeductVoConverter;
-import com.gateweb.charge.service.dataGateway.DeductDataGateway;
 import com.gateweb.charge.enumeration.*;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.eventBus.EventAction;
 import com.gateweb.charge.eventBus.EventSource;
-import com.gateweb.charge.frontEndIntegration.bean.PayInfo;
 import com.gateweb.charge.frontEndIntegration.datatablePagination.PageInfo;
 import com.gateweb.charge.service.DeductService;
+import com.gateweb.charge.service.dataGateway.DeductDataGateway;
 import com.gateweb.orm.charge.entity.*;
 import com.gateweb.orm.charge.entity.view.DeductFetchView;
 import com.gateweb.orm.charge.entity.view.DeductHistoryFetchView;
@@ -29,7 +28,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class DeductServiceImpl implements DeductService {
@@ -76,17 +74,11 @@ public class DeductServiceImpl implements DeductService {
         completableFutureList.stream().forEach(completableFuture -> {
             try {
                 deductHistoryFetchViewList.add(completableFuture.get().get());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
         return deductHistoryFetchViewList;
-    }
-
-    public void payDeduct(Deduct deduct, PayInfo payInfo) {
-
     }
 
     @Override
@@ -121,7 +113,7 @@ public class DeductServiceImpl implements DeductService {
         billingItem.setCount(1);
         billingItem.setExpectedOutDate(LocalDateTime.now());
         billingItem.setTaxExcludedAmount(deduct.getSalesPrice());
-        billingItem.setTaxRate(new BigDecimal(0.05).setScale(4, RoundingMode.HALF_UP));
+        billingItem.setTaxRate(BigDecimal.valueOf(0.05).setScale(4, RoundingMode.HALF_UP));
         billingItem.setIsMemo(false);
         billingItem.setProductCategoryId(deduct.getProductCategoryId());
         billingItem.setCompanyId(deduct.getCompanyId());

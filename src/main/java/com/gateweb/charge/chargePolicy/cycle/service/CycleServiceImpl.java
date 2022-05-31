@@ -67,9 +67,8 @@ public class CycleServiceImpl implements CycleService {
             result = new CronExpression(pattern);
         } catch (ParseException e) {
             e.printStackTrace();
-        } finally {
-            return Optional.of(result);
         }
+        return Optional.of(result);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.gateweb.charge.chargePolicy.grade.service;
 
 import com.gateweb.charge.chargePolicy.grade.bean.RootGradeStorageBean;
 import com.gateweb.charge.chargePolicy.grade.mapper.NewGradeMapper;
-import com.gateweb.charge.component.annotated.ModifierAndCreatorUtils;
 import com.gateweb.charge.exception.InvalidGradeLevelException;
 import com.gateweb.charge.model.nonMapped.CallerInfo;
 import com.gateweb.orm.charge.entity.ChargeRule;
@@ -34,8 +33,6 @@ public class GradeServiceImpl implements GradeService {
     SimpleUserViewRepository simpleUserViewRepository;
     @Autowired
     NewGradeMapper newGradeMapper;
-    @Autowired
-    ModifierAndCreatorUtils modifierAndCreatorUtils;
     @Autowired
     ChargeRuleRepository chargeRuleRepository;
     @Autowired
@@ -130,6 +127,8 @@ public class GradeServiceImpl implements GradeService {
     public void saveOrUpdateGradeByMap(Map<String, Object> map, CallerInfo callerInfo) {
         //根據map產生vo
         NewGrade newGradeVo = beanConverterUtils.mapToBean(map, NewGrade.class);
+        newGradeVo.setModifyDate(LocalDateTime.now());
+        newGradeVo.setModifierId(callerInfo.getUserEntity().getUserId().longValue());
         //根據vo找資料
         Optional<NewGrade> gradeOptional = Optional.empty();
         if (newGradeVo.getGradeId() != null) {
@@ -181,10 +180,8 @@ public class GradeServiceImpl implements GradeService {
         }
         if (gradeOptional.isPresent()) {
             newGradeMapper.updateNewGradeFromVo(newGradeVo, gradeOptional.get());
-            modifierAndCreatorUtils.signEntityWithCallerInfo(gradeOptional.get(), callerInfo);
             newGradeRepository.save(gradeOptional.get());
         } else {
-            modifierAndCreatorUtils.signEntityWithCallerInfo(newGradeVo, callerInfo);
             newGradeVo.setEnabled(true);
             newGradeVo = newGradeRepository.save(newGradeVo);
             newGradeVo.setRootId(newGradeVo.getGradeId());

@@ -102,21 +102,4 @@ public class CommonRentalFeeBillingDataGenerator implements ContractRentalFeeBil
         }
         return customIntervalList;
     }
-
-    /**
-     * TODO:為了migration的資料正確而做的方法
-     * 舊計費因為可以跨合約進行計算，也就是說就算不是這個合約產生的帳單，他也可以透過其它合約計算寫入費用
-     * 在未來完全汰換舊系統時就可以把這個拿掉
-     *
-     * @param companyId
-     * @return
-     */
-//    @Deprecated
-//    private List<BillingItem> findExistsMigrationBillingItemList(Long companyId) {
-//        List<BillingItem> existsMigrationBillingItemList = new ArrayList<>(
-//                billingItemRepository.findByCompanyIdAndBillingItemTypeAndProductCategoryId(
-//                        companyId, BillingItemType.MIGRATION, 2L)
-//        );
-//        return existsMigrationBillingItemList;
-//    }
 }

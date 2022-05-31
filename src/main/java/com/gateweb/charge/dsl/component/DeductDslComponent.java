@@ -1,9 +1,12 @@
 package com.gateweb.charge.dsl.component;
 
-import com.gateweb.charge.dsl.*;
-import com.gateweb.charge.frontEndIntegration.datatablePagination.PageInfo;
+import com.gateweb.charge.dsl.CriteriaPageableSearchBuilder;
+import com.gateweb.charge.dsl.DslSearchConditionRender;
+import com.gateweb.charge.dsl.SortableDslDispatcher;
+import com.gateweb.charge.dsl.SortableDslFieldRender;
 import com.gateweb.charge.enumeration.DeductStatus;
 import com.gateweb.charge.enumeration.DeductType;
+import com.gateweb.charge.frontEndIntegration.datatablePagination.PageInfo;
 import com.gateweb.orm.charge.entity.QDeduct;
 import com.querydsl.core.support.QueryBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import java.util.Map;
+
+import static com.gateweb.charge.dsl.component.DslCommonComponent.entityPathAsConstants;
 
 @Component
 public class DeductDslComponent implements SortableDslFieldRender, SortableDslDispatcher
@@ -40,10 +45,10 @@ public class DeductDslComponent implements SortableDslFieldRender, SortableDslDi
 
     @Override
     public void orderByDslModifierSwitch(QueryBase queryBase, String propertyName, String direction) {
-        if (propertyName.equals("deductType")) {
+        if (propertyName.equals(entityPathAsConstants(qDeduct.deductType))) {
             dslCommonService.orderByPath(queryBase, qDeduct.deductType, direction);
         }
-        if (propertyName.equals("deductStatus")) {
+        if (propertyName.equals(entityPathAsConstants(qDeduct.deductStatus))) {
             dslCommonService.orderByPath(queryBase, qDeduct.deductStatus, direction);
         }
         if (propertyName.equals("effectiveDate")) {

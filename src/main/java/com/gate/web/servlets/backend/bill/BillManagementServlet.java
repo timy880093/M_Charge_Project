@@ -2,7 +2,6 @@ package com.gate.web.servlets.backend.bill;
 
 import com.gate.web.facades.UserService;
 import com.gate.web.servlets.abstraction.DefaultDisplayPageModelViewController;
-import com.gateweb.charge.component.annotated.InputAndOutputStreamUtils;
 import com.gateweb.charge.constant.CompanyConstant;
 import com.gateweb.charge.enumeration.BillStatus;
 import com.gateweb.charge.exception.CancelAlreadyPaidBillException;
@@ -59,8 +58,6 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
     BillService billService;
     @Autowired
     ReportService reportService;
-    @Autowired
-    InputAndOutputStreamUtils inputAndOutputStreamUtils;
     @Autowired
     BillDataGateway billDataGatewayImpl;
     @Autowired
@@ -263,12 +260,13 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
         return JsonUtils.gsonToJson(oneReportDownloadRes);
     }
 
+    @Deprecated
     @RequestMapping(method = RequestMethod.GET, value = "/api/cancelByYearMonth/{yearMonth}", produces = "application/text;charset=utf-8")
     @ResponseBody
     public String cancelByYearMonth(
             Authentication authentication
             , @PathVariable(name = "yearMonth") String yearMonth) {
-        Map dataMap = new HashMap();
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         List<Bill> successList = new ArrayList<>();
         List<Bill> failList = new ArrayList<>();
         try {
@@ -296,14 +294,16 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
             e.printStackTrace();
         } finally {
             if (!failList.isEmpty()) {
-                dataMap.put("status", "warning");
-                dataMap.put("message", "跳過" + failList.size() + "個操作失敗的項目");
+                sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.WARNING);
+                sweetAlertResponse.setTitle("操作完成");
+                sweetAlertResponse.setMessage("跳過" + failList.size() + "個操作失敗的項目");
             } else {
-                dataMap.put("status", "success");
-                dataMap.put("message", "操作成功,已刪除" + successList.size() + "個項目");
+                sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+                sweetAlertResponse.setTitle("操作成功");
+                sweetAlertResponse.setMessage("已刪除" + successList.size() + "個項目");
             }
         }
-        return JsonUtils.gsonToJson(dataMap);
+        return JsonUtils.gsonToJson(sweetAlertResponse);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/markAsPaidByCondition", produces = "application/text;charset=utf-8")

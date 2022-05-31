@@ -284,7 +284,7 @@ function initServerSideProcessingBillDataTable(
             {name: 'businessNo', data: 'company.businessNo'},
             {name: 'billStatus', data: 'billStatus', render: billStatusNameRender},
             {name: 'paymentRequestEmail', data: 'noticeList', render: paymentRequestEmailDescriptionRender},
-            {name: 'inDate', data: 'paidDate', render: dateTimeRender},
+            {name: 'paidDate', data: 'paidDate', render: dateTimeRender},
             {name: 'taxExcludedAmount', data: 'taxExcludedAmount'},
             {name: 'taxIncludedAmount', data: 'taxIncludedAmount'},
             {name: 'createDate', data: 'createDate', render: dateTimeRender},

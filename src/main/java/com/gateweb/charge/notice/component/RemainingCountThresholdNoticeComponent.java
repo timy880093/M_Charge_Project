@@ -2,7 +2,6 @@ package com.gateweb.charge.notice.component;
 
 import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
 import com.gateweb.charge.chargePolicy.bean.ChargePolicy;
-import com.gateweb.charge.config.BillingSystemMailSender;
 import com.gateweb.charge.contract.component.ContractRenewComponent;
 import com.gateweb.charge.contract.component.RemainingContractComponent;
 import com.gateweb.charge.contract.component.RemainingCountAmountProvider;
@@ -19,6 +18,8 @@ import freemarker.template.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -44,7 +45,8 @@ public class RemainingCountThresholdNoticeComponent implements NoticeMimeMessage
     @Autowired
     CompanyRepository companyRepository;
     @Autowired
-    BillingSystemMailSender billingSystemMailSender;
+    @Qualifier("billingSystemMailSender")
+    JavaMailSender billingSystemMailSender;
     @Autowired
     RemainingContractComponent remainingContractComponent;
     @Autowired
@@ -78,7 +80,7 @@ public class RemainingCountThresholdNoticeComponent implements NoticeMimeMessage
                 Optional<String> mailContentOpt = generateEmailContent(remainingCountThresholdNoticeReportDataOpt.get());
                 MailMimeMessageBuilder mailBuilder = new MailMimeMessageBuilder();
                 if (mailContentOpt.isPresent()) {
-                    MimeMessageHelper mimeMessageHelper = mailBuilder.initBuilder(billingSystemMailSender.javaMailSenderOpt.get())
+                    MimeMessageHelper mimeMessageHelper = mailBuilder.initBuilder(billingSystemMailSender)
                             .withRecipientList(remainingCountThresholdNoticeReportDataOpt.get().getRecipients())
                             .withHtmlContent(mailContentOpt.get())
                             .withSubject(

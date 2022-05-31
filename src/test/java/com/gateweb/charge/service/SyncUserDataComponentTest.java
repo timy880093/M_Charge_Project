@@ -16,7 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})
 @WebAppConfiguration
-@TestPropertySource("classpath:application.properties")
+@TestPropertySource("classpath:application-uat.properties")
 public class SyncUserDataComponentTest {
     @Autowired
     SyncUserDataComponent syncUserDataComponent;

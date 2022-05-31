@@ -164,7 +164,7 @@ public class BillingItemManagementServlet extends DefaultDisplayPageModelViewCon
     @RequestMapping(method = RequestMethod.POST, value = "/api/calculateContractFeeAndOutToBill", produces = "application/text;charset=utf-8")
     @ResponseBody
     public String calculateContractFeeAndOutToBill(Authentication authentication, @RequestBody String requestBody) {
-        Map dataMap = new HashMap();
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         try {
             ChargeUserPrinciple chargeUserPrinciple = (ChargeUserPrinciple) authentication.getPrincipal();
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
@@ -174,15 +174,15 @@ public class BillingItemManagementServlet extends DefaultDisplayPageModelViewCon
                         outToBillRequestOpt.get()
                         , callerInfoOptional.get().getUserEntity().getUserId().longValue()
                 );
-                dataMap.put("status", "success");
-                dataMap.put("title", "處理完成");
+                sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+                sweetAlertResponse.setTitle("處理完成");
             }
         } catch (Exception e) {
-            dataMap.put("status", "error");
-            dataMap.put("title", "處理失敗");
-            logger.error(e.getMessage());
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setTitle("處理失敗");
+            sweetAlertResponse.setMessage(e.getMessage());
         }
-        return gson.toJson(dataMap);
+        return gson.toJson(sweetAlertResponse);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/calculateByParameter", produces = "application/text;charset=utf-8")
@@ -190,7 +190,7 @@ public class BillingItemManagementServlet extends DefaultDisplayPageModelViewCon
     public String calculateFeeByParameter(
             Authentication authentication
             , @RequestBody String requestBody) {
-        Map dataMap = new HashMap();
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         try {
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
@@ -201,12 +201,13 @@ public class BillingItemManagementServlet extends DefaultDisplayPageModelViewCon
                         outToBillRequestOpt.get(), callerInfoOptional.get().getUserEntity().getUserId().longValue()
                 );
             }
-            dataMap.put("status", "success");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+            sweetAlertResponse.setTitle("操作完成");
         } catch (Exception e) {
-            dataMap.put("status", "danger");
-            dataMap.put("message", "查詢失敗");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setTitle("查詢失敗");
         }
-        return gson.toJson(dataMap);
+        return gson.toJson(sweetAlertResponse);
     }
 
     @Override

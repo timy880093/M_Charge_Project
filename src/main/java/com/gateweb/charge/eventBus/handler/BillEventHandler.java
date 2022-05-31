@@ -76,25 +76,34 @@ public class BillEventHandler implements ChargeSystemEventHandler {
         if (billOptional.isPresent()) {
             Set<BillingItem> billingItemSet = new HashSet<>(billingItemRepository.findByBillId(billId));
             billingItemSet.stream().forEach(billingItem -> {
-                if (billingItem.getContractId() != null && billingItem.getPackageRefId() != null) {
-                    //檢查有沒有合約被付款完成的
-                    Optional<Contract> contractOptional = contractRepository.findById(billingItem.getContractId());
-                    if (contractOptional.isPresent() && contractOptional.get().getStatus().equals(ContractStatus.B)) {
-                        contractService.enableContract(
-                                contractOptional.get()
-                                , callerId
-                        );
-                    }
-                } else if (billingItem.getDeductId() != null) {
-                    //檢查有沒有扣抵或預繳付款完成
-                    Optional<Deduct> deductOptional = deductRepository.findById(billingItem.getDeductId());
-                    if (deductOptional.isPresent()) {
-                        deductService.enableDeduct(deductOptional.get());
-                    }
-                }
+                enableContractIfPaid(billingItem, callerId);
+                enableDeductIfPaid(billingItem);
             });
         } else {
-            logger.error("BillId:{} Operation:onBillPaid , ignore.", billId);
+            logger.error("BillId:{}, Operation:onBillPaid , ignore.", billId);
+        }
+    }
+
+    public void enableContractIfPaid(BillingItem billingItem, Long callerId) {
+        if (billingItem.getContractId() != null && billingItem.getPackageRefId() != null) {
+            //檢查有沒有合約被付款完成的
+            Optional<Contract> contractOptional = contractRepository.findById(billingItem.getContractId());
+            if (contractOptional.isPresent() && contractOptional.get().getStatus().equals(ContractStatus.B)) {
+                contractService.enableContract(
+                        contractOptional.get()
+                        , callerId
+                );
+            }
+        }
+    }
+
+    public void enableDeductIfPaid(BillingItem billingItem) {
+        if(billingItem.getDeductId()!=null){
+            //檢查有沒有扣抵或預繳付款完成
+            Optional<Deduct> deductOptional = deductRepository.findById(billingItem.getDeductId());
+            if (deductOptional.isPresent()) {
+                deductService.enableDeduct(deductOptional.get());
+            }
         }
     }
 }

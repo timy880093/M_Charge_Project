@@ -1,7 +1,6 @@
 package com.gateweb.charge.service.impl;
 
 import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
-import com.gateweb.charge.component.annotated.ModifierAndCreatorUtils;
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.component.*;
 import com.gateweb.charge.enumeration.ContractStatus;
@@ -61,8 +60,6 @@ public class ContractServiceImpl implements ContractService {
     PackageRefRepository packageRefRepository;
     @Autowired
     ContractMapper contractMapper;
-    @Autowired
-    ModifierAndCreatorUtils modifierAndCreatorUtils;
     @Autowired
     BillService billService;
     @Autowired
@@ -126,25 +123,15 @@ public class ContractServiceImpl implements ContractService {
         return contractVo;
     }
 
-    @Override
-    public Optional<Contract> saveOrUpdateContractByMap(Map<String, Object> map, CallerInfo callerInfo)
-            throws ContractIntervalOverlapException
-            , MissingRequiredPropertiesException, ContractTypeAmbiguousException {
-        if (map.containsKey("contractId")) {
-            return updateContract(map, callerInfo);
-        } else {
-            return createContract(map, callerInfo);
-        }
-    }
-
     public Optional<Contract> createContract(Map<String, Object> map, CallerInfo callerInfo)
             throws MissingRequiredPropertiesException
             , ContractIntervalOverlapException
             , ContractTypeAmbiguousException {
         Optional<Contract> contractOptional = createContractByMap(map);
         if (contractOptional.isPresent()) {
-            modifierAndCreatorUtils.signEntityWithCallerInfo(contractOptional.get(), callerInfo);
             contractOptional.get().setStatus(ContractStatus.C);
+            contractOptional.get().setContractId(callerInfo.getUserEntity().getUserId().longValue());
+            contractOptional.get().setCreateDate(LocalDateTime.now());
             contractRepository.save(contractOptional.get());
             ChargeSystemEvent chargeSystemEvent = new ChargeSystemEvent(
                     EventSource.CONTRACT
@@ -153,20 +140,6 @@ public class ContractServiceImpl implements ContractService {
                     , callerInfo.getUserEntity().getUserId().longValue()
             );
             chargeSystemEventBus.post(chargeSystemEvent);
-        }
-        return contractOptional;
-    }
-
-    public Optional<Contract> updateContract(Map<String, Object> map, CallerInfo callerInfo)
-            throws ContractIntervalOverlapException, ContractTypeAmbiguousException {
-        Optional<Contract> contractOptional = createContractByMap(map);
-        if (contractOptional.isPresent()) {
-            Optional<Contract> existContractOptional = contractRepository.findById(contractOptional.get().getContractId());
-            if (existContractOptional.isPresent()) {
-                contractMapper.updateContractFromVo(contractOptional.get(), contractOptional.get());
-                modifierAndCreatorUtils.signEntityWithCallerInfo(contractOptional.get(), callerInfo);
-                contractRepository.save(contractOptional.get());
-            }
         }
         return contractOptional;
     }

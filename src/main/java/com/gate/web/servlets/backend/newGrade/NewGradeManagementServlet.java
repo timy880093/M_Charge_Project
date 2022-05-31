@@ -7,6 +7,8 @@ import com.gateweb.charge.chargePolicy.grade.bean.RootGradeStorageBean;
 import com.gateweb.charge.chargePolicy.grade.service.GradeService;
 import com.gateweb.charge.chargePolicy.grade.service.RootGradeSearchService;
 import com.gateweb.charge.exception.InvalidGradeLevelException;
+import com.gateweb.charge.frontEndIntegration.bean.SweetAlertResponse;
+import com.gateweb.charge.frontEndIntegration.enumeration.SweetAlertStatus;
 import com.gateweb.charge.model.nonMapped.CallerInfo;
 import com.gateweb.orm.charge.entity.RootGradeFetchView;
 import com.gateweb.orm.charge.repository.RootGradeFetchViewRepository;
@@ -69,7 +71,7 @@ public class NewGradeManagementServlet extends DefaultDisplayPageModelViewContro
     @RequestMapping(method = RequestMethod.POST, value = "/api/saveOrUpdate", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String createNewGrade(HttpServletRequest request, HttpServletResponse response, @RequestBody String jsonBody) {
-        Map resultMap = new HashMap();
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         try {
 //            todo: 暫時拔掉權限
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByUserId(new Long(318));
@@ -82,17 +84,19 @@ public class NewGradeManagementServlet extends DefaultDisplayPageModelViewContro
                 );
                 gradeService.saveRootGradeStorageBean(rootGradeStorageBean);
                 System.out.println(gson.toJson(rootGradeFetchView));
-                resultMap.put("status", "success");
-                resultMap.put("message", "修改成功");
+                sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+                sweetAlertResponse.setTitle("修改成功");
             }
         } catch (InvalidGradeLevelException igle) {
-            resultMap.put("status", "error");
-            resultMap.put("message", "級距層級不可為空");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setTitle("修改失敗");
+            sweetAlertResponse.setMessage("級距層級不可為空");
         } catch (Exception ex) {
-            resultMap.put("status", "error");
-            resultMap.put("message", "非預期錯誤");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setTitle("非預期錯誤");
+            sweetAlertResponse.setMessage(ex.getMessage());
         }
-        return gson.toJson(resultMap);
+        return gson.toJson(sweetAlertResponse);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "method=delete", produces = "application/json;charset=utf8")

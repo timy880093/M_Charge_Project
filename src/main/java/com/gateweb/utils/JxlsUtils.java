@@ -22,10 +22,14 @@ import java.util.Map;
 public class JxlsUtils {
     private static final Logger logger = LogManager.getLogger(JxlsUtils.class);
 
+    @Deprecated
     public void processTemplate(Map<String, Object> parameterMap, String templateFilePath, String outputFilePath) throws FileNotFoundException {
-        InputStream templateFileInputStream = new FileInputStream(templateFilePath);
-        OutputStream outputFileOutputStream = new FileOutputStream(outputFilePath);
-        processTemplate(parameterMap, templateFileInputStream, outputFileOutputStream);
+        try (InputStream templateFileInputStream = new FileInputStream(templateFilePath)) {
+            OutputStream outputFileOutputStream = new FileOutputStream(outputFilePath);
+            processTemplate(parameterMap, templateFileInputStream, outputFileOutputStream);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public static void processTemplate(Map<String, Object> parameterMap, InputStream inputStream, OutputStream outputStream) {

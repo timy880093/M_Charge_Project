@@ -192,7 +192,7 @@ public class ContractManagementServlet extends DefaultDisplayPageModelViewContro
     public String enabledContract(
             Authentication authentication
             , @PathVariable("contractId") long contractId) {
-        Map dataMap = new HashMap();
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         try {
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
@@ -202,15 +202,15 @@ public class ContractManagementServlet extends DefaultDisplayPageModelViewContro
                         contractId
                         , callerInfoOptional.get().getUserEntity().getUserId().longValue()
                 );
-                dataMap.put("status", "success");
-                dataMap.put("message", "啟用成功");
+                sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+                sweetAlertResponse.setTitle("啟用成功");
             }
         } catch (Exception e) {
-            dataMap.put("status", "failed");
-            dataMap.put("message", "非預期錯誤");
-            e.printStackTrace();
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setTitle("非預期錯誤");
+            sweetAlertResponse.setMessage(e.getMessage());
         }
-        return gson.toJson(dataMap);
+        return gson.toJson(sweetAlertResponse);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/batchContinueEnabledContract", produces = "application/text;charset=utf-8")
@@ -218,7 +218,7 @@ public class ContractManagementServlet extends DefaultDisplayPageModelViewContro
     public String continueEnabledContractByCondition(
             Authentication authentication
             , @RequestBody String requestBody) {
-        Map dataMap = new HashMap();
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         try {
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
@@ -232,19 +232,20 @@ public class ContractManagementServlet extends DefaultDisplayPageModelViewContro
                         callerInfoOptional.get()
                 );
             });
-            dataMap.put("status", "success");
-            dataMap.put("message", "處理成功");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+            sweetAlertResponse.setTitle("處理成功");
         } catch (Exception e) {
-            dataMap.put("status", "danger");
-            dataMap.put("message", "處理失敗");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setTitle("處理失敗");
+            sweetAlertResponse.setMessage(e.getMessage());
         }
-        return gson.toJson(dataMap);
+        return gson.toJson(sweetAlertResponse);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/api/cancelInitial/{contractId}", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String cancelInitialContract(Authentication authentication, @PathVariable("contractId") long contractId) {
-        Map dataMap = new HashMap();
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         try {
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
@@ -255,13 +256,14 @@ public class ContractManagementServlet extends DefaultDisplayPageModelViewContro
                         callerInfoOptional.get().getUserEntity().getUserId().longValue()
                 );
             }
-            dataMap.put("status", "success");
-            dataMap.put("message", "處理成功");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+            sweetAlertResponse.setTitle("處理成功");
         } catch (DeleteBilledBillingItemException e) {
-            dataMap.put("status", "failed");
-            dataMap.put("message", "費用已被出帳，無法刪除");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setTitle("處理失敗");
+            sweetAlertResponse.setMessage("費用已被出帳，無法刪除");
         }
-        return gson.toJson(dataMap);
+        return gson.toJson(sweetAlertResponse);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/serverSideProcessingSearch", produces = "application/json;charset=utf-8")

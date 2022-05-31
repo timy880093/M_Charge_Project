@@ -1,19 +1,19 @@
 package com.gateweb.charge.service.impl;
 
-import com.gateweb.charge.component.annotated.ModifierAndCreatorUtils;
-import com.gateweb.orm.charge.repository.*;
-import com.gateweb.utils.bean.BeanConverterUtils;
 import com.gateweb.charge.exception.MissingRequiredPropertiesException;
 import com.gateweb.charge.mapper.ChargePackageMapper;
-import com.gateweb.orm.charge.entity.ChargePackage;
-import com.gateweb.orm.charge.entity.Contract;
-import com.gateweb.orm.charge.entity.PackageRef;
 import com.gateweb.charge.model.nonMapped.CallerInfo;
 import com.gateweb.charge.service.ChargePackageService;
 import com.gateweb.charge.service.PackageRefService;
+import com.gateweb.orm.charge.entity.ChargePackage;
+import com.gateweb.orm.charge.entity.Contract;
+import com.gateweb.orm.charge.entity.PackageRef;
+import com.gateweb.orm.charge.repository.*;
+import com.gateweb.utils.bean.BeanConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -38,14 +38,14 @@ public class ChargePackageServiceImpl implements ChargePackageService {
     ChargePackageMapper chargePackageMapper;
     @Autowired
     PackageRefService packageRefService;
-    @Autowired
-    ModifierAndCreatorUtils modifierAndCreatorUtils;
 
     @Override
     public void transactionSaveChargePackageByMap(HashMap<String, Object> map, CallerInfo callerInfo) {
         List<PackageRef> packageRefList = new ArrayList<>();
         //根據map產生vo
         ChargePackage chargePackageVo = beanConverterUtils.mapToBean(map, ChargePackage.class);
+        chargePackageVo.setModifierId(callerInfo.getUserEntity().getUserId().longValue());
+        chargePackageVo.setModifyDate(LocalDateTime.now());
         //根據vo找資料
         Optional<ChargePackage> chargePackageOptional = Optional.empty();
         if (chargePackageVo.getPackageId() != null) {
@@ -55,10 +55,8 @@ public class ChargePackageServiceImpl implements ChargePackageService {
             //查詢原來的清單
             packageRefList = packageRefRepository.findByFromPackageId(chargePackageOptional.get().getPackageId());
             chargePackageMapper.updateChargePackageFromVo(chargePackageVo, chargePackageOptional.get());
-            modifierAndCreatorUtils.signEntityWithCallerInfo(chargePackageOptional.get(), callerInfo);
             chargePackageRepository.save(chargePackageOptional.get());
         } else {
-            modifierAndCreatorUtils.signEntityWithCallerInfo(chargePackageVo, callerInfo);
             chargePackageOptional = Optional.ofNullable(chargePackageRepository.save(chargePackageVo));
         }
         //看看有沒有子清單

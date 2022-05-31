@@ -1,6 +1,6 @@
 package com.gateweb.charge.notice.component;
 
-import com.gateweb.charge.config.BillingSystemMailSender;
+import com.gateweb.charge.config.BillingSystemMailSenderInitializer;
 import com.gateweb.charge.enumeration.NoticeType;
 import com.gateweb.charge.notice.bean.PaymentRequestMailData;
 import com.gateweb.orm.charge.entity.Notice;
@@ -22,7 +22,7 @@ public class PaymentRequestMimeMessageHelperProvider implements NoticeMimeMessag
     private static final String PAYMENT_REQUEST_MAIL_TEMPLATE = "paymentRequestMail.ftl";
 
     @Autowired
-    BillingSystemMailSender billingSystemMailSender;
+    BillingSystemMailSenderInitializer billingSystemMailSenderInitializer;
     @Autowired
     BillRepository billRepository;
     @Autowired

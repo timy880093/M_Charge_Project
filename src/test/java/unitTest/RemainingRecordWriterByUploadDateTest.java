@@ -4,19 +4,27 @@ import com.gateweb.utils.LocalDateTimeUtils;
 import com.gateweb.charge.contract.component.RemainingRecordWriterByUploadDate;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import org.eclipse.core.runtime.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})
 @WebAppConfiguration
+@TestPropertySource(properties = {"spring.profiles.active=uat"})
 public class RemainingRecordWriterByUploadDateTest {
     @Autowired
     RemainingRecordWriterByUploadDate remainingCountRecordWriter;

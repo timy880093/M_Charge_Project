@@ -57,22 +57,6 @@ public class RemainingContractRenewExecutioner {
         this.chargeSystemEventBus = chargeSystemEventBus;
     }
 
-    @Deprecated
-    public boolean needToBeRenew(final ChargeByRemainingCountCalData chargeByRemainingCountCalData) {
-        boolean negativeRemainingCount = chargeByRemainingCountCalData.getPreviousInvoiceRemaining().getRemaining() < 0;
-        //invoiceDate+1 months > contractEndDate
-        boolean expire = false;
-        for (CustomInterval nextCalculateInterval : chargeByRemainingCountCalData.getNextCalculateIntervalList()) {
-            if (nextCalculateInterval.getEndLocalDateTime()
-                    .isEqual(chargeByRemainingCountCalData.getContract().getExpirationDate())) {
-                expire = true;
-            }
-        }
-        boolean autoRenew = chargeByRemainingCountCalData.getContract().getAutoRenew();
-        boolean contractEnabled = chargeByRemainingCountCalData.getContract().getStatus().equals(ContractStatus.E);
-        return (negativeRemainingCount || expire) && autoRenew && contractEnabled;
-    }
-
     public void executeRenew(Set<Company> targetCompanySet) {
         targetCompanySet.stream().forEach(company -> {
             try {
