@@ -9,7 +9,7 @@
     <Appenders>
         <Gelf name="gelf" host="udp:34.80.231.41" port="12201" version="1.0" extractStackTrace="true"
               filterStackTrace="true" mdcProfiling="true" includeFullMdc="true" maximumMessageSize="8192"
-              originHost="ChargeSystemProdLog" additionalFieldTypes="fieldName1=String,fieldName2=Double,fieldName3=Long"
+              originHost="ChargeSystemLog" additionalFieldTypes="fieldName1=String,fieldName2=Double,fieldName3=Long"
               ignoreExceptions="true">
             <Field name="timestamp" pattern="%d{dd MMM yyyy HH:mm:ss,SSS}" />
             <Field name="level" pattern="%level" />

@@ -3,10 +3,13 @@ package com.gateweb.charge.component.propertyProvider;
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:application.properties")
+@PropertySources({
+        @PropertySource(value = "classpath:application-${spring.profiles.active}.properties")
+})
 public abstract class ContextComponent {
     @Autowired
     protected CompanyRepository companyRepository;

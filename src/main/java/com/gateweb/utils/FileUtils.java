@@ -1,11 +1,7 @@
 package com.gateweb.utils;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +24,7 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class FileUtils {
-    
+
     /**
      * 取得文件名
      * <p>
@@ -64,7 +60,7 @@ public class FileUtils {
     public static String getFileContent(InputStream inputStream, String encoding) {
 
         if (encoding == null) {
-            encoding = "UTF-8";
+            encoding = StandardCharsets.UTF_8.name();
         }
 
         BufferedReader reader = null;

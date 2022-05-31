@@ -1,23 +1,19 @@
 package com.gateweb.charge.service;
 
 
-import com.gateweb.charge.exception.*;
+import com.gateweb.charge.exception.DeleteBilledBillingItemException;
 import com.gateweb.charge.frontEndIntegration.bean.OutToBillRequest;
 import com.gateweb.charge.model.nonMapped.CallerInfo;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.view.ContractFetchView;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public interface ContractService {
 
     List<ContractFetchView> getNotExpireContractFetchViewList();
 
     List<ContractFetchView> searchAllContractFetchView();
-
-    Optional<Contract> saveOrUpdateContractByMap(Map<String, Object> map, CallerInfo callerInfo) throws ContractIntervalOverlapException, EmptyPackageRefListException, MissingRequiredPropertiesException, ContractTypeAmbiguousException;
 
     List<ContractFetchView> findDeductibleContractList();
 

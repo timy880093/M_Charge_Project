@@ -3,6 +3,7 @@ package com.gateweb.charge.service.impl;
 import com.gate.web.beans.CashDetailBean;
 import com.gate.web.beans.CashMasterBean;
 import com.gate.web.beans.InvoiceExcelBean;
+import com.gate.web.beans.InvoiceExcelPrepareDataBean;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.enumeration.ReportType;
 import com.gateweb.charge.report.bean.InvoiceBatchRecord;
@@ -185,57 +186,79 @@ public class ReportServiceImpl implements ReportService {
         return resultMap;
     }
 
-    public List<InvoiceExcelBean> genInvoiceExcelBean(List<Bill> billList) {
-        List<InvoiceExcelBean> invoiceExcelBeanList = new ArrayList<>();
+    public String genCurrentInvoiceDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
+        return sdf.format(new Date());
+    }
+
+    public InvoiceExcelBean genInvoiceExcelBean(int invoiceIndex, int itemIndex, String businessNo, BillingItem billingItem) {
+        InvoiceExcelBean bean = new InvoiceExcelBean();
+        bean.setInvoiceIndex(invoiceIndex); //發票張數
+        bean.setInvoiceDate(genCurrentInvoiceDateString()); //發票日期
+        bean.setItemIndex(itemIndex); //品序號
+        bean.setItemName(productService.getProductName(billingItem)); //發票品名
+        bean.setItemCnt(1); //數量
+        bean.setUnitPrice(billingItem.getTaxIncludedAmount()); //單價
+        bean.setTaxType(1); //課稅別
+        bean.setTaxRate(0.05d); //稅率
+        bean.setBusinessNo(businessNo); //買方統編
+        return bean;
+    }
+
+    public List<InvoiceExcelPrepareDataBean> genInvoiceExcelPrepareDataBean(List<Bill> billList) {
+        List<InvoiceExcelPrepareDataBean> invoiceExcelPrepareDataBeanList = new ArrayList<>();
         HashMap<Long, Company> companyMap = new HashMap<>();
-        int invoiceIndex = 1;
-        for (Bill bill : billList) {
+        billList.stream().forEach(bill -> {
+            InvoiceExcelPrepareDataBean invoiceExcelPrepareDataBean = new InvoiceExcelPrepareDataBean();
             if (!companyMap.containsKey(bill.getCompanyId())) {
                 Optional<Company> companyOptional = companyRepository.findByCompanyId(bill.getCompanyId().intValue());
                 if (companyOptional.isPresent()) {
                     companyMap.put(bill.getCompanyId(), companyOptional.get());
                 }
-            }
-
-            if (companyMap.containsKey(bill.getCompanyId())) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
-                String invoiceDate = sdf.format(new Date());
                 Set<BillingItem> billingItemSet = new HashSet<>(billingItemRepository.findByBillId(bill.getBillId()));
-                int itemIndex = 1;
-                HashMap<String, InvoiceExcelBean> mergeMap = new HashMap<>();
-                for (BillingItem billingItem : billingItemSet) {
-                    InvoiceExcelBean bean = new InvoiceExcelBean();
-                    bean.setInvoiceIndex(invoiceIndex); //發票張數
-                    bean.setInvoiceDate(invoiceDate); //發票日期
-                    bean.setItemIndex(itemIndex); //品序號
-                    bean.setItemName(productService.getProductName(billingItem)); //發票品名
-                    bean.setItemCnt(1); //數量
-                    bean.setUnitPrice(billingItem.getTaxIncludedAmount()); //單價
-                    bean.setTaxType(1); //課稅別
-                    bean.setTaxRate(0.05d); //稅率
-                    bean.setBusinessNo(companyMap.get(bill.getCompanyId()).getBusinessNo()); //買方統編
-                    if (mergeMap.containsKey(bean.getItemName())) {
-                        //合併packageRef相同的預繳項目
-                        InvoiceExcelBean invoiceExcelBean =
-                                mergeInvoiceExcelBean(mergeMap.get(bean.getItemName()), bean);
-                        mergeMap.put(bean.getItemName(), invoiceExcelBean);
-                    } else {
-                        mergeMap.put(bean.getItemName(), bean);
-                        itemIndex++;
-                    }
-                }
-                invoiceExcelBeanList.addAll(
-                        mergeMap.values().stream().sorted(
-                                Comparator.comparing(InvoiceExcelBean::getItemIndex)).collect(Collectors.toList()
-                        )
-                );
-                //四捨五入
-                invoiceExcelBeanList.stream().forEach(invoiceExcelBean -> {
-                    invoiceExcelBean.setUnitPrice(
-                            invoiceExcelBean.getUnitPrice().setScale(2, RoundingMode.HALF_UP)
-                    );
-                });
+                invoiceExcelPrepareDataBean.getBillingItemList().addAll(billingItemSet);
             }
+            invoiceExcelPrepareDataBean.setCompany(companyMap.get(bill.getCompanyId()));
+            invoiceExcelPrepareDataBean.setBill(bill);
+            invoiceExcelPrepareDataBeanList.add(invoiceExcelPrepareDataBean);
+        });
+        return invoiceExcelPrepareDataBeanList;
+    }
+
+    public List<InvoiceExcelBean> genInvoiceExcelBeanByPrepareDataBean(List<InvoiceExcelPrepareDataBean> prepareDataBeanList) {
+        List<InvoiceExcelBean> invoiceExcelBeanList = new ArrayList<>();
+        int invoiceIndex = 1;
+        for (InvoiceExcelPrepareDataBean invoiceExcelPrepareDataBean : prepareDataBeanList) {
+            int itemIndex = 1;
+            HashMap<String, InvoiceExcelBean> mergeMap = new HashMap<>();
+            for (BillingItem billingItem : invoiceExcelPrepareDataBean.getBillingItemList()) {
+                InvoiceExcelBean bean = genInvoiceExcelBean(
+                        invoiceIndex
+                        , itemIndex
+                        , invoiceExcelPrepareDataBean.getCompany().getBusinessNo()
+                        , billingItem
+                );
+                if (mergeMap.containsKey(bean.getItemName())) {
+                    //合併packageRef相同的預繳項目
+                    InvoiceExcelBean invoiceExcelBean =
+                            mergeInvoiceExcelBean(mergeMap.get(bean.getItemName()), bean);
+                    mergeMap.put(bean.getItemName(), invoiceExcelBean);
+                } else {
+                    mergeMap.put(bean.getItemName(), bean);
+                    itemIndex++;
+                }
+            }
+            invoiceExcelBeanList.addAll(
+                    mergeMap.values().stream().sorted(
+                            Comparator.comparing(InvoiceExcelBean::getItemIndex)).collect(Collectors.toList()
+                    )
+            );
+            //四捨五入
+            invoiceExcelBeanList.stream().forEach(invoiceExcelBean -> {
+                invoiceExcelBean.setUnitPrice(
+                        invoiceExcelBean.getUnitPrice().setScale(2, RoundingMode.HALF_UP)
+                );
+            });
             invoiceIndex++;
         }
         return invoiceExcelBeanList;
@@ -260,7 +283,8 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void genInvoiceExcelFile(OutputStream outputStream, List<Bill> billList) throws FileNotFoundException {
         UUID uuid = UUID.randomUUID();
-        List<InvoiceExcelBean> invoiceExcelBeanList = genInvoiceExcelBean(billList);
+        List<InvoiceExcelPrepareDataBean> invoiceExcelPrepareDataBeanList = genInvoiceExcelPrepareDataBean(billList);
+        List<InvoiceExcelBean> invoiceExcelBeanList = genInvoiceExcelBeanByPrepareDataBean(invoiceExcelPrepareDataBeanList);
         List<InvoiceBatchRecord> invoiceBatchRecordList = genInvoiceBatchRecordList(invoiceExcelBeanList);
         Map<String, Object> parameterMap = new HashMap<>();
         parameterMap.put("invoiceBatchRecordList", invoiceBatchRecordList);

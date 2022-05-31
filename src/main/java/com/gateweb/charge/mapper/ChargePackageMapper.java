@@ -13,8 +13,8 @@ public interface ChargePackageMapper {
             @Mapping(target = "packageId", ignore = true),
             @Mapping(target = "createDate", ignore = true),
             @Mapping(target = "creatorId", ignore = true),
-            @Mapping(target = "modifierId", ignore = true),
-            @Mapping(target = "modifyDate", ignore = true)
+            @Mapping(target = "modifierId"),
+            @Mapping(target = "modifyDate")
     })
     void updateChargePackageFromVo(ChargePackage from, @MappingTarget ChargePackage to);
 

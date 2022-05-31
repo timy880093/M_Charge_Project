@@ -19,10 +19,10 @@ public class PropertySourceTest {
 
     @Test
     public void printEnvironmentProperties() {
-        environmentPropertiesUtils.getProperties("application.properties", "env");
-        environmentPropertiesUtils.getProperties("application.properties", "mail.propertyFileName");
-        environmentPropertiesUtils.getProperties("application.properties", "file.propertyFileName");
-        environmentPropertiesUtils.getProperties("application.properties", "einv.db.propertyFileName");
+        environmentPropertiesUtils.getProperties("application-uat.properties", "env");
+        environmentPropertiesUtils.getProperties("application-uat.properties", "mail.propertyFileName");
+        environmentPropertiesUtils.getProperties("application-uat.properties", "file.propertyFileName");
+        environmentPropertiesUtils.getProperties("application-uat.properties", "einv.db.propertyFileName");
     }
 
 

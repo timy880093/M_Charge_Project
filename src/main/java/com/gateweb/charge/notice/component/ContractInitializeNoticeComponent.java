@@ -1,6 +1,5 @@
 package com.gateweb.charge.notice.component;
 
-import com.gateweb.charge.config.BillingSystemMailSender;
 import com.gateweb.charge.contract.component.ContractValidationComponent;
 import com.gateweb.charge.notice.builder.MailMimeMessageBuilder;
 import com.gateweb.orm.charge.entity.Company;
@@ -14,9 +13,10 @@ import freemarker.template.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import javax.annotation.Resource;
@@ -31,8 +31,6 @@ public class ContractInitializeNoticeComponent implements NoticeMimeMessageHelpe
     @Resource
     Configuration freemarkerConfig;
     @Autowired
-    BillingSystemMailSender billingSystemMailSender;
-    @Autowired
     ContractValidationComponent contractValidationComponent;
     @Autowired
     ContractRepository contractRepository;
@@ -42,6 +40,9 @@ public class ContractInitializeNoticeComponent implements NoticeMimeMessageHelpe
     NoticeRepository noticeRepository;
     @Autowired
     NoticeRequestGenerator noticeRequestGenerator;
+    @Autowired
+    @Qualifier("billingSystemMailSender")
+    JavaMailSender billingSystemMailSender;
 
     /**
      * 通知邏輯表
@@ -101,16 +102,14 @@ public class ContractInitializeNoticeComponent implements NoticeMimeMessageHelpe
                     freemarkerConfig.getTemplate(AUTOMATIC_CONTRACT_ENABLE_MAIL_TEMPLATE)
                     , freeMarkerTemplateMap
             );
-            if (billingSystemMailSender.javaMailSenderOpt.isPresent()) {
-                MailMimeMessageBuilder mailBuilder = new MailMimeMessageBuilder();
-                MimeMessageHelper mimeMessageHelper = mailBuilder
-                        .initBuilder(billingSystemMailSender.javaMailSenderOpt.get())
-                        .withRecipientAndName("se01@gateweb.com.tw", "se01")
-                        .withSubject("【合約啟用通知】關網電子發票服務合約啟用通知，請詳內文")
-                        .withHtmlContent(resultString)
-                        .getMimeHelper();
-                result = Optional.of(mimeMessageHelper);
-            }
+            MailMimeMessageBuilder mailBuilder = new MailMimeMessageBuilder();
+            MimeMessageHelper mimeMessageHelper = mailBuilder
+                    .initBuilder(billingSystemMailSender)
+                    .withRecipientAndName("se01@gateweb.com.tw", "se01")
+                    .withSubject("【合約啟用通知】關網電子發票服務合約啟用通知，請詳內文")
+                    .withHtmlContent(resultString)
+                    .getMimeHelper();
+            result = Optional.of(mimeMessageHelper);
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }

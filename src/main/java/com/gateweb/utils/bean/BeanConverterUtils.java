@@ -55,6 +55,7 @@ public class BeanConverterUtils {
         return resultMap;
     }
 
+    @Deprecated
     public ChargeModeCycleAddEntity companyChargeCycleBeanToChargeModeCycleEntity(CompanyChargeCycleBean companyChargeCycleBean) {
         ChargeModeCycleAddEntity addEntity = new ChargeModeCycleAddEntity();
         addEntity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
@@ -214,7 +215,6 @@ public class BeanConverterUtils {
                 }
             }
             if (targetClass.equals(LocalDateTime.class)) {
-                //ISO Format其實有bug，所以我們還是回歸milliseconds的作法
                 //不處理這種類型
             }
         }

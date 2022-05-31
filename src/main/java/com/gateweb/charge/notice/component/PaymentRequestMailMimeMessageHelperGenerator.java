@@ -1,6 +1,5 @@
 package com.gateweb.charge.notice.component;
 
-import com.gateweb.charge.config.BillingSystemMailSender;
 import com.gateweb.charge.notice.bean.PaymentRequestMailData;
 import com.gateweb.charge.notice.bean.PaymentRequestMailFreemarkerData;
 import com.gateweb.charge.notice.builder.MailMimeMessageBuilder;
@@ -9,6 +8,8 @@ import com.gateweb.orm.charge.repository.CompanyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,8 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
     @Autowired(required = false)
     ServletContext servletContext;
     @Autowired
-    BillingSystemMailSender billingSystemMailSender;
+    @Qualifier("billingSystemMailSender")
+    JavaMailSender billingSystemMailSender;
     @Autowired
     PaymentRequestMailFreemarkerDataProvider paymentRequestMailFreemarkerDataProvider;
     @Autowired
@@ -51,12 +53,9 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
             if (!mailHtmlOpt.isPresent()) {
                 return mimeMessageHelperOptional;
             }
-            if (!billingSystemMailSender.javaMailSenderOpt.isPresent()) {
-                return mimeMessageHelperOptional;
-            }
 
             MailMimeMessageBuilder mailBuilder = new MailMimeMessageBuilder();
-            MimeMessageHelper mimeMessageHelper = mailBuilder.initBuilder(billingSystemMailSender.javaMailSenderOpt.get())
+            MimeMessageHelper mimeMessageHelper = mailBuilder.initBuilder(billingSystemMailSender)
                     .withRecipient(paymentRequestMailData.getRecipient())
                     .withHtmlContent(mailHtmlOpt.get())
                     .withSubject(paymentRequestMailSubject(paymentRequestMailFreemarkerData.getCompanyName()))

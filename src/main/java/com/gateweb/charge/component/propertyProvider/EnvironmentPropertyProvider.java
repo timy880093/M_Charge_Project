@@ -5,12 +5,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 
 import java.util.Optional;
 
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySources({
+        @PropertySource("classpath:application.properties")
+})
 public class EnvironmentPropertyProvider {
     protected Logger logger = LoggerFactory.getLogger(EnvironmentPropertyProvider.class);
 

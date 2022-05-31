@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 @EnableWebMvc
 @PropertySources({
-        @PropertySource("classpath:application.properties"),
+        @PropertySource(value = "classpath:application-${spring.profiles.active}.properties"),
         @PropertySource(name = "charge.localhost.jdbc.properties", value = "classpath:charge.localhost.jdbc.properties"),
         @PropertySource(name = "charge.production.jdbc.properties", value = "classpath:charge.production.jdbc.properties"),
         @PropertySource(name = "charge.localhost.file.properties", value = "classpath:charge.localhost.file.properties"),

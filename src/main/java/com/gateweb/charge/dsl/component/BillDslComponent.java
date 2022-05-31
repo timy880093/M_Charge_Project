@@ -21,6 +21,8 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import java.util.Map;
 
+import static com.gateweb.charge.dsl.component.DslCommonComponent.entityPathAsConstants;
+
 @Component
 public class BillDslComponent implements SortableDslDispatcher, SortableDslFieldRender
         , DslSearchConditionRender, CriteriaPageableSearchBuilder {
@@ -53,25 +55,25 @@ public class BillDslComponent implements SortableDslDispatcher, SortableDslField
 
     @Override
     public void orderByDslModifierSwitch(QueryBase queryBase, String propertyName, String direction) {
-        if (propertyName.equals("billId")) {
+        if (propertyName.equals(entityPathAsConstants(qBill.billId))) {
             dslCommonComponent.orderByPath(queryBase, qBill.billId, direction);
         }
-        if (propertyName.equals("inDate")) {
+        if (propertyName.equals(entityPathAsConstants(qBill.paidDate))) {
+            dslCommonComponent.orderByPath(queryBase, qBill.paidDate, direction);
+        }
+        if (propertyName.equals(entityPathAsConstants(qBill.createDate))) {
             dslCommonComponent.orderByPath(queryBase, qBill.createDate, direction);
         }
-        if (propertyName.equals("createDate")) {
-            dslCommonComponent.orderByPath(queryBase, qBill.createDate, direction);
-        }
-        if (propertyName.equals("billStatus")) {
+        if (propertyName.equals(entityPathAsConstants(qBill.billStatus))) {
             dslCommonComponent.orderByPath(queryBase, qBill.billStatus, direction);
         }
-        if (propertyName.equals("taxExcludedAmount")) {
+        if (propertyName.equals(entityPathAsConstants(qBill.taxExcludedAmount))) {
             dslCommonComponent.orderByPath(queryBase, qBill.taxExcludedAmount, direction);
         }
-        if (propertyName.equals("taxIncludedAmount")) {
+        if (propertyName.equals(entityPathAsConstants(qBill.taxIncludedAmount))) {
             dslCommonComponent.orderByPath(queryBase, qBill.taxIncludedAmount, direction);
         }
-        if (propertyName.equals("billYm")) {
+        if (propertyName.equals(entityPathAsConstants(qBill.billYm))) {
             dslCommonComponent.orderByPath(queryBase, qBill.billYm, direction);
         }
     }
@@ -91,8 +93,10 @@ public class BillDslComponent implements SortableDslDispatcher, SortableDslField
     @Override
     public void searchConditionModifier(QueryBase queryBase, Map<String, Object> conditionMap) {
         try {
-            if (conditionMap.containsKey("billStatus")) {
-                BillStatus billStatus = BillStatus.valueOf(String.valueOf(conditionMap.get("billStatus")));
+            if (conditionMap.containsKey(entityPathAsConstants(qBill.billStatus))) {
+                BillStatus billStatus = BillStatus.valueOf(
+                        String.valueOf(conditionMap.get(entityPathAsConstants(qBill.billStatus)))
+                );
                 queryBase.where(qBill.billStatus.eq(billStatus));
             }
             if (conditionMap.containsKey("companyId")) {

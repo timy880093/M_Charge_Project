@@ -861,10 +861,11 @@
             ko.applyBindings(billPayInfoViewModel, dom);
         },
         clean: function () {
-            billPayInfoViewModel.knockoutComponent.billPaidDatePicker.clean();
-            billPayInfoViewModel.payAmount('');
-            billPayInfoViewModel.paymentRemark('');
-            billPayInfoViewModel.knockoutComponent.paymentMethodSelector.clean();
+            //202205261455 使用者不希望清掉內容
+            // billPayInfoViewModel.knockoutComponent.billPaidDatePicker.clean();
+            // billPayInfoViewModel.payAmount('');
+            // billPayInfoViewModel.paymentRemark('');
+            // billPayInfoViewModel.knockoutComponent.paymentMethodSelector.clean();
         },
         payInfo: function () {
             var data = {};

@@ -1,6 +1,5 @@
 package com.gateweb.charge.service.impl;
 
-import com.gateweb.charge.component.annotated.ModifierAndCreatorUtils;
 import com.gateweb.charge.enumeration.ChargePlan;
 import com.gateweb.charge.exception.ItemHaveBeenOccupiedException;
 import com.gateweb.charge.exception.MissingRequiredPropertiesException;
@@ -16,6 +15,7 @@ import com.gateweb.utils.bean.BeanConverterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,14 +33,14 @@ public class ChargeRuleServiceImpl implements ChargeRuleService {
     @Autowired
     ChargeRuleMapper chargeRuleMapper;
     @Autowired
-    ModifierAndCreatorUtils modifierAndCreatorUtils;
-    @Autowired
     PackageRefRepository packageRefRepository;
 
     @Override
     public void saveOrUpdateChargeRuleByMap(Map<String, Object> map, CallerInfo callerInfo) {
         //根據map產生vo
         ChargeRule chargeRuleVo = beanConverterUtils.mapToBean(map, ChargeRule.class);
+        chargeRuleVo.setModifierId(callerInfo.getUserEntity().getUserId().longValue());
+        chargeRuleVo.setModifyDate(LocalDateTime.now());
         Optional<ChargeRule> chargeModeOptional = Optional.empty();
         if (chargeRuleVo.getChargeRuleId() != null) {
             chargeModeOptional = chargeRuleRepository.findById(chargeRuleVo.getChargeRuleId());
@@ -54,9 +54,7 @@ public class ChargeRuleServiceImpl implements ChargeRuleService {
         }
         if (chargeModeOptional.isPresent()) {
             chargeRuleMapper.updateChargeRuleFromVo(chargeRuleVo, chargeModeOptional.get());
-            modifierAndCreatorUtils.signEntityWithCallerInfo(chargeModeOptional.get(), callerInfo);
         } else {
-            modifierAndCreatorUtils.signEntityWithCallerInfo(chargeRuleVo, callerInfo);
             chargeRuleVo.setEnabled(true);
         }
         chargeRuleRepository.save(chargeRuleVo);

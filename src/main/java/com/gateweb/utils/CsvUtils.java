@@ -140,9 +140,8 @@ public class CsvUtils {
             }
         } catch (IntrospectionException e) {
             e.printStackTrace();
-        } finally {
-            return resultList;
         }
+        return resultList;
     }
 
     private static List<String[]> getCombinedBeanValueData(
