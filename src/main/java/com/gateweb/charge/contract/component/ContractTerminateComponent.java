@@ -141,7 +141,7 @@ public class ContractTerminateComponent {
         billingItemCollection.stream().forEach(billingItem -> {
             ChargeSystemEvent chargeSystemEvent = new ChargeSystemEvent(
                     EventSource.BILLING_ITEM
-                    , EventAction.CANCEL_BILLING
+                    , EventAction.CANCEL
                     , billingItem.getBillingItemId()
                     , null
             );
@@ -153,7 +153,7 @@ public class ContractTerminateComponent {
         billCollection.stream().forEach(bill -> {
             ChargeSystemEvent chargeSystemEvent = new ChargeSystemEvent(
                     EventSource.BILLING_ITEM
-                    , EventAction.CANCEL_BILLING
+                    , EventAction.CANCEL
                     , bill.getBillId()
                     , null
             );

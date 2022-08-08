@@ -6,7 +6,6 @@
     <persistence-unit name="chargeFacade" transaction-type="RESOURCE_LOCAL">
         <class>com.gateweb.orm.charge.entity.PrinterEntity</class>
         <class>com.gateweb.orm.charge.entity.Grade</class>
-        <class>com.gateweb.orm.charge.entity.ChargeModeCycleEntity</class>
         <class>com.gateweb.orm.charge.entity.Company</class>
         <class>com.gateweb.orm.charge.entity.CashDetailEntity</class>
         <class>com.gateweb.orm.charge.entity.DealerCompanyEntity</class>
@@ -15,17 +14,13 @@
         <class>com.gateweb.orm.charge.entity.DeductDetailEntity</class>
         <class>com.gateweb.orm.charge.entity.BillCycleEntity</class>
         <class>com.gateweb.orm.charge.entity.LogParameterEntity</class>
-        <class>com.gateweb.orm.charge.entity.ChargeModeCycleAddEntity</class>
-        <class>com.gateweb.orm.charge.entity.ChargeModeGradeEntity</class>
         <class>com.gateweb.orm.charge.entity.CashMasterEntity</class>
         <class>com.gateweb.orm.charge.entity.PrepayDeductMasterEntity</class>
-        <class>com.gateweb.orm.charge.entity.UserEntity</class>
         <class>com.gateweb.orm.charge.entity.ChargeIasrEntity</class>
         <class>com.gateweb.orm.charge.entity.PackageRef</class>
         <class>com.gateweb.orm.charge.entity.ProductSource</class>
         <class>com.gateweb.orm.charge.entity.BillingItem</class>
         <class>com.gateweb.orm.charge.entity.ChargeRule</class>
-        <class>com.gateweb.orm.charge.entity.Grade</class>
         <class>com.gateweb.orm.charge.entity.MigEventRecordEntity</class>
         <class>com.gateweb.orm.charge.entity.NewGrade</class>
         <class>com.gateweb.orm.charge.entity.Contract</class>
@@ -34,7 +29,6 @@
         <class>com.gateweb.orm.charge.entity.FinancialTransaction</class>
         <class>com.gateweb.orm.charge.entity.DeductHistory</class>
         <class>com.gateweb.orm.charge.entity.ProductPurchase</class>
-        <class>com.gateweb.orm.charge.entity.TerminationClause</class>
         <class>com.gateweb.orm.charge.entity.Product</class>
         <class>com.gateweb.orm.charge.entity.Deduct</class>
         <class>com.gateweb.orm.charge.entity.ProductPricing</class>

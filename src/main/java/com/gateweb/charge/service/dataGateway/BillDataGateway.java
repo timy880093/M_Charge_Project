@@ -5,7 +5,6 @@ import com.gateweb.charge.dsl.component.DslCommonComponent;
 import com.gateweb.charge.frontEndIntegration.bean.BillSearchCondition;
 import com.gateweb.charge.frontEndIntegration.bean.OperationObject;
 import com.gateweb.charge.frontEndIntegration.datatablePagination.PageInfo;
-import com.gateweb.charge.model.nonMapped.CallerInfo;
 import com.gateweb.orm.charge.entity.Bill;
 import com.gateweb.orm.charge.entity.view.BillFetchView;
 import com.gateweb.orm.charge.repository.BillFetchViewRepository;

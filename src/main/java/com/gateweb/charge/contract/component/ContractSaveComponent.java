@@ -65,6 +65,7 @@ public class ContractSaveComponent {
         contract.setEffectiveDate(contractSaveReq.getEffectiveDate());
         contract.setExpirationDate(contractSaveReq.getExpirationDate());
         contract.setInstallationDate(contractSaveReq.getInstallationDate());
+        contract.setCreatorId(contractSaveReq.getCallerId());
         return contract;
     }
 }

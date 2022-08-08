@@ -59,6 +59,7 @@ public class BillEventHandler implements ChargeSystemEventHandler {
                 break;
             case DELETE:
             case CREATE:
+            case CANCEL:
                 break;
             default:
                 logger.error("unknown action:{}", chargeSystemEvent);
@@ -98,7 +99,7 @@ public class BillEventHandler implements ChargeSystemEventHandler {
     }
 
     public void enableDeductIfPaid(BillingItem billingItem) {
-        if(billingItem.getDeductId()!=null){
+        if (billingItem.getDeductId() != null) {
             //檢查有沒有扣抵或預繳付款完成
             Optional<Deduct> deductOptional = deductRepository.findById(billingItem.getDeductId());
             if (deductOptional.isPresent()) {

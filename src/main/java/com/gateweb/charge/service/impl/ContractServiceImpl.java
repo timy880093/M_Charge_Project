@@ -4,10 +4,8 @@ import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.component.*;
 import com.gateweb.charge.enumeration.ContractStatus;
-import com.gateweb.charge.eventBus.ChargeSystemEvent;
-import com.gateweb.charge.eventBus.EventAction;
-import com.gateweb.charge.eventBus.EventSource;
-import com.gateweb.charge.exception.*;
+import com.gateweb.charge.exception.DeleteBilledBillingItemException;
+import com.gateweb.charge.exception.InvalidOperationException;
 import com.gateweb.charge.feeCalculation.bean.ContractOverageFeeBillingData;
 import com.gateweb.charge.feeCalculation.dataGateway.ContractOverageFeeBillingDataCollector;
 import com.gateweb.charge.frontEndIntegration.bean.OutToBillRequest;
@@ -23,7 +21,6 @@ import com.gateweb.orm.charge.entity.PackageRef;
 import com.gateweb.orm.charge.entity.view.ContractFetchView;
 import com.gateweb.orm.charge.repository.*;
 import com.gateweb.utils.ConcurrentUtils;
-import com.gateweb.utils.LocalDateTimeUtils;
 import com.gateweb.utils.bean.BeanConverterUtils;
 import com.google.common.eventbus.EventBus;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +30,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -99,49 +95,6 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public List<ContractFetchView> searchAllContractFetchView() {
         return contractFetchViewRepository.findAll();
-    }
-
-    public Optional<Contract> createContractByMap(Map<String, Object> map)
-            throws ContractIntervalOverlapException, ContractTypeAmbiguousException {
-        Contract contractVo = newContractPrepare(map);
-        contractValidationComponent.contractValidation(contractVo);
-        return Optional.ofNullable(contractVo);
-    }
-
-    public Contract newContractPrepare(Map<String, Object> map) {
-        //根據map產生vo
-        Contract contractVo = beanConverterUtils.mapToBean(map, Contract.class);
-        if (contractVo.getFirstInvoiceDateAsEffectiveDate() == null) {
-            contractVo.setFirstInvoiceDateAsEffectiveDate(false);
-        }
-        if (contractVo.getExpirationDate() != null) {
-            contractVo.setExpirationDate(
-                    LocalDateTimeUtils.pushToLastSecond(contractVo.getExpirationDate())
-            );
-        }
-        contractVo.setCreateDate(LocalDateTime.now());
-        return contractVo;
-    }
-
-    public Optional<Contract> createContract(Map<String, Object> map, CallerInfo callerInfo)
-            throws MissingRequiredPropertiesException
-            , ContractIntervalOverlapException
-            , ContractTypeAmbiguousException {
-        Optional<Contract> contractOptional = createContractByMap(map);
-        if (contractOptional.isPresent()) {
-            contractOptional.get().setStatus(ContractStatus.C);
-            contractOptional.get().setContractId(callerInfo.getUserEntity().getUserId().longValue());
-            contractOptional.get().setCreateDate(LocalDateTime.now());
-            contractRepository.save(contractOptional.get());
-            ChargeSystemEvent chargeSystemEvent = new ChargeSystemEvent(
-                    EventSource.CONTRACT
-                    , EventAction.CREATE
-                    , contractOptional.get().getContractId()
-                    , callerInfo.getUserEntity().getUserId().longValue()
-            );
-            chargeSystemEventBus.post(chargeSystemEvent);
-        }
-        return contractOptional;
     }
 
     @Override

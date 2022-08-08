@@ -1,15 +1,15 @@
 package com.gateweb.charge.service.endPointService;
 
 import com.gateweb.charge.contract.bean.request.*;
-import com.gateweb.charge.contract.utils.ContractRenewIntervalGenerator;
 import com.gateweb.charge.contract.component.ContractSaveComponent;
 import com.gateweb.charge.contract.component.ContractTerminateComponent;
-import com.gateweb.charge.frontEndIntegration.enumeration.SweetAlertStatus;
+import com.gateweb.charge.contract.utils.ContractRenewIntervalGenerator;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.eventBus.EventAction;
 import com.gateweb.charge.eventBus.EventSource;
 import com.gateweb.charge.exception.ContractIntervalOverlapException;
 import com.gateweb.charge.exception.ContractTypeAmbiguousException;
+import com.gateweb.charge.frontEndIntegration.enumeration.SweetAlertStatus;
 import com.gateweb.orm.charge.entity.Contract;
 import com.google.common.eventbus.EventBus;
 import org.apache.logging.log4j.LogManager;
@@ -52,7 +52,7 @@ public class ContractEndpointService {
         return expirationDateFulfillRes;
     }
 
-    public ContractSaveRes contractSaveOrUpdate(ContractSaveReq contractSaveReq, Long callerId) {
+    public ContractSaveRes contractSaveOrUpdate(ContractSaveReq contractSaveReq) {
         ContractSaveRes contractSaveRes = new ContractSaveRes();
         try {
             if (contractSaveReq.getContractId() == null) {
@@ -61,7 +61,7 @@ public class ContractEndpointService {
                         EventSource.CONTRACT,
                         EventAction.CREATE,
                         contract.getContractId(),
-                        callerId
+                        contractSaveReq.getCallerId()
                 );
                 chargeSystemEventBus.post(chargeSystemEvent);
             } else {

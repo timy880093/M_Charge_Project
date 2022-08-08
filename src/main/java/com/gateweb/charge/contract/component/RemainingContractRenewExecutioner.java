@@ -1,14 +1,11 @@
 package com.gateweb.charge.contract.component;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.bean.ChargeRemainingCountRenewData;
 import com.gateweb.charge.contract.bean.RemainingRecordModel;
 import com.gateweb.charge.contract.bean.request.RemainingContractRenewReq;
-import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.eventBus.EventAction;
 import com.gateweb.charge.eventBus.EventSource;
-import com.gateweb.charge.feeCalculation.bean.ChargeByRemainingCountCalData;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;

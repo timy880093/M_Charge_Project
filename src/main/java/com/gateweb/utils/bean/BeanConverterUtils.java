@@ -2,9 +2,7 @@ package com.gateweb.utils.bean;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gate.web.formbeans.CompanyChargeCycleBean;
 import com.gateweb.charge.enumeration.*;
-import com.gateweb.orm.charge.entity.ChargeModeCycleAddEntity;
 import com.gateweb.utils.LocalDateTimeUtils;
 import com.gateweb.utils.bean.typeConverter.*;
 import com.google.gson.Gson;
@@ -53,18 +51,6 @@ public class BeanConverterUtils {
             resultMap.remove(removableKey);
         });
         return resultMap;
-    }
-
-    @Deprecated
-    public ChargeModeCycleAddEntity companyChargeCycleBeanToChargeModeCycleEntity(CompanyChargeCycleBean companyChargeCycleBean) {
-        ChargeModeCycleAddEntity addEntity = new ChargeModeCycleAddEntity();
-        addEntity.setCreateDate(Timestamp.valueOf(LocalDateTime.now()));
-        addEntity.setModifyDate(Timestamp.valueOf(LocalDateTime.now()));
-        addEntity.setRealEndDate(LocalDateTimeUtils.stringToDate(companyChargeCycleBean.getRealEndDate(), "yyyy-MM-dd"));
-        addEntity.setRealStartDate(LocalDateTimeUtils.stringToDate(companyChargeCycleBean.getRealStartDate(), "yyyy-MM-dd"));
-        addEntity.setFreeMonth(companyChargeCycleBean.getFreeMonth());
-        addEntity.setGiftPrice(new BigDecimal(companyChargeCycleBean.getGiftPrice()));
-        return addEntity;
     }
 
     /**

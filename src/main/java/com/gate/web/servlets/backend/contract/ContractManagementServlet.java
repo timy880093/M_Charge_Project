@@ -5,6 +5,7 @@ import com.gate.web.servlets.abstraction.DefaultDisplayPageModelViewController;
 import com.gateweb.charge.chargePolicy.cycle.service.CycleService;
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.bean.request.*;
+import com.gateweb.charge.contract.component.ContractSaveReqConverter;
 import com.gateweb.charge.contract.component.ContractValidationComponent;
 import com.gateweb.charge.exception.DeleteBilledBillingItemException;
 import com.gateweb.charge.frontEndIntegration.bean.SweetAlertResponse;
@@ -44,7 +45,7 @@ import java.util.*;
 public class ContractManagementServlet extends DefaultDisplayPageModelViewController {
     private static final String DEFAULT_DISPATCH_PAGE = "/pages/contractListView.html";
     protected final Logger logger = LogManager.getLogger(getClass());
-    final BeanConverterUtils beanConverterUtils = new BeanConverterUtils();
+    final private static BeanConverterUtils beanConverterUtils = new BeanConverterUtils();
 
     @Autowired
     ContractService contractService;
@@ -131,17 +132,13 @@ public class ContractManagementServlet extends DefaultDisplayPageModelViewContro
         try {
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
-            Optional<ContractSaveReq> contractSaveReqOptional = beanConverterUtils.convertJsonToObjWithTypeCast(
-                    jsonBody, ContractSaveReq.class
-            );
-            if (callerInfoOptional.isPresent() && contractSaveReqOptional.isPresent()) {
+            Optional<ContractSaveReq> contractSaveReqOptional
+                    = ContractSaveReqConverter.genContractSaveReq(jsonBody, callerInfoOptional.get());
+            if (contractSaveReqOptional.isPresent()) {
                 gson = new GsonBuilder().serializeNulls().create();
                 return
                         ResponseEntity.ok(
-                                contractEndpointService.contractSaveOrUpdate(
-                                        contractSaveReqOptional.get()
-                                        , chargeUserPrinciple.getUserInstance().getUserId().longValue()
-                                )
+                                contractEndpointService.contractSaveOrUpdate(contractSaveReqOptional.get())
                         );
             }
         } catch (Exception ex) {

@@ -5,7 +5,6 @@ public enum EventAction {
     CANCEL,
     INITIAL,
     BILLING,
-    CANCEL_BILLING,
     ENABLE,
     PAID,
     SEND_NOTICE,
