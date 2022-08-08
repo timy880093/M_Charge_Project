@@ -29,8 +29,6 @@ public class ChargePackageServiceImpl implements ChargePackageService {
     @Autowired
     ProductRepository productRepository;
     @Autowired
-    TerminationClauseRepository terminationClauseRepository;
-    @Autowired
     ChargePackageRepository chargePackageRepository;
     @Autowired
     PackageRefRepository packageRefRepository;

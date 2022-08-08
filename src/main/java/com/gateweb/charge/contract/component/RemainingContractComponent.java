@@ -119,18 +119,6 @@ public class RemainingContractComponent {
         return invoiceRemaining;
     }
 
-    @Deprecated
-    public Contract updateOriginalContract(Contract original, LocalDateTime newEffectiveDate) {
-        //update renewFlag
-        original.setAutoRenew(false);
-        if (original.getEffectiveDate().equals(newEffectiveDate)) {
-            original.setExpirationDate(newEffectiveDate);
-        } else {
-            original.setExpirationDate(newEffectiveDate.minusSeconds(1));
-        }
-        return original;
-    }
-
     public Optional<CustomInterval> genInvoiceDateInterval(String fromStr, String toStr) {
         Optional<LocalDate> fromStrOpt = LocalDateTimeUtils.parseLocalDateFromString(fromStr, "yyyyMMdd");
         Optional<LocalDate> toStrOpt = LocalDateTimeUtils.parseLocalDateFromString(toStr, "yyyyMMdd");

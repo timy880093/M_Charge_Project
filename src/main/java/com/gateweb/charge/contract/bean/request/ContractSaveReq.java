@@ -15,11 +15,12 @@ public class ContractSaveReq {
     LocalDateTime effectiveDate;
     LocalDateTime expirationDate;
     LocalDateTime installationDate;
+    Long callerId;
 
     public ContractSaveReq() {
     }
 
-    public ContractSaveReq(Long contractId, Long companyId, Long packageId, Long renewPackageId, String contractName, Boolean autoRenew, Boolean firstContract, Boolean firstInvoiceDateAsEffectiveDate, Integer periodMonth, LocalDateTime effectiveDate, LocalDateTime expirationDate, LocalDateTime installationDate) {
+    public ContractSaveReq(Long contractId, Long companyId, Long packageId, Long renewPackageId, String contractName, Boolean autoRenew, Boolean firstContract, Boolean firstInvoiceDateAsEffectiveDate, Integer periodMonth, LocalDateTime effectiveDate, LocalDateTime expirationDate, LocalDateTime installationDate, Long callerId) {
         this.contractId = contractId;
         this.companyId = companyId;
         this.packageId = packageId;
@@ -32,6 +33,7 @@ public class ContractSaveReq {
         this.effectiveDate = effectiveDate;
         this.expirationDate = expirationDate;
         this.installationDate = installationDate;
+        this.callerId = callerId;
     }
 
     public Long getContractId() {
@@ -128,6 +130,14 @@ public class ContractSaveReq {
 
     public void setInstallationDate(LocalDateTime installationDate) {
         this.installationDate = installationDate;
+    }
+
+    public Long getCallerId() {
+        return callerId;
+    }
+
+    public void setCallerId(Long callerId) {
+        this.callerId = callerId;
     }
 }
 

@@ -171,27 +171,6 @@ public class NegativeRemainingRenewDataCollector implements RemainingContractRen
         return Optional.empty();
     }
 
-    /**
-     * 以張計費的合約續約會將舊有的張數記錄拆成兩個張數記錄，並將新的可用張數記錄於新產生的張數項目
-     *
-     * @param negativeRecord
-     * @param renewContract
-     * @return
-     */
-    @Deprecated
-    private Optional<InvoiceRemaining> generateUpdatedNegativeRecord(final InvoiceRemaining negativeRecord, final Contract renewContract) {
-        Optional<String> newInvoiceDateOpt = LocalDateTimeUtils.parseLocalDateTimeToString(
-                renewContract.getEffectiveDate().minusSeconds(1)
-                , "yyyyMMdd"
-        );
-        if (newInvoiceDateOpt.isPresent()) {
-            negativeRecord.setInvoiceDate(newInvoiceDateOpt.get());
-            return Optional.of(negativeRecord);
-        } else {
-            return Optional.empty();
-        }
-    }
-
     public void updateNegativeRecord(String businessNo, InvoiceRemaining negativeRecord, CustomInterval marginInterval) {
         Optional<String> newInvoiceDateOpt = LocalDateTimeUtils.parseLocalDateTimeToString(
                 marginInterval.getEndLocalDateTime(), "yyyyMMdd"

@@ -5,8 +5,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
+@Deprecated
 @Configuration
-@ComponentScan({ "com.gateweb.charge.component.annotated" })
+@ComponentScan({ "com.gateweb.charge.component" })
 public class MethodValidationConfig {
 
     @Bean

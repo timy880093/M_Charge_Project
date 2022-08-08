@@ -60,4 +60,13 @@ public class ContractRenewIntervalRangeTest {
             Assert.assertEquals("2022-03-31T23:59:59", customIntervalOpt.get().getEndLocalDateTime().toString());
         }
     }
+
+    @Test
+    public void renewIntervalTest3(){
+        Optional<CustomInterval> customIntervalOpt = contractRenewComponent.getRenewIntervalByYmStr("202206");
+        if (customIntervalOpt.isPresent()) {
+            Assert.assertEquals("2022-08-01T00:00", customIntervalOpt.get().getStartLocalDateTime().toString());
+            Assert.assertEquals("2022-08-31T23:59:59", customIntervalOpt.get().getEndLocalDateTime().toString());
+        }
+    }
 }

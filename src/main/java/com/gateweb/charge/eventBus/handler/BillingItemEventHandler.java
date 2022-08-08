@@ -42,6 +42,8 @@ public class BillingItemEventHandler implements ChargeSystemEventHandler {
             case DELETE:
                 onBillingItemDelete(chargeSystemEvent.getSourceId());
                 break;
+            case CANCEL:
+                break;
             default:
                 logger.error("Unknown Event Action:{}", chargeSystemEvent);
                 break;

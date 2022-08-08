@@ -233,19 +233,6 @@ public class RemainingRecordModelComponent {
         return Optional.empty();
     }
 
-    @Deprecated
-    public boolean isFirstRecordOfTheCompany(InvoiceRemaining invoiceRemaining) {
-        //確認是不是該公司的第一個項目
-        Optional<InvoiceRemaining> firstRecordOfCompanyOpt
-                = invoiceRemainingRepository.findTopByCompanyIdOrderByInvoiceRemainingIdAsc(invoiceRemaining.getCompanyId());
-        if (firstRecordOfCompanyOpt.isPresent()
-                && firstRecordOfCompanyOpt.get().getInvoiceRemainingId().equals(invoiceRemaining.getInvoiceRemainingId())) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     public boolean isFirstRecordOfTheContract(InvoiceRemaining invoiceRemaining) {
         Optional<InvoiceRemaining> firstRecordOfContractOpt
                 = invoiceRemainingRepository.findTopByCompanyIdAndContractIdOrderByInvoiceDate(

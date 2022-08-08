@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
 public class BillServiceImpl implements BillService {
     protected final Logger logger = LogManager.getLogger(getClass());
     final BillingItemFeeCalculator billingItemFeeCalculator = new BillingItemFeeCalculator();
-    final BeanConverterUtils beanConverterUtils = new BeanConverterUtils();
 
     @Autowired
     CompanyRepository companyRepository;

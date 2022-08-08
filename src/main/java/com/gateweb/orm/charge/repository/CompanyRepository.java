@@ -49,45 +49,7 @@ public interface CompanyRepository extends JpaRepository<Company, Integer>
     public List<Company> findByVerifyStatusIs(Integer verifyStatus);
 
     public Optional<Company> findByBusinessNo(String businessNo);
-
-    @Query(value = "SELECT *\n" +
-            "FROM company\n" +
-            "WHERE company_id IN (\n" +
-            "\t\tSELECT company_id\n" +
-            "\t\tFROM payment_reference\n" +
-            "\t\tWHERE payment_type = 'AUTOMATIC'\n" +
-            "\t\t\tAND payment_method = 'SCSB_CONVENIENT_STORE'\n" +
-            "\t\t)\n", nativeQuery = true)
-    List<Company> findNeedScsbConvenientStoreReport();
-
-    /**
-     * 為了解決超額計算時花太多時間處理不需要處理的公司的問題
-     * 至少要過濾沒有方案的公司，不然計算時間過長
-     *
-     * @param yearMonth
-     * @return
-     */
-    @Query(value = "SELECT com.* \n" +
-            "FROM company com\n" +
-            "JOIN bill_cycle bc ON (\n" +
-            "\t\tcom.company_id = bc.company_id\n" +
-            "\t\tAND bc.year_month = ?1 \n" +
-            "\t\tAND STATUS = '1'\n" +
-            "\t\t)\n" +
-            "ORDER BY bc.cnt DESC\n"
-            , nativeQuery = true)
-    List<Company> findNeedToBeCalculateCompanyList(String yearMonth);
-
-    @Query(value = "SELECT com.* \n" +
-            "FROM company com\n" +
-            "JOIN bill_cycle bc ON (\n" +
-            "\t\tcom.company_id = bc.company_id\n" +
-            "\t\tAND STATUS = '1'\n" +
-            "\t\t)\n" +
-            "ORDER BY bc.cnt DESC\n"
-            , nativeQuery = true)
-    List<Company> findNeedToBeCalculateCompanyList();
-
+    
     @Query(value =
             "select com.* from company com where com.verify_status !=9 ", nativeQuery = true)
     List<Company> findEnabledCompanyList();
@@ -105,18 +67,6 @@ public interface CompanyRepository extends JpaRepository<Company, Integer>
             "\t\tcontract_id IS NOT NULL\n" +
             "\t\t)\n", nativeQuery = true)
     Collection<Company> findBillableCompanyByContract();
-
-    /**
-     * 舊的公司查詢方法
-     *
-     * @return
-     */
-    @Query(value = "SELECT DISTINCT com.*\n" +
-            "FROM company com\n" +
-            "JOIN bill_cycle bc ON (bc.company_id = com.company_id)\n" +
-            "WHERE com.verify_status = 3 \n" +
-            "\tAND bill_id IS NOT NULL\n", nativeQuery = true)
-    Collection<Company> findBillableCompanyByBillCycle();
 
     /**
      * 區分新舊的billableContract定義
