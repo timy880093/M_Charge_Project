@@ -11,7 +11,7 @@ import org.junit.rules.ExpectedException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class objectNullCheckerTest {
+public class ObjectNullCheckerTest {
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 

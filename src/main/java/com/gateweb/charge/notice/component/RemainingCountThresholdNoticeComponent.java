@@ -3,8 +3,8 @@ package com.gateweb.charge.notice.component;
 import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
 import com.gateweb.charge.chargePolicy.bean.ChargePolicy;
 import com.gateweb.charge.contract.component.ContractRenewComponent;
-import com.gateweb.charge.contract.component.RemainingContractComponent;
-import com.gateweb.charge.contract.component.RemainingCountAmountProvider;
+import com.gateweb.charge.contract.remainingCount.component.RemainingContractComponent;
+import com.gateweb.charge.contract.remainingCount.component.RemainingCountAmountProvider;
 import com.gateweb.charge.deduct.component.DeductibleItemFilterComponent;
 import com.gateweb.charge.notice.bean.RemainingCountThresholdNoticeReportData;
 import com.gateweb.charge.notice.builder.MailMimeMessageBuilder;
@@ -111,6 +111,7 @@ public class RemainingCountThresholdNoticeComponent implements NoticeMimeMessage
             //TODO:預設為10%內
             int maxRemaining = remainingCountOpt.get();
             double threshold = newInvoiceRemaining.getRemaining().doubleValue() / maxRemaining;
+            //若為負項則會觸發續約，續約後就不符合10%以下的條件了
             if (threshold < 0.1d) {
                 Notice notice = noticeRequestGenerator.genRemainingCountInventoryAlertMailNotice(newInvoiceRemaining);
                 noticeRepository.save(notice);

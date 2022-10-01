@@ -32,6 +32,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.gateweb.utils.ConcurrentUtils.pool;
+
 @Component
 public class ContractRenewComponent {
     protected final Logger logger = LogManager.getLogger(getClass());
@@ -93,7 +95,6 @@ public class ContractRenewComponent {
 
     private Collection<Contract> renewContractCollection(Collection<Contract> contractCollection, Long callerId) {
         Set<Contract> renewContractSet = new HashSet<>();
-        ExecutorService pool = Executors.newFixedThreadPool(5);
         List<CompletableFuture<Void>> completableFutureList = new ArrayList<>();
         contractCollection.stream().forEach(contract -> {
             completableFutureList.add(CompletableFuture.runAsync(() -> {
@@ -104,7 +105,6 @@ public class ContractRenewComponent {
             }, pool));
         });
         ConcurrentUtils.completableGet(completableFutureList);
-        pool.shutdown();
         return renewContractSet;
     }
 
@@ -224,7 +224,7 @@ public class ContractRenewComponent {
         return renewContract;
     }
 
-    public Optional<Contract> genRenewContract(final Contract contract, LocalDateTime newEffectiveDate) {
+    public Optional<Contract> genRenewRemainingContract(final Contract contract, LocalDateTime newEffectiveDate) {
         Optional<LocalDateTime> newContractIntervalOpt = ContractRenewIntervalGenerator.getContractExpirationDate(
                 newEffectiveDate
                 , contract.getPeriodMonth()
@@ -242,7 +242,7 @@ public class ContractRenewComponent {
         }
     }
 
-    public Optional<Contract> genRenewContract(final Contract contract, String prevInvoiceDate) {
+    public Optional<Contract> genRenewRemainingContract(final Contract contract, String prevInvoiceDate) {
         Optional<CustomInterval> newContractIntervalOpt = ContractRenewIntervalGenerator.genRemainingTypeRenewInterval(
                 contract
                 , prevInvoiceDate

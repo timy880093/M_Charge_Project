@@ -1,4 +1,4 @@
-package com.gateweb.charge.contract.bean;
+package com.gateweb.charge.contract.remainingCount.bean;
 
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;

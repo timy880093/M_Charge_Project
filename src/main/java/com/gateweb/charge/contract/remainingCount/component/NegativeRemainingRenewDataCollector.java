@@ -1,9 +1,10 @@
-package com.gateweb.charge.contract.component;
+package com.gateweb.charge.contract.remainingCount.component;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
-import com.gateweb.charge.contract.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.bean.RemainingRecordModel;
-import com.gateweb.charge.contract.bean.request.RemainingContractRenewReq;
+import com.gateweb.charge.contract.component.ContractRenewComponent;
+import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordModel;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
@@ -84,7 +85,7 @@ public class NegativeRemainingRenewDataCollector implements RemainingContractRen
                 renewRecordInterval.getStartLocalDateTime().minusSeconds(1)
         );
         //產生續約合約
-        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewContract(
+        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewRemainingContract(
                 contract
                 , searchInterval.getStartLocalDateTime()
         );
@@ -135,7 +136,7 @@ public class NegativeRemainingRenewDataCollector implements RemainingContractRen
                 renewRecordInterval.getStartLocalDateTime().minusSeconds(1)
         );
         //產生續約合約
-        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewContract(
+        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewRemainingContract(
                 contract
                 , negativeRecord.getInvoiceDate()
         );

@@ -32,13 +32,12 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import static com.gateweb.utils.ConcurrentUtils.pool;
 
 @Service
 public class ContractServiceImpl implements ContractService {
-    ExecutorService pool = Executors.newFixedThreadPool(4);
     protected final Logger logger = LogManager.getLogger(getClass());
     final BeanConverterUtils beanConverterUtils = new BeanConverterUtils();
 
@@ -185,20 +184,19 @@ public class ContractServiceImpl implements ContractService {
         Set<CustomInterval> overageCalculateIntervalSet = contractPeriodicFeeCalculator.getOverageCalculateIntervalByYmStr(
                 calFeeYearMonth
         );
-        overageCalculateIntervalSet.stream().forEach(customInterval -> {
-            Set<CompletableFuture<Void>> overageCompletableFutureList = new HashSet<>();
+        Set<CompletableFuture<Void>> overageCompletableFutureList = Collections.synchronizedSet(new HashSet<>());
+        overageCalculateIntervalSet.parallelStream().forEach(customInterval -> {
             overageCompletableFutureList.add(CompletableFuture.runAsync(() -> {
-                Set<ContractOverageFeeBillingData> contractOverageFeeBillingData;
-                contractOverageFeeBillingData = new HashSet<>(
-                        contractOverageFeeBillingDataCollector.collect(customInterval)
+                Set<ContractOverageFeeBillingData> contractOverageFeeBillingData = Collections.synchronizedSet(
+                        new HashSet<>(contractOverageFeeBillingDataCollector.collect(customInterval))
                 );
                 contractPeriodicFeeCalculator.executePostPaidPeriodicBilling(
                         contractOverageFeeBillingData
                         , callerId
                 );
             }, pool));
-            ConcurrentUtils.completableGet(overageCompletableFutureList);
         });
+        ConcurrentUtils.completableGet(overageCompletableFutureList);
     }
 
     @Override

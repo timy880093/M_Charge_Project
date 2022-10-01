@@ -1,11 +1,15 @@
-package com.gateweb.charge.contract.component;
+package com.gateweb.charge.contract.remainingCount.component;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.contract.component.ContractPrepayTypeComponent;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.enumeration.PaidPlan;
 import com.gateweb.charge.feeCalculation.bean.ChargeByRemainingCountCalData;
 import com.gateweb.charge.service.dataGateway.ContractDataGateway;
-import com.gateweb.orm.charge.entity.*;
+import com.gateweb.orm.charge.entity.ChargeRule;
+import com.gateweb.orm.charge.entity.Company;
+import com.gateweb.orm.charge.entity.Contract;
+import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.ChargeRuleRepository;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
 import com.gateweb.orm.charge.repository.NewGradeRepository;
@@ -65,6 +69,13 @@ public class RemainingContractComponent {
         return chargeByRemainingCountCalDataSet;
     }
 
+    /**
+     * 使用者的需求為若最新的一筆資料為負項，就不寫入新的記錄資料
+     * 但這其實會造成新的記錄不會寫進去，一直使用原有的舊記錄進行續約
+     * 因為也沒有新的記錄，所以除了那一筆也找不到其它記錄，就會停在該記錄中不會繼續
+     * @param company
+     * @return
+     */
     public Optional<ChargeByRemainingCountCalData> chargeByRemainingCountCalDataCollector(Company company) {
         Optional result = Optional.empty();
         try {

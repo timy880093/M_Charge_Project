@@ -1,7 +1,6 @@
-package com.gateweb.charge.contract.bean.request;
+package com.gateweb.charge.contract.remainingCount.bean;
 
-import com.gateweb.charge.contract.bean.RemainingRecordModel;
-import com.gateweb.charge.contract.component.RemainingContractRenewDataCollector;
+import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollector;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
 

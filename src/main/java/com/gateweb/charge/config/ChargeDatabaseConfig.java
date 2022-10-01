@@ -142,7 +142,6 @@ public class ChargeDatabaseConfig {
         transactionAttributes.setProperty("save*", PROPAGATION_REQUIRED);
         transactionAttributes.setProperty("send*", PROPAGATION_REQUIRED);
         transactionAttributes.setProperty("clean*", PROPAGATION_REQUIRED);
-        transactionAttributes.setProperty("query*", PROPAGATION_REQUIRED);
         transactionAttributes.setProperty("get*", PROPAGATION_REQUIRED);
         transactionAttributes.setProperty("*", "PROPAGATION_SUPPORTS,-Throwable,readOnly");
         transactionInterceptor.setTransactionAttributes(transactionAttributes);

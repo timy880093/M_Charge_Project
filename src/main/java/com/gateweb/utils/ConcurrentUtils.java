@@ -5,12 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 
 public class ConcurrentUtils {
-
+    public static ExecutorService pool = Executors.newFixedThreadPool(9);
     private static final Logger logger = LogManager.getLogger(ConcurrentUtils.class);
 
     public static void completableGet(Collection<CompletableFuture<Void>> completableFutureCollection) {

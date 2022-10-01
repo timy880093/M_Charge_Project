@@ -23,13 +23,12 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import static com.gateweb.utils.ConcurrentUtils.pool;
 
 @Service
 public class SyncIasrDataServiceImpl implements com.gateweb.bridge.service.SyncIasrDataService {
-    ExecutorService executorService = Executors.newFixedThreadPool(9);
     final Logger logger = LoggerFactory.getLogger(SyncIasrDataServiceImpl.class);
     Gson gson = new Gson();
 
@@ -100,22 +99,24 @@ public class SyncIasrDataServiceImpl implements com.gateweb.bridge.service.SyncI
         if (yearMonthOptional.isPresent()) {
             String twYm = LocalDateTimeUtils.getTwYearMonth(yearMonthOptional.get().atDay(1).atStartOfDay());
             String likeStrCondition = yearMonthStr + "%";
-            Set<String> sellerList = einvInvoiceMainRepository.findByInvoiceDateLikeAndYearMonth(likeStrCondition, twYm);
-            Set<String> billableBusinessNo = companyService.getBillableBusinessNo();
-            List<CompletableFuture<Void>> completableFutureList = new ArrayList<>();
-            sellerList.stream().forEach(businessNo -> {
-                if (billableBusinessNo.contains(businessNo)) {
-                    completableFutureList.add(CompletableFuture.runAsync(() -> {
+            Set<String> sellerList = Collections.synchronizedSet(
+                    einvInvoiceMainRepository.findByInvoiceDateLikeAndYearMonth(likeStrCondition, twYm)
+            );
+            Set<String> billableBusinessNo = Collections.synchronizedSet(companyService.getBillableBusinessNo());
+            List<CompletableFuture<Void>> completableFutureList = Collections.synchronizedList(new ArrayList<>());
+            completableFutureList.add(CompletableFuture.runAsync(() -> {
+                sellerList.parallelStream().forEach(businessNo -> {
+                    if (billableBusinessNo.contains(businessNo)) {
                         try {
                             regenIasrCount(businessNo, yearMonthStr);
                         } catch (InterruptedException e) {
                             logger.error(e.getMessage());
                         }
-                    }, executorService));
-                } else {
-                    logger.info(" not in service businessNo:" + businessNo);
-                }
-            });
+                    } else {
+                        logger.info(" not in service businessNo:" + businessNo);
+                    }
+                });
+            }, pool));
             ConcurrentUtils.completableGet(completableFutureList);
         }
     }

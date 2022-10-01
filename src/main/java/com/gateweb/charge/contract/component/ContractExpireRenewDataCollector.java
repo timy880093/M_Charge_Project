@@ -1,9 +1,12 @@
 package com.gateweb.charge.contract.component;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
-import com.gateweb.charge.contract.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.bean.RemainingRecordModel;
-import com.gateweb.charge.contract.bean.request.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordModel;
+import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.component.RemainingContractComponent;
+import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollector;
+import com.gateweb.charge.contract.remainingCount.component.RemainingRecordModelComponent;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
@@ -29,7 +32,7 @@ public class ContractExpireRenewDataCollector implements RemainingContractRenewD
     public Optional<ChargeRemainingCountRenewData> execute(final RemainingContractRenewReq remainingContractRenewReq) {
         InvoiceRemaining expireRecord = remainingContractRenewReq.getRemainingRecordModel().getTargetRecord();
         Contract contract = remainingContractRenewReq.getContract();
-        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewContract(
+        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewRemainingContract(
                 contract
                 , contract.getExpirationDate().plusSeconds(1)
         );

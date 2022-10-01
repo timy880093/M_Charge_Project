@@ -17,7 +17,6 @@ import com.gateweb.charge.service.ContractService;
 import com.gateweb.charge.service.dataGateway.BillingItemDataGateway;
 import com.gateweb.orm.charge.entity.view.BillingItemFetchView;
 import com.gateweb.orm.charge.repository.BillingItemFetchViewRepository;
-import com.gateweb.orm.charge.repository.BillingItemFetchViewRepositoryCustom;
 import com.gateweb.orm.charge.repository.BillingItemRepository;
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import com.gateweb.utils.CsvUtils;
@@ -45,8 +44,6 @@ public class BillingItemManagementServlet extends DefaultDisplayPageModelViewCon
     BillingService billingService;
     @Autowired
     BillingItemFetchViewRepository billingItemFetchViewRepository;
-    @Autowired
-    BillingItemFetchViewRepositoryCustom billingItemFetchViewRepositoryCustom;
     @Autowired
     BillingItemRepository billingItemRepository;
     @Autowired
