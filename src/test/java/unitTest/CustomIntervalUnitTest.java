@@ -209,7 +209,7 @@ public class CustomIntervalUnitTest {
                 , "yyyy-MM-dd'T'HH:mm:ss.SSS"
         );
         CustomInterval targetInterval = new CustomInterval(fromLocalDateTime.get(), toLocalDateTime.get());
-        ChargeCycle seasonCycle = new SeasonCycle(1);
+        ChargeCycle seasonCycle = new QuarterlyCycle(1);
         List<CustomInterval> customIntervalList = seasonCycle.doPartitioning(targetInterval);
         Assert.assertEquals(customIntervalList.size(), 4);
     }

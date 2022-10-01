@@ -5,19 +5,18 @@ import com.gateweb.orm.charge.entity.view.BillingItemFetchView;
 import com.gateweb.orm.charge.repository.BillingItemFetchViewRepository;
 import com.gateweb.orm.charge.repository.BillingItemFetchViewRepositoryCustom;
 import com.gateweb.orm.charge.repository.BillingItemRepositoryCustom;
+import com.gateweb.utils.ConcurrentUtils;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+@Deprecated
 @Repository("BillingItemFetchViewRepositoryCustom")
 public class BillingItemFetchViewRepositoryCustomImpl implements BillingItemFetchViewRepositoryCustom {
     protected final Logger logger = LogManager.getLogger(getClass());

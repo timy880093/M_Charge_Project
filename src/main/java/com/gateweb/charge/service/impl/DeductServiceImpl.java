@@ -18,6 +18,8 @@ import com.gateweb.orm.charge.entity.view.DeductHistoryFetchView;
 import com.gateweb.orm.charge.repository.*;
 import com.google.common.eventbus.EventBus;
 import org.joda.time.Interval;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 public class DeductServiceImpl implements DeductService {
+    Logger logger = LoggerFactory.getLogger(DeductServiceImpl.class);
 
     @Autowired
     DeductRepository deductRepository;
@@ -75,6 +78,7 @@ public class DeductServiceImpl implements DeductService {
             try {
                 deductHistoryFetchViewList.add(completableFuture.get().get());
             } catch (Exception e) {
+                logger.error(e.getMessage());
                 e.printStackTrace();
             }
         });

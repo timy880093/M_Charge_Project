@@ -27,9 +27,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import static com.gateweb.utils.ConcurrentUtils.pool;
+
 @Service
 public class ChargeSourceServiceImpl implements ChargeSourceService {
-    ExecutorService pool = Executors.newFixedThreadPool(9);
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -56,8 +57,8 @@ public class ChargeSourceServiceImpl implements ChargeSourceService {
             LocalDateTime localDateTime = targetYmOptional.get().atDay(1).atStartOfDay();
             String twYm = LocalDateTimeUtils.getTwYearMonth(localDateTime);
             List<CompletableFuture<Void>> completableFutureList = new ArrayList<>();
-            Set<ChargeIasrCountReport> chargeIasrCountReportSet = new HashSet<>();
-            Set<EinvInvoiceDateCountReport> einvInvoiceDateCountReportSet = new HashSet<>();
+            Set<ChargeIasrCountReport> chargeIasrCountReportSet = Collections.synchronizedSet(new HashSet<>());
+            Set<EinvInvoiceDateCountReport> einvInvoiceDateCountReportSet = Collections.synchronizedSet(new HashSet<>());
             completableFutureList.add(CompletableFuture.runAsync(() -> {
                 chargeIasrCountReportSet.addAll(
                         chargeIasrCountReportRepository.findChargeIasrCountReport(targetYearMonth + '%')
@@ -85,8 +86,8 @@ public class ChargeSourceServiceImpl implements ChargeSourceService {
             LocalDateTime localDateTime = targetYmOptional.get().atDay(1).atStartOfDay();
             String twYm = LocalDateTimeUtils.getTwYearMonth(localDateTime);
             List<CompletableFuture<Void>> completableFutureList = new ArrayList<>();
-            Set<ChargeIasrCountReport> chargeIasrCountReportSet = new HashSet<>();
-            Set<EinvInvoiceDateCountReport> einvInvoiceDateCountReportSet = new HashSet<>();
+            Set<ChargeIasrCountReport> chargeIasrCountReportSet = Collections.synchronizedSet(new HashSet<>());
+            Set<EinvInvoiceDateCountReport> einvInvoiceDateCountReportSet = Collections.synchronizedSet(new HashSet<>());
             completableFutureList.add(CompletableFuture.runAsync(() -> {
                 chargeIasrCountReportSet.addAll(chargeIasrCountReportRepository.findChargeIasrCountReportWithSeller(targetYearMonth + '%', seller));
             }, pool));

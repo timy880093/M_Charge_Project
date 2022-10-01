@@ -1,4 +1,4 @@
-package com.gateweb.charge.contract.component;
+package com.gateweb.charge.contract.remainingCount.component;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.feeCalculation.bean.ChargeByRemainingCountCalData;

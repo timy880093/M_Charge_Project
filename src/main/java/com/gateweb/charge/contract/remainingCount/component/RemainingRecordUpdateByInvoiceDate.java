@@ -1,8 +1,8 @@
-package com.gateweb.charge.contract.component;
+package com.gateweb.charge.contract.remainingCount.component;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
-import com.gateweb.charge.contract.bean.RemainingCountRecordUpdateData;
-import com.gateweb.charge.contract.bean.request.RemainingRecordUpdateReq;
+import com.gateweb.charge.contract.remainingCount.bean.RemainingCountRecordUpdateData;
+import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordUpdateReq;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;

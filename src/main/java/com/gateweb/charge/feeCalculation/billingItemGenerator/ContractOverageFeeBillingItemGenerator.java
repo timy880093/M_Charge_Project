@@ -13,25 +13,25 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.gateweb.utils.ConcurrentUtils.pool;
+
 @Component
 public class ContractOverageFeeBillingItemGenerator {
 
-    ExecutorService pool = Executors.newFixedThreadPool(2);
     protected final Logger logger = LogManager.getLogger(getClass());
 
     public Collection<BillingItem> gen(Collection<ContractOverageFeeBillingData> contractOverageFeeBillingDataCollection) {
         Set<CompletableFuture<Void>> billingItemGenCompletableFutureSet = new HashSet<>();
-        Collection<BillingItem> billingItemCollection = new HashSet<>();
+        Collection<BillingItem> billingItemCollection = Collections.synchronizedSet(new HashSet<>());
+        Collection<ContractOverageFeeBillingData> synchronizedCollection
+                = Collections.synchronizedCollection(contractOverageFeeBillingDataCollection);
         billingItemGenCompletableFutureSet.add(CompletableFuture.runAsync(() -> {
-            contractOverageFeeBillingDataCollection.parallelStream().forEach(contractOverageFeeBillingData -> {
+            synchronizedCollection.parallelStream().forEach(contractOverageFeeBillingData -> {
                 billingItemCollection.addAll(gen(contractOverageFeeBillingData));
             });
         }, pool));

@@ -21,24 +21,21 @@ public class BillingItemCollisionDataCollector {
         //過濾已經存在的時間
         List<BillingItem> existsBillingItemList = billingItemRepository
                 .findByCompanyIdAndPackageRefIdAndDeductIdIsNull(company, packageRefId);
-
-        Set<BillingItem> removableBillingItemSet = existsBillingItemList.stream().filter(billingItem -> {
+        return existsBillingItemList.stream().filter(billingItem -> {
             if (billingItem.getBillId() != null) {
                 return false;
             } else {
                 return true;
             }
         }).collect(Collectors.toSet());
-        return removableBillingItemSet;
     }
 
     public Set<BillingItem> getCollisionBillingItem(BillingItem billingItem) {
-        Set<BillingItem> billingItemOptional = new HashSet<>(billingItemRepository.findByCompanyIdAndPackageRefIdAndCalculateFromDateAndCalculateToDate(
+        return new HashSet<>(billingItemRepository.findByCompanyIdAndPackageRefIdAndCalculateFromDateAndCalculateToDate(
                 billingItem.getCompanyId()
                 , billingItem.getPackageRefId()
                 , billingItem.getCalculateFromDate()
                 , billingItem.getCalculateToDate()
         ));
-        return billingItemOptional;
     }
 }

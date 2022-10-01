@@ -4,9 +4,9 @@ import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 
 import java.util.List;
 
-public class SeasonCycle extends MonthCycle {
+public class QuarterlyCycle extends MonthCycle {
 
-    public SeasonCycle(Integer period) {
+    public QuarterlyCycle(Integer period) {
         super(period * 3);
     }
 

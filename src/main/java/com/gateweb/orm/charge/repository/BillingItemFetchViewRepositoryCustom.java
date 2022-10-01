@@ -7,6 +7,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 @NoRepositoryBean
 public interface BillingItemFetchViewRepositoryCustom {
 

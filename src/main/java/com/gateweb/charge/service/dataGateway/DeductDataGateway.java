@@ -46,6 +46,7 @@ public class DeductDataGateway {
         return deductList;
     }
 
+    @Deprecated
     public List<DeductFetchView> searchBySearchCondition(HashMap<String, Object> parameterMap) {
         logger.debug("DeductSearchServiceImpl searchWithCondition vo: " + gson.toJson(parameterMap));
         List<DeductFetchView> resultList = new ArrayList<>();

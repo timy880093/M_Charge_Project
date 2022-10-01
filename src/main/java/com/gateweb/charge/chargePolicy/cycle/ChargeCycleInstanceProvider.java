@@ -15,7 +15,7 @@ public class ChargeCycleInstanceProvider {
             result = Optional.of(new MonthCycle(1));
         }
         if (cycleType.equals(CycleType.SEASON)) {
-            result = Optional.of(new SeasonCycle(1));
+            result = Optional.of(new QuarterlyCycle(1));
         }
         if (cycleType.equals(CycleType.ANY)) {
             result = Optional.of(new AnyCycle());
@@ -33,6 +33,9 @@ public class ChargeCycleInstanceProvider {
         Optional<ChargeCycle> result = Optional.empty();
         if (cycleType.equals(CycleType.GW_RENTAL_CAL)) {
             result = Optional.of(new GwRentalCalculateCycle(1, limitPartition));
+        }
+        if (cycleType.equals(CycleType.SEASON)) {
+            result = Optional.of(new QuarterlyCycle(1));
         }
         if (cycleType.equals(CycleType.ANY)) {
             result = Optional.of(new AnyCycle());

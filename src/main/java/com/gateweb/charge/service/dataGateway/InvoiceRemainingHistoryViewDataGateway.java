@@ -1,7 +1,7 @@
 package com.gateweb.charge.service.dataGateway;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
-import com.gateweb.charge.contract.component.RemainingRecordModelComponent;
+import com.gateweb.charge.contract.remainingCount.component.RemainingRecordModelComponent;
 import com.gateweb.charge.report.bean.InvoiceRemainingHistoryView;
 import com.gateweb.orm.charge.entity.InvoiceRemainingData;
 import com.gateweb.orm.charge.repository.InvoiceRemainingDataRepository;
