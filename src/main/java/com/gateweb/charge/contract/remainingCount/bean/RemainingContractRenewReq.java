@@ -1,16 +1,16 @@
 package com.gateweb.charge.contract.remainingCount.bean;
 
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollector;
+import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollectorDispatcher;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
 
 public class RemainingContractRenewReq {
     Company company;
-    RemainingContractRenewDataCollector remainingContractRenewDataCollector;
+    RemainingContractRenewDataCollectorDispatcher remainingContractRenewDataCollector;
     Contract contract;
     RemainingRecordModel remainingRecordModel;
 
-    public RemainingContractRenewReq(Company company, RemainingContractRenewDataCollector remainingContractRenewDataCollector, Contract contract, RemainingRecordModel remainingRecordModel) {
+    public RemainingContractRenewReq(Company company, RemainingContractRenewDataCollectorDispatcher remainingContractRenewDataCollector, Contract contract, RemainingRecordModel remainingRecordModel) {
         this.company = company;
         this.remainingContractRenewDataCollector = remainingContractRenewDataCollector;
         this.contract = contract;
@@ -25,11 +25,11 @@ public class RemainingContractRenewReq {
         this.company = company;
     }
 
-    public RemainingContractRenewDataCollector getRemainingContractRenewDataCollector() {
+    public RemainingContractRenewDataCollectorDispatcher getRemainingContractRenewDataCollector() {
         return remainingContractRenewDataCollector;
     }
 
-    public void setRemainingContractRenewDataCollector(RemainingContractRenewDataCollector remainingContractRenewDataCollector) {
+    public void setRemainingContractRenewDataCollector(RemainingContractRenewDataCollectorDispatcher remainingContractRenewDataCollector) {
         this.remainingContractRenewDataCollector = remainingContractRenewDataCollector;
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class NegativeRemainingRenewDataCollector implements RemainingContractRenewDataCollector {
+public class NegativeRemainingRenewDataCollectorDispatcher implements RemainingContractRenewDataCollectorDispatcher {
     @Autowired
     ContractRenewComponent contractRenewComponent;
     @Autowired

@@ -5,6 +5,6 @@ import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq
 
 import java.util.Optional;
 
-public interface RemainingContractRenewDataCollector {
+public interface RemainingContractRenewDataCollectorDispatcher {
     Optional<ChargeRemainingCountRenewData> execute(RemainingContractRenewReq remainingContractRenewReq);
 }
