@@ -1,6 +1,7 @@
 package com.gateweb.charge.contract.remainingCount.component;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
 import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordModel;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
 import com.gateweb.orm.charge.entity.Company;
@@ -165,41 +166,23 @@ public class RemainingRecordModelComponent {
         return Optional.empty();
     }
 
-    public Optional<RemainingRecordModel> genForExpireCaseSplitRenew(
-            Company company
-            , RemainingRecordModel remainingRecordModel
-            , CustomInterval customInterval) {
-        Optional<Integer> usageOpt = iasrDataCounterByInvoiceDate.count(company.getBusinessNo(), customInterval);
-        Optional<String> invoiceDateOpt = LocalDateTimeUtils.parseLocalDateTimeToString(
-                customInterval.getEndLocalDateTime(), "yyyyMMdd"
-        );
-        if (usageOpt.isPresent() && invoiceDateOpt.isPresent()) {
-            remainingRecordModel.getTargetRecord().setContractId(null);
-            remainingRecordModel.getTargetRecord().setInvoiceDate(invoiceDateOpt.get());
-            remainingRecordModel.getTargetRecord().setUsage(usageOpt.get());
-            remainingRecordModel.getTargetRecord().setRemaining(
-                    remainingRecordModel.getPrevRecord().getRemaining() - usageOpt.get()
-            );
-            remainingRecordModel.getTargetRecord().setModifyDate(LocalDateTime.now());
-            return Optional.of(remainingRecordModel);
+    /**
+     * 取得新產生的marginRecord的Interval
+     *
+     * @param prevRecord
+     * @param contract
+     * @return
+     */
+    public Optional<CustomInterval> getExpireCaseMarginRecordInterval(InvoiceRemaining prevRecord, Contract contract) {
+        Optional<LocalDate> marginRecordStartDateOpt = LocalDateTimeUtils.parseLocalDateFromString(prevRecord.getInvoiceDate(), "yyyyMMdd");
+        LocalDateTime marginRecordEndDate = contract.getExpirationDate();
+        if (marginRecordStartDateOpt.isPresent()) {
+            return Optional.of(new CustomInterval(marginRecordStartDateOpt.get().atStartOfDay(), marginRecordEndDate));
         }
         return Optional.empty();
     }
 
-    public Optional<RemainingRecordModel> updateForExpireCaseNonSplitRenew(
-            Contract renewContract
-            , RemainingRecordModel remainingRecordModel) {
-        //取得新合約的張數
-        Optional<Integer> remainingOpt = remainingCountAmountProvider.getRemainingCountFromPackageId(renewContract.getPackageId());
-        if (remainingOpt.isPresent()) {
-            remainingRecordModel.getTargetRecord().setRemaining(remainingOpt.get());
-            //清空合約號碼
-            remainingRecordModel.getTargetRecord().setContractId(null);
-            return Optional.of(remainingRecordModel);
-        }
-        return Optional.empty();
-    }
-
+    @Deprecated
     public Optional<RemainingRecordModel> genRenewRemainingRecordModel(
             Company company
             , Contract contract
@@ -246,4 +229,5 @@ public class RemainingRecordModelComponent {
             return false;
         }
     }
+
 }

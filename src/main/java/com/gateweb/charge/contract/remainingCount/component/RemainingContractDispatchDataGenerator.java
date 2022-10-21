@@ -1,6 +1,5 @@
 package com.gateweb.charge.contract.remainingCount.component;
 
-import com.gateweb.charge.contract.component.ContractExpireRenewDataCollector;
 import com.gateweb.charge.contract.remainingCount.bean.RemainingContractDispatchData;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
@@ -17,9 +16,9 @@ public class RemainingContractDispatchDataGenerator {
     @Autowired
     InvoiceRemainingRepository invoiceRemainingRepository;
     @Autowired
-    NegativeRemainingRenewDataCollector negativeRemainingRenewDataCollector;
+    NegativeRemainingRenewDataCollectorDispatcher negativeRemainingRenewDataCollectorDispatcher;
     @Autowired
-    ContractExpireRenewDataCollector contractExpireRenewDataCollector;
+    ContractExpireRenewDataCollectorDispatcher contractExpireRenewDataCollectorDispatcher;
 
     public Optional<RemainingContractDispatchData> gen(Company company, Contract contract) {
         Optional<InvoiceRemaining> negativeRecordOpt
@@ -39,13 +38,14 @@ public class RemainingContractDispatchDataGenerator {
                     , expirationDate.get()
             );
         }
-        Optional<RemainingContractRenewDataCollector> collectorOpt = getCollector(negativeRecordOpt, expireRecordOptional);
+        Optional<RemainingContractRenewDataCollectorDispatcher> collectorOpt
+                = getCollectorDispatcher(negativeRecordOpt, expireRecordOptional);
         if (collectorOpt.isPresent()) {
             Optional<InvoiceRemaining> targetInvoiceRemainingOpt = Optional.empty();
-            if (collectorOpt.get() instanceof NegativeRemainingRenewDataCollector
+            if (collectorOpt.get() instanceof NegativeRemainingRenewDataCollectorDispatcher
                     && negativeRecordOpt.isPresent()) {
                 targetInvoiceRemainingOpt = Optional.of(negativeRecordOpt.get());
-            } else if (collectorOpt.get() instanceof ContractExpireRenewDataCollector
+            } else if (collectorOpt.get() instanceof ContractExpireRenewDataCollectorDispatcher
                     && expireRecordOptional.isPresent()) {
                 targetInvoiceRemainingOpt = Optional.of(expireRecordOptional.get());
             }
@@ -62,22 +62,22 @@ public class RemainingContractDispatchDataGenerator {
         return Optional.empty();
     }
 
-    public Optional<RemainingContractRenewDataCollector> getCollector(Optional<InvoiceRemaining> negativeRecordOpt, Optional<InvoiceRemaining> expireRecordOpt) {
+    public Optional<RemainingContractRenewDataCollectorDispatcher> getCollectorDispatcher(Optional<InvoiceRemaining> negativeRecordOpt, Optional<InvoiceRemaining> expireRecordOpt) {
         if (negativeRecordOpt.isPresent() && !expireRecordOpt.isPresent()) {
-            return Optional.of(negativeRemainingRenewDataCollector);
+            return Optional.of(negativeRemainingRenewDataCollectorDispatcher);
         } else if (!negativeRecordOpt.isPresent() && expireRecordOpt.isPresent()) {
-            return Optional.of(contractExpireRenewDataCollector);
+            return Optional.of(contractExpireRenewDataCollectorDispatcher);
         } else if (negativeRecordOpt.isPresent() && expireRecordOpt.isPresent()) {
             Integer negativeRecordInvoiceDateInt = Integer.parseInt(negativeRecordOpt.get().getInvoiceDate());
             Integer expireRecordInvoiceDateInt = Integer.parseInt(expireRecordOpt.get().getInvoiceDate());
             if (negativeRecordInvoiceDateInt.compareTo(expireRecordInvoiceDateInt) < 0) {
-                return Optional.of(negativeRemainingRenewDataCollector);
+                return Optional.of(negativeRemainingRenewDataCollectorDispatcher);
             }
             if (expireRecordInvoiceDateInt.compareTo(negativeRecordInvoiceDateInt) < 0) {
-                return Optional.of(contractExpireRenewDataCollector);
+                return Optional.of(contractExpireRenewDataCollectorDispatcher);
             }
             if (negativeRecordInvoiceDateInt.compareTo(expireRecordInvoiceDateInt) == 0) {
-                return Optional.of(contractExpireRenewDataCollector);
+                return Optional.of(contractExpireRenewDataCollectorDispatcher);
             }
         }
         return Optional.empty();

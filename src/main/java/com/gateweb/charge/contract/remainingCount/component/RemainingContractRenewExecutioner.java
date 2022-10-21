@@ -1,6 +1,5 @@
 package com.gateweb.charge.contract.remainingCount.component;
 
-import com.gateweb.charge.contract.component.ContractExpireRenewDataCollector;
 import com.gateweb.charge.contract.component.ContractRenewComponent;
 import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
 import com.gateweb.charge.contract.remainingCount.bean.RemainingContractDispatchData;
@@ -108,11 +107,11 @@ public class RemainingContractRenewExecutioner {
 
         if (remainingContractDispatchDataOptional.isPresent()) {
             if (remainingContractDispatchDataOptional.get().getRemainingContractRenewDataCollector()
-                    instanceof NegativeRemainingRenewDataCollector) {
+                    instanceof NegativeRemainingRenewDataCollectorDispatcher) {
                 return negativeRemainingContractRenewReqGenerator.gen(remainingContractDispatchDataOptional.get());
             }
             if (remainingContractDispatchDataOptional.get().getRemainingContractRenewDataCollector()
-                    instanceof ContractExpireRenewDataCollector) {
+                    instanceof ContractExpireRenewDataCollectorDispatcher) {
                 return expireRemainingContractRenewReqGenerator.gen(remainingContractDispatchDataOptional.get());
             }
         }

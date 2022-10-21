@@ -1,10 +1,10 @@
 package unitTest;
 
 import com.gateweb.charge.config.SpringWebMvcConfig;
-import com.gateweb.charge.contract.component.ContractExpireRenewDataCollector;
-import com.gateweb.charge.contract.remainingCount.component.NegativeRemainingRenewDataCollector;
+import com.gateweb.charge.contract.remainingCount.component.ContractExpireRenewDataCollectorDispatcher;
+import com.gateweb.charge.contract.remainingCount.component.NegativeRemainingRenewDataCollectorDispatcher;
 import com.gateweb.charge.contract.remainingCount.component.RemainingContractDispatchDataGenerator;
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollector;
+import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollectorDispatcher;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.utils.LocalDateTimeUtils;
 import org.junit.Assert;
@@ -54,57 +54,57 @@ public class RemainingContractDispatchDataGeneratorTest {
 
     @Test
     public void negativeRecordTest1() {
-        Optional<RemainingContractRenewDataCollector> collectorOpt =
-                remainingContractDispatchDataGenerator.getCollector(
+        Optional<RemainingContractRenewDataCollectorDispatcher> collectorOpt =
+                remainingContractDispatchDataGenerator.getCollectorDispatcher(
                         genNegativeRecordOpt("20080831"), genExpireRecordOpt("20090831")
                 );
         Assert.assertTrue(collectorOpt.isPresent());
-        Assert.assertTrue(collectorOpt.get() instanceof NegativeRemainingRenewDataCollector);
+        Assert.assertTrue(collectorOpt.get() instanceof NegativeRemainingRenewDataCollectorDispatcher);
     }
 
     @Test
     public void negativeRecordTest2() {
-        Optional<RemainingContractRenewDataCollector> collectorOpt =
-                remainingContractDispatchDataGenerator.getCollector(
+        Optional<RemainingContractRenewDataCollectorDispatcher> collectorOpt =
+                remainingContractDispatchDataGenerator.getCollectorDispatcher(
                         genNegativeRecordOpt("20080831"), Optional.empty());
         Assert.assertTrue(collectorOpt.isPresent());
-        Assert.assertTrue(collectorOpt.get() instanceof NegativeRemainingRenewDataCollector);
+        Assert.assertTrue(collectorOpt.get() instanceof NegativeRemainingRenewDataCollectorDispatcher);
     }
 
     @Test
     public void expireRecordTest1() {
-        Optional<RemainingContractRenewDataCollector> collectorOpt =
-                remainingContractDispatchDataGenerator.getCollector(
+        Optional<RemainingContractRenewDataCollectorDispatcher> collectorOpt =
+                remainingContractDispatchDataGenerator.getCollectorDispatcher(
                         Optional.empty(), genExpireRecordOpt("20090831")
                 );
         Assert.assertTrue(collectorOpt.isPresent());
-        Assert.assertTrue(collectorOpt.get() instanceof ContractExpireRenewDataCollector);
+        Assert.assertTrue(collectorOpt.get() instanceof ContractExpireRenewDataCollectorDispatcher);
     }
 
     @Test
     public void expireRecordTest2() {
-        Optional<RemainingContractRenewDataCollector> collectorOpt =
-                remainingContractDispatchDataGenerator.getCollector(
+        Optional<RemainingContractRenewDataCollectorDispatcher> collectorOpt =
+                remainingContractDispatchDataGenerator.getCollectorDispatcher(
                         genNegativeRecordOpt("20090831"), genExpireRecordOpt("20080831")
                 );
         Assert.assertTrue(collectorOpt.isPresent());
-        Assert.assertTrue(collectorOpt.get() instanceof ContractExpireRenewDataCollector);
+        Assert.assertTrue(collectorOpt.get() instanceof ContractExpireRenewDataCollectorDispatcher);
     }
 
     @Test
     public void expireRecordTest3() {
-        Optional<RemainingContractRenewDataCollector> collectorOpt =
-                remainingContractDispatchDataGenerator.getCollector(
+        Optional<RemainingContractRenewDataCollectorDispatcher> collectorOpt =
+                remainingContractDispatchDataGenerator.getCollectorDispatcher(
                         genNegativeRecordOpt("20080931"), genExpireRecordOpt("20080931")
                 );
         Assert.assertTrue(collectorOpt.isPresent());
-        Assert.assertTrue(collectorOpt.get() instanceof ContractExpireRenewDataCollector);
+        Assert.assertTrue(collectorOpt.get() instanceof ContractExpireRenewDataCollectorDispatcher);
     }
 
     @Test
     public void emptyTest() {
-        Optional<RemainingContractRenewDataCollector> collectorOpt =
-                remainingContractDispatchDataGenerator.getCollector(
+        Optional<RemainingContractRenewDataCollectorDispatcher> collectorOpt =
+                remainingContractDispatchDataGenerator.getCollectorDispatcher(
                         Optional.empty(), Optional.empty()
                 );
         Assert.assertFalse(collectorOpt.isPresent());
