@@ -1,6 +1,6 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
-import com.gateweb.charge.contract.remainingCount.component.RemainingCountAmountProvider;
+import com.gateweb.charge.contract.remainingCount.source.RemainingCountAmountProvider;
 import com.gateweb.orm.charge.entity.ChargeRule;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;

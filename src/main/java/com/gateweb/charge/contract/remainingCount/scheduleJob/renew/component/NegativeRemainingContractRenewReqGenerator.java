@@ -1,8 +1,9 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
-import com.gateweb.charge.contract.remainingCount.bean.RemainingContractDispatchData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordModel;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractDispatchData;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,13 @@ import java.util.Optional;
 @Component
 public class NegativeRemainingContractRenewReqGenerator implements RemainingContractRenewReqGenerator {
     @Autowired
-    RemainingRecordModelComponent remainingRecordModelComponent;
+    RemainingRecordFrameComponent remainingRecordFrameComponent;
     @Autowired
     InvoiceRemainingRepository invoiceRemainingRepository;
 
     @Override
     public Optional<RemainingContractRenewReq> gen(RemainingContractDispatchData data) {
-        Optional<RemainingRecordModel> remainingRecordModelOpt = getRemainingRecordModel(data);
+        Optional<RemainingRecordFrame> remainingRecordModelOpt = getRemainingRecordModel(data);
         if (remainingRecordModelOpt.isPresent()) {
             return Optional.of(new RemainingContractRenewReq(
                     data.getCompany()
@@ -31,8 +32,8 @@ public class NegativeRemainingContractRenewReqGenerator implements RemainingCont
         return Optional.empty();
     }
 
-    public Optional<RemainingRecordModel> getRemainingRecordModel(RemainingContractDispatchData data) {
-        boolean isFirstRecordOfTheContract = remainingRecordModelComponent.isFirstRecordOfTheContract(
+    public Optional<RemainingRecordFrame> getRemainingRecordModel(RemainingContractDispatchData data) {
+        boolean isFirstRecordOfTheContract = remainingRecordFrameComponent.isFirstRecordOfTheContract(
                 data.getTargetInvoiceRemaining()
         );
         if (isFirstRecordOfTheContract) {
@@ -43,13 +44,15 @@ public class NegativeRemainingContractRenewReqGenerator implements RemainingCont
                     , data.getTargetInvoiceRemaining().getInvoiceDate()
             );
             if (nextRecordOpt.isPresent()) {
-                return remainingRecordModelComponent.genRemainingRecordModel(
-                        data.getTargetInvoiceRemaining()
-                        , nextRecordOpt.get()
+                return Optional.of(
+                        new RemainingRecordFrame(
+                                data.getTargetInvoiceRemaining()
+                                , nextRecordOpt.get()
+                        )
                 );
             }
         }
-        return remainingRecordModelComponent.getRemainingRecordModel(
+        return remainingRecordFrameComponent.getRemainingRecordModel(
                 data.getTargetInvoiceRemaining()
         );
     }

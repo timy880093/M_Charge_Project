@@ -1,7 +1,8 @@
 package com.gateweb.charge.service.dataGateway;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
-import com.gateweb.charge.contract.remainingCount.component.RemainingRecordModelComponent;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameUtils;
 import com.gateweb.charge.report.bean.InvoiceRemainingHistoryView;
 import com.gateweb.orm.charge.entity.InvoiceRemainingData;
 import com.gateweb.orm.charge.repository.InvoiceRemainingDataRepository;
@@ -23,7 +24,7 @@ public class InvoiceRemainingHistoryViewDataGateway {
     @Autowired
     InvoiceRemainingDataRepository invoiceRemainingDataRepository;
     @Autowired
-    RemainingRecordModelComponent remainingRecordModelComponent;
+    RemainingRecordFrameComponent remainingRecordFrameComponent;
 
     public List<InvoiceRemainingHistoryView> findByCompanyId(Long companyId) {
         List<InvoiceRemainingData> invoiceRemainingDataList
@@ -47,7 +48,7 @@ public class InvoiceRemainingHistoryViewDataGateway {
                 break;
             }
             if (i > 0) {
-                Optional<CustomInterval> calculateIntervalOpt = remainingRecordModelComponent.genRemainingRecordInterval(
+                Optional<CustomInterval> calculateIntervalOpt = RemainingRecordFrameUtils.genRemainingRecordInvoiceDateInterval(
                         sortedList.get(i - 1).getInvoiceDate()
                         , sortedList.get(i).getInvoiceDate()
                 );

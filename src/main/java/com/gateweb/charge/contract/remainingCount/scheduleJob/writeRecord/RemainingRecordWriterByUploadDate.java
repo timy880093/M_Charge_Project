@@ -1,6 +1,7 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.writeRecord;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractComponent;
 import com.gateweb.charge.exception.ConversionFailedException;
 import com.gateweb.charge.feeCalculation.bean.ChargeByRemainingCountCalData;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByUploadDate;

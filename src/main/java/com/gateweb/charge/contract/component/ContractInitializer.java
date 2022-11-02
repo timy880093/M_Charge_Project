@@ -1,8 +1,8 @@
 package com.gateweb.charge.contract.component;
 
 import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractComponent;
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractInitializer;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractComponent;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractInitializer;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.eventBus.EventAction;

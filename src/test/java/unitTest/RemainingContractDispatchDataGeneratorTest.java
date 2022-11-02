@@ -1,10 +1,10 @@
 package unitTest;
 
 import com.gateweb.charge.config.SpringWebMvcConfig;
-import com.gateweb.charge.contract.remainingCount.component.ContractExpireRenewDataCollectorDispatcher;
-import com.gateweb.charge.contract.remainingCount.component.NegativeRemainingRenewDataCollectorDispatcher;
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractDispatchDataGenerator;
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollectorDispatcher;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.ContractExpireRenewDataCollectorDispatcher;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.NegativeRemainingRenewDataCollectorDispatcher;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractDispatchDataGenerator;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractRenewDataCollectorDispatcher;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.utils.LocalDateTimeUtils;
 import org.junit.Assert;

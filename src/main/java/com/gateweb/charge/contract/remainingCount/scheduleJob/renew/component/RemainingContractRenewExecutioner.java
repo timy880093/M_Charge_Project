@@ -1,9 +1,9 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
 import com.gateweb.charge.contract.component.ContractRenewComponent;
-import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingContractDispatchData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractDispatchData;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.eventBus.EventAction;
 import com.gateweb.charge.eventBus.EventSource;

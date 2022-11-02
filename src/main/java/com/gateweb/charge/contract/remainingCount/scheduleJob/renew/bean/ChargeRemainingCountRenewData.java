@@ -1,5 +1,6 @@
-package com.gateweb.charge.contract.remainingCount.bean;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean;
 
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 
@@ -9,16 +10,16 @@ import java.util.List;
 public class ChargeRemainingCountRenewData {
     Contract originalContract;
     Contract renewContract;
-    RemainingRecordModel remainingRecordModel;
+    RemainingRecordFrame remainingRecordFrame;
     List<InvoiceRemaining> updateRecordList = new ArrayList<>();
 
     public ChargeRemainingCountRenewData() {
     }
 
-    public ChargeRemainingCountRenewData(Contract originalContract, Contract renewContract, RemainingRecordModel remainingRecordModel, List<InvoiceRemaining> updateRecordList) {
+    public ChargeRemainingCountRenewData(Contract originalContract, Contract renewContract, RemainingRecordFrame remainingRecordFrame, List<InvoiceRemaining> updateRecordList) {
         this.originalContract = originalContract;
         this.renewContract = renewContract;
-        this.remainingRecordModel = remainingRecordModel;
+        this.remainingRecordFrame = remainingRecordFrame;
         this.updateRecordList = updateRecordList;
     }
 
@@ -38,12 +39,12 @@ public class ChargeRemainingCountRenewData {
         this.renewContract = renewContract;
     }
 
-    public RemainingRecordModel getRemainingRecordModel() {
-        return remainingRecordModel;
+    public RemainingRecordFrame getRemainingRecordModel() {
+        return remainingRecordFrame;
     }
 
-    public void setRemainingRecordModel(RemainingRecordModel remainingRecordModel) {
-        this.remainingRecordModel = remainingRecordModel;
+    public void setRemainingRecordModel(RemainingRecordFrame remainingRecordFrame) {
+        this.remainingRecordFrame = remainingRecordFrame;
     }
 
     public List<InvoiceRemaining> getUpdateRecordList() {

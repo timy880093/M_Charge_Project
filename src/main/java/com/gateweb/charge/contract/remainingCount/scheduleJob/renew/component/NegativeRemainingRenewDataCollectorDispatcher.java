@@ -1,10 +1,14 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.component.ContractRenewComponent;
-import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordModel;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.source.RemainingCountAmountProvider;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameUtils;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord.RemainingRecordUpdateByInvoiceDate;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
@@ -31,23 +35,23 @@ public class NegativeRemainingRenewDataCollectorDispatcher implements RemainingC
     @Autowired
     RemainingRecordUpdateByInvoiceDate remainingRecordUpdateByInvoiceDate;
     @Autowired
-    RemainingRecordModelComponent remainingRecordModelComponent;
+    RemainingRecordFrameComponent remainingRecordFrameComponent;
     @Autowired
     RemainingCountAmountProvider remainingCountAmountProvider;
 
     @Override
     public Optional<ChargeRemainingCountRenewData> execute(final RemainingContractRenewReq remainingContractRenewReq) {
-        InvoiceRemaining negativeRecord = remainingContractRenewReq.getRemainingRecordModel().getTargetRecord();
+        InvoiceRemaining negativeRecord = remainingContractRenewReq.getRemainingRecordFrame().getTargetRecord();
         Company company = remainingContractRenewReq.getCompany();
         Contract contract = remainingContractRenewReq.getContract();
 
-        Optional<CustomInterval> searchIntervalOpt = remainingContractComponent.genInvoiceDateInterval(
-                remainingContractRenewReq.getRemainingRecordModel().getPrevRecord().getInvoiceDate()
+        Optional<CustomInterval> searchIntervalOpt = RemainingRecordFrameUtils.genRemainingRecordInvoiceDateInterval(
+                remainingContractRenewReq.getRemainingRecordFrame().getPrevRecord().getInvoiceDate()
                 , negativeRecord.getInvoiceDate()
         );
         Optional<CustomInterval> marginIntervalOpt = findMarginInterval(
                 company.getBusinessNo()
-                , remainingContractRenewReq.getRemainingRecordModel().getPrevRecord().getRemaining()
+                , remainingContractRenewReq.getRemainingRecordFrame().getPrevRecord().getRemaining()
                 , searchIntervalOpt.get()
         );
         if (marginIntervalOpt.isPresent()) {
@@ -63,7 +67,7 @@ public class NegativeRemainingRenewDataCollectorDispatcher implements RemainingC
             return marginNotExistsProcess(
                     company
                     , contract
-                    , remainingContractRenewReq.getRemainingRecordModel().getPrevRecord()
+                    , remainingContractRenewReq.getRemainingRecordFrame().getPrevRecord()
                     , negativeRecord
                     , searchIntervalOpt.get()
             );
@@ -93,7 +97,7 @@ public class NegativeRemainingRenewDataCollectorDispatcher implements RemainingC
             return Optional.empty();
         }
         //根據續約合約產生新的記錄
-        Optional<RemainingRecordModel> remainingRecordModelOptional = remainingRecordModelComponent.genModelForNonMarginNegativeCase(
+        Optional<RemainingRecordFrame> remainingRecordModelOptional = remainingRecordFrameComponent.genModelForNonMarginNegativeCase(
                 company
                 , renewContractOpt.get()
                 , prevRecord
@@ -155,21 +159,14 @@ public class NegativeRemainingRenewDataCollectorDispatcher implements RemainingC
                 remainingRecordUpdateByInvoiceDate.updateRemainingFromRecord(
                         negativeRecord, renewRemainingRecordOpt.get().getRemaining()
                 );
-        Optional<RemainingRecordModel> remainingRecordModelOpt = remainingRecordModelComponent.genRemainingRecordModel(
-                negativeRecord
-                , renewRemainingRecordOpt.get()
+        return Optional.of(
+                new ChargeRemainingCountRenewData(
+                        contract
+                        , renewContractOpt.get()
+                        , new RemainingRecordFrame(negativeRecord, renewRemainingRecordOpt.get())
+                        , relatedRecordList
+                )
         );
-        if (remainingRecordModelOpt.isPresent()) {
-            return Optional.of(
-                    new ChargeRemainingCountRenewData(
-                            contract
-                            , renewContractOpt.get()
-                            , remainingRecordModelOpt.get()
-                            , relatedRecordList
-                    )
-            );
-        }
-        return Optional.empty();
     }
 
     public void updateNegativeRecord(String businessNo, InvoiceRemaining negativeRecord, CustomInterval marginInterval) {

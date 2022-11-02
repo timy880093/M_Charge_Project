@@ -1,8 +1,8 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingCountRecordUpdateData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordUpdateReq;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameUtils;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
@@ -29,7 +29,7 @@ public class RemainingRecordUpdateByInvoiceDate {
     @Autowired
     CompanyRepository companyRepository;
     @Autowired
-    RemainingRecordModelComponent remainingRecordModelComponent;
+    RemainingRecordFrameComponent remainingRecordFrameComponent;
 
     public List<InvoiceRemaining> sortByInvoiceDate(Collection<InvoiceRemaining> invoiceRemainingCollection) {
         return invoiceRemainingCollection.stream().sorted(new Comparator<InvoiceRemaining>() {
@@ -108,7 +108,7 @@ public class RemainingRecordUpdateByInvoiceDate {
     private List<RemainingCountRecordUpdateData> genUpdateDataList(List<RemainingRecordUpdateReq> remainingRecordUpdateReqList) {
         List<RemainingCountRecordUpdateData> resultList = new ArrayList<>();
         remainingRecordUpdateReqList.stream().forEach(req -> {
-            Optional<CustomInterval> calculateIntervalOpt = remainingRecordModelComponent.genRemainingRecordInterval(
+            Optional<CustomInterval> calculateIntervalOpt = RemainingRecordFrameUtils.genRemainingRecordInvoiceDateInterval(
                     req.getPrevRecord().getInvoiceDate()
                     , req.getTargetRecord().getInvoiceDate()
             );
