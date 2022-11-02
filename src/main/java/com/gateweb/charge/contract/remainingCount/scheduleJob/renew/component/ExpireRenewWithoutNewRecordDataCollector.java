@@ -1,10 +1,12 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
 import com.gateweb.charge.contract.component.ContractRenewComponent;
-import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordModel;
+import com.gateweb.charge.contract.remainingCount.source.RemainingCountAmountProvider;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
 import com.gateweb.orm.charge.entity.Contract;
+import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,25 +24,31 @@ public class ExpireRenewWithoutNewRecordDataCollector implements RemainingContra
     @Autowired
     ContractRenewComponent contractRenewComponent;
 
-    public Optional<RemainingRecordModel> updateForExpireCaseNonSplitRenew(
+    public Optional<RemainingRecordFrame> updateForExpireCaseNonSplitRenew(
             Long renewPackageId
-            , RemainingRecordModel remainingRecordModel) {
+            , RemainingRecordFrame prevFrame) {
         //取得新合約的張數
         Optional<Integer> remainingOpt = remainingCountAmountProvider.getRemainingCountFromPackageId(renewPackageId);
         if (remainingOpt.isPresent()) {
-            remainingRecordModel.getTargetRecord().setRemaining(remainingOpt.get());
+            InvoiceRemaining updatedTargetRecord = prevFrame.getTargetRecord();
+            updatedTargetRecord.setRemaining(
+                    remainingOpt.get() - prevFrame.getTargetRecord().getUsage()
+            );
             //清空合約號碼
-            remainingRecordModel.getTargetRecord().setContractId(null);
-            return Optional.of(remainingRecordModel);
+            updatedTargetRecord.setContractId(null);
+            return Optional.of(new RemainingRecordFrame(
+                    prevFrame.getPrevRecord()
+                    , updatedTargetRecord
+            ));
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<ChargeRemainingCountRenewData> execute(RemainingContractRenewReq remainingContractRenewReq, Contract renewedContract) {
-        Optional<RemainingRecordModel> remainingRecordModelOptional
+        Optional<RemainingRecordFrame> remainingRecordModelOptional
                 = updateForExpireCaseNonSplitRenew(
-                renewedContract.getPackageId(), remainingContractRenewReq.getRemainingRecordModel()
+                renewedContract.getPackageId(), remainingContractRenewReq.getRemainingRecordFrame()
         );
         if (remainingRecordModelOptional.isPresent()) {
             return chargeRemainingCountRenewDataGenerator.execute(

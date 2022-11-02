@@ -1,6 +1,6 @@
-package com.gateweb.charge.contract.remainingCount.bean;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean;
 
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollectorDispatcher;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractRenewDataCollectorDispatcher;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;

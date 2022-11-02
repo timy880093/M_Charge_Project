@@ -1,4 +1,4 @@
-package com.gateweb.charge.contract.remainingCount.bean;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;

@@ -1,6 +1,7 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.writeRecord;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractComponent;
 import com.gateweb.charge.feeCalculation.bean.ChargeByRemainingCountCalData;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
 import com.gateweb.charge.notice.component.RemainingCountThresholdNoticeComponent;
@@ -14,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
@@ -33,19 +33,6 @@ public class RemainingRecordWriterByInvoiceDate {
     RemainingCountThresholdNoticeComponent remainingCountThresholdNotice;
 
     final Logger logger = LogManager.getLogger(getClass());
-
-    @Deprecated
-    private Optional<CustomInterval> getTargetCalculateInterval(
-            String prevInvoiceDate, LocalDateTime nextTargetDateTime) {
-        Optional<CustomInterval> result = Optional.empty();
-        Optional<LocalDate> prevStartLocalDateOpt
-                = LocalDateTimeUtils.parseLocalDateFromString(prevInvoiceDate, "yyyyMMdd");
-        if (prevStartLocalDateOpt.isPresent()) {
-            LocalDateTime start = prevStartLocalDateOpt.get().atStartOfDay();
-            result = Optional.of(new CustomInterval(start, nextTargetDateTime.minusSeconds(1)));
-        }
-        return result;
-    }
 
     /**
      * 當前日期大於目標計算的日期且其數字不是零

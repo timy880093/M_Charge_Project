@@ -1,6 +1,7 @@
-package com.gateweb.charge.contract.remainingCount.bean;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean;
 
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewDataCollectorDispatcher;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractRenewDataCollectorDispatcher;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
 
@@ -8,13 +9,13 @@ public class RemainingContractRenewReq {
     Company company;
     RemainingContractRenewDataCollectorDispatcher remainingContractRenewDataCollector;
     Contract contract;
-    RemainingRecordModel remainingRecordModel;
+    RemainingRecordFrame remainingRecordFrame;
 
-    public RemainingContractRenewReq(Company company, RemainingContractRenewDataCollectorDispatcher remainingContractRenewDataCollector, Contract contract, RemainingRecordModel remainingRecordModel) {
+    public RemainingContractRenewReq(Company company, RemainingContractRenewDataCollectorDispatcher remainingContractRenewDataCollector, Contract contract, RemainingRecordFrame remainingRecordFrame) {
         this.company = company;
         this.remainingContractRenewDataCollector = remainingContractRenewDataCollector;
         this.contract = contract;
-        this.remainingRecordModel = remainingRecordModel;
+        this.remainingRecordFrame = remainingRecordFrame;
     }
 
     public Company getCompany() {
@@ -41,11 +42,11 @@ public class RemainingContractRenewReq {
         this.contract = contract;
     }
 
-    public RemainingRecordModel getRemainingRecordModel() {
-        return remainingRecordModel;
+    public RemainingRecordFrame getRemainingRecordFrame() {
+        return remainingRecordFrame;
     }
 
-    public void setRemainingRecordModel(RemainingRecordModel remainingRecordModel) {
-        this.remainingRecordModel = remainingRecordModel;
+    public void setRemainingRecordFrame(RemainingRecordFrame remainingRecordFrame) {
+        this.remainingRecordFrame = remainingRecordFrame;
     }
 }

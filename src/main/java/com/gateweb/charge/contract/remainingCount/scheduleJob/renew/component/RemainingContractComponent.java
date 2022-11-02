@@ -1,7 +1,8 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.component.ContractPrepayTypeComponent;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameUtils;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.enumeration.PaidPlan;
 import com.gateweb.charge.feeCalculation.bean.ChargeByRemainingCountCalData;
@@ -13,12 +14,10 @@ import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.ChargeRuleRepository;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
 import com.gateweb.orm.charge.repository.NewGradeRepository;
-import com.gateweb.utils.LocalDateTimeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,15 +33,15 @@ public class RemainingContractComponent {
     InvoiceRemainingRepository invoiceRemainingRepository;
     ContractPrepayTypeComponent contractPrepayTypeComponent;
     ContractDataGateway contractDataGateway;
-    RemainingRecordModelComponent remainingRecordModelComponent;
+    RemainingRecordFrameComponent remainingRecordFrameComponent;
 
-    public RemainingContractComponent(ChargeRuleRepository chargeRuleRepository, NewGradeRepository newGradeRepository, InvoiceRemainingRepository invoiceRemainingRepository, ContractPrepayTypeComponent contractPrepayTypeComponent, ContractDataGateway contractDataGateway, RemainingRecordModelComponent remainingRecordModelComponent) {
+    public RemainingContractComponent(ChargeRuleRepository chargeRuleRepository, NewGradeRepository newGradeRepository, InvoiceRemainingRepository invoiceRemainingRepository, ContractPrepayTypeComponent contractPrepayTypeComponent, ContractDataGateway contractDataGateway, RemainingRecordFrameComponent remainingRecordFrameComponent) {
         this.chargeRuleRepository = chargeRuleRepository;
         this.newGradeRepository = newGradeRepository;
         this.invoiceRemainingRepository = invoiceRemainingRepository;
         this.contractPrepayTypeComponent = contractPrepayTypeComponent;
         this.contractDataGateway = contractDataGateway;
-        this.remainingRecordModelComponent = remainingRecordModelComponent;
+        this.remainingRecordFrameComponent = remainingRecordFrameComponent;
     }
 
     public boolean isChargeByRemainingCount(Long packageId) {
@@ -73,6 +72,7 @@ public class RemainingContractComponent {
      * 使用者的需求為若最新的一筆資料為負項，就不寫入新的記錄資料
      * 但這其實會造成新的記錄不會寫進去，一直使用原有的舊記錄進行續約
      * 因為也沒有新的記錄，所以除了那一筆也找不到其它記錄，就會停在該記錄中不會繼續
+     *
      * @param company
      * @return
      */
@@ -99,7 +99,7 @@ public class RemainingContractComponent {
                             contractPrepayTypeComponent.isPrepayByRemainingCount(contractOptional.get())
                     );
                     chargeByRemainingCountCalData.setNextCalculateIntervalList(
-                            remainingRecordModelComponent.genNextLocalDateTimeList(
+                            RemainingRecordFrameUtils.genNextLocalDateTimeList(
                                     invoiceRemainingOptional.get()
                             ));
                     result = Optional.of(chargeByRemainingCountCalData);
@@ -130,16 +130,4 @@ public class RemainingContractComponent {
         return invoiceRemaining;
     }
 
-    public Optional<CustomInterval> genInvoiceDateInterval(String fromStr, String toStr) {
-        Optional<LocalDate> fromStrOpt = LocalDateTimeUtils.parseLocalDateFromString(fromStr, "yyyyMMdd");
-        Optional<LocalDate> toStrOpt = LocalDateTimeUtils.parseLocalDateFromString(toStr, "yyyyMMdd");
-        if (fromStrOpt.isPresent() && toStrOpt.isPresent()) {
-            LocalDateTime startLocalDateTime = fromStrOpt.get().plusDays(1).atStartOfDay();
-            LocalDateTime endLocalDateTime = toStrOpt.get().plusDays(1).atStartOfDay().minusSeconds(1);
-            return Optional.of(
-                    new CustomInterval(startLocalDateTime, endLocalDateTime)
-            );
-        }
-        return Optional.empty();
-    }
 }

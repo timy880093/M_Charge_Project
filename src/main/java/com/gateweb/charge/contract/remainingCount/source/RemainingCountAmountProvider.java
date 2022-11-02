@@ -1,4 +1,4 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.source;
 
 import com.gateweb.orm.charge.entity.ChargeRule;
 import com.gateweb.orm.charge.entity.NewGrade;

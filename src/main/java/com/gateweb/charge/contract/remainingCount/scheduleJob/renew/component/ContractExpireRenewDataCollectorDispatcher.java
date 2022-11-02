@@ -1,8 +1,9 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
 import com.gateweb.charge.contract.component.ContractRenewComponent;
-import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
@@ -21,7 +22,7 @@ public class ContractExpireRenewDataCollectorDispatcher implements RemainingCont
     @Autowired
     RemainingContractComponent remainingContractComponent;
     @Autowired
-    RemainingRecordModelComponent remainingRecordModelComponent;
+    RemainingRecordFrameComponent remainingRecordFrameComponent;
     @Autowired
     ExpireRenewWithNewRecordDataCollector expireRenewWithNewRecordDataCollector;
     @Autowired
@@ -38,7 +39,7 @@ public class ContractExpireRenewDataCollectorDispatcher implements RemainingCont
             //取消autoRenew
             contract.setAutoRenew(false);
             boolean createMarginRecord = needToCreateMarginRecord(
-                    contract, remainingContractRenewReq.getRemainingRecordModel().getPrevRecord()
+                    contract, remainingContractRenewReq.getRemainingRecordFrame().getPrevRecord()
             );
             //確認是否需要拆分
             if (!createMarginRecord) {

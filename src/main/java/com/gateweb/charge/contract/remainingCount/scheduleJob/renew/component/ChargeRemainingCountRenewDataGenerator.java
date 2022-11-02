@@ -1,7 +1,7 @@
-package com.gateweb.charge.contract.remainingCount.component;
+package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
-import com.gateweb.charge.contract.remainingCount.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.remainingCount.bean.RemainingRecordModel;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
@@ -16,16 +16,15 @@ public class ChargeRemainingCountRenewDataGenerator {
     @Autowired
     InvoiceRemainingRepository invoiceRemainingRepository;
 
-    Optional<ChargeRemainingCountRenewData> execute(Contract originalContract, Contract renewedContract, RemainingRecordModel remainingRecordModel) {
-
+    Optional<ChargeRemainingCountRenewData> execute(Contract originalContract, Contract renewedContract, RemainingRecordFrame remainingRecordFrame) {
         //找出需要更新的項目
         List<InvoiceRemaining> updateRecordList =
                 invoiceRemainingRepository.findByCompanyIdAndInvoiceDateGreaterThanOrderByInvoiceDate(
                         originalContract.getCompanyId()
-                        , remainingRecordModel.getTargetRecord().getInvoiceDate()
+                        , remainingRecordFrame.getTargetRecord().getInvoiceDate()
                 );
         //更新計數
-        Integer remaining = remainingRecordModel.getTargetRecord().getRemaining();
+        Integer remaining = remainingRecordFrame.getTargetRecord().getRemaining();
         for (InvoiceRemaining updateRemaining : updateRecordList) {
             updateRemaining.setRemaining(remaining - updateRemaining.getUsage());
             remaining = updateRemaining.getRemaining();
@@ -33,10 +32,9 @@ public class ChargeRemainingCountRenewDataGenerator {
         ChargeRemainingCountRenewData chargeRemainingCountRenewData = new ChargeRemainingCountRenewData(
                 originalContract
                 , renewedContract
-                , remainingRecordModel
+                , remainingRecordFrame
                 , updateRecordList
         );
         return Optional.of(chargeRemainingCountRenewData);
-
     }
 }
