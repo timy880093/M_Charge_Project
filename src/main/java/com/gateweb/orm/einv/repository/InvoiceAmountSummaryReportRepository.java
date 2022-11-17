@@ -36,12 +36,6 @@ public interface InvoiceAmountSummaryReportRepository extends JpaRepository<Einv
     @Query(value = "SELECT count(id) FROM invoice_amount_summary_report", nativeQuery = true)
     long findCountId();
 
-
-//    Collection<PartsOfIasrReport> findNullSourceInvoiceAmountReport(
-//            String sellerBusinessNo,
-//            List<String> yearMonth,
-//            Date fromDate,
-//            Date toDate
-//    );
+    
 }
 

@@ -134,7 +134,7 @@
     }
 
     function initViewModel() {
-        companySelectorInitializer('companyInputAutoComplete', function (companySelector) {
+        billableCompanySelectorInitializer('companyInputAutoComplete', function (companySelector) {
             companySelector.chosenCompany.subscribe(function (newValue) {
                 loadingAjaxProcessor(
                     function () {

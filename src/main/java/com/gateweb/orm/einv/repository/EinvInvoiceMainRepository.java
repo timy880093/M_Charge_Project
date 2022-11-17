@@ -100,6 +100,14 @@ public interface EinvInvoiceMainRepository extends JpaRepository<InvoiceMain, Lo
             , @Param("yearMonth") String yearMonth
             , @Param("num") Integer num
     );
+
+    /**
+     * 因為執行效率的問題，選擇了invoiceDate做為來源
+     * @return
+     */
+    @Query(value = " select invoice_date from invoice_main where invoice_date !='' order by invoice_date limit 1 ", nativeQuery = true)
+    Optional<String> findMinInvoiceDate();
+
 }
 
 	

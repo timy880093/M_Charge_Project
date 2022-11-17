@@ -6,7 +6,6 @@ import com.gateweb.charge.model.nonMapped.CallerInfo;
 import com.gateweb.charge.report.bean.InvoiceRemainingHistoryView;
 import com.gateweb.charge.security.ChargeUserPrinciple;
 import com.gateweb.charge.service.dataGateway.InvoiceRemainingHistoryViewDataGateway;
-import com.gateweb.orm.charge.entity.InvoiceRemainingData;
 import com.gateweb.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

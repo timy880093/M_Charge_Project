@@ -15,7 +15,6 @@
         <class>com.gateweb.orm.charge.entity.BillCycleEntity</class>
         <class>com.gateweb.orm.charge.entity.LogParameterEntity</class>
         <class>com.gateweb.orm.charge.entity.CashMasterEntity</class>
-        <class>com.gateweb.orm.charge.entity.PrepayDeductMasterEntity</class>
         <class>com.gateweb.orm.charge.entity.ChargeIasrEntity</class>
         <class>com.gateweb.orm.charge.entity.PackageRef</class>
         <class>com.gateweb.orm.charge.entity.ProductSource</class>
@@ -39,7 +38,6 @@
         <class>com.gateweb.orm.charge.entity.ContractHistory</class>
         <class>com.gateweb.orm.charge.entity.ProductDiscount</class>
         <class>com.gateweb.orm.charge.entity.SimpleCompany</class>
-        <class>com.gateweb.orm.charge.entity.NotMatchCountStatisticsView</class>
         <class>com.gateweb.orm.charge.entity.ChargeUser</class>
         <class>com.gateweb.orm.charge.entity.view.ChargePackageView</class>
         <class>com.gateweb.orm.charge.entity.view.SimpleUserView</class>
@@ -59,6 +57,7 @@
         <class>com.gateweb.orm.charge.entity.view.DeductPackageRefFetchView</class>
         <class>com.gateweb.orm.charge.entity.view.DeductHistoryFetchView</class>
         <class>com.gateweb.orm.charge.entity.ChargeIasrCountReport</class>
+        <class>com.gateweb.orm.charge.entity.view.ChargeIasrP2bTotalAmountView</class>
         <class>com.gateweb.orm.charge.entity.InvoiceRemaining</class>
         <class>com.gateweb.orm.charge.entity.InvoiceRemainingData</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>

@@ -74,9 +74,6 @@ public class BeanConverterUtils {
 
     public <T> Optional<T> convertJsonToObjWithTypeCast(String json, Class<T> returnType) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             Map map = convertJsonToMap(json);
             T result = (T) mapToBean(map, returnType);
             return Optional.of(result);

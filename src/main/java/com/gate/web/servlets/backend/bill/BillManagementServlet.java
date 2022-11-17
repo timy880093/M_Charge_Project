@@ -2,7 +2,7 @@ package com.gate.web.servlets.backend.bill;
 
 import com.gate.web.facades.UserService;
 import com.gate.web.servlets.abstraction.DefaultDisplayPageModelViewController;
-import com.gateweb.charge.constant.CompanyConstant;
+import com.gateweb.charge.dsl.constant.CompanyConstant;
 import com.gateweb.charge.enumeration.BillStatus;
 import com.gateweb.charge.exception.CancelAlreadyPaidBillException;
 import com.gateweb.charge.exception.InvalidUserException;
