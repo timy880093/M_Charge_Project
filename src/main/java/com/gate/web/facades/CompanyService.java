@@ -1,5 +1,6 @@
 package com.gate.web.facades;
 
+import com.gateweb.charge.company.bean.SimplifiedCompanyForMenuItem;
 import com.gateweb.orm.charge.entity.Company;
 
 import java.util.Set;
@@ -11,5 +12,9 @@ public interface CompanyService extends Service {
 
     Set<String> getBillableBusinessNo();
 
-    Set<Company> getBillableCompany();
+    Set<Company> getContractBasedCompanySet();
+
+    Set<SimplifiedCompanyForMenuItem> getContractBasedSimplifiedCompanyList();
+
+    Set<SimplifiedCompanyForMenuItem> getSimplifiedCompanyList();
 }

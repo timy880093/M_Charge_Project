@@ -1,7 +1,8 @@
 package com.gate.web.servlets.backend.chargeSource;
 
 import com.gate.web.servlets.abstraction.DefaultDisplayPageModelViewController;
-import com.gateweb.bridge.service.ChargeSourceService;
+import com.gateweb.charge.chargeSource.iasr.bean.MaxIasrInvoiceDatePeriod;
+import com.gateweb.charge.chargeSource.service.ChargeSourceService;
 import com.gateweb.charge.frontEndIntegration.bean.SweetAlertResponse;
 import com.gateweb.charge.frontEndIntegration.enumeration.SweetAlertStatus;
 import com.gateweb.charge.report.bean.ChargeSourceInvoiceCountDiffReport;
@@ -14,19 +15,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RequestMapping("/backendAdmin/chargeSourceManagementServlet")
@@ -73,7 +69,36 @@ public class ChargeSourceManagementServlet extends DefaultDisplayPageModelViewCo
             if (regenTaskMap.isEmpty()) {
                 logger.info("recalculateByCondition add " + key, key);
                 regenTaskMap.put(key, JsonUtils.gsonToJson(conditionMap));
-                chargeSourceService.recalculateByConditionMap(conditionMap);
+                chargeSourceService.reSyncContractBasedIasrCountByConditionMap(conditionMap);
+                regenTaskMap.remove(key);
+                logger.info("recalculateByCondition remove", key);
+                sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
+                sweetAlertResponse.setTitle("排程執行結束");
+            } else {
+                sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.WARNING);
+                sweetAlertResponse.setTitle("其它排程執行中");
+            }
+        } catch (Exception ex) {
+            regenTaskMap.remove(key);
+            logger.info("recalculateByCondition remove " + key, key);
+            sweetAlertResponse.setTitle("排程意外結束");
+            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
+            sweetAlertResponse.setMessage(ex.getMessage());
+            logger.error(ex.getMessage());
+        }
+        return JsonUtils.gsonToJson(sweetAlertResponse);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/reSyncIasrDataBySeller/{seller}", produces = "application/text;charset=utf-8")
+    @ResponseBody
+    public String recalculateByBusinessNo(@PathVariable("seller") String seller) {
+        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
+        LocalDateTime key = LocalDateTime.now();
+        try {
+            if (regenTaskMap.isEmpty()) {
+                logger.info("recalculateByCondition add " + key, key);
+                regenTaskMap.put(key, seller);
+                chargeSourceService.reSyncIasrDataBySeller(seller);
                 regenTaskMap.remove(key);
                 logger.info("recalculateByCondition remove", key);
                 sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
@@ -119,6 +144,22 @@ public class ChargeSourceManagementServlet extends DefaultDisplayPageModelViewCo
             resultMap.put("message", ex.getMessage());
         }
         return JsonUtils.gsonToJson(resultMap);
+    }
+
+    /**
+     * 取得該公司發票開立日期的最大區間
+     *
+     * @return
+     */
+    @GetMapping(value = "/iasr/maximumInvoiceDatePeriod/seller/{seller}")
+    public ResponseEntity findMaximumInvoicePeriod(@PathVariable("seller") String seller) {
+        Optional<MaxIasrInvoiceDatePeriod> maxIasrInvoiceDatePeriodOptional
+                = chargeSourceService.findMaxInvoiceDatePeriodBySeller(seller);
+        if (maxIasrInvoiceDatePeriodOptional.isPresent()) {
+            return ResponseEntity.ok(maxIasrInvoiceDatePeriodOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Override

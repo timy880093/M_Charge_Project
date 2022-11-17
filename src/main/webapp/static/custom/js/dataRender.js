@@ -1,6 +1,5 @@
-var companyList = [];
-var inCacheMilliSeconds = {};
-var cycleMenuOptionList = {};
+let inCacheMilliSeconds = {};
+let cycleMenuOptionList = {};
 
 /**
  * 為了解決重覆render的問題，約定defaultDataModel為Rendering用的資料集。

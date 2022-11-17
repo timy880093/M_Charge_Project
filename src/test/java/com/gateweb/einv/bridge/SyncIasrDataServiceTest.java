@@ -1,6 +1,6 @@
 package com.gateweb.einv.bridge;
 
-import com.gateweb.bridge.service.SyncIasrDataService;
+import com.gateweb.charge.chargeSource.service.SyncIasrDataService;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -22,6 +22,6 @@ public class SyncIasrDataServiceTest {
 
     @Test
     public void syncIasrTest1() throws InterruptedException {
-        syncIasrDataServiceImpl.regenIasrCount("10910", "09");
+        syncIasrDataServiceImpl.regenIasrCountAndCheckExists("10910", "09");
     }
 }

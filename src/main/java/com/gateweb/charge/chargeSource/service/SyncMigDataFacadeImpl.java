@@ -1,9 +1,8 @@
-package com.gateweb.bridge.service.impl;
+package com.gateweb.charge.chargeSource.service;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.enumeration.ChargeIntervalType;
 import com.gateweb.charge.exception.UnsupportedChargeIntervalException;
-import com.gateweb.bridge.service.SyncMigDataFacade;
 import com.gateweb.orm.charge.entity.MigEventRecordEntity;
 import com.gateweb.orm.charge.repository.MigEventRecordRepository;
 import com.gateweb.orm.einv.entity.Company;

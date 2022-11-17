@@ -609,7 +609,7 @@
     let contentMenuViewModel = {
         selectedCountBadge: ko.observable(0),
         knockoutComponent: {
-            companySelector: companySelectorInitializer('companyInputAutoComplete', function (companySelector) {
+            companySelector: generalCompanySelectorInitializer('companyInputAutoComplete', function (companySelector) {
                 companySelector.chosenCompany.subscribe(function (newValue) {
                     filterEditViewModel.chosenCompany(newValue);
                     contractEditViewModel.chosenCompany(newValue);

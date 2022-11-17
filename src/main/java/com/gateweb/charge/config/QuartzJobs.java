@@ -19,7 +19,8 @@ public class QuartzJobs {
     private static final String CRON_EVERY_SAT_AT_1_AM = "0 0 12 ? * SAT *";
     private static final String CRON_EVERY_ODD_MONTH_16TH_AT_1_AM = "0 0 12 16 1,3,5,7,9,11 ?";
     private static final String CRON_EVERY_WEEK_AT_SUNDAY = "0 0 0 ? * SUN";
-    private static final String CRON_EVERY_MONTH_15_20 = "0 0 0 15,16,17,18,19,20 * ? ";
+    private static final String CRON_EVERY_MONTH_ODD_DAYS_15_23 = "0 0 0 15,17,19,21,23 * ? ";
+    private static final String CRON_EVERY_MONTH_EVENT_DAYS_16_24 = "0 0 0 16,18,20,22,24 * ? ";
 
     @Bean(name = "contractAutomationStats")
     public JobDetailFactoryBean contractAutomationJobDetail() {
@@ -51,14 +52,24 @@ public class QuartzJobs {
         return QuartzConfig.createCronTrigger(jobDetail, CRON_EVERY_SAT_AT_1_AM, "syncCompanyDataTrigger");
     }
 
-    @Bean(name = "syncIasrDataStats")
-    public JobDetailFactoryBean syncIasrJobDetail() {
-        return QuartzConfig.createJobDetail(SyncIasrDataJob.class, "syncIasrDataStats");
+    @Bean(name = "syncContractBasedIasrDataStats")
+    public JobDetailFactoryBean syncContractBasedIasrJobDetail() {
+        return QuartzConfig.createJobDetail(SyncContractBasedIasrDataJob.class, "syncContractBasedIasrDataStats");
     }
 
-    @Bean(name = "syncIasrDataTrigger")
-    public CronTriggerFactoryBean triggerSyncIasrData(@Qualifier("syncIasrDataStats") JobDetail jobDetail) {
-        return QuartzConfig.createCronTrigger(jobDetail, CRON_EVERY_MONTH_15_20, "syncIasrDataTrigger");
+    @Bean(name = "syncContractBasedIasrDataTrigger")
+    public CronTriggerFactoryBean triggerSyncContractBasedIasrData(@Qualifier("syncContractBasedIasrDataStats") JobDetail jobDetail) {
+        return QuartzConfig.createCronTrigger(jobDetail, CRON_EVERY_MONTH_ODD_DAYS_15_23, "syncContractBasedIasrDataTrigger");
+    }
+
+    @Bean(name = "syncAllIasrDataStats")
+    public JobDetailFactoryBean syncAllIasrJobDetail() {
+        return QuartzConfig.createJobDetail(SyncAllIasrDataJob.class, "syncAllIasrDataStats");
+    }
+
+    @Bean(name = "syncAllIasrDataTrigger")
+    public CronTriggerFactoryBean triggerSyncAllIasrData(@Qualifier("syncAllIasrDataStats") JobDetail jobDetail) {
+        return QuartzConfig.createCronTrigger(jobDetail, CRON_EVERY_MONTH_EVENT_DAYS_16_24, "syncAllIasrDataTrigger");
     }
 
     @Bean(name = "sendNoticeDataStats")

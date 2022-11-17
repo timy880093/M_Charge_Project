@@ -49,8 +49,6 @@
     <link type="text/css" href="/static/custom/css/bootstrap_template.css" rel="stylesheet" media="all"/>
     <link href="/static/custom/css/menu_layout.css" rel="stylesheet" type="text/css"/>
 
-    <!--custom utils-->
-    <script type="text/javascript" src="/static/custom/js/gridSearch.js"></script>
     <!--custom bootstrap utils -->
     <script type="text/javascript" src="/static/custom/js/customDataTableUtils.js"></script>
     <script type="text/javascript" src="/static/custom/js/dataModel.js"></script>
@@ -60,27 +58,20 @@
     <script type="text/javascript" src="/static/custom/js/ajaxUtils.js"></script>
     <script type="text/javascript" src="/static/custom/js/downloadUtils.js"></script>
     <script type="text/javascript" src="/static/custom/js/shareFunction.js"></script>
+    <script type="text/javascript" src="/static/custom/js/knockoutComponent/dataTableInitializer.js"></script>
 
     <!--knockout -->
     <script src="/static/custom/js/knockout-3.5.1.js"></script>
 
     <!--knockout component utils -->
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/dataTableInitializer.js"></script>
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/knockoutComponentInitializer.js"></script>
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/cycleMenuViewComponent.js"></script>
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/newGradeMenuViewComponent.js"></script>
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/bootstrapSwitchComponent.js"></script>
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/chargeRuleMenuViewComponent.js"></script>
     <script type="text/javascript" src="/static/custom/js/knockoutComponent/bootstrapDatePickerComponent.js"></script>
     <script type="text/javascript" src="/static/custom/js/knockoutComponent/companySelectorComponent.js"></script>
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/chargePackageMenuComponent.js"></script>
-    <script type="text/javascript" src="/static/custom/js/knockoutComponent/optionSelectorComponent.js"></script>
-    <script type="text/javascript"
-            src="/static/custom/js/knockoutComponent/packageRefChargeRulePreviewComponent.js"></script>
-    <script type="text/javascript"
-            src="/static/custom/js/knockoutComponent/bootstrapDataTableMenuModalComponent.js"></script>
-    <script type="text/javascript"
-            src="/static/custom/js/knockoutComponent/dataTableOptionSelectorComponent.js"></script>
+    <script type="text/javascript" src="/static/custom/js/knockoutComponent/bootstrapSwitchComponent.js"></script>
+
+    <!--Google Statistics-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="/static/custom/js/googleVisualization/googleVisualizationUtils.js"></script>
+
     <!--sweet alert-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
@@ -90,6 +81,7 @@
 
     <script>
         $(document).ready(function () {
+
             showEnv();
             if (initPage) {
                 initPage();
@@ -108,5 +100,12 @@
         }
     </script>
 
-
+    <style>
+        .breadcrumb {
+            background-color: #f9f9f9;
+        }
+        .card-body {
+            background-color: #f9f9f9;
+        }
+    </style>
 </header>

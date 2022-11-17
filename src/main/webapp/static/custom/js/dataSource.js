@@ -1,8 +1,8 @@
-var dataSourceModule = {
-    getBankCodeList: function () {
-        var resultSet = undefined;
-        var ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/enumerationServlet/api/bankCode';
+let dataSourceModule = {
+    getIasrMaximumInvoiceDatePeriodBySeller: function (seller) {
+        let resultSet = undefined;
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargeSourceManagementServlet/iasr/maximumInvoiceDatePeriod/seller/' + seller;
         ajaxParam.requestType = 'GET';
         ajaxParam.successHandler = function (responseData) {
             resultSet = responseData;
@@ -11,8 +11,8 @@ var dataSourceModule = {
         return resultSet;
     },
     getPaymentMethod: function () {
-        var resultSet = undefined;
-        var ajaxParam = {};
+        let resultSet = undefined;
+        let ajaxParam = {};
         ajaxParam.url = '/backendAdmin/enumerationServlet/api/paymentMethod';
         ajaxParam.requestType = 'GET';
         ajaxParam.successHandler = function (responseData) {
@@ -35,10 +35,10 @@ var dataSourceModule = {
     getBillableCompanyList: function () {
         let resultSet = undefined;
         let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/enumerationServlet/api/billableCompanyMenuItem';
+        ajaxParam.url = '/backendAdmin/companySearchServlet/billable/list';
         ajaxParam.requestType = 'GET';
         ajaxParam.successHandler = function (responseMap) {
-            resultSet = responseMap;
+            resultSet = responseMap.data;
         };
         syncAjaxCall(ajaxParam);
         return resultSet;
@@ -50,17 +50,6 @@ var dataSourceModule = {
         ajaxParam.requestType = 'GET';
         ajaxParam.successHandler = function (responseData) {
             resultSet = responseData;
-        };
-        syncAjaxCall(ajaxParam);
-        return resultSet;
-    },
-    getContractList: function () {
-        let resultSet = undefined;
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/contractManagementServlet/api/list';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.successHandler = function (responseMap) {
-            resultSet = responseMap.data;
         };
         syncAjaxCall(ajaxParam);
         return resultSet;
@@ -132,28 +121,6 @@ var dataSourceModule = {
         syncAjaxCall(ajaxParam);
         return resultSet;
     },
-    getProductList: function () {
-        let resultSet = undefined;
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/productManagementServlet/api/list';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.successHandler = function (responseMap) {
-            resultSet = responseMap.data;
-        };
-        syncAjaxCall(ajaxParam);
-        return resultSet;
-    },
-    getChargePlanList: function () {
-        let resultSet = undefined;
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/enumerationServlet/api/chargePlan';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.successHandler = function (responseMap) {
-            resultSet = responseMap;
-        };
-        syncAjaxCall(ajaxParam);
-        return resultSet;
-    },
     getChargeBaseTypeList: function () {
         let resultSet = undefined;
         let ajaxParam = {};
@@ -161,50 +128,6 @@ var dataSourceModule = {
         ajaxParam.requestType = 'GET';
         ajaxParam.successHandler = function (responseMap) {
             resultSet = responseMap;
-        };
-        syncAjaxCall(ajaxParam);
-        return resultSet;
-    },
-    getChargeBaseList: function () {
-        let resultSet = undefined;
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/enumerationServlet/api/chargeBase';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.successHandler = function (responseMap) {
-            resultSet = responseMap.data;
-        };
-        syncAjaxCall(ajaxParam);
-        return resultSet;
-    },
-    getChargePackageStatusList: function () {
-        let resultSet = undefined;
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/enumerationServlet/api/chargePackageStatus';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.successHandler = function (responseMap) {
-            resultSet = responseMap
-        };
-        syncAjaxCall(ajaxParam);
-        return resultSet;
-    },
-    getTerminationClauseTypeList: function () {
-        let resultSet = undefined;
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/enumerationServlet/api/terminationClauseType';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.successHandler = function (responseMap) {
-            resultSet = responseMap;
-        };
-        syncAjaxCall(ajaxParam);
-        return resultSet;
-    },
-    getChargeModeStatusList: function () {
-        let resultSet = undefined;
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/enumerationServlet/api/chargeRuleStatus';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.successHandler = function (responseData) {
-            resultSet = responseData;
         };
         syncAjaxCall(ajaxParam);
         return resultSet;
@@ -316,6 +239,15 @@ var dataSourceModule = {
         ajaxParam.data = JSON.stringify(obj);
         asyncAjaxCall(ajaxParam, handler, handler);
     },
+    reSyncIasrBySeller: function (businessNo, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/chargeSourceManagementServlet/reSyncIasrDataBySeller/' + businessNo;
+        ajaxParam.requestType = 'POST';
+        ajaxParam.contentType = 'application/json';
+        ajaxParam.dataType = 'json';
+        ajaxParam.processData = 'false';
+        asyncAjaxCall(ajaxParam, handler, handler);
+    },
     getRegenTaskMap: function (handler) {
         let resultSet = undefined;
         let ajaxParam = {};
@@ -324,14 +256,6 @@ var dataSourceModule = {
         ajaxParam.successHandler = handler;
         syncAjaxCall(ajaxParam);
         return resultSet;
-    },
-    genInvoiceImportReportWithIdList: function (handler) {
-        let ajaxParam = {};
-        ajaxParam.url = '/backendAdmin/billManagementServlet/api/downloadInvoiceImportReportWithIdList';
-        ajaxParam.requestType = 'GET';
-        ajaxParam.contentType = 'application/text;charset=utf-8';
-        ajaxParam.successHandler = handler;
-        syncAjaxCall(ajaxParam);
     },
     serverSideProcessingDeductSearchAjaxCall: function (obj, handler) {
         let ajaxParam = {};
@@ -353,14 +277,6 @@ var dataSourceModule = {
         return promiseSyncAjaxCall(ajaxParam, handler, handler);
     }
 };
-
-function getIasrYearMonthList(handler) {
-    let ajaxParam = {};
-    ajaxParam.url = '/backendAdmin/reliableManagementServlet/api/iasr/yearMonth/list';
-    ajaxParam.requestType = 'GET';
-    ajaxParam.successHandler = handler;
-    syncAjaxCall(ajaxParam);
-}
 
 function serverSideProcessingBillingItemSearchAjaxCall(obj, handler) {
     let ajaxParam = {};

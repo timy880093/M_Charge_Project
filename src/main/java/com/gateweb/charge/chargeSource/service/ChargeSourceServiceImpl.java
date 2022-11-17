@@ -1,15 +1,16 @@
-package com.gateweb.bridge.service.impl;
+package com.gateweb.charge.chargeSource.service;
 
 import com.gate.web.facades.CompanyService;
-import com.gateweb.bridge.service.ChargeSourceService;
-import com.gateweb.bridge.service.SyncIasrDataService;
+import com.gateweb.charge.chargeSource.iasr.bean.MaxIasrInvoiceDatePeriod;
 import com.gateweb.charge.report.bean.ChargeSourceInvoiceCountDiffReport;
 import com.gateweb.orm.charge.entity.ChargeIasrCountReport;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.repository.ChargeIasrCountReportRepository;
+import com.gateweb.orm.charge.repository.ChargeIasrRepository;
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import com.gateweb.orm.einv.entity.report.EinvInvoiceDateCountReport;
 import com.gateweb.orm.einv.repository.EinvInvoiceDateCountReportRepository;
+import com.gateweb.orm.einv.repository.EinvInvoiceMainRepository;
 import com.gateweb.utils.ConcurrentUtils;
 import com.gateweb.utils.LocalDateTimeUtils;
 import org.slf4j.Logger;
@@ -18,13 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static com.gateweb.utils.ConcurrentUtils.pool;
@@ -43,6 +43,10 @@ public class ChargeSourceServiceImpl implements ChargeSourceService {
     SyncIasrDataService syncIasrDataServiceImpl;
     @Autowired
     CompanyService companyService;
+    @Autowired
+    ChargeIasrRepository chargeIasrRepository;
+    @Autowired
+    EinvInvoiceMainRepository invoiceMainRepository;
 
     @Bean
     ConcurrentHashMap<LocalDateTime, String> regenTaskMap() {
@@ -182,8 +186,7 @@ public class ChargeSourceServiceImpl implements ChargeSourceService {
         return resultList;
     }
 
-    @Override
-    public void recalculateByConditionMap(Map<String, Object> conditionMap) {
+    public void reSyncContractBasedIasrCountByConditionMap(Map<String, Object> conditionMap) {
         try {
             Optional<Company> companyOptional = Optional.empty();
             if (conditionMap.containsKey("companyId")) {
@@ -194,14 +197,72 @@ public class ChargeSourceServiceImpl implements ChargeSourceService {
             if (conditionMap.containsKey("yearMonth")) {
                 yearMonthOptional = Optional.ofNullable(String.valueOf(conditionMap.get("yearMonth")));
             }
-
             if (companyOptional.isPresent() && yearMonthOptional.isPresent()) {
-                syncIasrDataServiceImpl.regenIasrCount(companyOptional.get().getBusinessNo(), yearMonthOptional.get());
+                syncIasrDataServiceImpl.regenIasrCountAndCheckExists(companyOptional.get().getBusinessNo(), yearMonthOptional.get());
             } else if (yearMonthOptional.isPresent()) {
-                syncIasrDataServiceImpl.regenIasrCount(yearMonthOptional.get());
+                syncIasrDataServiceImpl.regenContractBasedIasrCount(yearMonthOptional.get());
             }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
+        }
+    }
+
+    @Override
+    public void reSyncIasrDataBySeller(String businessNo) {
+        try {
+            Optional<Company> companyOptional = companyRepository.findByBusinessNo(businessNo);
+            if (companyOptional.isPresent()) {
+                Optional<LocalDateTime> companyLocalDateTimeOpt
+                        = getCompanyCreateDateTime(companyOptional.get());
+                if (companyLocalDateTimeOpt.isPresent()) {
+                    List<YearMonth> reasonableYearMonthList
+                            = getReasonableInvoiceDataSyncPeriod(companyLocalDateTimeOpt.get());
+                    reasonableYearMonthList.stream().forEach(yearMonth -> {
+                        try {
+                            syncIasrDataServiceImpl.regenIasrCountAndCheckExists(companyOptional.get().getBusinessNo(), yearMonth);
+                        } catch (Exception ex) {
+                            logger.error(ex.getMessage());
+                        }
+                    });
+                }
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+    }
+
+    public Optional<LocalDateTime> getCompanyCreateDateTime(Company company) {
+        if (company.getCreateDate() == null) {
+            Optional<String> invoiceDateOpt = invoiceMainRepository.findMinInvoiceDate();
+            if (invoiceDateOpt.isPresent()) {
+                Optional<LocalDate> localDateOptional
+                        = LocalDateTimeUtils.parseLocalDateFromString(invoiceDateOpt.get(), "yyyyMMdd");
+                return Optional.of(localDateOptional.get().atStartOfDay());
+            }
+        } else {
+            return Optional.of(company.getCreateDate().toLocalDateTime());
+        }
+        return Optional.empty();
+    }
+
+    public List<YearMonth> getReasonableInvoiceDataSyncPeriod(LocalDateTime companyCreateLocalDateTime) {
+        List<YearMonth> resultList = new ArrayList<>();
+        int i = 0;
+        while (companyCreateLocalDateTime.plusMonths(i).isBefore(LocalDateTime.now())) {
+            resultList.add(YearMonth.from(companyCreateLocalDateTime.toLocalDate().plusMonths(i)));
+            i++;
+        }
+        return resultList;
+    }
+
+    @Override
+    public Optional<MaxIasrInvoiceDatePeriod> findMaxInvoiceDatePeriodBySeller(String seller) {
+        String result = chargeIasrRepository.findMinAndMaxInvoiceDate(seller);
+        if (result.contains(",")) {
+            String[] resultArray = result.split(",");
+            return Optional.of(new MaxIasrInvoiceDatePeriod(resultArray[0], resultArray[1]));
+        } else {
+            return Optional.empty();
         }
     }
 }

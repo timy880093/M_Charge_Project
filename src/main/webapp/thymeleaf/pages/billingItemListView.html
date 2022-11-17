@@ -650,8 +650,8 @@
     };
 
     function initMenuViewModel() {
-        optionSelectorInitializer('companyInputAutoComplete', dataSourceModule.getCompanyMenuItemList(), function (companySelector) {
-            companySelector.chosenOption.subscribe(function (newValue) {
+        generalCompanySelectorInitializer('companyInputAutoComplete', function (companySelector) {
+            companySelector.chosenCompany.subscribe(function (newValue) {
                 filterEditViewModel.selectedCompany(newValue);
                 billingItemMainListViewModel.billingItemDataTable.ajax.reload();
             });
@@ -684,7 +684,7 @@
     }
 
     function genOutToBillRequest() {
-        var obj = {};
+        let obj = {};
         if (billingPreviewViewModel.remark()) {
             obj.billRemark = billingPreviewViewModel.remark();
         }
@@ -706,7 +706,7 @@
                 condition.gwBillingRuleYm = filterEditViewModel.gwBillingRuleYmInput();
             }
             if (filterEditViewModel.selectedCompany()) {
-                condition.companyId = filterEditViewModel.selectedCompany().id;
+                condition.companyId = filterEditViewModel.selectedCompany().companyId;
             }
             if (filterEditViewModel.chosenProductCategory()) {
                 condition.productCategoryId = filterEditViewModel.chosenProductCategory().id;

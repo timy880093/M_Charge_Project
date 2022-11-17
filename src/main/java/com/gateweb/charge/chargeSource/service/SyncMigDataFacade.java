@@ -1,4 +1,4 @@
-package com.gateweb.bridge.service;
+package com.gateweb.charge.chargeSource.service;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.exception.UnsupportedChargeIntervalException;
