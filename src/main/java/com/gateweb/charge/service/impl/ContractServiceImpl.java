@@ -10,7 +10,6 @@ import com.gateweb.charge.feeCalculation.bean.ContractOverageFeeBillingData;
 import com.gateweb.charge.feeCalculation.dataGateway.ContractOverageFeeBillingDataCollector;
 import com.gateweb.charge.frontEndIntegration.bean.OutToBillRequest;
 import com.gateweb.charge.mapper.ContractMapper;
-import com.gateweb.charge.model.nonMapped.CallerInfo;
 import com.gateweb.charge.service.BillService;
 import com.gateweb.charge.service.BillingService;
 import com.gateweb.charge.service.ContractService;
@@ -21,7 +20,6 @@ import com.gateweb.orm.charge.entity.PackageRef;
 import com.gateweb.orm.charge.entity.view.ContractFetchView;
 import com.gateweb.orm.charge.repository.*;
 import com.gateweb.utils.ConcurrentUtils;
-import com.gateweb.utils.bean.BeanConverterUtils;
 import com.google.common.eventbus.EventBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +37,6 @@ import static com.gateweb.utils.ConcurrentUtils.pool;
 @Service
 public class ContractServiceImpl implements ContractService {
     protected final Logger logger = LogManager.getLogger(getClass());
-    final BeanConverterUtils beanConverterUtils = new BeanConverterUtils();
 
     @Autowired
     ContractRepository contractRepository;
@@ -257,25 +254,6 @@ public class ContractServiceImpl implements ContractService {
             } else {
                 throw new DeleteBilledBillingItemException();
             }
-        }
-    }
-
-    /**
-     * 使用當前月份作為區間
-     *
-     * @param contract
-     * @param callerInfo
-     */
-    @Deprecated
-    @Override
-    public void continueContractWithCurrentDateTime(Contract contract, CallerInfo callerInfo) {
-        Optional<Contract> continueResult = contractRenewComponent.renewContract(contract, callerInfo.getUserEntity().getUserId().longValue());
-        if (continueResult.isPresent()) {
-            contractInitializer.initialContract(
-                    continueResult.get(),
-                    null,
-                    callerInfo.getUserEntity().getUserId().longValue()
-            );
         }
     }
 

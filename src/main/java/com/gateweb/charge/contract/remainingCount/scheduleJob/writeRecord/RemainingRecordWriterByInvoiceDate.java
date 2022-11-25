@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -81,6 +82,7 @@ public class RemainingRecordWriterByInvoiceDate {
         return nextInvoiceRemainingOpt;
     }
 
+    @Transactional
     public void executeWriter(Set<Company> targetCompanySet) {
         Set<ChargeByRemainingCountCalData> chargeByRemainingCountCalDataSet
                 = remainingContractComponent.chargeByRemainingCountCalDataCollector(targetCompanySet);

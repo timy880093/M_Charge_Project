@@ -29,8 +29,6 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.gateweb.utils.ConcurrentUtils.pool;
 
@@ -224,13 +222,17 @@ public class ContractRenewComponent {
         return renewContract;
     }
 
-    public Optional<Contract> genRenewRemainingContract(final Contract contract, LocalDateTime newEffectiveDate) {
-        Optional<LocalDateTime> newContractIntervalOpt = ContractRenewIntervalGenerator.getContractExpirationDate(
+    public Optional<Contract> genRenewRemainingContract(
+            final Contract contract
+            , LocalDateTime newEffectiveDate
+            , LocalDateTime executionDateTime) {
+        Optional<LocalDateTime> newExpirationDateOpt = ContractRenewIntervalGenerator.getContractExpirationDate(
                 newEffectiveDate
                 , contract.getPeriodMonth()
         );
-        if (newContractIntervalOpt.isPresent()) {
-            CustomInterval newContractInterval = new CustomInterval(newEffectiveDate, newContractIntervalOpt.get());
+        if (newExpirationDateOpt.isPresent()
+                && executionDateTime.isAfter(newExpirationDateOpt.get())) {
+            CustomInterval newContractInterval = new CustomInterval(newEffectiveDate, newExpirationDateOpt.get());
             return Optional.of(
                     genRenewContract(
                             contract
@@ -240,6 +242,10 @@ public class ContractRenewComponent {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Optional<Contract> genRenewRemainingContract(final Contract contract, LocalDateTime newEffectiveDate) {
+        return genRenewRemainingContract(contract, newEffectiveDate, LocalDateTime.now());
     }
 
     public Optional<Contract> genRenewRemainingContract(final Contract contract, String prevInvoiceDate) {

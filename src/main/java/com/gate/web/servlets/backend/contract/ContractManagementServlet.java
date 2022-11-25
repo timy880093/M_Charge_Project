@@ -210,35 +210,6 @@ public class ContractManagementServlet extends DefaultDisplayPageModelViewContro
         return gson.toJson(sweetAlertResponse);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/api/batchContinueEnabledContract", produces = "application/text;charset=utf-8")
-    @ResponseBody
-    public String continueEnabledContractByCondition(
-            Authentication authentication
-            , @RequestBody String requestBody) {
-        SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
-        try {
-            ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
-            Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
-            gson = new GsonBuilder().serializeNulls().create();
-            Map<String, Object> conditionMap = beanConverterUtils.convertJsonToMap(requestBody);
-            Map<String, Object> resultMap = contractDataGateway.searchListByCondition(conditionMap);
-            List<Contract> contractList = (List<Contract>) resultMap.get("data");
-            contractList.stream().forEach(contract -> {
-                contractService.continueContractWithCurrentDateTime(
-                        contract,
-                        callerInfoOptional.get()
-                );
-            });
-            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.SUCCESS);
-            sweetAlertResponse.setTitle("處理成功");
-        } catch (Exception e) {
-            sweetAlertResponse.setSweetAlertStatus(SweetAlertStatus.ERROR);
-            sweetAlertResponse.setTitle("處理失敗");
-            sweetAlertResponse.setMessage(e.getMessage());
-        }
-        return gson.toJson(sweetAlertResponse);
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/api/cancelInitial/{contractId}", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String cancelInitialContract(Authentication authentication, @PathVariable("contractId") long contractId) {
