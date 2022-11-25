@@ -26,6 +26,4 @@ public interface ContractService {
     void initialContract(Long contractId, Long callerId);
 
     void cancelInitialContract(Contract contract, Long callerId) throws DeleteBilledBillingItemException;
-
-    void continueContractWithCurrentDateTime(Contract contract, CallerInfo callerInfo);
 }

@@ -4,6 +4,10 @@
 package com.gateweb.orm.charge.entity;
 
 
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -15,8 +19,10 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 @Entity
+@OptimisticLocking(type = OptimisticLockType.ALL)
 @Table(name = "invoice_remaining", schema = "public", uniqueConstraints = {
-        @UniqueConstraint(name = "invoice_remaining_pkey", columnNames = {"invoice_remaining_id"})
+        @UniqueConstraint(name = "invoice_remaining_pkey", columnNames = {"invoice_remaining_id"}),
+        @UniqueConstraint(name = "remaining_unique_constraint", columnNames = {"company_id", "invoice_date"})
 })
 public class InvoiceRemaining implements Serializable {
 
@@ -112,6 +118,7 @@ public class InvoiceRemaining implements Serializable {
         this.createDate = createDate;
     }
 
+    @Version
     @Column(name = "modify_date")
     public LocalDateTime getModifyDate() {
         return modifyDate;
