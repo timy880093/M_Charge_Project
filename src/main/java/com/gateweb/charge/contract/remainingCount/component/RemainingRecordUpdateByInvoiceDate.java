@@ -70,21 +70,30 @@ public class RemainingRecordUpdateByInvoiceDate {
                     = new ArrayList<>(
                     invoiceRemainingRepository.findUnstableRemainingCountByCompanyId(company.getCompanyId().longValue())
             );
-            List<RemainingRecordUpdateReq> remainingRecordUpdateReqList = new ArrayList<>();
-            //產生RemainingRecordUpdateReq
-            unstableRecordList = sortByInvoiceDate(unstableRecordList);
-            unstableRecordList.stream().forEach(unstableRecord -> {
-                Optional<RemainingRecordUpdateReq> remainingRecordUpdateReqOpt = genUpdateReq(
-                        company.getBusinessNo(), unstableRecord);
-                if (remainingRecordUpdateReqOpt.isPresent()) {
-                    remainingRecordUpdateReqList.add(remainingRecordUpdateReqOpt.get());
-                }
-            });
-            List<RemainingCountRecordUpdateData> updateDataList = genUpdateDataList(remainingRecordUpdateReqList);
-            updateDataList.stream().forEach(recordUpdateData -> {
-                updateData(recordUpdateData);
-            });
+            Optional<RemainingRecordUpdateReq> updateReqOpt = genUpdateReqFromList(company.getBusinessNo(), unstableRecordList);
+            updateReqOpt.ifPresent(updateReq -> {
+                        Optional<RemainingCountRecordUpdateData> updateDataOpt = genUpdateData(updateReqOpt.get());
+                        updateDataOpt.ifPresent(updateData -> {
+                            updateData(updateDataOpt.get());
+                        });
+                    }
+            );
+
         });
+    }
+
+    public Optional<RemainingRecordUpdateReq> genUpdateReqFromList(String businessNo, List<InvoiceRemaining> unstableRecordList) {
+        //產生RemainingRecordUpdateReq
+        unstableRecordList = sortByInvoiceDate(unstableRecordList);
+        Optional<RemainingRecordUpdateReq> resultOpt = Optional.empty();
+        for (InvoiceRemaining unstableRecord : unstableRecordList) {
+            Optional<RemainingRecordUpdateReq> remainingRecordUpdateReqOpt = genUpdateReq(
+                    businessNo, unstableRecord);
+            if (remainingRecordUpdateReqOpt.isPresent()) {
+                resultOpt = remainingRecordUpdateReqOpt;
+            }
+        }
+        return resultOpt;
     }
 
     private Optional<RemainingRecordUpdateReq> genUpdateReq(String businessNo, InvoiceRemaining targetRecord) {
@@ -105,44 +114,42 @@ public class RemainingRecordUpdateByInvoiceDate {
         return result;
     }
 
-    private List<RemainingCountRecordUpdateData> genUpdateDataList(List<RemainingRecordUpdateReq> remainingRecordUpdateReqList) {
-        List<RemainingCountRecordUpdateData> resultList = new ArrayList<>();
-        remainingRecordUpdateReqList.stream().forEach(req -> {
-            Optional<CustomInterval> calculateIntervalOpt = remainingRecordModelComponent.genRemainingRecordInterval(
-                    req.getPrevRecord().getInvoiceDate()
-                    , req.getTargetRecord().getInvoiceDate()
+    private Optional<RemainingCountRecordUpdateData> genUpdateData(RemainingRecordUpdateReq req) {
+        Optional<RemainingCountRecordUpdateData> resultOpt = Optional.empty();
+        Optional<CustomInterval> calculateIntervalOpt = remainingRecordModelComponent.genRemainingRecordInterval(
+                req.getPrevRecord().getInvoiceDate()
+                , req.getTargetRecord().getInvoiceDate()
+        );
+        if (calculateIntervalOpt.isPresent()) {
+            CustomInterval targetInterval = new CustomInterval(
+                    calculateIntervalOpt.get().getStartLocalDateTime()
+                    , calculateIntervalOpt.get().getEndLocalDateTime()
             );
-            if (calculateIntervalOpt.isPresent()) {
-                CustomInterval targetInterval = new CustomInterval(
-                        calculateIntervalOpt.get().getStartLocalDateTime()
-                        , calculateIntervalOpt.get().getEndLocalDateTime()
-                );
-                //取得張數差異
-                Optional<Integer> newCountOpt = iasrDataCounterByInvoiceDate.count(
-                        req.getBusinessNo()
-                        , targetInterval
-                );
-                if (newCountOpt.isPresent()) {
-                    int diff = newCountOpt.get() - req.getTargetRecord().getUsage();
-                    if (diff != 0) {
-                        //查詢會影響的記錄
-                        List<InvoiceRemaining> relatedRecordList =
-                                updateRemainingFromRecord(
-                                        req.getTargetRecord(), req.getTargetRecord().getRemaining() + diff
-                                );
-                        //組合
-                        RemainingCountRecordUpdateData remainingCountRecordUpdateData = new RemainingCountRecordUpdateData(
-                                diff,
-                                req.getTargetRecord(),
-                                targetInterval,
-                                relatedRecordList
-                        );
-                        resultList.add(remainingCountRecordUpdateData);
-                    }
+            //取得張數差異
+            Optional<Integer> newCountOpt = iasrDataCounterByInvoiceDate.count(
+                    req.getBusinessNo()
+                    , targetInterval
+            );
+            if (newCountOpt.isPresent()) {
+                int diff = newCountOpt.get() - req.getTargetRecord().getUsage();
+                if (diff != 0) {
+                    //查詢會影響的記錄
+                    List<InvoiceRemaining> relatedRecordList =
+                            updateRemainingFromRecord(
+                                    req.getTargetRecord(), req.getTargetRecord().getRemaining() + diff
+                            );
+                    //組合
+                    RemainingCountRecordUpdateData remainingCountRecordUpdateData = new RemainingCountRecordUpdateData(
+                            diff,
+                            req.getTargetRecord(),
+                            targetInterval,
+                            relatedRecordList
+                    );
+                    resultOpt = Optional.of(remainingCountRecordUpdateData);
                 }
             }
-        });
-        return resultList;
+        }
+        return resultOpt;
     }
 
     private void updateData(RemainingCountRecordUpdateData remainingCountRecordUpdateData) {
