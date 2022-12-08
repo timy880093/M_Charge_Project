@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({"all", "unchecked", "rawtypes"})
 @Entity
-@OptimisticLocking(type = OptimisticLockType.ALL)
 @Table(name = "invoice_remaining", schema = "public", uniqueConstraints = {
         @UniqueConstraint(name = "invoice_remaining_pkey", columnNames = {"invoice_remaining_id"}),
         @UniqueConstraint(name = "remaining_unique_constraint", columnNames = {"company_id", "invoice_date"})
@@ -118,7 +117,6 @@ public class InvoiceRemaining implements Serializable {
         this.createDate = createDate;
     }
 
-    @Version
     @Column(name = "modify_date")
     public LocalDateTime getModifyDate() {
         return modifyDate;
