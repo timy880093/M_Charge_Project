@@ -9,13 +9,13 @@ import java.util.List;
 public class RemainingCountRecordUpdateData {
     Integer diff;
     InvoiceRemaining targetInvoiceRemaining;
-    CustomInterval searchInterval;
+    InvoiceRemaining previousInvoiceRemaining;
     List<InvoiceRemaining> relatedList = new ArrayList<>();
 
-    public RemainingCountRecordUpdateData(Integer diff, InvoiceRemaining targetInvoiceRemaining, CustomInterval searchInterval, List<InvoiceRemaining> relatedList) {
+    public RemainingCountRecordUpdateData(Integer diff, InvoiceRemaining targetInvoiceRemaining, InvoiceRemaining previousInvoiceRemaining, List<InvoiceRemaining> relatedList) {
         this.diff = diff;
         this.targetInvoiceRemaining = targetInvoiceRemaining;
-        this.searchInterval = searchInterval;
+        this.previousInvoiceRemaining = previousInvoiceRemaining;
         this.relatedList = relatedList;
     }
 
@@ -35,12 +35,12 @@ public class RemainingCountRecordUpdateData {
         this.targetInvoiceRemaining = targetInvoiceRemaining;
     }
 
-    public CustomInterval getSearchInterval() {
-        return searchInterval;
+    public InvoiceRemaining getPreviousInvoiceRemaining() {
+        return previousInvoiceRemaining;
     }
 
-    public void setSearchInterval(CustomInterval searchInterval) {
-        this.searchInterval = searchInterval;
+    public void setPreviousInvoiceRemaining(InvoiceRemaining previousInvoiceRemaining) {
+        this.previousInvoiceRemaining = previousInvoiceRemaining;
     }
 
     public List<InvoiceRemaining> getRelatedList() {

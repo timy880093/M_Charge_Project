@@ -8,7 +8,6 @@ import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
-import com.gateweb.utils.LocalDateTimeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,60 +39,27 @@ public class RemainingRecordUpdateByInvoiceDate {
         }).collect(Collectors.toList());
     }
 
-    public Optional<CustomInterval> getSearchInterval(InvoiceRemaining targetRecord) {
-        Optional<CustomInterval> result = Optional.empty();
-        try {
-            Optional<InvoiceRemaining> prevRecordOpt
-                    = invoiceRemainingRepository.findTopByCompanyIdAndInvoiceRemainingIdLessThanOrderByInvoiceRemainingIdDesc(
-                    targetRecord.getCompanyId()
-                    , targetRecord.getInvoiceRemainingId()
-            );
-            if (prevRecordOpt.isPresent()) {
-                LocalDateTime start = LocalDateTimeUtils.parseLocalDateFromString(
-                        prevRecordOpt.get().getInvoiceDate(), "yyyyMMdd"
-                ).get().atStartOfDay();
-
-                LocalDateTime end = LocalDateTimeUtils.parseLocalDateFromString(
-                        targetRecord.getInvoiceDate(), "yyyyMMdd"
-                ).get().atStartOfDay().minusSeconds(1);
-                result = Optional.of(new CustomInterval(start, end));
-            }
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-        }
-        return result;
-    }
-
     public void executeUpdate(Set<Company> companySet) {
         companySet.stream().forEach(company -> {
             List<InvoiceRemaining> unstableRecordList
                     = new ArrayList<>(
                     invoiceRemainingRepository.findUnstableRemainingCountByCompanyId(company.getCompanyId().longValue())
             );
-            Optional<RemainingRecordUpdateReq> updateReqOpt = genUpdateReqFromList(company.getBusinessNo(), unstableRecordList);
-            updateReqOpt.ifPresent(updateReq -> {
-                        Optional<RemainingCountRecordUpdateData> updateDataOpt = genUpdateData(updateReqOpt.get());
-                        updateDataOpt.ifPresent(updateData -> {
-                            updateData(updateDataOpt.get());
-                        });
-                    }
-            );
-
+            List<RemainingRecordUpdateReq> remainingRecordUpdateReqList = new ArrayList<>();
+            //產生RemainingRecordUpdateReq
+            unstableRecordList = sortByInvoiceDate(unstableRecordList);
+            unstableRecordList.stream().forEach(unstableRecord -> {
+                Optional<RemainingRecordUpdateReq> remainingRecordUpdateReqOpt = genUpdateReq(
+                        company.getBusinessNo(), unstableRecord);
+                if (remainingRecordUpdateReqOpt.isPresent()) {
+                    remainingRecordUpdateReqList.add(remainingRecordUpdateReqOpt.get());
+                }
+            });
+            Optional<RemainingCountRecordUpdateData> recordUpdateDataOptional = genUpdateDataByList(remainingRecordUpdateReqList);
+            recordUpdateDataOptional.ifPresent(recordUpdateData -> {
+                updateData(recordUpdateData);
+            });
         });
-    }
-
-    public Optional<RemainingRecordUpdateReq> genUpdateReqFromList(String businessNo, List<InvoiceRemaining> unstableRecordList) {
-        //產生RemainingRecordUpdateReq
-        unstableRecordList = sortByInvoiceDate(unstableRecordList);
-        Optional<RemainingRecordUpdateReq> resultOpt = Optional.empty();
-        for (InvoiceRemaining unstableRecord : unstableRecordList) {
-            Optional<RemainingRecordUpdateReq> remainingRecordUpdateReqOpt = genUpdateReq(
-                    businessNo, unstableRecord);
-            if (remainingRecordUpdateReqOpt.isPresent()) {
-                resultOpt = remainingRecordUpdateReqOpt;
-            }
-        }
-        return resultOpt;
     }
 
     private Optional<RemainingRecordUpdateReq> genUpdateReq(String businessNo, InvoiceRemaining targetRecord) {
@@ -114,6 +80,26 @@ public class RemainingRecordUpdateByInvoiceDate {
         return result;
     }
 
+    private Optional<RemainingCountRecordUpdateData> genUpdateDataByList(List<RemainingRecordUpdateReq> reqList) {
+        Optional<RemainingCountRecordUpdateData> resultOpt = Optional.empty();
+        for (RemainingRecordUpdateReq remainingRecordUpdateReq : reqList) {
+            Optional<RemainingCountRecordUpdateData> dataOpt = genUpdateData(remainingRecordUpdateReq);
+            if (dataOpt.isPresent()) {
+                resultOpt = dataOpt;
+            }
+        }
+        return resultOpt;
+    }
+
+    boolean needToUpdate(RemainingRecordUpdateReq req, int newCount) {
+        boolean wrongSummary = req.getTargetRecord().getRemaining().compareTo(
+                req.getPrevRecord().getRemaining() - req.getTargetRecord().getUsage().intValue()
+        ) != 0;
+        boolean sameContract = req.getTargetRecord().getContractId().compareTo(req.getPrevRecord().getContractId()) == 0;
+        boolean invalidUsage = req.getTargetRecord().getUsage() != newCount;
+        return (sameContract && wrongSummary) || invalidUsage;
+    }
+
     private Optional<RemainingCountRecordUpdateData> genUpdateData(RemainingRecordUpdateReq req) {
         Optional<RemainingCountRecordUpdateData> resultOpt = Optional.empty();
         Optional<CustomInterval> calculateIntervalOpt = remainingRecordModelComponent.genRemainingRecordInterval(
@@ -131,18 +117,18 @@ public class RemainingRecordUpdateByInvoiceDate {
                     , targetInterval
             );
             if (newCountOpt.isPresent()) {
-                int diff = newCountOpt.get() - req.getTargetRecord().getUsage();
-                if (diff != 0) {
+                boolean needToUpdate = needToUpdate(req, newCountOpt.get());
+                if (needToUpdate) {
                     //查詢會影響的記錄
                     List<InvoiceRemaining> relatedRecordList =
                             updateRemainingFromRecord(
-                                    req.getTargetRecord(), req.getTargetRecord().getRemaining() + diff
+                                    req.getTargetRecord(), req.getPrevRecord().getRemaining()
                             );
                     //組合
                     RemainingCountRecordUpdateData remainingCountRecordUpdateData = new RemainingCountRecordUpdateData(
-                            diff,
+                            newCountOpt.get() - req.getTargetRecord().getUsage(),
                             req.getTargetRecord(),
-                            targetInterval,
+                            req.getPrevRecord(),
                             relatedRecordList
                     );
                     resultOpt = Optional.of(remainingCountRecordUpdateData);
@@ -157,8 +143,8 @@ public class RemainingRecordUpdateByInvoiceDate {
         Integer newUsage = remainingCountRecordUpdateData.getTargetInvoiceRemaining().getUsage()
                 + remainingCountRecordUpdateData.getDiff();
         remainingCountRecordUpdateData.getTargetInvoiceRemaining().setUsage(newUsage);
-        Integer newRemaining = remainingCountRecordUpdateData.getTargetInvoiceRemaining().getRemaining()
-                - remainingCountRecordUpdateData.getDiff();
+        Integer newRemaining = remainingCountRecordUpdateData.getPreviousInvoiceRemaining().getRemaining()
+                - remainingCountRecordUpdateData.getTargetInvoiceRemaining().getUsage();
         remainingCountRecordUpdateData.getTargetInvoiceRemaining().setRemaining(newRemaining);
         remainingCountRecordUpdateData.getTargetInvoiceRemaining().setModifyDate(LocalDateTime.now());
         saveList.add(remainingCountRecordUpdateData.getTargetInvoiceRemaining());
@@ -185,7 +171,6 @@ public class RemainingRecordUpdateByInvoiceDate {
         for (InvoiceRemaining record : updateRecordList) {
             record.setRemaining(nextRemaining - record.getUsage());
             nextRemaining = record.getRemaining();
-
         }
         return updateRecordList;
     }
