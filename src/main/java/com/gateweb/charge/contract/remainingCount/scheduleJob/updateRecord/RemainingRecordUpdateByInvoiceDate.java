@@ -9,6 +9,7 @@ import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
+import com.gateweb.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,7 @@ public class RemainingRecordUpdateByInvoiceDate {
             unstableRecordList.stream().forEach(unstableRecord -> {
                 Optional<RemainingRecordUpdateReq> remainingRecordUpdateReqOpt = genUpdateReq(
                         company.getBusinessNo(), unstableRecord);
-                if (remainingRecordUpdateReqOpt.isPresent()) {
-                    updateData(remainingRecordUpdateReqOpt.get());
-                }
+                remainingRecordUpdateReqOpt.ifPresent(this::updateData);
             });
         });
     }
@@ -72,34 +71,32 @@ public class RemainingRecordUpdateByInvoiceDate {
                         , calculateIntervalOpt.get()
                 );
                 if (newCountOpt.isPresent()) {
-                    Optional<UpdateTypeEnum> updateTypeEnumOpt = getUpdateType(remainingRecordFrameOpt.get(), newCountOpt.get());
-                    if (updateTypeEnumOpt.isPresent()) {
-                        if (updateTypeEnumOpt.get().equals(UpdateTypeEnum.SAME_CONTRACT_UPDATE)) {
-                            //組合
-                            RemainingRecordUpdateReq remainingRecordUpdateReq = new RemainingRecordUpdateReq(
-                                    businessNo
-                                    , remainingRecordFrameOpt.get()
-                                    , newCountOpt.get()
-                                    , remainingRecordFrameOpt.get().getPrevRecord().getRemaining() - newCountOpt.get()
-                            );
-                            result = Optional.of(remainingRecordUpdateReq);
-                        }
-                        if (updateTypeEnumOpt.get().equals(UpdateTypeEnum.DIFF_CONTRACT_UPDATE)) {
-                            int newRemaining = remainingRecordFrameOpt.get().getTargetRecord().getRemaining()
-                                    - (newCountOpt.get() - remainingRecordFrameOpt.get().getTargetRecord().getUsage());
-                            RemainingRecordUpdateReq remainingRecordUpdateReq = new RemainingRecordUpdateReq(
-                                    businessNo
-                                    , remainingRecordFrameOpt.get()
-                                    , newCountOpt.get()
-                                    , newRemaining
-                                    );
-                            result = Optional.of(remainingRecordUpdateReq);
-                        }
+                    Optional<UpdateReqGenerator> updateReqGeneratorOpt
+                            = updateReqGeneratorDispatcher(remainingRecordFrameOpt.get(), newCountOpt.get());
+                    if (updateReqGeneratorOpt.isPresent()) {
+                        return Optional.of(
+                                updateReqGeneratorOpt.get().gen(
+                                        remainingRecordFrameOpt.get(), newCountOpt.get(), businessNo
+                                )
+                        );
                     }
                 }
             }
         }
         return result;
+    }
+
+    public Optional<UpdateReqGenerator> updateReqGeneratorDispatcher(RemainingRecordFrame frame, int newUsage) {
+        Optional<UpdateTypeEnum> updateTypeEnumOpt = getUpdateType(frame, newUsage);
+        if (updateTypeEnumOpt.isPresent()) {
+            if (updateTypeEnumOpt.get().equals(UpdateTypeEnum.SAME_CONTRACT_UPDATE)) {
+                return Optional.of(new SameContractUpdateReqGenerator());
+            }
+            if (updateTypeEnumOpt.get().equals(UpdateTypeEnum.DIFF_CONTRACT_UPDATE)) {
+                return Optional.of(new DiffContractUpdateReqGenerator());
+            }
+        }
+        return Optional.empty();
     }
 
     Optional<UpdateTypeEnum> getUpdateType(RemainingRecordFrame frame, int newCount) {
@@ -120,7 +117,7 @@ public class RemainingRecordUpdateByInvoiceDate {
         req.getRemainingRecordFrame().getTargetRecord().setRemaining(req.getNewRemaining());
         req.getRemainingRecordFrame().getTargetRecord().setUsage(req.getNewUsage());
         invoiceRemainingRepository.save(req.getRemainingRecordFrame().getTargetRecord());
-        logger.info("RemainingCountUpdate :" + req);
+        logger.info("RemainingCountUpdate :{}", JsonUtils.gsonToJson(req));
     }
 
     public List<InvoiceRemaining> updateRemainingFromRecord(InvoiceRemaining targetRecord, Integer newRemaining) {
