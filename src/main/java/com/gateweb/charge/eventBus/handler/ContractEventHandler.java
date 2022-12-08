@@ -3,7 +3,7 @@ package com.gateweb.charge.eventBus.handler;
 import com.gateweb.charge.contract.component.ContractBillingComponent;
 import com.gateweb.charge.contract.component.ContractInitializer;
 import com.gateweb.charge.contract.component.ContractValidationComponent;
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractComponent;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractComponent;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.notice.component.ContractInitializeNoticeComponent;
 import com.gateweb.charge.service.ContractService;

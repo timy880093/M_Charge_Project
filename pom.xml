@@ -10,7 +10,7 @@
         <repository>
             <id>nexus-release</id>
             <name>local private nexus</name>
-            <url>http://test3.gwis.com.tw/nexus/content/groups/public/</url>
+            <url>https://gw-nexus.tweinv.com/content/groups/public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -21,7 +21,7 @@
         <repository>
             <id>nexus-snapshot</id>
             <name>local private nexus snapshot</name>
-            <url>http://test3.gwis.com.tw/nexus/content/repositories/snapshots/</url>
+            <url>https://gw-nexus.tweinv.com/content/repositories/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -32,7 +32,7 @@
         <repository>
             <id>nexus-third</id>
             <name>local third party</name>
-            <url>http://test3.gwis.com.tw/nexus/content/repositories/thirdparty/</url>
+            <url>https://gw-nexus.tweinv.com/content/repositories/thirdparty/</url>
         </repository>
     </repositories>
     <!--設定環境變數 -->
@@ -48,6 +48,7 @@
         <spring.version>5.0.4.RELEASE</spring.version>
         <commons.collections.version>4.2</commons.collections.version>
         <commons.lang3.version>3.9</commons.lang3.version>
+        <commons.math.version>3.6.1</commons.math.version>
         <commons.io.version>2.5</commons.io.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
         <commons.codec.version>1.10</commons.codec.version>
@@ -444,6 +445,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons.lang3.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>${commons.math.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>

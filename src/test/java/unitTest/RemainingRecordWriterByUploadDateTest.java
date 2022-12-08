@@ -1,7 +1,7 @@
 package unitTest;
 
 import com.gateweb.utils.LocalDateTimeUtils;
-import com.gateweb.charge.contract.remainingCount.component.RemainingRecordWriterByUploadDate;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.writeRecord.RemainingRecordWriterByUploadDate;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import org.eclipse.core.runtime.Assert;
 import org.junit.Test;

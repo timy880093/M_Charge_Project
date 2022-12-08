@@ -51,6 +51,9 @@ public interface ChargeIasrRepository extends JpaRepository<ChargeIasrEntity, Lo
     @Query(value = "delete from invoice_amount_summary_report where invoice_date like :invoiceDate and seller = :seller", nativeQuery = true)
     void deleteByInvoiceDateLikeAndSellerIs(@Param("invoiceDate") String invoiceDate, @Param("seller") String seller);
 
+    @Query(value = "select min(invoice_date),max(invoice_date) from invoice_amount_summary_report iasr where seller = :seller", nativeQuery = true)
+    String findMinAndMaxInvoiceDate(@Param("seller") String seller);
+
 }
 
 	

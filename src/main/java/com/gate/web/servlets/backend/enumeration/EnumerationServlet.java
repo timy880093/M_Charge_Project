@@ -206,13 +206,6 @@ public class EnumerationServlet {
         return gson.toJson(companyToFrontOption(companySet));
     }
 
-    @GetMapping(value = "/api/billableCompanyMenuItem", produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String billableCompanyMenuItemList() {
-        Set<Company> companySet = companyService.getBillableCompany();
-        return gson.toJson(companyToFrontOption(companySet));
-    }
-
     @GetMapping(value = "/api/bankCode", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String bankCodeList() {

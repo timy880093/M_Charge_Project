@@ -1,10 +1,10 @@
 package com.gateweb.charge.scheduleJob.quartzJobs;
 
-import com.gateweb.bridge.service.SyncIasrDataService;
-import com.gateweb.charge.contract.remainingCount.component.RemainingContractRenewExecutioner;
-import com.gateweb.charge.contract.remainingCount.component.RemainingRecordUpdateByInvoiceDate;
-import com.gateweb.charge.contract.remainingCount.component.RemainingRecordWriterByInvoiceDate;
-import com.gateweb.charge.contract.remainingCount.component.RemainingRecordWriterByUploadDate;
+import com.gateweb.charge.chargeSource.service.SyncIasrDataService;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractRenewExecutioner;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord.RemainingRecordUpdateByInvoiceDate;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.writeRecord.RemainingRecordWriterByInvoiceDate;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.writeRecord.RemainingRecordWriterByUploadDate;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.CompanyRepository;
@@ -39,8 +39,6 @@ public class RemainingCountMonitorJob implements Job {
     @Autowired
     SyncIasrDataService syncIasrDataService;
     @Autowired
-    SyncIasrDataJob syncIasrDataJob;
-    @Autowired
     InvoiceRemainingRepository invoiceRemainingRepository;
 
     @Override
@@ -58,7 +56,7 @@ public class RemainingCountMonitorJob implements Job {
             logger.info("SyncIasrDataForRemainingCountCompanyJob:" + company.getBusinessNo());
             yearMonthList.stream().forEach(yearMonth -> {
                 try {
-                    syncIasrDataService.regenIasrCount(company.getBusinessNo(), yearMonth);
+                    syncIasrDataService.regenIasrCountAndCheckExists(company.getBusinessNo(), yearMonth);
                 } catch (Exception ex) {
                     logger.error(ex.getMessage());
                 }

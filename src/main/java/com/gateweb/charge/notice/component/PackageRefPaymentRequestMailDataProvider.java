@@ -1,6 +1,6 @@
 package com.gateweb.charge.notice.component;
 
-import com.gateweb.bridge.service.ChargeSourceService;
+import com.gateweb.charge.chargeSource.service.ChargeSourceService;
 import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
 import com.gateweb.charge.enumeration.ChargePolicyType;
 import com.gateweb.charge.notice.bean.PaymentRequestMailBillingItem;

@@ -1,7 +1,7 @@
 package com.gateweb.charge.service;
 
-import com.gateweb.bridge.service.ChargeSourceService;
-import com.gateweb.bridge.service.SyncIasrDataService;
+import com.gateweb.charge.chargeSource.service.ChargeSourceService;
+import com.gateweb.charge.chargeSource.service.SyncIasrDataService;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import com.gateweb.charge.report.bean.ChargeSourceInvoiceCountDiffReport;
 import com.google.gson.Gson;
@@ -15,7 +15,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})
@@ -50,9 +49,9 @@ public class ChargeSourceServiceTest {
         String prevYearMonth = currentDate.getYear() + prevMonthStr;
         String currentYearMonth = currentDate.getYear() + currentMonthStr;
         try {
-            syncIasrDataServiceImpl.regenIasrCount(prevYearMonth);
-            syncIasrDataServiceImpl.regenIasrCount(currentYearMonth);
-        } catch (InterruptedException | ExecutionException e) {
+            syncIasrDataServiceImpl.regenContractBasedIasrCount(prevYearMonth);
+            syncIasrDataServiceImpl.regenContractBasedIasrCount(currentYearMonth);
+        } catch (Exception e) {
             gson.toJson(e);
         }
     }

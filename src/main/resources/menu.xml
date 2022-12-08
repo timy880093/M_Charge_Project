@@ -11,6 +11,7 @@
 <!--        <menu id="product_menu" name="商品管理" url="/backendAdmin/productManagementServlet?sessionClean=Y" enable="true" pop="true"/>-->
         <menu id="chargeSource_menu" name="資料來源檢視" url="/backendAdmin/chargeSourceManagementServlet?sessionClean=Y" enable="true" pop="true"/>
         <menu id="invoiceRemainingView_menu" name="以張計費張數檢視" url="/backendAdmin/invoiceRemainingViewServlet?sessionClean=Y" enable="true" pop="true"/>
+        <menu id="p2bIasrReport_menu" name="公司發票營收統計表" url="/backendAdmin/p2bReportViewServlet?sessionClean=Y" enable="true" pop="true"/>
     </role>
     <role id="600" name="帳務管理者">
         <menu id="billingItem_menu" name="待結清單列表" url="/backendAdmin/billingItemManagementServlet?sessionClean=Y" enable="true" pop="true"/>

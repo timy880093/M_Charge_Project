@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+<html>
+<head th:replace="/fragments/gstaticBootstrapHeader.html :: header">
+    <title>Index</title>
+</head>
+<body>
+<div id="chmis">
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left" style="white-space:nowrap;"><span class="textstyle_01" id="envSpan"></span></td>
+                </tr>
+            </table>
+        </div>
+        <div class="mes">
+            <table class="content" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td align="left">
+
+                    </td>
+                    <td align="right">
+                        <a class="float-right" href="javascript:logout()" title="登出系統"> <span
+                                class="textstyle_01">登出　</span></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div style="width:100%; margin:0 auto;  background-image: url(/backendAdmin/images/bg.jpg); background-position: left;">
+        <div class="mainMenu">
+            <a href="/backendAdmin/indexServlet"><img src="/backendAdmin/images/logo.jpg"
+                                                      width="200" height="127"/></a>
+            <div id="menu" class="withoutBoxSizing">
+                <div th:replace="/fragments/menu.html :: menu">Web Application. Passed parameter"</div>
+            </div>
+        </div>
+
+        <div class="contant">
+            <tr>
+                <td>
+                    <table id='contentMenu' class="content" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left"><span class="textstyle_06">P2B好企貸-公司營收發票資料報表</span></td>
+                            <td>
+                                <div class="d-flex justify-content-end">
+                                    <div class="form-group">
+                                        <div class="input-group-sm">
+                                            <select class="form-control" id="companyInputAutoComplete"> </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="condition" name="condition" title="過濾條件" class="butbox"
+                                           data-toggle="modal"
+                                           data-target="#filterModal"><span>過濾條件</span></a>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="#" id="operation" name="operation" title="操作項目" class="butbox"
+                                           data-toggle="modal"
+                                           data-target="#chargeSourceOperationModal"><span>操作項目</span>
+                                            <span id='selectedBadge' class="badge"
+                                                  data-bind="text:selectedCountBadge"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <!-- master dataTable-->
+            <tr id="#list">
+                <td>
+                    <div class="content" title="主要區域" style=" width:100%">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <div class="box-tools pull-right">
+                                        <button class="btn btn-box-tool" data-widget="collapse">
+                                            <i class="fa fa-minus"></i></button>
+                                        <button class="btn btn-box-tool" data-widget="remove">
+                                            <i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a data-toggle="collapse"
+                                                                           href="#revenueRunChartCollapse">營收狀況趨勢圖</a>
+                                            </li>
+                                            <li class="breadcrumb-item"><a data-toggle="collapse"
+                                                                           href="#quarterlyRevenueRunChartCollapse">季年平均營收趨勢圖</a>
+                                            </li>
+                                            <li class="breadcrumb-item"><a data-toggle="collapse"
+                                                                           href="#samePeriodRevenueCompareRunChartCollapse">同期營收預警圖</a>
+                                            </li>
+                                            <li class="breadcrumb-item"><a data-toggle="collapse"
+                                                                           href="#rowDataCollapse">資料</a></li>
+                                        </ol>
+                                    </nav>
+                                    <div class="collapse" id="revenueRunChartCollapse">
+                                        <h5 class="card-title">營收狀況趨勢圖</h5>
+                                        <div class="card card-body border-0">
+                                            <div id="revenueRunChart"></div>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="quarterlyRevenueRunChartCollapse">
+                                        <h5 class="card-title">季年平均營收趨勢圖</h5>
+                                        <div class="card card-body border-0">
+                                            <div id="quarterlyRevenueRunChart"></div>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="samePeriodRevenueCompareRunChartCollapse">
+                                        <h5 class="card-title">同期營收預警圖</h5>
+                                        <div class="card card-body border-0">
+                                            <div id="samePeriodRevenueCompareRunChart"></div>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="rowDataCollapse">
+                                        <h5 class="card-title">資料</h5>
+                                        <div class="card card-body border-0">
+                                            <div id="table_div2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <div class="modal fade" id="filterModal" tabindex="-1" role="dialog"
+                 aria-labelledby="filterModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="filterModalLabel">過濾條件</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="filterModalStartDate">查詢起迄日</label>
+                                    <div class="input-group">
+                                        <input type="text" class="input-sm form-control"
+                                               id="filterModalStartDate"
+                                               name="filterModalStartDate"
+                                               aria-label="startDate"
+                                               data-bind="value:filterModalStartDateInput"/>
+                                        <input type="text" class="input-sm form-control"
+                                               id="filterModalEndDate"
+                                               name="filterModalEndDate"
+                                               aria-label="to"
+                                               data-bind="value:filterModalEndDateInput"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label for="filterModalMaximumInvoicePeriodSwitch">最大區間</label>
+                                    <input id="filterModalMaximumInvoicePeriodSwitch" type="checkbox">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" id="applyBillSearchCondition"
+                                    data-dismiss="modal"
+                                    data-bind="click:doSearch">搜尋
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="chargeSourceOperationModal" tabindex="-1" role="dialog"
+                 aria-labelledby="chargeSourceOperationModalLabel"
+                 aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="chargeSourceOperationModalLabel">操作項目</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:recalculateByCondition'
+                                                data-dismiss="modal">
+                                            重新計算指定公司資料
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </div>
+
+    <div style="width:100%; margin:0 auto; overflow:auto; _display:inline-block;">
+        <div class="top"></div>
+        <div class="mes">
+            <div style="text-align:center; width:100%">
+                <span class="footerstyle_01">All rights reserved © 關網資訊股份有限公司‧本系統支援：Chrome 瀏覽器 ．螢幕解析度 1024x768 ．目前版本V.01 </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let filterEditViewModel = {
+        filterModalStartDateInput: ko.observable(),
+        filterModalEndDateInput: ko.observable(),
+        chosenBillStatus: ko.observable({}),
+        diffOnly: ko.observable(),
+        chosenMaxInvoiceDatePeriod: ko.observable(),
+        knockoutComponent: {
+            filterStartDatePicker: initDatePicker('filterModalStartDate'),
+            filterEndDatePicker: initDatePicker('filterModalEndDate'),
+            filterModalMaximumInvoicePeriodSwitch: bootstrapSwitchViewComponentInitializer('filterModalMaximumInvoicePeriodSwitch', function (filterModalMaximumInvoicePeriodSwitch) {
+                filterModalMaximumInvoicePeriodSwitch.chosenValue.subscribe(function (newValue) {
+                    filterEditViewModel.chosenMaxInvoiceDatePeriod(newValue);
+                    let selectedCompany = contentMenuViewModel.knockoutComponent.companySelector.chosenCompany();
+                    if (filterEditViewModel.chosenMaxInvoiceDatePeriod() && selectedCompany) {
+                        let maxInvoiceDatePeriod = dataSourceModule.getIasrMaximumInvoiceDatePeriodBySeller(
+                            contentMenuViewModel.knockoutComponent.companySelector.chosenCompany().businessNo
+                        );
+                        if (maxInvoiceDatePeriod) {
+                            filterEditViewModel.filterModalStartDateInput(maxInvoiceDatePeriod.startInvoiceDate);
+                            filterEditViewModel.filterModalEndDateInput(maxInvoiceDatePeriod.endInvoiceDate);
+                        }
+                    }
+                });
+                return filterModalMaximumInvoicePeriodSwitch;
+            }),
+        },
+        init: function (dom) {
+            ko.applyBindings(filterEditViewModel, dom);
+        },
+        condition: function () {
+            let condition = {};
+            try {
+                let selectedCompany = contentMenuViewModel.knockoutComponent.companySelector.chosenCompany();
+                if (filterEditViewModel.filterModalStartDateInput()) {
+                    condition.startDate = filterEditViewModel.filterModalStartDateInput().replaceAll('/', '');
+                }
+                if (filterEditViewModel.filterModalEndDateInput()) {
+                    condition.endDate = filterEditViewModel.filterModalEndDateInput().replaceAll('/', '');
+                }
+                if (selectedCompany) {
+                    condition.seller = selectedCompany.businessNo;
+                }
+            } catch (err) {
+                console.log(err);
+            }
+            return condition;
+        },
+        doSearch: function () {
+            googleChartViewModel.reloadDataTable();
+        }
+    };
+
+    let googleChartViewModel = {
+        googleChart: googleChartsInit(),
+        googleChartDataTable: ko.observable(),
+        init: function () {
+            google.charts.setOnLoadCallback(function () {
+                googleChartViewModel.googleChartDataTable(googleChartViewModel.googleChart.initDataTable([]));
+                googleChartViewModel.googleChart.drawDataTable("table_div2", googleChartViewModel.googleChartDataTable());
+            });
+        },
+        showAllCollapse: function () {
+            $('.collapse').collapse();
+        },
+        reloadDataTable: function () {
+            let req = genSearchReportDataReq(function (data) {
+                google.charts.setOnLoadCallback(function () {
+                    googleChartViewModel.showAllCollapse();
+                    googleChartViewModel.googleChartDataTable(googleChartViewModel.googleChart.initDataTable(data));
+                    googleChartViewModel.googleChart.drawDataTable("table_div2", googleChartViewModel.googleChartDataTable());
+                    googleChartViewModel.googleChart.drawRevenueRunChart("revenueRunChart", googleChartViewModel.googleChartDataTable());
+                    googleChartViewModel.googleChart.drawQuarterlyRevenueRunChart("quarterlyRevenueRunChart", googleChartViewModel.googleChartDataTable());
+                    googleChartViewModel.googleChart.drawRevenueForSamePeriodRunChart("samePeriodRevenueCompareRunChart", data);
+                });
+            });
+            if (req) {
+                searchP2bIasrReportData(req);
+            }
+        }
+    }
+
+    let contentMenuViewModel = {
+        selectedCountBadge: ko.observable(0),
+        availableCompanies: ko.observableArray(),
+        knockoutComponent: {
+            companySelector: generalCompanySelectorInitializer('companyInputAutoComplete', function (companySelector) {
+                companySelector.chosenCompany.subscribe(function (newValue) {
+                    if (!filterEditViewModel.filterModalStartDateInput) {
+                        return;
+                    }
+                    if (!filterEditViewModel.filterModalEndDateInput) {
+                        return;
+                    }
+                    googleChartViewModel.reloadDataTable();
+                });
+                return companySelector;
+            })
+        },
+        init: function (dom) {
+            ko.applyBindings(contentMenuViewModel, dom);
+        }
+    };
+
+    let operationViewModel = {
+        init: function (dom) {
+            ko.applyBindings(operationViewModel, dom);
+        },
+        recalculateByCondition: function () {
+            confirmAjaxProcessor(
+                function () {
+                    dataSourceModule.reSyncIasrBySeller(
+                        contentMenuViewModel.knockoutComponent.companySelector.chosenCompany().businessNo,
+                        function (responseMap) {
+                            messageHandler(responseMap);
+                        }
+                    );
+                },
+                "注意",
+                "這個操作將會刪除指定條件下的資料並重新產生，確定要執行這個操作?",
+                "warning")
+        },
+        downloadInvoiceCountDiffCsvByCondition: function () {
+            confirmAjaxProcessor(function () {
+                    loadingAjaxProcessor(function () {
+                        downloadInvoiceCountDiffCsvByConditionAjax(filterEditViewModel.condition(), function (response) {
+                            if (response.reportBody) {
+                                var body = base64ToArrayBuffer(response.reportBody);
+                                downloadFileFromBlob(body, "invoiceCountDiffReport.csv");
+                            }
+                            messageHandler(response);
+                        });
+                    }, '處理中請稍候')
+                },
+                "注意",
+                "下載需要一段時間，確定要執行這個操作?",
+                "warning"
+            );
+        },
+    };
+
+    function initViewModel() {
+        contentMenuViewModel.init(document.getElementById("contentMenu"));
+        filterEditViewModel.init(document.getElementById("filterModal"));
+        operationViewModel.init(document.getElementById("chargeSourceOperationModal"));
+    }
+
+    function initMenuTemplate() {
+        return Promise.all([]);
+    }
+
+    function initPage() {
+        const promiseMenuTemplateInit = initMenuTemplate();
+        promiseMenuTemplateInit
+            .then(result => draggableModal(result))
+            .then(result => initTooltip(result))
+            .then(result => initViewModel())
+            .then(result => googleChartViewModel.init());
+    }
+
+    function genSearchReportDataReq(handler) {
+        let req = filterEditViewModel.condition();
+        if (!req.seller) {
+            messageHandler({
+                status: 'warning',
+                message: '請先選擇公司',
+                title: '未選擇公司'
+            });
+            return;
+        }
+        if (!req.startDate || !req.endDate) {
+            messageHandler({
+                status: 'warning',
+                message: '請先選擇起迄日',
+                title: '未選擇起迄日'
+            });
+            return;
+        }
+        if (typeof handler === 'function') {
+            req.handler = handler
+        }
+        return req;
+    }
+
+    function searchP2bIasrReportData(reqObj) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/p2bReportViewServlet/gstatic' +
+            '/seller/' + reqObj.seller +
+            '/startDate/' + reqObj.startDate +
+            '/endDate/' + reqObj.endDate;
+        ajaxParam.requestType = 'GET';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        return asyncAjaxCall(ajaxParam, function (data, textStatus, jqXHR) {
+            reqObj.handler(data);
+        });
+    }
+
+</script>
+</body>
+</html>
