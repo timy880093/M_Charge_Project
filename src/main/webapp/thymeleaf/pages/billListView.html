@@ -653,6 +653,7 @@
         },
         sendPaymentRequestEmail: function () {
             customizeMailContentViewModel.extraNoticeMessageOnly();
+            customizeMailContentViewModel.cleanCustomProperty();
             $('#customizeMailContentModal').modal();
         },
         resendPaymentRequestEmail: function () {

@@ -1,6 +1,7 @@
 package com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord;
 
 import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameUtils;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
@@ -8,13 +9,12 @@ import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
-import com.gateweb.utils.LocalDateTimeUtils;
+import com.gateweb.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,129 +40,84 @@ public class RemainingRecordUpdateByInvoiceDate {
         }).collect(Collectors.toList());
     }
 
-    public Optional<CustomInterval> getSearchInterval(InvoiceRemaining targetRecord) {
-        Optional<CustomInterval> result = Optional.empty();
-        try {
-            Optional<InvoiceRemaining> prevRecordOpt
-                    = invoiceRemainingRepository.findTopByCompanyIdAndInvoiceRemainingIdLessThanOrderByInvoiceRemainingIdDesc(
-                    targetRecord.getCompanyId()
-                    , targetRecord.getInvoiceRemainingId()
-            );
-            if (prevRecordOpt.isPresent()) {
-                LocalDateTime start = LocalDateTimeUtils.parseLocalDateFromString(
-                        prevRecordOpt.get().getInvoiceDate(), "yyyyMMdd"
-                ).get().atStartOfDay();
-
-                LocalDateTime end = LocalDateTimeUtils.parseLocalDateFromString(
-                        targetRecord.getInvoiceDate(), "yyyyMMdd"
-                ).get().atStartOfDay().minusSeconds(1);
-                result = Optional.of(new CustomInterval(start, end));
-            }
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-        }
-        return result;
-    }
-
     public void executeUpdate(Set<Company> companySet) {
         companySet.stream().forEach(company -> {
             List<InvoiceRemaining> unstableRecordList
                     = new ArrayList<>(
                     invoiceRemainingRepository.findUnstableRemainingCountByCompanyId(company.getCompanyId().longValue())
             );
-            List<RemainingRecordUpdateReq> remainingRecordUpdateReqList = new ArrayList<>();
             //產生RemainingRecordUpdateReq
             unstableRecordList = sortByInvoiceDate(unstableRecordList);
             unstableRecordList.stream().forEach(unstableRecord -> {
                 Optional<RemainingRecordUpdateReq> remainingRecordUpdateReqOpt = genUpdateReq(
                         company.getBusinessNo(), unstableRecord);
-                if (remainingRecordUpdateReqOpt.isPresent()) {
-                    remainingRecordUpdateReqList.add(remainingRecordUpdateReqOpt.get());
-                }
-            });
-            List<RemainingCountRecordUpdateData> updateDataList = genUpdateDataList(remainingRecordUpdateReqList);
-            updateDataList.stream().forEach(recordUpdateData -> {
-                updateData(recordUpdateData);
+                remainingRecordUpdateReqOpt.ifPresent(this::updateData);
             });
         });
     }
 
     private Optional<RemainingRecordUpdateReq> genUpdateReq(String businessNo, InvoiceRemaining targetRecord) {
         Optional<RemainingRecordUpdateReq> result = Optional.empty();
-        Optional<InvoiceRemaining> prevRecordOpt
-                = invoiceRemainingRepository.findTopInvoiceRemainingByCompanyIdAndInvoiceDateLessThanOrderByInvoiceDateDesc(
-                targetRecord.getCompanyId()
-                , targetRecord.getInvoiceDate()
-        );
-        if (prevRecordOpt.isPresent()) {
-            RemainingRecordUpdateReq remainingRecordUpdateReq = new RemainingRecordUpdateReq(
-                    businessNo
-                    , targetRecord
-                    , prevRecordOpt.get()
+        Optional<RemainingRecordFrame> remainingRecordFrameOpt
+                = remainingRecordFrameComponent.getRemainingRecordModel(targetRecord);
+        if (remainingRecordFrameOpt.isPresent()) {
+            Optional<CustomInterval> calculateIntervalOpt = RemainingRecordFrameUtils.genRemainingRecordInvoiceDateInterval(
+                    remainingRecordFrameOpt.get()
             );
-            result = Optional.of(remainingRecordUpdateReq);
+            if (calculateIntervalOpt.isPresent()) {
+                //取得張數差異
+                Optional<Integer> newCountOpt = iasrDataCounterByInvoiceDate.count(
+                        businessNo
+                        , calculateIntervalOpt.get()
+                );
+                if (newCountOpt.isPresent()) {
+                    Optional<UpdateReqGenerator> updateReqGeneratorOpt
+                            = updateReqGeneratorDispatcher(remainingRecordFrameOpt.get(), newCountOpt.get());
+                    if (updateReqGeneratorOpt.isPresent()) {
+                        return Optional.of(
+                                updateReqGeneratorOpt.get().gen(
+                                        remainingRecordFrameOpt.get(), newCountOpt.get(), businessNo
+                                )
+                        );
+                    }
+                }
+            }
         }
         return result;
     }
 
-    private List<RemainingCountRecordUpdateData> genUpdateDataList(List<RemainingRecordUpdateReq> remainingRecordUpdateReqList) {
-        List<RemainingCountRecordUpdateData> resultList = new ArrayList<>();
-        remainingRecordUpdateReqList.stream().forEach(req -> {
-            Optional<CustomInterval> calculateIntervalOpt = RemainingRecordFrameUtils.genRemainingRecordInvoiceDateInterval(
-                    req.getPrevRecord().getInvoiceDate()
-                    , req.getTargetRecord().getInvoiceDate()
-            );
-            if (calculateIntervalOpt.isPresent()) {
-                CustomInterval targetInterval = new CustomInterval(
-                        calculateIntervalOpt.get().getStartLocalDateTime()
-                        , calculateIntervalOpt.get().getEndLocalDateTime()
-                );
-                //取得張數差異
-                Optional<Integer> newCountOpt = iasrDataCounterByInvoiceDate.count(
-                        req.getBusinessNo()
-                        , targetInterval
-                );
-                if (newCountOpt.isPresent()) {
-                    int diff = newCountOpt.get() - req.getTargetRecord().getUsage();
-                    if (diff != 0) {
-                        //查詢會影響的記錄
-                        List<InvoiceRemaining> relatedRecordList =
-                                updateRemainingFromRecord(
-                                        req.getTargetRecord(), req.getTargetRecord().getRemaining() + diff
-                                );
-                        //組合
-                        RemainingCountRecordUpdateData remainingCountRecordUpdateData = new RemainingCountRecordUpdateData(
-                                diff,
-                                req.getTargetRecord(),
-                                targetInterval,
-                                relatedRecordList
-                        );
-                        resultList.add(remainingCountRecordUpdateData);
-                    }
-                }
+    public Optional<UpdateReqGenerator> updateReqGeneratorDispatcher(RemainingRecordFrame frame, int newUsage) {
+        Optional<UpdateTypeEnum> updateTypeEnumOpt = getUpdateType(frame, newUsage);
+        if (updateTypeEnumOpt.isPresent()) {
+            if (updateTypeEnumOpt.get().equals(UpdateTypeEnum.SAME_CONTRACT_UPDATE)) {
+                return Optional.of(new SameContractUpdateReqGenerator());
             }
-        });
-        return resultList;
+            if (updateTypeEnumOpt.get().equals(UpdateTypeEnum.DIFF_CONTRACT_UPDATE)) {
+                return Optional.of(new DiffContractUpdateReqGenerator());
+            }
+        }
+        return Optional.empty();
     }
 
-    private void updateData(RemainingCountRecordUpdateData remainingCountRecordUpdateData) {
-        List<InvoiceRemaining> saveList = new ArrayList<>();
-        Integer newUsage = remainingCountRecordUpdateData.getTargetInvoiceRemaining().getUsage()
-                + remainingCountRecordUpdateData.getDiff();
-        remainingCountRecordUpdateData.getTargetInvoiceRemaining().setUsage(newUsage);
-        Integer newRemaining = remainingCountRecordUpdateData.getTargetInvoiceRemaining().getRemaining()
-                - remainingCountRecordUpdateData.getDiff();
-        remainingCountRecordUpdateData.getTargetInvoiceRemaining().setRemaining(newRemaining);
-        remainingCountRecordUpdateData.getTargetInvoiceRemaining().setModifyDate(LocalDateTime.now());
-        saveList.add(remainingCountRecordUpdateData.getTargetInvoiceRemaining());
-        for (InvoiceRemaining invoiceRemaining : remainingCountRecordUpdateData.getRelatedList()) {
-            Integer newSubRemaining = invoiceRemaining.getRemaining() - remainingCountRecordUpdateData.getDiff();
-            invoiceRemaining.setRemaining(newSubRemaining);
-            invoiceRemaining.setModifyDate(LocalDateTime.now());
-            saveList.add(invoiceRemaining);
-            logger.info("RemainingCountUpdate :" + invoiceRemaining);
+    Optional<UpdateTypeEnum> getUpdateType(RemainingRecordFrame frame, int newCount) {
+        boolean wrongRemaining = frame.getTargetRecord().getRemaining().compareTo(
+                frame.getPrevRecord().getRemaining() - frame.getTargetRecord().getUsage()
+        ) != 0;
+        boolean sameContract = frame.getTargetRecord().getContractId().compareTo(frame.getPrevRecord().getContractId()) == 0;
+        boolean wrongUsage = frame.getTargetRecord().getUsage() != newCount;
+        if (sameContract && (wrongRemaining || wrongUsage)) {
+            return Optional.of(UpdateTypeEnum.SAME_CONTRACT_UPDATE);
+        } else if (!sameContract && (wrongUsage)) {
+            return Optional.of(UpdateTypeEnum.DIFF_CONTRACT_UPDATE);
         }
-        invoiceRemainingRepository.saveAll(saveList);
+        return Optional.empty();
+    }
+
+    private void updateData(RemainingRecordUpdateReq req) {
+        req.getRemainingRecordFrame().getTargetRecord().setRemaining(req.getNewRemaining());
+        req.getRemainingRecordFrame().getTargetRecord().setUsage(req.getNewUsage());
+        invoiceRemainingRepository.save(req.getRemainingRecordFrame().getTargetRecord());
+        logger.info("RemainingCountUpdate :{}", JsonUtils.gsonToJson(req));
     }
 
     public List<InvoiceRemaining> updateRemainingFromRecord(InvoiceRemaining targetRecord, Integer newRemaining) {
@@ -178,7 +133,6 @@ public class RemainingRecordUpdateByInvoiceDate {
         for (InvoiceRemaining record : updateRecordList) {
             record.setRemaining(nextRemaining - record.getUsage());
             nextRemaining = record.getRemaining();
-
         }
         return updateRecordList;
     }

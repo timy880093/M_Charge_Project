@@ -48,16 +48,7 @@
                                 <div class="d-flex justify-content-end">
                                     <div class="form-group">
                                         <div class="input-group-sm">
-                                            <select class="form-control"
-                                                    id="companyInputAutoComplete"
-                                                    data-bind="
-                                        options: availableCompanies,
-                                        optionsText:'name',
-                                        optionsValue:'id',
-                                         value: selectedCompany,
-                                         optionsCaption: 'Choose...'"
-                                            >
-                                            </select>
+                                            <select class="form-control" id="companyInputAutoComplete"> </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -252,13 +243,13 @@
             ko.applyBindings(filterEditViewModel, dom);
         },
         condition: function () {
-            var condition = {};
+            let condition = {};
             try {
                 if (filterEditViewModel.yearMonthInput()) {
                     condition.yearMonth = filterEditViewModel.yearMonthInput();
                 }
                 if (contentMenuViewModel.selectedCompany()) {
-                    condition.companyId = contentMenuViewModel.selectedCompany();
+                    condition.companyId = contentMenuViewModel.selectedCompany().companyId;
                 }
                 if (filterEditViewModel.diffOnly()) {
                     condition.diffOnly = filterEditViewModel.diffOnly();
@@ -277,22 +268,17 @@
         selectedCountBadge: ko.observable(0),
         availableCompanies: ko.observableArray(),
         selectedCompany: ko.observable(),
+        knockoutComponent: {
+            companySelector: generalCompanySelectorInitializer('companyInputAutoComplete', function (companySelector) {
+                companySelector.chosenCompany.subscribe(function (newValue) {
+                    contentMenuViewModel.selectedCompany(newValue);
+                    dataSourceMainListViewModel.reload();
+                });
+                return companySelector;
+            })
+        },
         init: function (dom) {
-            /*
-            這個selected input其實是由knockout.js與select2共同協作的
-            由knockout.js binding公司的資料給select，再由select2會將已存在的選項改為可以打字搜尋的樣式
-            再由knockout.js把選擇的值binding回來，整個流程的code只有10幾行，很划算
-             */
             ko.applyBindings(contentMenuViewModel, dom);
-            var companySelect2DataList = new Array();
-            dataSourceModule.getBillableCompanyList().forEach(company => {
-                companySelect2DataList.push(company);
-            });
-            contentMenuViewModel.availableCompanies(companySelect2DataList);
-            $('#companyInputAutoComplete').select2();
-            $('#companyInputAutoComplete').on('select2:select', function (e) {
-                dataSourceMainListViewModel.reload();
-            });
         }
     };
 

@@ -17,6 +17,8 @@ public interface ContractService {
 
     List<ContractFetchView> findDeductibleContractList();
 
+    void calculateContractFee(OutToBillRequest outToBillRequest, Long callerI);
+
     void calculateContractFeeAndOutToBill(OutToBillRequest outToBillRequest, Long callerId);
 
     void enableContract(Long contractId, Long callerId);
