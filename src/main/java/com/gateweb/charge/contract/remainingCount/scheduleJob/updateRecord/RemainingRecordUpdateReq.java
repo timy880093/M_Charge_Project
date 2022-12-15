@@ -1,19 +1,19 @@
 package com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord;
 
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 
 public class RemainingRecordUpdateReq {
     String businessNo;
-    InvoiceRemaining targetRecord;
-    InvoiceRemaining prevRecord;
+    RemainingRecordFrame remainingRecordFrame;
+    int newUsage;
+    int newRemaining;
 
-    public RemainingRecordUpdateReq() {
-    }
-
-    public RemainingRecordUpdateReq(String businessNo, InvoiceRemaining targetRecord, InvoiceRemaining prevRecord) {
+    public RemainingRecordUpdateReq(String businessNo, RemainingRecordFrame remainingRecordFrame, int newUsage, int newRemaining) {
         this.businessNo = businessNo;
-        this.targetRecord = targetRecord;
-        this.prevRecord = prevRecord;
+        this.remainingRecordFrame = remainingRecordFrame;
+        this.newUsage = newUsage;
+        this.newRemaining = newRemaining;
     }
 
     public String getBusinessNo() {
@@ -24,19 +24,27 @@ public class RemainingRecordUpdateReq {
         this.businessNo = businessNo;
     }
 
-    public InvoiceRemaining getTargetRecord() {
-        return targetRecord;
+    public RemainingRecordFrame getRemainingRecordFrame() {
+        return remainingRecordFrame;
     }
 
-    public void setTargetRecord(InvoiceRemaining targetRecord) {
-        this.targetRecord = targetRecord;
+    public void setRemainingRecordFrame(RemainingRecordFrame remainingRecordFrame) {
+        this.remainingRecordFrame = remainingRecordFrame;
     }
 
-    public InvoiceRemaining getPrevRecord() {
-        return prevRecord;
+    public int getNewUsage() {
+        return newUsage;
     }
 
-    public void setPrevRecord(InvoiceRemaining prevRecord) {
-        this.prevRecord = prevRecord;
+    public void setNewUsage(int newUsage) {
+        this.newUsage = newUsage;
+    }
+
+    public int getNewRemaining() {
+        return newRemaining;
+    }
+
+    public void setNewRemaining(int newRemaining) {
+        this.newRemaining = newRemaining;
     }
 }

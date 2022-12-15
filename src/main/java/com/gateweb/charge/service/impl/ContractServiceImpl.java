@@ -121,15 +121,8 @@ public class ContractServiceImpl implements ContractService {
         }
     }
 
-    /**
-     * 這個順序必需保持先算超額再進行續約
-     * 因為扣抵需要先扣抵超額，兩者為獨立事件
-     *
-     * @param outToBillRequest
-     * @param callerId
-     */
     @Override
-    public void calculateContractFeeAndOutToBill(OutToBillRequest outToBillRequest, Long callerId) {
+    public void calculateContractFee(OutToBillRequest outToBillRequest, Long callerId) {
         if (outToBillRequest.getCondition().getCompanyId() != null) {
             calculateContractPeriodicFeeByRequest(
                     outToBillRequest.getCondition().getCalFeeYearMonth()
@@ -151,6 +144,18 @@ public class ContractServiceImpl implements ContractService {
                     , callerId
             );
         }
+    }
+
+    /**
+     * 這個順序必需保持先算超額再進行續約
+     * 因為扣抵需要先扣抵超額，兩者為獨立事件
+     *
+     * @param outToBillRequest
+     * @param callerId
+     */
+    @Override
+    public void calculateContractFeeAndOutToBill(OutToBillRequest outToBillRequest, Long callerId) {
+        calculateContractFee(outToBillRequest, callerId);
         billService.transactionOutToBillByAjaxRequest(
                 outToBillRequest,
                 callerId

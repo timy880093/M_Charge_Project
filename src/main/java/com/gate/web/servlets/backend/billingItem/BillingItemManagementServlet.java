@@ -194,7 +194,7 @@ public class BillingItemManagementServlet extends DefaultDisplayPageModelViewCon
             gson = new GsonBuilder().serializeNulls().create();
             Optional<OutToBillRequest> outToBillRequestOpt = beanConverterUtils.convertJsonToObj(requestBody, OutToBillRequest.class);
             if (outToBillRequestOpt.isPresent() && callerInfoOptional.isPresent()) {
-                contractService.calculateContractFeeAndOutToBill(
+                contractService.calculateContractFee(
                         outToBillRequestOpt.get(), callerInfoOptional.get().getUserEntity().getUserId().longValue()
                 );
             }
