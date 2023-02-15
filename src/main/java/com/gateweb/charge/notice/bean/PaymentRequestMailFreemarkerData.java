@@ -15,6 +15,7 @@ public class PaymentRequestMailFreemarkerData {
     boolean haveOverage;
     boolean correction;
     boolean extraNotice;
+    boolean oBankAdvert;
     String extraNoticeMessage;
     String ctbcVirtualAccount;
     List<PaymentRequestMailBillingItem> paymentRequestMailBillingItemSet = new ArrayList<>();
@@ -24,7 +25,7 @@ public class PaymentRequestMailFreemarkerData {
     public PaymentRequestMailFreemarkerData() {
     }
 
-    public PaymentRequestMailFreemarkerData(String companyName, String ymString, String paymentExpirationDate, BigDecimal paymentRequestTotalAmount, BigDecimal paymentRequestOverageTotalAmount, int maximumCharge, int overageThreshold, boolean haveOverage, boolean correction, boolean extraNotice, String extraNoticeMessage, String ctbcVirtualAccount, List<PaymentRequestMailBillingItem> paymentRequestMailBillingItemSet, List<PaymentRequestMailOverageItem> paymentRequestMailOverageItemList, List<PaymentRequestMailGradeTable> paymentRequestMailGradeTableList) {
+    public PaymentRequestMailFreemarkerData(String companyName, String ymString, String paymentExpirationDate, BigDecimal paymentRequestTotalAmount, BigDecimal paymentRequestOverageTotalAmount, int maximumCharge, int overageThreshold, boolean haveOverage, boolean correction, boolean extraNotice, boolean oBankAdvert, String extraNoticeMessage, String ctbcVirtualAccount, List<PaymentRequestMailBillingItem> paymentRequestMailBillingItemSet, List<PaymentRequestMailOverageItem> paymentRequestMailOverageItemList, List<PaymentRequestMailGradeTable> paymentRequestMailGradeTableList) {
         this.companyName = companyName;
         this.ymString = ymString;
         this.paymentExpirationDate = paymentExpirationDate;
@@ -35,6 +36,7 @@ public class PaymentRequestMailFreemarkerData {
         this.haveOverage = haveOverage;
         this.correction = correction;
         this.extraNotice = extraNotice;
+        this.oBankAdvert = oBankAdvert;
         this.extraNoticeMessage = extraNoticeMessage;
         this.ctbcVirtualAccount = ctbcVirtualAccount;
         this.paymentRequestMailBillingItemSet = paymentRequestMailBillingItemSet;
@@ -122,6 +124,14 @@ public class PaymentRequestMailFreemarkerData {
         this.extraNotice = extraNotice;
     }
 
+    public boolean isoBankAdvert() {
+        return oBankAdvert;
+    }
+
+    public void setoBankAdvert(boolean oBankAdvert) {
+        this.oBankAdvert = oBankAdvert;
+    }
+
     public String getExtraNoticeMessage() {
         return extraNoticeMessage;
     }
@@ -160,26 +170,5 @@ public class PaymentRequestMailFreemarkerData {
 
     public void setPaymentRequestMailGradeTableList(List<PaymentRequestMailGradeTable> paymentRequestMailGradeTableList) {
         this.paymentRequestMailGradeTableList = paymentRequestMailGradeTableList;
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentRequestMailFreemarkerData{" +
-                "companyName='" + companyName + '\'' +
-                ", ymString='" + ymString + '\'' +
-                ", paymentExpirationDate='" + paymentExpirationDate + '\'' +
-                ", paymentRequestTotalAmount=" + paymentRequestTotalAmount +
-                ", paymentRequestOverageTotalAmount=" + paymentRequestOverageTotalAmount +
-                ", maximumCharge=" + maximumCharge +
-                ", overageThreshold=" + overageThreshold +
-                ", haveOverage=" + haveOverage +
-                ", correction=" + correction +
-                ", extraNotice=" + extraNotice +
-                ", extraNoticeMessage='" + extraNoticeMessage + '\'' +
-                ", ctbcVirtualAccount='" + ctbcVirtualAccount + '\'' +
-                ", paymentRequestMailBillingItemSet=" + paymentRequestMailBillingItemSet +
-                ", paymentRequestMailOverageItemList=" + paymentRequestMailOverageItemList +
-                ", paymentRequestMailGradeTableList=" + paymentRequestMailGradeTableList +
-                '}';
     }
 }

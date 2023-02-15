@@ -17,6 +17,8 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.gateweb.charge.notice.utils.CompanyRecipientUtils.noticeCompanyRecipientEncode;
+
 @Component
 public class NoticeRequestGenerator {
     Logger logger = LoggerFactory.getLogger(NoticeRequestGenerator.class);
@@ -75,7 +77,7 @@ public class NoticeRequestGenerator {
                 } else {
                     Optional<Company> companyOptional = companyRepository.findByCompanyId(bill.getCompanyId().intValue());
                     if (companyOptional.isPresent()) {
-                        notice.setRecipient(companyOptional.get().getEmail1());
+                        notice.setRecipient(noticeCompanyRecipientEncode(companyOptional.get()));
                     } else {
                         return Optional.empty();
                     }
@@ -137,26 +139,13 @@ public class NoticeRequestGenerator {
         noticeRepository.save(notice);
     }
 
-    @Deprecated
-    public void sendPaymentRequestNotice(Bill bill, String recipient, CallerInfo callerInfo) {
-        Notice notice = createOneTimeBillPaymentRequestNoticeWithCustomRecipient(
-                bill
-                , recipient
-                , NoticeType.PAYMENT_REQUEST_MAIL
-        );
-        notice.setCreatorId(callerInfo.getUserEntity().getCreatorId().longValue());
-        notice.setCreateDate(LocalDateTime.now());
-        noticeRepository.save(notice);
-    }
-
-
     public Notice createOneTimeBillPaymentRequestNoticeWithCustomRecipient(Bill bill, String recipient, NoticeType noticeType) {
         Notice notice = new Notice();
         notice.setNoticeType(noticeType);
         notice.setBillId(bill.getBillId());
         notice.setCompanyId(bill.getCompanyId());
         notice.setRequestBySystem(false);
-        notice.setNoticeStatus(NoticeStatus.FINISH.WAIT_FOR_FIRST_SEND);
+        notice.setNoticeStatus(NoticeStatus.WAIT_FOR_FIRST_SEND);
         notice.setRecipient(recipient);
         notice.setCreateDate(LocalDateTime.now());
         return notice;

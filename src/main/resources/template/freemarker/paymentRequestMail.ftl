@@ -118,8 +118,11 @@
     </#list>
 
 </#if>
-
 <p>以上說明， 若有任何疑問請與我們聯繫，感謝您。</p>
+<#if paymentRequestMailFreemarkerData.oBankAdvert>
+    <br/>
+    <img src='cid:O_Bank_Advert01' width="360" height="335">
+</#if>
 <p>--------------------------------------</p>
 <p><a title="關網資訊股份有限公司" href="http://www.gateweb.com.tw">www.gateweb.com.tw</a></p>
 <p>106663台北市大安區忠孝東路四段285號2樓之2</p>
@@ -127,7 +130,6 @@
 <p>Fax. 02-8773-5339 </p>
 <p>『客戶服務時間』</p>
 <p>平常上班日09:30~12:00,13:30~18:00</p>
-
 </body>
 
 </html>

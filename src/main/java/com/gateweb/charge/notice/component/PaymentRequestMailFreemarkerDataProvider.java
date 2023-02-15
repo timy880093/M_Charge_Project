@@ -34,6 +34,8 @@ public class PaymentRequestMailFreemarkerDataProvider {
     DeductBillingItemMailDataProvider deductBillingItemMailDataProvider;
     @Autowired
     PackageRefPaymentRequestMailDataProvider packageRefPaymentRequestMailDataProvider;
+    @Autowired
+    Boolean oBankPaymentNoticeAdvert;
 
     public PaymentRequestMailFreemarkerData genPaymentRequestCorrectionMailData(PaymentRequestMailData paymentRequestMailData) {
         PaymentRequestMailFreemarkerData paymentRequestMailFreemarkerData = genPaymentRequestMailData(paymentRequestMailData);
@@ -109,7 +111,12 @@ public class PaymentRequestMailFreemarkerDataProvider {
             paymentRequestMailFreemarkerData.setExtraNotice(false);
             paymentRequestMailFreemarkerData.setExtraNoticeMessage("");
         }
+        addObankAdvert(paymentRequestMailFreemarkerData);
         return paymentRequestMailFreemarkerData;
+    }
+
+    public void addObankAdvert(PaymentRequestMailFreemarkerData paymentRequestMailFreemarkerData) {
+        paymentRequestMailFreemarkerData.setoBankAdvert(oBankPaymentNoticeAdvert);
     }
 
     private void genPackageRefBillingItemMailData(Company company, Set<BillingItem> billingItemSet, PaymentRequestMailFreemarkerData paymentRequestMailFreemarkerData) {

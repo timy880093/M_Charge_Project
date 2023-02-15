@@ -5,18 +5,19 @@ import com.gateweb.orm.charge.entity.Bill;
 import com.gateweb.orm.charge.entity.Company;
 
 import java.util.Optional;
+import java.util.Set;
 
 public class PaymentRequestMailData {
     NoticeType noticeType;
     Bill bill;
     Company company;
     Optional<NoticeCustom> noticeCustomOpt;
-    String recipient;
+    Set<String> recipient;
 
     public PaymentRequestMailData() {
     }
 
-    public PaymentRequestMailData(NoticeType noticeType, Bill bill, Company company, Optional<NoticeCustom> noticeCustomOpt, String recipient) {
+    public PaymentRequestMailData(NoticeType noticeType, Bill bill, Company company, Optional<NoticeCustom> noticeCustomOpt, Set<String> recipient) {
         this.noticeType = noticeType;
         this.bill = bill;
         this.company = company;
@@ -56,22 +57,11 @@ public class PaymentRequestMailData {
         this.noticeCustomOpt = noticeCustomOpt;
     }
 
-    public String getRecipient() {
+    public Set<String> getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(String recipient) {
+    public void setRecipient(Set<String> recipient) {
         this.recipient = recipient;
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentRequestMailData{" +
-                "noticeType=" + noticeType +
-                ", bill=" + bill +
-                ", company=" + company +
-                ", noticeCustomOpt=" + noticeCustomOpt +
-                ", recipient='" + recipient + '\'' +
-                '}';
     }
 }
