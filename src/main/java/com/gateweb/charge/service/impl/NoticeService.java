@@ -23,10 +23,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.mail.Address;
-import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static com.gateweb.charge.notice.utils.CompanyRecipientUtils.getRecipientListStr;
 
 @Service
 public class NoticeService {
@@ -105,14 +105,6 @@ public class NoticeService {
             }
         });
         return genPaymentRequestMailResponseMap(successList, failList, ignoreList);
-    }
-
-    public String getRecipientListStr(MimeMessageHelper mimeMessageHelper) throws MessagingException {
-        Set<String> recipientSet = new HashSet<>();
-        for (Address address : mimeMessageHelper.getMimeMessage().getAllRecipients()) {
-            recipientSet.add(address.toString());
-        }
-        return String.join(",", recipientSet);
     }
 
     private Map genPaymentRequestMailResponseMap(Set<Bill> successList, Set<Bill> failList, Set<Bill> ignoreList) {

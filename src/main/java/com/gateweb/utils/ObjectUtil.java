@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.beans.PropertyDescriptor;
 import java.util.Optional;
+import java.util.Set;
 
 public class ObjectUtil {
     protected static final Logger logger = LoggerFactory.getLogger(ObjectUtil.class);
@@ -28,6 +29,11 @@ public class ObjectUtil {
         if (invalid) {
             throw new NullPropertyException();
         }
+    }
+
+    public static String[] stringSetToArray(Set<String> recipientSet) {
+        String[] resultArr = new String[recipientSet.size()];
+        return recipientSet.toArray(resultArr);
     }
 
 }

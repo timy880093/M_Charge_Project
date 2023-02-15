@@ -9,12 +9,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletContext;
 import java.util.Optional;
+
+import static com.gateweb.utils.ObjectUtil.stringSetToArray;
 
 @Component
 public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeMessageHelperGenerator {
@@ -35,6 +40,8 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
     NoticeCustomConverter noticeCustomConverter;
     @Autowired
     PaymentRequestFreemarkerUtil paymentRequestFreemarkerUtil;
+    @Autowired
+    Boolean oBankPaymentNoticeAdvert;
 
     private String paymentRequestMailSubject(String companyName) {
         String subject = String.format("【關網電子發票繳款通知】 %s_關網電子發票服務費用，請詳內文。", companyName);
@@ -55,17 +62,26 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
             }
 
             MailMimeMessageBuilder mailBuilder = new MailMimeMessageBuilder();
-            MimeMessageHelper mimeMessageHelper = mailBuilder.initBuilder(billingSystemMailSender)
-                    .withRecipient(paymentRequestMailData.getRecipient())
+            MailMimeMessageBuilder mimeMessageBuilder = mailBuilder.initBuilder(billingSystemMailSender)
+                    .withRecipientList(stringSetToArray(paymentRequestMailData.getRecipient()))
                     .withHtmlContent(mailHtmlOpt.get())
-                    .withSubject(paymentRequestMailSubject(paymentRequestMailFreemarkerData.getCompanyName()))
-                    .getMimeHelper();
+                    .withSubject(paymentRequestMailSubject(paymentRequestMailFreemarkerData.getCompanyName()));
+
+            if (oBankPaymentNoticeAdvert) {
+                addOBankAdvert(mimeMessageBuilder);
+            }
+            MimeMessageHelper mimeMessageHelper = mimeMessageBuilder.getMimeHelper();
             mimeMessageHelperOptional = Optional.of(mimeMessageHelper);
             return mimeMessageHelperOptional;
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             return mimeMessageHelperOptional;
         }
+    }
+
+    private void addOBankAdvert(MailMimeMessageBuilder mimeMessageBuilder) throws MessagingException {
+        Resource res = new ClassPathResource("advert/20221230-O-Bank-Advert01.jpg");
+        mimeMessageBuilder.withInlineImage("O_Bank_Advert01", res);
     }
 
 }

@@ -199,15 +199,15 @@ function drawQuarterlyRevenueRunChart(elementId, googleDataTable) {
 
 function objectWrapperForRevenueRunChart(objList) {
     let resultList = [];
-    let lastM2m = 0;
-    let lastQ2q = 0;
+    // let lastM2m = 0;
+    // let lastQ2q = 0;
     objList.forEach(element => {
         let result = [];
         result.push(googleDateObjectFormat(element['month']));
-        lastM2m = element['m2m'] * 100;
-        lastQ2q = element['q2q'] * 100;
-        result.push(lastM2m);
-        result.push(lastQ2q);
+        // lastM2m = element['m2m'] ;
+        // lastQ2q = element['q2q'] ;
+        result.push(element['m2m']);
+        result.push(element['q2q']);
         result.push(25);
         result.push(-25);
         resultList.push(result);

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static com.gateweb.utils.ObjectUtil.stringSetToArray;
+
 @Component
 public class PaymentRequestCorrectionMailMimeMessageHelperGenerator implements NoticeMimeMessageHelperGenerator {
     Logger logger = LoggerFactory.getLogger(PaymentRequestCorrectionMailMimeMessageHelperGenerator.class);
@@ -23,6 +25,7 @@ public class PaymentRequestCorrectionMailMimeMessageHelperGenerator implements N
     @Autowired
     @Qualifier("billingSystemMailSender")
     JavaMailSender billingSystemMailSender;
+
 
     private String paymentRequestCorrectionMailSubject(String companyName) {
         String subject = String.format("【帳務更正】__【關網電子發票繳款通知更正 %s_關網電子發票服務費用，請詳內文。", companyName);
@@ -44,7 +47,7 @@ public class PaymentRequestCorrectionMailMimeMessageHelperGenerator implements N
 
             MailMimeMessageBuilder mailBuilder = new MailMimeMessageBuilder();
             MimeMessageHelper mimeMessageHelper = mailBuilder.initBuilder(billingSystemMailSender)
-                    .withRecipient(paymentRequestMailData.getRecipient())
+                    .withRecipientList(stringSetToArray(paymentRequestMailData.getRecipient()))
                     .withHtmlContent(mailHtmlOpt.get())
                     .withSubject(paymentRequestCorrectionMailSubject(paymentRequestMailFreemarkerData.getCompanyName()))
                     .getMimeHelper();

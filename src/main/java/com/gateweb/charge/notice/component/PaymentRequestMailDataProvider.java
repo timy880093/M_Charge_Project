@@ -11,7 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+
+import static com.gateweb.charge.notice.utils.CompanyRecipientUtils.noticeCompanyRecipientDecode;
 
 @Component
 public class PaymentRequestMailDataProvider {
@@ -41,7 +46,7 @@ public class PaymentRequestMailDataProvider {
                 , billOptional.get()
                 , companyOptional.get()
                 , noticeCustomOptional
-                , notice.getRecipient()
+                , noticeCompanyRecipientDecode(notice.getRecipient())
         ));
     }
 }

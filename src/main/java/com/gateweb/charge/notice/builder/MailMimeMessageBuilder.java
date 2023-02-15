@@ -1,5 +1,6 @@
 package com.gateweb.charge.notice.builder;
 
+import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -9,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 public class MailMimeMessageBuilder {
@@ -54,6 +56,11 @@ public class MailMimeMessageBuilder {
 
     public MailMimeMessageBuilder withHtmlContent(String content) throws MessagingException {
         helper.setText(content, true);
+        return this;
+    }
+
+    public MailMimeMessageBuilder withInlineImage(String photoId, Resource image) throws MessagingException {
+        helper.addInline(photoId, image);
         return this;
     }
 
