@@ -16,6 +16,7 @@ import com.gateweb.orm.charge.entity.*;
 import com.gateweb.orm.charge.repository.*;
 import com.gateweb.utils.CsvUtils;
 import com.gateweb.utils.JxlsUtils;
+import com.gateweb.utils.LocalDateTimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jxls.common.CellRef;
 import org.slf4j.Logger;
@@ -31,7 +32,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -186,15 +186,10 @@ public class ReportServiceImpl implements ReportService {
         return resultMap;
     }
 
-    public String genCurrentInvoiceDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
-        return sdf.format(new Date());
-    }
-
     public InvoiceExcelBean genInvoiceExcelBean(int invoiceIndex, int itemIndex, String businessNo, BillingItem billingItem) {
         InvoiceExcelBean bean = new InvoiceExcelBean();
         bean.setInvoiceIndex(invoiceIndex); //發票張數
-        bean.setInvoiceDate(genCurrentInvoiceDateString()); //發票日期
+        bean.setInvoiceDate(LocalDateTimeUtils.getCurrentDateAsInvoiceDate()); //發票日期
         bean.setItemIndex(itemIndex); //品序號
         bean.setItemName(productService.getProductName(billingItem)); //發票品名
         bean.setItemCnt(1); //數量

@@ -19,6 +19,7 @@ import java.util.Set;
 
 public class LocalDateTimeUtils {
     final static private Logger logger = LogManager.getLogger(LocalDateTimeUtils.class);
+    public static String EGUI_DATE_FORMAT = "yyyy-MM-dd";
 
     public Optional<YearMonth> getYearMonthFromLocalDateTime(LocalDateTime localDateTime) {
         return Optional.of(YearMonth.of(localDateTime.getYear(), localDateTime.getMonth()));
@@ -170,5 +171,14 @@ public class LocalDateTimeUtils {
     public static LocalDate toTheEndOfTheMonth(LocalDate localDate) {
         return localDate
                 .plusMonths(1).withDayOfMonth(1).atStartOfDay().minusSeconds(1).toLocalDate();
+    }
+
+    public static Optional<String> parseLocalDateToString(LocalDate localDate, String pattern) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
+        return Optional.of(localDate.format(format));
+    }
+
+    public static String getCurrentDateAsInvoiceDate() {
+        return parseLocalDateToString(LocalDate.now(), EGUI_DATE_FORMAT).get();
     }
 }
