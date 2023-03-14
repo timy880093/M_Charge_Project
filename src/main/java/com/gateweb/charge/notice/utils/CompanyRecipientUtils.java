@@ -2,6 +2,7 @@ package com.gateweb.charge.notice.utils;
 
 import com.gateweb.orm.charge.entity.Company;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.thymeleaf.util.StringUtils;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
@@ -15,8 +16,12 @@ public class CompanyRecipientUtils {
 
     public static String noticeCompanyRecipientEncode(Company company) {
         Set<String> emailSet = new HashSet<>();
-        emailSet.addAll(noticeCompanyRecipientDecode(company.getEmail1()));
-        emailSet.addAll(noticeCompanyRecipientDecode(company.getEmail2()));
+        if (!StringUtils.isEmpty(company.getEmail1())) {
+            emailSet.addAll(noticeCompanyRecipientDecode(company.getEmail1()));
+        }
+        if (!StringUtils.isEmpty(company.getEmail2())) {
+            emailSet.addAll(noticeCompanyRecipientDecode(company.getEmail2()));
+        }
         return String.join(COMMA_SEPARATOR, emailSet);
     }
 
