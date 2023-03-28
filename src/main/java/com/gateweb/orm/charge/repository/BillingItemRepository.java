@@ -139,4 +139,6 @@ public interface BillingItemRepository extends JpaRepository<BillingItem, Long>,
     Collection<BillingItem> findByContractIdAndPaidPlan(Long contractId, PaidPlan paidPlan);
 
     Optional<BillingItem> findTopByPrevInvoiceRemainingIdIsNotNullAndContractId(Long contractId);
+
+    Collection<BillingItem> findByCompanyId(Long companyId);
 }

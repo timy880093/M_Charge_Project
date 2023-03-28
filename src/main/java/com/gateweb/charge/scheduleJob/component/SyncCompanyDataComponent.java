@@ -1,9 +1,9 @@
 package com.gateweb.charge.scheduleJob.component;
 
-import com.gateweb.orm.charge.entity.BillCycleEntity;
+import com.gateweb.orm.charge.entity.BillingItem;
 import com.gateweb.orm.charge.entity.ChargeUser;
 import com.gateweb.orm.charge.entity.Company;
-import com.gateweb.orm.charge.repository.BillCycleRepository;
+import com.gateweb.orm.charge.repository.BillingItemRepository;
 import com.gateweb.orm.charge.repository.ChargeUserRepository;
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import com.gateweb.orm.einv.repository.EinvCompanyRepository;
@@ -16,10 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Eason on 3/9/2018.
@@ -36,7 +33,7 @@ public class SyncCompanyDataComponent {
     @Autowired
     ChargeUserRepository userRepository;
     @Autowired
-    BillCycleRepository billCycleRepository;
+    BillingItemRepository billingItemRepository;
 
     /**
      * 用Spring的BeanUtils在Copy時，ID不會一併COPY，但apache的library沒有這個問題。
@@ -129,11 +126,13 @@ public class SyncCompanyDataComponent {
         Optional<Company> duplicateCompanyOptional = companyRepository.findByBusinessNo(newCompanyEntity.getBusinessNo());
 
         if (duplicateCompanyOptional.isPresent() && !newCompanyEntity.getCompanyId().equals(duplicateCompanyOptional.get().getCompanyId())) {
-            Set<BillCycleEntity> billCycleEntitySet = billCycleRepository.findByCompanyId(duplicateCompanyOptional.get().getCompanyId());
             List<ChargeUser> chargeUserSet = userRepository.findByCompanyId(duplicateCompanyOptional.get().getCompanyId());
+            Set<BillingItem> billingItemSet = new HashSet<>(
+                    billingItemRepository.findByCompanyId(duplicateCompanyOptional.get().getCompanyId().longValue())
+            );
             logger.error("Process Duplicate Company: {}", gson.toJson(newCompanyEntity));
             logger.error("Delete exists Company:{}", gson.toJson(duplicateCompanyOptional.get()));
-            if (billCycleEntitySet.isEmpty()) {
+            if (billingItemSet.isEmpty()) {
                 chargeUserSet.stream().forEach(chargeUser -> {
                     userRepository.delete(chargeUser);
                 });
