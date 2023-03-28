@@ -36,7 +36,6 @@ import java.util.Optional;
 @WebAppConfiguration
 public class BillServiceTest {
 
-    Gson gson = new Gson();
     CustomIntervalUtils customIntervalUtils = new CustomIntervalUtils();
     final ChargeCycleInstanceProvider chargeCycleInstanceProvider = new ChargeCycleInstanceProvider();
 
@@ -62,8 +61,6 @@ public class BillServiceTest {
     CashDetailRepository cashDetailRepository;
     @Autowired
     ContractService contractService;
-    @Autowired
-    BillCycleRepository billCycleRepository;
     @Autowired
     PackageRefRepository packageRefRepository;
 

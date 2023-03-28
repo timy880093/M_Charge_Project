@@ -12,7 +12,6 @@
         <class>com.gateweb.orm.charge.entity.LogDataEntity</class>
         <class>com.gateweb.orm.charge.entity.InvoiceTypeEntity</class>
         <class>com.gateweb.orm.charge.entity.DeductDetailEntity</class>
-        <class>com.gateweb.orm.charge.entity.BillCycleEntity</class>
         <class>com.gateweb.orm.charge.entity.LogParameterEntity</class>
         <class>com.gateweb.orm.charge.entity.CashMasterEntity</class>
         <class>com.gateweb.orm.charge.entity.ChargeIasrEntity</class>
