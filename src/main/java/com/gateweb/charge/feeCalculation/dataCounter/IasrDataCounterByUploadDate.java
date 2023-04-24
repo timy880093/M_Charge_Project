@@ -1,6 +1,6 @@
 package com.gateweb.charge.feeCalculation.dataCounter;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.einv.repository.EinvInvoiceMainRepository;
 import com.gateweb.utils.LocalDateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;

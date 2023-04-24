@@ -1,7 +1,7 @@
 package com.gate.web.servlets.backend.common;
 
 import com.gate.web.servlets.abstraction.DefaultDisplayPageModelViewController;
-import com.gateweb.charge.component.propertyProvider.EnvironmentPropertyProvider;
+import com.gateweb.charge.infrastructure.propertyProvider.EnvironmentPropertyProvider;
 import com.gateweb.charge.enumeration.BillStatus;
 import com.gateweb.charge.report.component.IndexPageReportComponent;
 import com.gateweb.utils.JsonUtils;

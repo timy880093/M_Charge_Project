@@ -1,6 +1,6 @@
 package unitTest;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import com.gateweb.charge.contract.component.ContractPeriodicFeeCalculator;
 import com.gateweb.utils.LocalDateTimeUtils;

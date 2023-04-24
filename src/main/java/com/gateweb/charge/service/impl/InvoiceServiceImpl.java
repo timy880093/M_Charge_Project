@@ -1,6 +1,6 @@
 package com.gateweb.charge.service.impl;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
 import com.gateweb.charge.service.InvoiceService;
 import com.gateweb.orm.charge.entity.ChargeIasrEntity;

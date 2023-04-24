@@ -1,18 +1,16 @@
 package com.gateweb.charge.service.dataGateway;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.dsl.component.ContractDslComponent;
 import com.gateweb.charge.dsl.component.DslCommonComponent;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.frontEndIntegration.datatablePagination.PageInfo;
-import com.gateweb.charge.service.dataGateway.ContractDataGateway;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.view.ContractFetchView;
 import com.gateweb.orm.charge.repository.ContractFetchViewRepository;
 import com.gateweb.orm.charge.repository.ContractRepository;
 import com.querydsl.core.support.QueryBase;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -4,7 +4,7 @@ import com.gate.web.facades.UserService;
 import com.gateweb.utils.LocalDateTimeUtils;
 import com.gateweb.charge.feeCalculation.dataGateway.ContractOverageFeeBillingDataCollector;
 import com.gateweb.charge.scheduleJob.quartzJobs.ContractAutomationJob;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import com.gateweb.orm.charge.entity.view.ChargePackageFetchView;
 import com.gateweb.orm.charge.repository.ChargePackageFetchViewRepository;

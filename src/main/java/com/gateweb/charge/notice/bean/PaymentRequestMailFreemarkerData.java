@@ -15,7 +15,7 @@ public class PaymentRequestMailFreemarkerData {
     boolean haveOverage;
     boolean correction;
     boolean extraNotice;
-    boolean oBankAdvert;
+    OBank oBank;
     String extraNoticeMessage;
     String ctbcVirtualAccount;
     List<PaymentRequestMailBillingItem> paymentRequestMailBillingItemSet = new ArrayList<>();
@@ -25,7 +25,7 @@ public class PaymentRequestMailFreemarkerData {
     public PaymentRequestMailFreemarkerData() {
     }
 
-    public PaymentRequestMailFreemarkerData(String companyName, String ymString, String paymentExpirationDate, BigDecimal paymentRequestTotalAmount, BigDecimal paymentRequestOverageTotalAmount, int maximumCharge, int overageThreshold, boolean haveOverage, boolean correction, boolean extraNotice, boolean oBankAdvert, String extraNoticeMessage, String ctbcVirtualAccount, List<PaymentRequestMailBillingItem> paymentRequestMailBillingItemSet, List<PaymentRequestMailOverageItem> paymentRequestMailOverageItemList, List<PaymentRequestMailGradeTable> paymentRequestMailGradeTableList) {
+    public PaymentRequestMailFreemarkerData(String companyName, String ymString, String paymentExpirationDate, BigDecimal paymentRequestTotalAmount, BigDecimal paymentRequestOverageTotalAmount, int maximumCharge, int overageThreshold, boolean haveOverage, boolean correction, boolean extraNotice, OBank oBank, String extraNoticeMessage, String ctbcVirtualAccount, List<PaymentRequestMailBillingItem> paymentRequestMailBillingItemSet, List<PaymentRequestMailOverageItem> paymentRequestMailOverageItemList, List<PaymentRequestMailGradeTable> paymentRequestMailGradeTableList) {
         this.companyName = companyName;
         this.ymString = ymString;
         this.paymentExpirationDate = paymentExpirationDate;
@@ -36,7 +36,7 @@ public class PaymentRequestMailFreemarkerData {
         this.haveOverage = haveOverage;
         this.correction = correction;
         this.extraNotice = extraNotice;
-        this.oBankAdvert = oBankAdvert;
+        this.oBank = oBank;
         this.extraNoticeMessage = extraNoticeMessage;
         this.ctbcVirtualAccount = ctbcVirtualAccount;
         this.paymentRequestMailBillingItemSet = paymentRequestMailBillingItemSet;
@@ -124,12 +124,12 @@ public class PaymentRequestMailFreemarkerData {
         this.extraNotice = extraNotice;
     }
 
-    public boolean isoBankAdvert() {
-        return oBankAdvert;
+    public OBank getoBank() {
+        return oBank;
     }
 
-    public void setoBankAdvert(boolean oBankAdvert) {
-        this.oBankAdvert = oBankAdvert;
+    public void setoBank(OBank oBank) {
+        this.oBank = oBank;
     }
 
     public String getExtraNoticeMessage() {

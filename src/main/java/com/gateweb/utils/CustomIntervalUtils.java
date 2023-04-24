@@ -1,6 +1,6 @@
 package com.gateweb.utils;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 

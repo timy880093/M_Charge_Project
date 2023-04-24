@@ -1,4 +1,4 @@
-package com.gateweb.charge.component.propertyProvider;
+package com.gateweb.charge.infrastructure.propertyProvider;
 
 import com.gateweb.orm.charge.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;

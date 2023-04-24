@@ -1,6 +1,6 @@
 package com.gateweb.charge.config;
 
-import com.gateweb.charge.component.propertyProvider.MailPropertyProvider;
+import com.gateweb.charge.infrastructure.propertyProvider.MailPropertyProvider;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import org.apache.log4j.LogManager;

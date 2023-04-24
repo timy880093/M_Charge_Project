@@ -1,6 +1,5 @@
 package com.gateweb.charge;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import com.gateweb.charge.scheduleJob.component.FindFirstInvoiceDateComponent;
 import com.gateweb.utils.LocalDateTimeUtils;

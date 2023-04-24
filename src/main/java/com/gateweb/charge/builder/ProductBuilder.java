@@ -6,7 +6,7 @@ import com.gateweb.orm.charge.entity.Product;
 import com.gateweb.orm.charge.entity.ProductCategory;
 import com.gateweb.orm.charge.entity.ProductPricing;
 import com.gateweb.orm.charge.entity.ProductSource;
-import com.gateweb.charge.component.propertyProvider.ContextComponent;
+import com.gateweb.charge.infrastructure.propertyProvider.ContextComponent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

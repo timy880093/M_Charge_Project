@@ -3,7 +3,7 @@ package com.gateweb.charge.deduct.builder;
 import com.gateweb.orm.charge.entity.BillingItem;
 import com.gateweb.orm.charge.entity.Deduct;
 import com.gateweb.orm.charge.entity.DeductHistory;
-import com.gateweb.charge.component.propertyProvider.ContextComponent;
+import com.gateweb.charge.infrastructure.propertyProvider.ContextComponent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

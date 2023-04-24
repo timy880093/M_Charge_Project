@@ -5,7 +5,7 @@ import com.gateweb.charge.config.SpringWebMvcConfig;
 import com.gateweb.orm.charge.entity.view.DeductHistoryFetchView;
 import com.gateweb.orm.charge.repository.*;
 import com.gateweb.orm.charge.entity.Deduct;
-import com.gateweb.charge.component.propertyProvider.ContextProvider;
+import com.gateweb.charge.infrastructure.propertyProvider.ContextProvider;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;

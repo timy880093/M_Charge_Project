@@ -1,4 +1,4 @@
-package com.gateweb.charge.component.nonAnnotated;
+package com.gateweb.charge.infrastructure.nonAnnotated;
 
 import com.gateweb.charge.enumeration.ChargeIntervalType;
 import com.gateweb.charge.exception.UnsupportedChargeIntervalException;

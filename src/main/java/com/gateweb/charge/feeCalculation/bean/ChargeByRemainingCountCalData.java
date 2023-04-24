@@ -1,6 +1,6 @@
 package com.gateweb.charge.feeCalculation.bean;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;

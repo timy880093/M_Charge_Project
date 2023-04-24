@@ -1,6 +1,6 @@
 package com.gateweb.charge.contract.remainingCount.remainingRecordFrame;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.utils.LocalDateTimeUtils;
 import org.slf4j.Logger;

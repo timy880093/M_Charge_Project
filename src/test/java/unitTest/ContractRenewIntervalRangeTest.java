@@ -1,11 +1,8 @@
 package unitTest;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.config.SpringWebMvcConfig;
 import com.gateweb.charge.contract.component.ContractRenewComponent;
-import com.gateweb.charge.enumeration.ContractStatus;
-import com.gateweb.charge.service.dataGateway.ContractDataGateway;
-import com.gateweb.orm.charge.entity.Contract;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -16,10 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})

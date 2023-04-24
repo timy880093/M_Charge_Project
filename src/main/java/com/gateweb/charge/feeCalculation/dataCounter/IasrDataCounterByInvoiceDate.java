@@ -1,6 +1,6 @@
 package com.gateweb.charge.feeCalculation.dataCounter;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.ChargeIasrEntity;
 import com.gateweb.orm.charge.repository.ChargeIasrRepository;
 import org.apache.logging.log4j.LogManager;

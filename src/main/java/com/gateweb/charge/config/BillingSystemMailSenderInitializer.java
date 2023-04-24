@@ -1,6 +1,6 @@
 package com.gateweb.charge.config;
 
-import com.gateweb.charge.component.propertyProvider.MailProperty;
+import com.gateweb.charge.infrastructure.propertyProvider.MailProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

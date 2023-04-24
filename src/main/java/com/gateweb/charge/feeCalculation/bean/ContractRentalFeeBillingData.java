@@ -1,7 +1,7 @@
 package com.gateweb.charge.feeCalculation.bean;
 
 import com.gateweb.charge.chargePolicy.bean.ChargePolicy;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

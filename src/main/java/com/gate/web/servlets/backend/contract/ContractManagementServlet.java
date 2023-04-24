@@ -3,7 +3,7 @@ package com.gate.web.servlets.backend.contract;
 import com.gate.web.facades.UserService;
 import com.gate.web.servlets.abstraction.DefaultDisplayPageModelViewController;
 import com.gateweb.charge.chargePolicy.cycle.service.CycleService;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.bean.request.*;
 import com.gateweb.charge.contract.component.ContractSaveReqConverter;
 import com.gateweb.charge.contract.component.ContractValidationComponent;

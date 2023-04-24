@@ -1,6 +1,6 @@
 package com.gateweb.charge.chargePolicy.cycle.service;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.Contract;
 import org.apache.logging.log4j.core.util.CronExpression;
 import org.joda.time.DateTime;
