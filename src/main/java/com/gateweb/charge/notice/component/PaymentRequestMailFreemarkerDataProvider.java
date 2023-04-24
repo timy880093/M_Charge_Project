@@ -34,8 +34,6 @@ public class PaymentRequestMailFreemarkerDataProvider {
     DeductBillingItemMailDataProvider deductBillingItemMailDataProvider;
     @Autowired
     PackageRefPaymentRequestMailDataProvider packageRefPaymentRequestMailDataProvider;
-    @Autowired
-    Boolean oBankPaymentNoticeAdvert;
 
     public PaymentRequestMailFreemarkerData genPaymentRequestCorrectionMailData(PaymentRequestMailData paymentRequestMailData) {
         PaymentRequestMailFreemarkerData paymentRequestMailFreemarkerData = genPaymentRequestMailData(paymentRequestMailData);
@@ -49,17 +47,15 @@ public class PaymentRequestMailFreemarkerDataProvider {
                 paymentRequestMailData.getBill().getBillId())
         );
         Optional<Company> companyOptional = companyRepository.findByCompanyId(
-                paymentRequestMailData.getCompany().getCompanyId().intValue()
+                paymentRequestMailData.getCompany().getCompanyId()
         );
         if (companyOptional.isPresent() && !billingItemSet.isEmpty()) {
             Optional<String> ctbcVirtualAccountOpt = ctbcVirtualAccountGenerator.getVirtualAccount(companyOptional.get().getBusinessNo());
-            if (ctbcVirtualAccountOpt.isPresent()) {
-                paymentRequestMailFreemarkerData.setCtbcVirtualAccount(
-                        ctbcVirtualAccountGenerator.customFormatVirtualAccount(
-                                ctbcVirtualAccountOpt.get()
-                        )
-                );
-            }
+            ctbcVirtualAccountOpt.ifPresent(s -> paymentRequestMailFreemarkerData.setCtbcVirtualAccount(
+                    ctbcVirtualAccountGenerator.customFormatVirtualAccount(
+                            s
+                    )
+            ));
             paymentRequestMailFreemarkerData.setCompanyName(companyOptional.get().getName());
             Optional<YearMonth> yearMonthOptional = LocalDateTimeUtils.parseYearMonthFromString(
                     paymentRequestMailData.getBill().getBillYm(), "yyyyMM"
@@ -111,12 +107,10 @@ public class PaymentRequestMailFreemarkerDataProvider {
             paymentRequestMailFreemarkerData.setExtraNotice(false);
             paymentRequestMailFreemarkerData.setExtraNoticeMessage("");
         }
-        addObankAdvert(paymentRequestMailFreemarkerData);
+        if (paymentRequestMailData.getObankOpt().isPresent()) {
+            paymentRequestMailFreemarkerData.setoBank(paymentRequestMailData.getObankOpt().get());
+        }
         return paymentRequestMailFreemarkerData;
-    }
-
-    public void addObankAdvert(PaymentRequestMailFreemarkerData paymentRequestMailFreemarkerData) {
-        paymentRequestMailFreemarkerData.setoBankAdvert(oBankPaymentNoticeAdvert);
     }
 
     private void genPackageRefBillingItemMailData(Company company, Set<BillingItem> billingItemSet, PaymentRequestMailFreemarkerData paymentRequestMailFreemarkerData) {

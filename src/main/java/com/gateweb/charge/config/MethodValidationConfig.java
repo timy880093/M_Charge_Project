@@ -7,7 +7,7 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 
 @Deprecated
 @Configuration
-@ComponentScan({ "com.gateweb.charge.component" })
+@ComponentScan({"com.gateweb.charge.infrastructure"})
 public class MethodValidationConfig {
 
     @Bean

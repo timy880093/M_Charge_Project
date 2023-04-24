@@ -1,6 +1,6 @@
 package com.gateweb.charge.notice.component;
 
-import com.gateweb.charge.component.propertyProvider.MailProperty;
+import com.gateweb.charge.infrastructure.propertyProvider.MailProperty;
 import org.apache.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

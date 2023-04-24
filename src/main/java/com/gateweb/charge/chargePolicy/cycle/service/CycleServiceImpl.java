@@ -2,7 +2,7 @@ package com.gateweb.charge.chargePolicy.cycle.service;
 
 import com.gateweb.charge.chargePolicy.cycle.ChargeCycleInstanceProvider;
 import com.gateweb.charge.chargePolicy.cycle.builder.ChargeCycle;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.enumeration.PaidPlan;
 import com.gateweb.orm.charge.entity.BillingItem;
 import com.gateweb.orm.charge.entity.Contract;

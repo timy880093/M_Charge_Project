@@ -1,4 +1,4 @@
-package com.gateweb.charge.component.propertyProvider;
+package com.gateweb.charge.infrastructure.propertyProvider;
 
 public class MailProperty {
     String mailServerHost;

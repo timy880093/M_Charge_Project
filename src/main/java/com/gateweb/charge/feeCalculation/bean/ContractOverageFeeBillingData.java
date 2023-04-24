@@ -2,7 +2,7 @@ package com.gateweb.charge.feeCalculation.bean;
 
 import com.gateweb.charge.chargePolicy.bean.ChargePolicy;
 import com.gateweb.charge.feeCalculation.dataCounter.DataCounter;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 
 import java.util.Optional;

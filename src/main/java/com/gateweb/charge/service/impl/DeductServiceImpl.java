@@ -1,6 +1,6 @@
 package com.gateweb.charge.service.impl;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.deduct.builder.DeductHistoryBuilder;
 import com.gateweb.charge.deduct.component.DeductibleAmountComponent;
 import com.gateweb.charge.deduct.component.DeductibleItemFilterComponent;

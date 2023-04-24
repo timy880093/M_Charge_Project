@@ -1,7 +1,7 @@
 package com.gateweb.charge.service.impl;
 
 import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.component.*;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.exception.DeleteBilledBillingItemException;

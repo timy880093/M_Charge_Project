@@ -40,8 +40,6 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
     NoticeCustomConverter noticeCustomConverter;
     @Autowired
     PaymentRequestFreemarkerUtil paymentRequestFreemarkerUtil;
-    @Autowired
-    Boolean oBankPaymentNoticeAdvert;
 
     private String paymentRequestMailSubject(String companyName) {
         String subject = String.format("【關網電子發票繳款通知】 %s_關網電子發票服務費用，請詳內文。", companyName);
@@ -67,7 +65,8 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
                     .withHtmlContent(mailHtmlOpt.get())
                     .withSubject(paymentRequestMailSubject(paymentRequestMailFreemarkerData.getCompanyName()));
 
-            if (oBankPaymentNoticeAdvert) {
+            if (paymentRequestMailData.getObankOpt().isPresent()
+                    && paymentRequestMailData.getObankOpt().get().getoBankAdvert()) {
                 addOBankAdvert(mimeMessageBuilder);
             }
             MimeMessageHelper mimeMessageHelper = mimeMessageBuilder.getMimeHelper();
@@ -80,7 +79,7 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
     }
 
     private void addOBankAdvert(MailMimeMessageBuilder mimeMessageBuilder) throws MessagingException {
-        Resource res = new ClassPathResource("advert/20221230-O-Bank-Advert01.jpg");
+        Resource res = new ClassPathResource("advert/20230420-O-Bank-Advert01.jpg");
         mimeMessageBuilder.withInlineImage("O_Bank_Advert01", res);
     }
 

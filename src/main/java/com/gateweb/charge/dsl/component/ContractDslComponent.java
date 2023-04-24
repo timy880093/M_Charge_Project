@@ -1,6 +1,6 @@
 package com.gateweb.charge.dsl.component;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.dsl.CriteriaPageableSearchBuilder;
 import com.gateweb.charge.dsl.DslSearchConditionRender;
 import com.gateweb.charge.dsl.SortableDslDispatcher;

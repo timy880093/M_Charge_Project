@@ -1,6 +1,8 @@
 package com.gateweb.charge.notice.component;
 
+import com.gateweb.charge.infrastructure.propertyProvider.ObankPropertyProvider;
 import com.gateweb.charge.notice.bean.NoticeCustom;
+import com.gateweb.charge.notice.bean.OBank;
 import com.gateweb.charge.notice.bean.PaymentRequestMailData;
 import com.gateweb.orm.charge.entity.Bill;
 import com.gateweb.orm.charge.entity.Company;
@@ -11,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static com.gateweb.charge.notice.utils.CompanyRecipientUtils.noticeCompanyRecipientDecode;
 
@@ -26,9 +25,11 @@ public class PaymentRequestMailDataProvider {
     CompanyRepository companyRepository;
     @Autowired
     NoticeCustomConverter noticeCustomConverter;
+    @Autowired
+    ObankPropertyProvider obankPropertyProvider;
 
     public Optional<PaymentRequestMailData> getPaymentRequestMailData(Notice notice) {
-        Optional<PaymentRequestMailData> result = Optional.empty();
+            Optional<PaymentRequestMailData> result = Optional.empty();
         Optional<Bill> billOptional = billRepository.findById(notice.getBillId());
         if (!billOptional.isPresent()) {
             return result;
@@ -46,6 +47,7 @@ public class PaymentRequestMailDataProvider {
                 , billOptional.get()
                 , companyOptional.get()
                 , noticeCustomOptional
+                , obankPropertyProvider.getProperty()
                 , noticeCompanyRecipientDecode(notice.getRecipient())
         ));
     }

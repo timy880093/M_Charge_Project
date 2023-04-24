@@ -1,6 +1,6 @@
 package com.gateweb.charge.chargePolicy.cycle.builder;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

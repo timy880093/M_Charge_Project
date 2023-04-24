@@ -1,6 +1,6 @@
 package com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameUtils;

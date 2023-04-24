@@ -1,6 +1,6 @@
 package com.gateweb.charge.contract.utils;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.utils.LocalDateTimeUtils;
 

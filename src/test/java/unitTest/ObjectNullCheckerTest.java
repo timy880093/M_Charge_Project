@@ -1,6 +1,7 @@
 package unitTest;
 
 import com.gateweb.base.exception.NullPropertyException;
+import com.gateweb.charge.notice.bean.OBank;
 import com.gateweb.charge.notice.bean.PaymentRequestMailFreemarkerData;
 import com.gateweb.utils.ObjectUtil;
 import com.mysema.commons.lang.Assert;
@@ -28,6 +29,7 @@ public class ObjectNullCheckerTest {
         paymentRequestMailFreemarkerData.setPaymentRequestOverageTotalAmount(BigDecimal.ZERO);
         paymentRequestMailFreemarkerData.setPaymentRequestTotalAmount(BigDecimal.ZERO);
         paymentRequestMailFreemarkerData.setYmString("");
+        paymentRequestMailFreemarkerData.setoBank(new OBank(false, ""));
         return paymentRequestMailFreemarkerData;
     }
 

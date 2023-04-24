@@ -1,7 +1,7 @@
 package com.gateweb.charge.feeCalculation.dataGateway;
 
 import com.gateweb.charge.chargePolicy.bean.ChargePolicy;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.feeCalculation.bean.ContractRentalFeeBillingData;
 import com.gateweb.orm.charge.entity.Contract;
 import org.springframework.stereotype.Component;

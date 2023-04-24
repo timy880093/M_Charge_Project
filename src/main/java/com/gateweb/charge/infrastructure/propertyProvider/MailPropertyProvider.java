@@ -1,4 +1,4 @@
-package com.gateweb.charge.component.propertyProvider;
+package com.gateweb.charge.infrastructure.propertyProvider;
 
 import com.gateweb.charge.config.EnvironmentPropertiesUtils;
 import com.gateweb.charge.exception.InitializeMailPropertyFailed;

@@ -1,4 +1,4 @@
-package com.gateweb.charge.component.propertyProvider;
+package com.gateweb.charge.infrastructure.propertyProvider;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

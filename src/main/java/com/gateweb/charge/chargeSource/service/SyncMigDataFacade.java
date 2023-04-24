@@ -1,6 +1,6 @@
 package com.gateweb.charge.chargeSource.service;
 
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.exception.UnsupportedChargeIntervalException;
 import com.gateweb.orm.charge.entity.MigEventRecordEntity;
 import com.gateweb.orm.einv.entity.MigStateRecordEntity;

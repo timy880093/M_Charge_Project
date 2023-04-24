@@ -3,7 +3,7 @@ package com.gateweb.charge.scheduleJob.component;
 import com.gateweb.charge.chargePolicy.cycle.builder.CronCycle;
 import com.gateweb.utils.ConcurrentUtils;
 import com.gateweb.utils.LocalDateTimeUtils;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.einv.repository.EinvInvoiceMainRepository;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

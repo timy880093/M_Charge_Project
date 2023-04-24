@@ -2,7 +2,7 @@ package com.gateweb.charge.feeCalculation.dataGateway;
 
 import com.gateweb.charge.chargePolicy.ChargePolicyProvider;
 import com.gateweb.charge.chargePolicy.bean.ChargePolicy;
-import com.gateweb.charge.component.nonAnnotated.CustomInterval;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.enumeration.ChargePolicyType;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.feeCalculation.bean.ContractOverageFeeBillingData;

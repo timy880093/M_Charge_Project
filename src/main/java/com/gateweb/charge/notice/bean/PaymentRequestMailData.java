@@ -12,16 +12,18 @@ public class PaymentRequestMailData {
     Bill bill;
     Company company;
     Optional<NoticeCustom> noticeCustomOpt;
+    Optional<OBank> obankOpt;
     Set<String> recipient;
 
     public PaymentRequestMailData() {
     }
 
-    public PaymentRequestMailData(NoticeType noticeType, Bill bill, Company company, Optional<NoticeCustom> noticeCustomOpt, Set<String> recipient) {
+    public PaymentRequestMailData(NoticeType noticeType, Bill bill, Company company, Optional<NoticeCustom> noticeCustomOpt, Optional<OBank> obankOpt, Set<String> recipient) {
         this.noticeType = noticeType;
         this.bill = bill;
         this.company = company;
         this.noticeCustomOpt = noticeCustomOpt;
+        this.obankOpt = obankOpt;
         this.recipient = recipient;
     }
 
@@ -63,5 +65,13 @@ public class PaymentRequestMailData {
 
     public void setRecipient(Set<String> recipient) {
         this.recipient = recipient;
+    }
+
+    public Optional<OBank> getObankOpt() {
+        return obankOpt;
+    }
+
+    public void setObankOpt(Optional<OBank> obankOpt) {
+        this.obankOpt = obankOpt;
     }
 }

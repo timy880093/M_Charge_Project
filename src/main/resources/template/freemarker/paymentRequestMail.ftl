@@ -119,9 +119,11 @@
 
 </#if>
 <p>以上說明， 若有任何疑問請與我們聯繫，感謝您。</p>
-<#if paymentRequestMailFreemarkerData.oBankAdvert>
+<#if paymentRequestMailFreemarkerData.oBank.oBankAdvert>
     <br/>
-    <img src='cid:O_Bank_Advert01' width="360" height="335">
+    <a href="${paymentRequestMailFreemarkerData.oBank.oBankAdvertUrl}">
+        <img src='cid:O_Bank_Advert01' width="360" height="335">
+    </a>
 </#if>
 <p>--------------------------------------</p>
 <p><a title="關網資訊股份有限公司" href="http://www.gateweb.com.tw">www.gateweb.com.tw</a></p>
