@@ -79,7 +79,7 @@ public class PaymentRequestMailMimeMessageHelperGenerator implements NoticeMimeM
     }
 
     private void addOBankAdvert(MailMimeMessageBuilder mimeMessageBuilder) throws MessagingException {
-        Resource res = new ClassPathResource("advert/20230420-O-Bank-Advert01.jpg");
+        Resource res = new ClassPathResource("advert/20221230-O-Bank-Advert01.jpg");
         mimeMessageBuilder.withInlineImage("O_Bank_Advert01", res);
     }
 
