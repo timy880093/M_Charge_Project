@@ -90,6 +90,62 @@ public class NoticeRequestGenerator {
         return Optional.empty();
     }
 
+    public Optional<Notice> genPaymentRequestDueNoticeRequest(Bill bill, JsonNode custom, CallerInfo callerInfo) {
+        try {
+            boolean hasValidRecipient = hasValidRecipient(custom);
+            Notice notice = new Notice();
+            notice.setNoticeType(NoticeType.PAYMENT_DUE_MAIL);
+            notice.setCustomJson(custom.toString());
+            notice.setBillId(bill.getBillId());
+            notice.setCompanyId(bill.getCompanyId());
+            notice.setNoticeStatus(NoticeStatus.WAIT_FOR_FIRST_SEND);
+            notice.setCreateDate(LocalDateTime.now());
+            notice.setCreatorId(callerInfo.getUserEntity().getUserId().longValue());
+            if (hasValidRecipient) {
+                notice.setRecipient(custom.get("recipient").textValue());
+            } else {
+                Optional<Company> companyOptional = companyRepository.findByCompanyId(bill.getCompanyId().intValue());
+                if (companyOptional.isPresent()) {
+                    notice.setRecipient(noticeCompanyRecipientEncode(companyOptional.get()));
+                } else {
+                    return Optional.empty();
+                }
+            }
+            return Optional.of(notice);
+        } catch (Exception ex) {
+            logger.error("bill:{};custom:{}", bill, custom);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Notice> genPaymentRequestOverdueNoticeRequest(Bill bill, JsonNode custom, CallerInfo callerInfo) {
+        try {
+            boolean hasValidRecipient = hasValidRecipient(custom);
+            Notice notice = new Notice();
+            notice.setNoticeType(NoticeType.PAYMENT_OVERDUE_MAIL);
+            notice.setCustomJson(custom.toString());
+            notice.setBillId(bill.getBillId());
+            notice.setCompanyId(bill.getCompanyId());
+            notice.setNoticeStatus(NoticeStatus.WAIT_FOR_FIRST_SEND);
+            notice.setCreateDate(LocalDateTime.now());
+            notice.setCreatorId(callerInfo.getUserEntity().getUserId().longValue());
+            if (hasValidRecipient) {
+                notice.setRecipient(custom.get("recipient").textValue());
+            } else {
+                Optional<Company> companyOptional = companyRepository.findByCompanyId(bill.getCompanyId().intValue());
+                if (companyOptional.isPresent()) {
+                    notice.setRecipient(noticeCompanyRecipientEncode(companyOptional.get()));
+                } else {
+                    return Optional.empty();
+                }
+            }
+            return Optional.of(notice);
+        } catch (Exception ex) {
+            logger.error("bill:{};custom:{}", bill, custom);
+        }
+        return Optional.empty();
+    }
+
     public void sendPaymentRequestNoticeWithCustomAlertMessage(
             Bill bill,
             Company company,

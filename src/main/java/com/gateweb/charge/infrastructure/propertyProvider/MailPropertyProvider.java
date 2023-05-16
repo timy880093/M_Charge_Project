@@ -37,6 +37,8 @@ public class MailPropertyProvider {
             mapMapper.toStringOptional("mail.smtp.auth").ifPresent(mailProperty::setSmtpAuth);
             mapMapper.toStringOptional("mail.smtp.starttls.enable").ifPresent(mailProperty::setSmtpStarttlsEnable);
             mapMapper.toStringOptional("mail.transport.protocol").ifPresent(mailProperty::setMailTransportProtocol);
+            mapMapper.toCharSplitStrArray("mail.due.bcc.to").ifPresent(mailProperty::setMailDueBccTo);
+            mapMapper.toCharSplitStrArray("mail.overdue.bcc.to").ifPresent(mailProperty::setMailOverdueBccTo);
             return mailProperty;
         } else {
             throw new InitializeMailPropertyFailed();

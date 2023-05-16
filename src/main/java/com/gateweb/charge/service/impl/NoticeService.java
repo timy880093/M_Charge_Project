@@ -107,6 +107,64 @@ public class NoticeService {
         return genPaymentRequestMailResponseMap(successList, failList, ignoreList);
     }
 
+    public Map sendPaymentDueRequestEmail(OperationObject operationObject, CallerInfo callerInfo) {
+        Set<Bill> successList = new HashSet<>();
+        Set<Bill> failList = new HashSet<>();
+        Set<Bill> ignoreList = new HashSet<>();
+        List<Bill> billList = billDataGateway.searchByOperationObj(operationObject);
+        billList.forEach(bill -> {
+            try {
+                if (org.apache.commons.lang3.StringUtils.isNotEmpty(bill.getBillYm())) {
+                    Optional<Notice> noticeOptional = noticeRequestGenerator.genPaymentRequestDueNoticeRequest(
+                            bill, operationObject.getCustom(), callerInfo
+                    );
+                    if (noticeOptional.isPresent()) {
+                        noticeRepository.save(noticeOptional.get());
+                        successList.add(bill);
+                    } else {
+                        failList.add(bill);
+                        throw new InvalidNoticeRequestException();
+                    }
+                } else {
+                    ignoreList.add(bill);
+                }
+            } catch (Exception ex) {
+                logger.error("OperationObject:{};{}", operationObject, ex.getMessage());
+                failList.add(bill);
+            }
+        });
+        return genPaymentRequestMailResponseMap(successList, failList, ignoreList);
+    }
+
+    public Map sendPaymentOverdueRequestEmail(OperationObject operationObject, CallerInfo callerInfo) {
+        Set<Bill> successList = new HashSet<>();
+        Set<Bill> failList = new HashSet<>();
+        Set<Bill> ignoreList = new HashSet<>();
+        List<Bill> billList = billDataGateway.searchByOperationObj(operationObject);
+        billList.forEach(bill -> {
+            try {
+                if (org.apache.commons.lang3.StringUtils.isNotEmpty(bill.getBillYm())) {
+                    Optional<Notice> noticeOptional = noticeRequestGenerator.genPaymentRequestOverdueNoticeRequest(
+                            bill, operationObject.getCustom(), callerInfo
+                    );
+                    if (noticeOptional.isPresent()) {
+                        noticeRepository.save(noticeOptional.get());
+                        successList.add(bill);
+                    } else {
+                        failList.add(bill);
+                        throw new InvalidNoticeRequestException();
+                    }
+                } else {
+                    ignoreList.add(bill);
+                }
+            } catch (Exception ex) {
+                logger.error("OperationObject:{};{}", operationObject, ex.getMessage());
+                failList.add(bill);
+            }
+        });
+        return genPaymentRequestMailResponseMap(successList, failList, ignoreList);
+    }
+
     private Map genPaymentRequestMailResponseMap(Set<Bill> successList, Set<Bill> failList, Set<Bill> ignoreList) {
         Map dataMap = new HashMap();
         dataMap.put("status", "success");
