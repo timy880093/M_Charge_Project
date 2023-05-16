@@ -388,6 +388,22 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:sendPaymentDueRequestEmail' data-dismiss="modal">
+                                            寄送繳款提醒信(單筆/多筆/條件-公司收件人)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
+                                                data-bind='click:sendPaymentOverdueRequestEmail' data-dismiss="modal">
+                                            寄送催款通知信(單筆/多筆/條件-公司收件人)
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block"
                                                 data-bind='click:downloadScsbConvenientStoreReport'
                                                 data-dismiss="modal">
                                             產生上海銀行便利商店報表(單筆/多筆/條件)
@@ -655,6 +671,58 @@
             customizeMailContentViewModel.extraNoticeMessageOnly();
             customizeMailContentViewModel.cleanCustomProperty();
             $('#customizeMailContentModal').modal();
+        },
+        sendPaymentDueRequestEmail: function () {
+            let operationObj = operationViewModel.genOperationObject();
+            if (operationObj) {
+                let noticeMsg = '';
+                if (operationObj.idList == '') {
+                    noticeMsg = '未選擇任何資料會使用查詢條件做為篩選寄出通知信\n請務必於操作前確認查詢結果';
+                } else {
+                    noticeMsg = '將寄送' + billMainListViewModel.selectedBillList.length + "筆";
+                }
+                confirmAjaxProcessor(function () {
+                        loadingAjaxProcessor(function () {
+                            sendPaymentDueReminderEmailAjax(
+                                operationObj
+                                , function (response) {
+                                    messageHandler(response);
+                                }
+                            );
+                        }, '處理中請稍候');
+                    },
+                    '繳款提醒信',
+                    noticeMsg,
+                    'warning'
+                );
+                customizeMailContentViewModel.cleanCustomProperty();
+            }
+        },
+        sendPaymentOverdueRequestEmail: function () {
+            let operationObj = operationViewModel.genOperationObject();
+            if (operationObj) {
+                let noticeMsg = '';
+                if (operationObj.idList == '') {
+                    noticeMsg = '未選擇任何資料會使用查詢條件做為篩選寄出通知信\n請務必於操作前確認查詢結果';
+                } else {
+                    noticeMsg = '將寄送' + billMainListViewModel.selectedBillList.length + "筆";
+                }
+                confirmAjaxProcessor(function () {
+                        loadingAjaxProcessor(function () {
+                            sendPaymentOverdueReminderEmailAjax(
+                                operationObj
+                                , function (response) {
+                                    messageHandler(response);
+                                }
+                            );
+                        }, '處理中請稍候');
+                    },
+                    '催款提醒信',
+                    noticeMsg,
+                    'warning'
+                );
+                customizeMailContentViewModel.cleanCustomProperty();
+            }
         },
         resendPaymentRequestEmail: function () {
             if (billMainListViewModel.selectedBillList.length == 1) {
@@ -955,6 +1023,28 @@
     function sendPaymentReminderEmailAjax(data, handler) {
         let ajaxParam = {};
         ajaxParam.url = '/backendAdmin/billManagementServlet/sendPaymentRequestEmail';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.data = JSON.stringify(data);
+        ajaxParam.successHandler = handler;
+        asyncAjaxCall(ajaxParam, handler);
+    }
+
+    function sendPaymentDueReminderEmailAjax(data, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/sendPaymentDueRequestEmail';
+        ajaxParam.requestType = 'POST';
+        ajaxParam.dataType = 'json';
+        ajaxParam.contentType = 'application/text;charset=utf-8';
+        ajaxParam.data = JSON.stringify(data);
+        ajaxParam.successHandler = handler;
+        asyncAjaxCall(ajaxParam, handler);
+    }
+
+    function sendPaymentOverdueReminderEmailAjax(data, handler) {
+        let ajaxParam = {};
+        ajaxParam.url = '/backendAdmin/billManagementServlet/sendPaymentOverdueRequestEmail';
         ajaxParam.requestType = 'POST';
         ajaxParam.dataType = 'json';
         ajaxParam.contentType = 'application/text;charset=utf-8';

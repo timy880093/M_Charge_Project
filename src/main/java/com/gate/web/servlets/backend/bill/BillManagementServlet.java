@@ -190,6 +190,43 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
         return JsonUtils.gsonToJson(resultMap);
     }
 
+    @PostMapping(value = "/sendPaymentDueRequestEmail", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String sendPaymentDueRequestEmail(Authentication authentication, @RequestBody String requestBody) {
+        Map resultMap = new HashMap<>();
+        try {
+            CallerInfo callerInfo = userService.getCallerInfoByAuthentication(authentication);
+            Optional<OperationObject> operationObjectOpt = beanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
+            if (operationObjectOpt.isPresent()) {
+                resultMap = noticeService.sendPaymentDueRequestEmail(operationObjectOpt.get(), callerInfo);
+            }
+        } catch (InvalidUserException invalidUserException) {
+            resultMap = DefaultResponseDataMap.invalidUserResponseMap();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return JsonUtils.gsonToJson(resultMap);
+    }
+
+
+    @PostMapping(value = "/sendPaymentOverdueRequestEmail", produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String sendPaymentOverdueRequestEmail(Authentication authentication, @RequestBody String requestBody) {
+        Map resultMap = new HashMap<>();
+        try {
+            CallerInfo callerInfo = userService.getCallerInfoByAuthentication(authentication);
+            Optional<OperationObject> operationObjectOpt = beanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
+            if (operationObjectOpt.isPresent()) {
+                resultMap = noticeService.sendPaymentOverdueRequestEmail(operationObjectOpt.get(), callerInfo);
+            }
+        } catch (InvalidUserException invalidUserException) {
+            resultMap = DefaultResponseDataMap.invalidUserResponseMap();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return JsonUtils.gsonToJson(resultMap);
+    }
+
     @PostMapping(value = "/downloadConvenientStoreReport", produces = "application/text;charset=utf-8")
     @ResponseBody
     public String downloadConvenientStoreReport(
