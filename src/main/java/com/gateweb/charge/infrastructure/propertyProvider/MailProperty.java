@@ -11,8 +11,8 @@ public class MailProperty {
     String mailFrom;
     String[] mailForceTo;
     String[] mailCcTo;
-    String[] mailDueBccTo;
-    String[] mailOverdueBccTo;
+    String[] mailDueCcTo;
+    String[] mailOverdueCcTo;
 
     public MailProperty() {
     }
@@ -28,8 +28,8 @@ public class MailProperty {
         this.mailFrom = mailFrom;
         this.mailForceTo = mailForceTo;
         this.mailCcTo = mailCcTo;
-        this.mailDueBccTo = mailDueBccTo;
-        this.mailOverdueBccTo = mailOverdueBccTo;
+        this.mailDueCcTo = mailDueBccTo;
+        this.mailOverdueCcTo = mailOverdueBccTo;
     }
 
     public String getMailServerHost() {
@@ -112,19 +112,19 @@ public class MailProperty {
         this.mailCcTo = mailCcTo;
     }
 
-    public String[] getMailDueBccTo() {
-        return mailDueBccTo;
+    public String[] getMailDueCcTo() {
+        return mailDueCcTo;
     }
 
-    public void setMailDueBccTo(String[] mailDueBccTo) {
-        this.mailDueBccTo = mailDueBccTo;
+    public void setMailDueCcTo(String[] mailDueCcTo) {
+        this.mailDueCcTo = mailDueCcTo;
     }
 
-    public String[] getMailOverdueBccTo() {
-        return mailOverdueBccTo;
+    public String[] getMailOverdueCcTo() {
+        return mailOverdueCcTo;
     }
 
-    public void setMailOverdueBccTo(String[] mailOverdueBccTo) {
-        this.mailOverdueBccTo = mailOverdueBccTo;
+    public void setMailOverdueCcTo(String[] mailOverdueCcTo) {
+        this.mailOverdueCcTo = mailOverdueCcTo;
     }
 }

@@ -25,9 +25,9 @@ public class OverdueMailSender implements NoticeMimeMessageHelperSender {
                 mimeMessageHelper.setTo(forceMailTo);
             }
 
-            String[] bccSet = mailProperty.getMailOverdueBccTo();
-            if (bccSet.length > 0) {
-                mimeMessageHelper.setBcc(bccSet);
+            String[] ccSet = mailProperty.getMailOverdueCcTo();
+            if (ccSet.length > 0) {
+                mimeMessageHelper.setCc(ccSet);
             }
             billingSystemMailSender.send(mimeMessageHelper.getMimeMessage());
             return true;

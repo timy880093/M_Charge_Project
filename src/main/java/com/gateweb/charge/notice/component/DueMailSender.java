@@ -25,9 +25,9 @@ public class DueMailSender implements NoticeMimeMessageHelperSender {
                 mimeMessageHelper.setTo(forceMailTo);
             }
 
-            String[] bccSet = mailProperty.getMailDueBccTo();
-            if (bccSet.length > 0) {
-                mimeMessageHelper.setBcc(bccSet);
+            String[] ccSet = mailProperty.getMailDueCcTo();
+            if (ccSet.length > 0) {
+                mimeMessageHelper.setCc(ccSet);
             }
             billingSystemMailSender.send(mimeMessageHelper.getMimeMessage());
             return true;
