@@ -1,15 +1,15 @@
 package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
-import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.component.ContractRenewComponent;
-import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
-import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
-import com.gateweb.charge.contract.remainingCount.source.RemainingCountAmountProvider;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrame;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
 import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameUtils;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
+import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
 import com.gateweb.charge.contract.remainingCount.scheduleJob.updateRecord.RemainingRecordUpdateByInvoiceDate;
+import com.gateweb.charge.contract.remainingCount.source.RemainingCountAmountProvider;
 import com.gateweb.charge.feeCalculation.dataCounter.IasrDataCounterByInvoiceDate;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.orm.charge.entity.Company;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
@@ -89,7 +89,7 @@ public class NegativeRemainingRenewDataCollectorDispatcher implements RemainingC
                 renewRecordInterval.getStartLocalDateTime().minusSeconds(1)
         );
         //產生續約合約
-        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewRemainingContract(
+        Optional<Contract> renewContractOpt = contractRenewComponent.genNegativeRemainingRenewContract(
                 contract
                 , searchInterval.getStartLocalDateTime()
         );

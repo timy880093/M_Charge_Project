@@ -14,7 +14,7 @@ public class QuartzJobs {
     private static final String CRON_EVERY_5_MINUTE = "0 */5 * * * ?";
     private static final String CRON_EVERY_10_MINUTE = "0 */10 * * * ?";
     private static final String CRON_EVERY_30_MINUTE = "0 */30 * * * ?";
-    private static final String CRON_EVERY_HOUR = "0 * * * * ?";
+    private static final String CRON_EVERY_HOUR = "0 0 * * * ?";
     private static final String CRON_EVERY_DAY_AT_1_AM = "0 0 1 ? * * *";
     private static final String CRON_EVERY_THU_AT_1_AM = "0 0 12 ? * THU *";
     private static final String CRON_EVERY_SAT_AT_1_AM = "0 0 12 ? * SAT *";

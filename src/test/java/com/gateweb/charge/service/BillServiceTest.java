@@ -35,8 +35,6 @@ import java.util.Optional;
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})
 @WebAppConfiguration
 public class BillServiceTest {
-
-    CustomIntervalUtils customIntervalUtils = new CustomIntervalUtils();
     final ChargeCycleInstanceProvider chargeCycleInstanceProvider = new ChargeCycleInstanceProvider();
 
     @Autowired
@@ -73,8 +71,8 @@ public class BillServiceTest {
         Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByUserId(new Long(348));
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         //取得日期
-        CustomInterval startYearMonthInterval = customIntervalUtils.generateCustomIntervalByYearMonth("202005");
-        CustomInterval endYearMonthInterval = customIntervalUtils.generateCustomIntervalByYearMonth("202006");
+        CustomInterval startYearMonthInterval = CustomIntervalUtils.generateCustomIntervalByYearMonth("202005");
+        CustomInterval endYearMonthInterval = CustomIntervalUtils.generateCustomIntervalByYearMonth("202006");
 
         //取得實際的區間
         CustomInterval totalInterval = new CustomInterval(startYearMonthInterval.getStartLocalDateTime(), endYearMonthInterval.getEndLocalDateTime());

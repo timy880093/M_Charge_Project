@@ -46,7 +46,6 @@ import java.util.*;
 public class BillManagementServlet extends DefaultDisplayPageModelViewController {
     private final Logger logger = LogManager.getLogger(getClass());
     private static final String DEFAULT_DISPATCH_PAGE = "/pages/billListView.html";
-    final BeanConverterUtils beanConverterUtils = new BeanConverterUtils();
 
     @Autowired
     BillRepository billRepository;
@@ -106,7 +105,7 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
     String markAsPaid(Authentication authentication, @RequestBody String requestBody) {
         SweetAlertResponse sweetAlertResponse = new SweetAlertResponse();
         try {
-            Optional<PayInfo> payInfoOptional = beanConverterUtils.convertJsonToObj(requestBody, PayInfo.class);
+            Optional<PayInfo> payInfoOptional = BeanConverterUtils.convertJsonToObj(requestBody, PayInfo.class);
             if (payInfoOptional.isPresent()) {
                 ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
                 Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByUserId(chargeUserPrinciple.getUserInstance().getUserId().longValue());
@@ -178,7 +177,7 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
         Map resultMap = new HashMap();
         try {
             CallerInfo callerInfo = userService.getCallerInfoByAuthentication(authentication);
-            Optional<OperationObject> operationObjectOpt = beanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
+            Optional<OperationObject> operationObjectOpt = BeanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
             if (operationObjectOpt.isPresent()) {
                 resultMap = noticeService.sendPaymentRequestEmail(operationObjectOpt.get(), callerInfo);
             }
@@ -196,7 +195,7 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
         Map resultMap = new HashMap<>();
         try {
             CallerInfo callerInfo = userService.getCallerInfoByAuthentication(authentication);
-            Optional<OperationObject> operationObjectOpt = beanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
+            Optional<OperationObject> operationObjectOpt = BeanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
             if (operationObjectOpt.isPresent()) {
                 resultMap = noticeService.sendPaymentDueRequestEmail(operationObjectOpt.get(), callerInfo);
             }
@@ -215,7 +214,7 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
         Map resultMap = new HashMap<>();
         try {
             CallerInfo callerInfo = userService.getCallerInfoByAuthentication(authentication);
-            Optional<OperationObject> operationObjectOpt = beanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
+            Optional<OperationObject> operationObjectOpt = BeanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
             if (operationObjectOpt.isPresent()) {
                 resultMap = noticeService.sendPaymentOverdueRequestEmail(operationObjectOpt.get(), callerInfo);
             }
@@ -237,7 +236,7 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByUserId(chargeUserPrinciple.getUserInstance().getUserId().longValue());
-            Optional<OperationObject> operationObjectOpt = beanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
+            Optional<OperationObject> operationObjectOpt = BeanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
             if (callerInfoOptional.isPresent() && operationObjectOpt.isPresent()) {
                 List<Bill> billList = billDataGatewayImpl.searchByOperationObj(operationObjectOpt.get());
                 if (!billList.isEmpty()) {
@@ -272,7 +271,7 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
             if (callerInfoOptional.isPresent()) {
-                Optional<OperationObject> operationObjectOpt = beanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
+                Optional<OperationObject> operationObjectOpt = BeanConverterUtils.convertJsonToObj(requestBody, OperationObject.class);
                 if (operationObjectOpt.isPresent()) {
                     List<Bill> billList = billDataGatewayImpl.searchByOperationObj(operationObjectOpt.get());
                     if (!billList.isEmpty()) {
@@ -356,7 +355,7 @@ public class BillManagementServlet extends DefaultDisplayPageModelViewController
             ChargeUserPrinciple chargeUserPrinciple = getChargeUserPrinciple(authentication);
             Optional<CallerInfo> callerInfoOptional = userService.getCallerInfoByChargeUser(chargeUserPrinciple.getUserInstance());
             if (callerInfoOptional.isPresent()) {
-                HashMap<String, Object> conditionMap = beanConverterUtils.convertJsonToMap(requestBody);
+                HashMap<String, Object> conditionMap = BeanConverterUtils.convertJsonToMap(requestBody);
                 //根據conditionMap查詢清單
                 List<Bill> billList = billDataGatewayImpl.searchListByCondition(conditionMap);
                 billList.stream().forEach(bill -> {

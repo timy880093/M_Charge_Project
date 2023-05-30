@@ -40,17 +40,12 @@ public class ContractRenewIntervalGenerator {
         Optional<LocalDateTime> expirationDateOptional = Optional.empty();
         if (effectiveDate != null && periodMonth != null) {
             //目前只有計算結束日
-            Optional<LocalDateTime> effectiveLocalDateTimeOptional = Optional.ofNullable(effectiveDate);
-            Optional<Integer> periodMonthOptional = Optional.of(periodMonth);
-            if (effectiveLocalDateTimeOptional.isPresent() && periodMonthOptional.isPresent()) {
-                expirationDateOptional = Optional.ofNullable(
-                        effectiveLocalDateTimeOptional.get().plusMonths(
-                                periodMonthOptional.get()
-                        ).withHour(0).withMinute(0).withSecond(0).minusSeconds(1)
-                );
-            }
+            expirationDateOptional = Optional.of(
+                    effectiveDate.plusMonths(
+                            periodMonth
+                    ).withHour(0).withMinute(0).withSecond(0).minusSeconds(1)
+            );
         }
         return expirationDateOptional;
     }
-
 }

@@ -61,7 +61,7 @@ public class BeanConverterUtils {
      * @param <T>
      * @return
      */
-    public <T> Optional<T> convertJsonToObj(String json, Class<T> returnType) {
+    public static synchronized <T> Optional<T> convertJsonToObj(String json, Class<T> returnType) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
@@ -82,7 +82,7 @@ public class BeanConverterUtils {
         }
     }
 
-    public HashMap<String, Object> convertJsonToMap(String json) {
+    public static synchronized HashMap<String, Object> convertJsonToMap(String json) {
         Gson gson = new GsonBuilder().serializeNulls().create();
         Type type = new TypeToken<HashMap<String, Object>>() {
         }.getType();

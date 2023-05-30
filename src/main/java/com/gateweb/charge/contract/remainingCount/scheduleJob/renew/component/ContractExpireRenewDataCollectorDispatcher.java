@@ -1,9 +1,9 @@
 package com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component;
 
 import com.gateweb.charge.contract.component.ContractRenewComponent;
+import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
 import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.ChargeRemainingCountRenewData;
 import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.bean.RemainingContractRenewReq;
-import com.gateweb.charge.contract.remainingCount.remainingRecordFrame.RemainingRecordFrameComponent;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.InvoiceRemaining;
 import com.gateweb.orm.charge.repository.InvoiceRemainingRepository;
@@ -11,6 +11,7 @@ import com.gateweb.utils.LocalDateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
@@ -31,7 +32,7 @@ public class ContractExpireRenewDataCollectorDispatcher implements RemainingCont
     @Override
     public Optional<ChargeRemainingCountRenewData> execute(final RemainingContractRenewReq remainingContractRenewReq) {
         Contract contract = remainingContractRenewReq.getContract();
-        Optional<Contract> renewContractOpt = contractRenewComponent.genRenewRemainingContract(
+        Optional<Contract> renewContractOpt = contractRenewComponent.genExpireRemainingRenewContract(
                 contract
                 , contract.getExpirationDate().plusSeconds(1)
         );

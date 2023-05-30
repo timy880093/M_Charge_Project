@@ -1,11 +1,11 @@
 package com.gateweb.charge.contract.component;
 
-import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.contract.utils.ContractRenewIntervalGenerator;
 import com.gateweb.charge.enumeration.ContractStatus;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.eventBus.EventAction;
 import com.gateweb.charge.eventBus.EventSource;
+import com.gateweb.charge.infrastructure.nonAnnotated.CustomInterval;
 import com.gateweb.charge.service.dataGateway.ContractDataGateway;
 import com.gateweb.orm.charge.entity.ChargePackage;
 import com.gateweb.orm.charge.entity.Contract;
@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.*;
@@ -222,16 +223,30 @@ public class ContractRenewComponent {
         return renewContract;
     }
 
+    public Optional<Contract> genExpireRemainingRenewContract(final Contract contract, LocalDateTime newEffectiveDate, Clock clock) {
+        if (contract.getExpirationDate().isAfter(LocalDateTime.now(clock))) {
+            return Optional.empty();
+        } else {
+            return genRenewRemainingContract(contract, newEffectiveDate);
+        }
+    }
+
+    public Optional<Contract> genNegativeRemainingRenewContract(final Contract contract, LocalDateTime newEffectiveDate) {
+        return genRenewRemainingContract(contract, newEffectiveDate);
+    }
+
+    public Optional<Contract> genExpireRemainingRenewContract(final Contract contract, LocalDateTime newEffectiveDate) {
+        return genExpireRemainingRenewContract(contract, newEffectiveDate, Clock.systemUTC());
+    }
+
     public Optional<Contract> genRenewRemainingContract(
             final Contract contract
-            , LocalDateTime newEffectiveDate
-            , LocalDateTime executionDateTime) {
+            , LocalDateTime newEffectiveDate) {
         Optional<LocalDateTime> newExpirationDateOpt = ContractRenewIntervalGenerator.getContractExpirationDate(
                 newEffectiveDate
                 , contract.getPeriodMonth()
         );
-        if (newExpirationDateOpt.isPresent()
-                && executionDateTime.isAfter(newExpirationDateOpt.get())) {
+        if (newExpirationDateOpt.isPresent()) {
             CustomInterval newContractInterval = new CustomInterval(newEffectiveDate, newExpirationDateOpt.get());
             return Optional.of(
                     genRenewContract(
@@ -242,10 +257,6 @@ public class ContractRenewComponent {
         } else {
             return Optional.empty();
         }
-    }
-
-    public Optional<Contract> genRenewRemainingContract(final Contract contract, LocalDateTime newEffectiveDate) {
-        return genRenewRemainingContract(contract, newEffectiveDate, LocalDateTime.now());
     }
 
     public Optional<Contract> genRenewRemainingContract(final Contract contract, String prevInvoiceDate) {

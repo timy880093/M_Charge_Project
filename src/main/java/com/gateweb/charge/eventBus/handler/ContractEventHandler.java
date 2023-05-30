@@ -2,7 +2,6 @@ package com.gateweb.charge.eventBus.handler;
 
 import com.gateweb.charge.contract.component.ContractBillingComponent;
 import com.gateweb.charge.contract.component.ContractInitializer;
-import com.gateweb.charge.contract.component.ContractValidationComponent;
 import com.gateweb.charge.contract.remainingCount.scheduleJob.renew.component.RemainingContractComponent;
 import com.gateweb.charge.eventBus.ChargeSystemEvent;
 import com.gateweb.charge.notice.component.ContractInitializeNoticeComponent;
@@ -12,7 +11,6 @@ import com.gateweb.orm.charge.entity.BillingItem;
 import com.gateweb.orm.charge.entity.Contract;
 import com.gateweb.orm.charge.entity.PackageRef;
 import com.gateweb.orm.charge.repository.BillingItemRepository;
-import com.gateweb.orm.charge.repository.CompanyRepository;
 import com.gateweb.orm.charge.repository.PackageRefRepository;
 import com.google.common.eventbus.EventBus;
 import org.apache.logging.log4j.LogManager;
@@ -36,23 +34,15 @@ public class ContractEventHandler implements ChargeSystemEventHandler {
     @Autowired
     ContractInitializeNoticeComponent contractInitializeNoticeComponent;
     @Autowired
-    CompanyRepository companyRepository;
-    @Autowired
     BillingItemRepository billingItemRepository;
     @Autowired
     PackageRefRepository packageRefRepository;
     @Autowired
     ContractInitializer contractInitializer;
     @Autowired
-    ContractValidationComponent contractValidationComponent;
-    @Autowired
     ContractBillingComponent contractBillingComponent;
     @Autowired
     RemainingContractComponent remainingContractComponent;
-
-    public void setContractService(ContractService contractService) {
-        this.contractService = contractService;
-    }
 
     @Override
     public void onMessage(EventBus eventBus, ChargeSystemEvent chargeSystemEvent) {
