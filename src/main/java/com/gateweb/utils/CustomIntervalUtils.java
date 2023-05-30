@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CustomIntervalUtils {
 
-    public static CustomInterval generateCustomIntervalByYearMonth(String yearMonth) throws ParseException {
+    public static synchronized CustomInterval generateCustomIntervalByYearMonth(String yearMonth) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
         DateTime fromDateTime = new DateTime(simpleDateFormat.parse(yearMonth));
         org.joda.time.LocalDateTime fromLocalDateTime = fromDateTime.toLocalDateTime().withDayOfMonth(1).withHourOfDay(0);
@@ -21,7 +21,7 @@ public class CustomIntervalUtils {
         return new CustomInterval(fromLocalDateTime.toDateTime(), toLocalDateTime.toDateTime());
     }
 
-    public static Interval getJodaInterval(LocalDateTime startLocalDateTime, LocalDateTime endLocalDateTime) {
+    public static synchronized Interval getJodaInterval(LocalDateTime startLocalDateTime, LocalDateTime endLocalDateTime) {
         return new Interval(
                 Timestamp.valueOf(startLocalDateTime).getTime()
                 , Timestamp.valueOf(endLocalDateTime).getTime()
