@@ -34,6 +34,7 @@ import java.nio.charset.StandardCharsets;
         @PropertySource(name = "charge.localhost.file.properties", value = "classpath:charge.localhost.file.properties"),
         @PropertySource(name = "charge.uat.file.properties", value = "classpath:charge.uat.file.properties"),
         @PropertySource(name = "charge.uat.jdbc.properties", value = "classpath:charge.uat.jdbc.properties"),
+        @PropertySource(name = "charge.test.jdbc.properties", value = "classpath:charge.test.jdbc.properties"),
         @PropertySource(name = "mail.uat.properties", value = "classpath:mail.uat.properties"),
         @PropertySource(name = "mail.production.properties", value = "classpath:mail.production.properties"),
         @PropertySource(name = "freeMarker.properties", value = "classpath:freeMarker.properties")

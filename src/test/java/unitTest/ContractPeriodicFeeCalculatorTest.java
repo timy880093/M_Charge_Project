@@ -20,7 +20,7 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})
 @WebAppConfiguration
-@TestPropertySource(properties = {"spring.profiles.active=uat"})
+@TestPropertySource(properties = {"spring.profiles.active=test"})
 public class ContractPeriodicFeeCalculatorTest {
 
 

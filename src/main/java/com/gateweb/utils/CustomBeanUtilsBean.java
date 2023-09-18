@@ -1,4 +1,4 @@
-package com.gate.core.utils;
+package com.gateweb.utils;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.Converter;

@@ -3,8 +3,8 @@
  */
 package com.gate.web.servlets;
 
-import com.gate.web.exceptions.FormValidationException;
-import com.gate.web.exceptions.ReturnPathException;
+import com.gateweb.base.exception.FormValidationException;
+import com.gateweb.base.exception.ReturnPathException;
 import com.gateweb.einv.exception.EinvAjaxException;
 import com.gateweb.einv.exception.EinvSysException;
 import org.apache.logging.log4j.LogManager;

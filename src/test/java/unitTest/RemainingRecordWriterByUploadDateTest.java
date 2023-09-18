@@ -18,7 +18,7 @@ import java.util.Optional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})
 @WebAppConfiguration
-@TestPropertySource(properties = {"spring.profiles.active=uat"})
+@TestPropertySource(properties = {"spring.profiles.active=test"})
 public class RemainingRecordWriterByUploadDateTest {
     @Autowired
     RemainingRecordWriterByUploadDate remainingCountRecordWriter;

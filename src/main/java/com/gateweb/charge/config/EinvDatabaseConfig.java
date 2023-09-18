@@ -17,7 +17,8 @@ import java.util.Optional;
 
 @Configuration
 @PropertySources({
-        @PropertySource("classpath:einv.production.replication.jdbc.properties")
+        @PropertySource("classpath:einv.production.replication.jdbc.properties"),
+        @PropertySource("classpath:einv.test.jdbc.properties")
 })
 @EnableJpaRepositories(
         basePackages = {"com.gateweb.orm.einv.repository"},

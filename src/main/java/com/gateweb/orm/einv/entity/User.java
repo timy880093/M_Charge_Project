@@ -18,7 +18,7 @@ import java.util.*;
  * @author pkliu
  */
 @Entity
-@Table(name = "public.user")
+@Table(name = "user")
 public class User extends BaseObject implements UserDetails {
 
 //long serialVersionUID jdk tool: serialver.exe 

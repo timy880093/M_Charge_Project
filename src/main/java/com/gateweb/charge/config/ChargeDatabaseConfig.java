@@ -79,7 +79,7 @@ public class ChargeDatabaseConfig {
             properties.put("hibernate.default_schema",
                     chargeDatabaseProperty.get().getProperty("hibernate.default_schema"));
             properties.put("hibernate.jdbc.batch_size", "5");
-            properties.put("hibernate.databasePlatform", "org.hibernate.dialect.PostgreSQLDialect");
+            properties.put("hibernate.dialect", chargeDatabaseProperty.get().getProperty("hibernate.dialect"));
             em.setJpaPropertyMap(properties);
         }
         return em;

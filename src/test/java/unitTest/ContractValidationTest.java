@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @ContextConfiguration(classes = {SpringWebMvcConfig.class})
 @WebAppConfiguration
 @Category(ContractPeriodicFeeCalculatorTest.class)
-@TestPropertySource(properties = {"spring.profiles.active=uat"})
+@TestPropertySource(properties = {"spring.profiles.active=test"})
 public class ContractValidationTest {
     @Autowired
     ContractValidationComponent contractValidationComponent;
