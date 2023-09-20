@@ -32,7 +32,7 @@ pipeline {
                   // 將 Workspace 目錄複製到 Docker volume
                   sh "docker run --rm -v ${WORKSPACE}:/source -v myworkspace:/target alpine cp -r /source /target"
                   // 複製 Docker volume 中的檔案到容器中的 /usr/local/tomcat/webapps/
-                  sh "docker cp ${WORKSPACE}/${WAR_FILE} ${TOMCAT_CONTAINER}:/usr/local/tomcat/webapps/ROOT.war"
+                  sh "docker cp source/${WAR_FILE} ${TOMCAT_CONTAINER}:/usr/local/tomcat/webapps/ROOT.war"
               }
               script{
                   dockerImage = docker.build("egui/charge-system:${GIT_COMMIT}", "-f  ./Dockerfile .")
