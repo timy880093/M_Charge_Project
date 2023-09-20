@@ -20,9 +20,8 @@ pipeline {
     stage('Build Image') {
         agent{
             docker{
-              image 'docker:dind' // 使用 Docker in Docker 映像
-              privileged true // 必須開啟特權模式
-              args '--privileged -v $HOME/.m2:/root/.m2'
+              image 'docker'
+              args '-v $HOME/.m2:/root/.m2'
               reuseNode true
             }
         }
