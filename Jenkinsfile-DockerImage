@@ -5,27 +5,28 @@ pipeline {
         agent {
             docker {
                 image 'maven:3.6.3-jdk-8'
-                args '-v $HOME/.m2:/root/.m2 -v ${WORKSPACE}:/target'
-                reuseNode true
+                args '-v $HOME/.m2:/root/.m2 -v'
+                reuseNode false
             }
         }
         steps {
             sh 'mvn clean package'
-            echo "Workspace Path: ${WORKSPACE}"
+            // 將 WAR 檔案保存到名為 "war-stash" 的 stash 中
+            stash name: 'war-stash', includes: 'target/ROOT.war'
         }
     }
     stage('Build Image') {
         agent{
             docker{
               image 'docker'
-              args '-v ${WORKSPACE}:/target'
               reuseNode true
             }
         }
         steps {
               script{
+                  unstash 'war-stash'
                   sh "ls -l /target"
-                  dockerImage = docker.build("egui/charge-system:${GIT_COMMIT}", "-f  ./Dockerfile .")
+                  dockerImage = docker.build("egui/charge-system:test", "-f  ./Dockerfile .")
               }
         }
     }
