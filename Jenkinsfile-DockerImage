@@ -1,7 +1,7 @@
 pipeline {
  agent any
  environment {
-    TOMCAT_CONTAINER = 'tomcat' // 指定 Tomcat 容器名稱
+    TOMCAT_CONTAINER = 'tomcat:8.5.93-jre8-temurin-jammy' // 指定 Tomcat 容器名稱
     WAR_FILE = 'target/ROOT.war' // 指定 WAR 文件的路徑
  }
  stages {
@@ -20,14 +20,14 @@ pipeline {
     stage('Build Image') {
         agent{
             docker{
-              image 'tomcat:8.5.93-jre8-temurin-jammy'
+              image TOMCAT_CONTAINER
               args '-v $HOME/.m2:/root/.m2'
               reuseNode true
             }
         }
         steps {
               script {
-                  sh "docker cp target/ROOT.war my-tomcat:/usr/local/tomcat/webapps/"
+                  sh "docker cp target/ROOT.war $TOMCAT_CONTAINER:/usr/local/tomcat/webapps/"
               }
               script{
                   dockerImage = docker.build("egui/charge-system:${GIT_COMMIT}", "-f  ./Dockerfile .")
