@@ -1,16 +1,14 @@
 pipeline {
  agent any
  environment {
-    TOMCAT_CONTAINER = 'tomcat:8.5.93-jre8-temurin-jammy' // 指定 Tomcat 容器名稱
-    WAR_FILE = 'target/ROOT.war' // 指定 WAR 文件的路徑
+
  }
  stages {
-    stage('Build War'){
-        agent{
-            docker{
-              image 'maven:3.6.3-jdk-8'
-              args '-v $HOME/.m2:/root/.m2'
-              reuseNode false
+    stage('Build War') {
+        agent {
+            docker {
+                image 'maven:3.6.3-jdk-8'
+                args '-v $HOME/.m2:/root/.m2 -v /path/to/your/target:${WORKSPACE}/target'
             }
         }
         steps {
@@ -21,7 +19,7 @@ pipeline {
         agent{
             docker{
               image 'docker'
-              args '-v $HOME/.m2:/root/.m2'
+              args '-v /var/run/docker.sock:/var/run/docker.sock -v /path/to/your/target:/workspace/target'
               reuseNode true
             }
         }
@@ -30,9 +28,7 @@ pipeline {
                   // 創建一個 Docker volume
                   sh "docker volume create myworkspace"
                   // 將 Workspace 目錄複製到 Docker volume
-                  sh "docker run --rm -v ${WORKSPACE}:/source -v myworkspace:/target alpine cp -r /source /target"
-                  // 複製 Docker volume 中的檔案到容器中的 /usr/local/tomcat/webapps/
-                  sh "docker cp source/${WAR_FILE} ${TOMCAT_CONTAINER}:/usr/local/tomcat/webapps/ROOT.war"
+                  sh "docker run --rm -v ${WORKSPACE}/target:/source -v myworkspace:/target alpine cp -r /source /target"
               }
               script{
                   dockerImage = docker.build("egui/charge-system:${GIT_COMMIT}", "-f  ./Dockerfile .")
