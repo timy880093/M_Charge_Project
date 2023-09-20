@@ -25,7 +25,7 @@ pipeline {
                   // 創建一個 Docker volume
                   sh "docker volume create myworkspace"
                   // 將 Workspace 目錄複製到 Docker volume
-                  sh "docker run --rm -v ${WORKSPACE}/target:/source -v myworkspace:/target alpine cp -r /source /target"
+                  sh "docker run --rm -v ${WORKSPACE}:/source -v myworkspace:/target alpine cp -r /source /target"
               }
               script{
                   dockerImage = docker.build("egui/charge-system:${GIT_COMMIT}", "-f  ./Dockerfile .")
