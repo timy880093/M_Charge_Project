@@ -25,7 +25,11 @@ pipeline {
         steps {
               script{
                   sh "ls -l /target"
-                  dockerImage = docker.build("egui/charge-system:${GIT_COMMIT}", "-f  ./Dockerfile .")
+                  docker.build("egui/charge-system:${GIT_COMMIT}", "-f  ./Dockerfile .")
+                  docker.withRegistry('https://gw-nexus-docker.tweinv.com',registryCredential) {
+                                    dockerImage.push("egui/charge-system:${GIT_COMMIT}")
+                                    dockerImage.push('latest')
+                  }
               }
         }
     }
