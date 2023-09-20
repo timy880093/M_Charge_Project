@@ -5,7 +5,8 @@ pipeline {
         agent {
             docker {
                 image 'maven:3.6.3-jdk-8'
-                args '-v $HOME/.m2:/root/.m2 -v /path/to/your/target:${WORKSPACE}/target'
+                args '-v $HOME/.m2:/root/.m2 -v ${WORKSPACE}:target'
+                reuseNode false
             }
         }
         steps {
@@ -16,7 +17,6 @@ pipeline {
         agent{
             docker{
               image 'docker'
-              args '-v /var/run/docker.sock:/var/run/docker.sock -v /path/to/your/target:/workspace/target'
               reuseNode true
             }
         }
