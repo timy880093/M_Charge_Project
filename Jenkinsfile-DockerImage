@@ -1,5 +1,9 @@
 pipeline {
  agent any
+  environment{
+     GIT_COMMIT="${env.GIT_COMMIT}"
+     registryCredential = 'nexus-deploy'
+  }
  stages {
     stage('Build War') {
         agent {
